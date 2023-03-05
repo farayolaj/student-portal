@@ -16,18 +16,22 @@ import { IoTime } from "react-icons/io5";
 const TransactionsCard: FC = () => {
   return (
     <Card>
-      <CardHeader display="flex" justifyContent="space-between">
+      <CardHeader
+        display="flex"
+        justifyContent="space-between"
+        flexWrap={["wrap", null, "initial"]}
+      >
         <Heading as="h2" fontSize="md">
           Recent Transactions
         </Heading>
-        <Text as="span">
+        <Text as="span" w={["full", null, "initial"]} textAlign="right">
           <Link as={NextLink} href="#">
             Check all transactions &rarr;
           </Link>
         </Text>
       </CardHeader>
       <CardBody>
-        <VStack divider={<Divider />}>
+        <VStack divider={<Divider />} gap={2}>
           <TransactionsCardItem
             amount={12000}
             dateInitiated={new Date(2023, 2, 12)}
@@ -41,7 +45,7 @@ const TransactionsCard: FC = () => {
           <TransactionsCardItem
             amount={600}
             dateInitiated={new Date(2023, 1, 6)}
-            status="pending"
+            status="success"
           />
           <TransactionsCardItem
             amount={600}

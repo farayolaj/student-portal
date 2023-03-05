@@ -25,7 +25,7 @@ const CoursesCard: FC = () => {
         </Text>
       </CardHeader>
       <CardBody>
-        <SimpleGrid columns={[1, null, 2, 6]}>
+        <SimpleGrid columns={[2, null, null, 6]}>
           <CourseItem code="GES 101" title="Use of English" units={4} />
           <CourseItem code="GES 101" title="Use of English" units={4} />
           <CourseItem code="GES 101" title="Use of English" units={4} />
@@ -47,9 +47,11 @@ type CourseItemProps = {
 const CourseItem: FC<CourseItemProps> = ({ code, title, units }) => {
   return (
     <VStack>
-      <Text>{code}</Text>
+      <Text fontWeight="bold" color="primary.500">
+        {code}
+      </Text>
       <Text>{title}</Text>
-      <Text>{units} Units</Text>
+      <Text fontSize="sm">{units} Units</Text>
     </VStack>
   );
 };

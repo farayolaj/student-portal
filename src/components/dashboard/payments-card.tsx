@@ -19,18 +19,22 @@ import { IoTime } from "react-icons/io5";
 const PaymentsCard: FC = () => {
   return (
     <Card>
-      <CardHeader display="flex" justifyContent="space-between">
+      <CardHeader
+        display="flex"
+        justifyContent="space-between"
+        flexWrap={["wrap", null, "initial"]}
+      >
         <Heading as="h2" fontSize="md">
           Outstanding Payment
         </Heading>
-        <Text as="span">
+        <Text as="span" w={["full", null, "initial"]} textAlign="right">
           <Link as={NextLink} href="#">
             Check all payments &rarr;
           </Link>
         </Text>
       </CardHeader>
       <CardBody>
-        <VStack divider={<StackDivider />}>
+        <VStack divider={<StackDivider />} gap={6}>
           <PaymentItem
             title="Acceptance Fee"
             amount={25000}
