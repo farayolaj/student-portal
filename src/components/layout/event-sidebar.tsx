@@ -48,7 +48,7 @@ const EventSidebar: FC = () => {
       <Card w="full">
         <CardHeader>
           <Text as="span" fontSize="lg" fontWeight="bold">
-            Calendar
+            Smart Table
           </Text>
         </CardHeader>
         <CardBody>
