@@ -38,7 +38,7 @@
 }
 .react-calendar__navigation button {
   min-width: 44px;
-  color: var(--chakra-colors-green-500);
+  color: var(--chakra-colors-primary-500);
   background: none;
 }
 .react-calendar__navigation button:disabled {
@@ -83,7 +83,7 @@
   line-height: 16px;
 }
 .react-calendar__tile .active-dot {
-  background: green;
+  background: var(--chakra-colors-primary);
 }
 .react-calendar__tile:disabled {
   background-color: #f0f0f0;
@@ -93,16 +93,16 @@
   background-color: #e6e6e6;
 }
 .react-calendar__tile--now {
-  background: var(--chakra-colors-green-200);
+  background: var(--chakra-colors-primary-200);
   border-radius: 4px;
-  color: var(--chakra-colors-green-900);
+  color: var(--chakra-colors-primary-900);
 }
 .react-calendar__tile--now .active-dot {
-  background: green;
+  background: var(--chakra-colors-primary);
 }
 .react-calendar__tile--now:enabled:hover,
 .react-calendar__tile--now:enabled:focus {
-  background: var(--chakra-colors-green-900);
+  background: var(--chakra-colors-primary-900);
   color: white;
 }
 .react-calendar__tile--hasActive {
@@ -114,7 +114,7 @@
   background: #a9d4ff;
 }
 .react-calendar__tile--active {
-  background: var(--chakra-colors-green-900);
+  background: var(--chakra-colors-primary-900);
   border-radius: 4px;
   color: white;
 }
@@ -123,7 +123,7 @@
 }
 .react-calendar__tile--active:enabled:hover,
 .react-calendar__tile--active:enabled:focus {
-  background: var(--chakra-colors-green-900);
+  background: var(--chakra-colors-primary-900);
   color: white;
 }
 .react-calendar--selectRange .react-calendar__tile--hover {
