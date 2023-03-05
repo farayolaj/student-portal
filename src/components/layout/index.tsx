@@ -10,7 +10,7 @@ const Layout: FC<PropsWithChildren> = ({ children }) => {
       <Header />
       <Flex>
         <Sidebar />
-        <Box h="calc(100vh - 5rem)" pos="relative" overflowY="auto" w="full">
+        <Box h="calc(100vh - 4rem)" pos="relative" overflowY="auto" w="full">
           <Flex pos="relative" minH="full" bg="gray.200">
             <Box
               alignSelf="flex-start"

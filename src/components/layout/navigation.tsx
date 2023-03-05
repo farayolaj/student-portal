@@ -102,7 +102,7 @@ const NavLink: FC<NavLinkProps> = ({ title, href, icon, isOpen, isActive }) => {
       color="initial"
       _hover={{ textDecoration: "none", bg: "primary.50" }}
     >
-      <Component size="2em" aria-label={title} />
+      <Component size="1.5em" aria-label={title} />
       <Text as="span" display={isOpen ? "unset" : "none"}>
         {title}
       </Text>
