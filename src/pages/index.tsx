@@ -5,21 +5,18 @@ import CoursesCard from "../components/dashboard/courses-card";
 import PaymentsCard from "../components/dashboard/payments-card";
 import ProfileCard from "../components/dashboard/profile-card";
 import TransactionsCard from "../components/dashboard/transactions-card";
-import Layout from "../components/layout";
 
 export default function Home() {
   return (
     <>
       <Seo title="Dashboard" />
-      <Layout>
-        <PageTitle>Dashboard</PageTitle>
-        <ProfileCard />
-        <CoursesCard />
-        <SimpleGrid mt={8} columns={[1, null, null, 2]} gap={8}>
-          <PaymentsCard />
-          <TransactionsCard />
-        </SimpleGrid>
-      </Layout>
+      <PageTitle>Dashboard</PageTitle>
+      <ProfileCard />
+      <CoursesCard />
+      <SimpleGrid mt={8} columns={[1, null, null, 2]} gap={8}>
+        <PaymentsCard />
+        <TransactionsCard />
+      </SimpleGrid>
     </>
   );
 }
