@@ -16,7 +16,7 @@ const SelectCourseView: FC<SelectCourseViewProps> = ({
   selectedCourses,
   onChange,
 }) => {
-  const isMobile = useBreakpointValue([true, null, true]);
+  const isMobile = useBreakpointValue([true, null, false]);
 
   return (
     <Box mt={8}>

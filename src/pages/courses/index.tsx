@@ -128,29 +128,26 @@ const Courses: FC = () => {
         registeredUnits={15}
         coursesRegistered={5}
       />
-      <HStack mt={6}>
+      <HStack mt={6} spacing={4}>
         {canAddCourses && (
           <Link variant="button" as={NextLink} href={routes.ADD_COURSES}>
             Add Courses
           </Link>
         )}
-        <Spacer />
-        {!isMobile && (
-          <>
-            <RadioButtonGroup
-              options={[<IoList key="list" />, <IoGrid key="grid" />]}
-              labels={["List View", "Grid View"]}
-              values={["list", "grid"]}
-              value={view}
-              onChange={setView}
-            />
-            <Spacer />
-          </>
-        )}
         {canDeleteCourses && (
           <Link variant="button" as={NextLink} href={routes.DELETE_COURSES}>
             Delete Courses
           </Link>
+        )}
+        <Spacer />
+        {!isMobile && (
+          <RadioButtonGroup
+            options={[<IoList key="list" />, <IoGrid key="grid" />]}
+            labels={["List View", "Grid View"]}
+            values={["list", "grid"]}
+            value={view}
+            onChange={setView}
+          />
         )}
       </HStack>
       <CourseView
