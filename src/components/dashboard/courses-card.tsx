@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { FC } from "react";
+import * as routes from "../../constants/routes";
 
 const CoursesCard: FC = () => {
   return (
@@ -19,7 +20,7 @@ const CoursesCard: FC = () => {
           Courses
         </Heading>
         <Text as="span">
-          <Link as={NextLink} href="#">
+          <Link as={NextLink} href={routes.REGISTERED_COURSES}>
             See other courses &rarr;
           </Link>
         </Text>

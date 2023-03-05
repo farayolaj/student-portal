@@ -46,7 +46,7 @@ const CourseListControls: FC<CourseListControlsProps> = ({
         <FormLabel srOnly>Semester</FormLabel>
         <RadioButtonGroup
           values={["all", "first", "second"]}
-          labels={["All", "First Semester", "Second Semester"]}
+          labels={["All", "1st Semester", "2nd Semester"]}
           value={semester}
           onChange={(e) => onSemesterChange(e)}
         />

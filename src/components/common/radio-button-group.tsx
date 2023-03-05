@@ -27,6 +27,8 @@ const RadioButtonGroup: FC<RadioButtonGroupProps> = (props) => {
       divider={<StackDivider />}
       borderRadius="md"
       align="stretch"
+      w="fit-content"
+      h="fit-content"
       {...group}
     >
       {props.values.map((value, idx) => {

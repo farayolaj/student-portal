@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, useBreakpointValue } from "@chakra-ui/react";
 import { FC } from "react";
 import SelectCourseGridView from "./select-course-grid-view";
 import SelectCourseListView from "./select-course-list-view";
@@ -16,9 +16,17 @@ const SelectCourseView: FC<SelectCourseViewProps> = ({
   selectedCourses,
   onChange,
 }) => {
+  const useGridOnly = useBreakpointValue([true, null, true]);
+
   return (
     <Box mt={8}>
-      {view == "grid" ? (
+      {useGridOnly ? (
+        <SelectCourseGridView
+          courseList={courseList}
+          selectedCourses={selectedCourses}
+          onChange={onChange}
+        />
+      ) : view == "grid" ? (
         <SelectCourseGridView
           courseList={courseList}
           selectedCourses={selectedCourses}

@@ -25,7 +25,7 @@ const SelectCourseGridView: FC<SelectCourseGridViewProps> = ({
 }) => {
   return (
     <CheckboxGroup defaultValue={selectedCourses} onChange={onChange}>
-      <SimpleGrid columns={[1, null, 2]} gap={8}>
+      <SimpleGrid columns={[1, null, 2, 3]} gap={8}>
         {courseList.map((course) => (
           <SelectCourseGridViewItem
             key={course.id}
