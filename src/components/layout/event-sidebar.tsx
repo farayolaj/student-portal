@@ -64,21 +64,25 @@ const EventSidebar: FC = () => {
             </Text>
             <VStack mt={4} divider={<StackDivider />}>
               {events[selectedDate] ? (
-                events[selectedDate].map(({ name, time }) => (
-                  <Flex
-                    direction="column"
-                    justify="space-between"
-                    flexWrap={["wrap", null, null, null, "initial"]}
-                    gap={2}
-                    w="full"
-                    key={name}
-                  >
-                    <Badge w="fit-content" colorScheme="primary">
-                      {time}
-                    </Badge>
-                    <Text>{name}</Text>
-                  </Flex>
-                ))
+                events[selectedDate]
+                  .sort((a, b) =>
+                    a.time == b.time ? 0 : a.time > b.time ? 1 : -1
+                  )
+                  .map(({ name, time }) => (
+                    <Flex
+                      direction="column"
+                      justify="space-between"
+                      flexWrap={["wrap", null, null, null, "initial"]}
+                      gap={2}
+                      w="full"
+                      key={name}
+                    >
+                      <Badge w="fit-content" colorScheme="primary">
+                        {time}
+                      </Badge>
+                      <Text>{name}</Text>
+                    </Flex>
+                  ))
               ) : (
                 <Text>No events on this day.</Text>
               )}
