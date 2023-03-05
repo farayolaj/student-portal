@@ -20,7 +20,7 @@ const PageTitle: FC<PropsWithChildren<PageTitleProps>> = ({
           aria-label="Go back"
           size="lg"
           variant="transparent"
-          icon={<IoArrowBackOutline size="2rem" />}
+          icon={<IoArrowBackOutline size="1.5rem" />}
           onClick={() => window.history.back()}
         />
       )}
