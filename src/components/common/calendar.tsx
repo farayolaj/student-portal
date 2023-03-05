@@ -13,6 +13,12 @@ const Calendar: FC<CalendarProps> = ({ eventDates, onDateClick }) => {
       <ReactCalendar
         view="month"
         onClickDay={onDateClick}
+        formatDay={(locale, date) =>
+          date.toLocaleString(locale, { day: "2-digit" })
+        }
+        formatShortWeekday={(locale, date) =>
+          date.toLocaleString(locale, { weekday: "narrow" })
+        }
         tileContent={({ date, view }) =>
           view == "month" &&
           eventDates.includes(date.toISOString().split("T")[0]) ? (
