@@ -31,14 +31,11 @@ const CourseListViewItem: FC<CourseListViewItemProps> = ({ course }) => {
       overflow="hidden"
       w="full"
       _hover={{
-        "& .download-button": { display: "block" },
         "& img": { filter: "auto", brightness: "60%" },
       }}
     >
       <Flex>
-        <Box display="none" className="download-button">
-          <CourseMaterialDownload link={course.materialLink} />
-        </Box>
+        <CourseMaterialDownload link={course.materialLink} />
         <Box pos="relative" w="15rem" h="15rem">
           <Image
             alt="Some image"

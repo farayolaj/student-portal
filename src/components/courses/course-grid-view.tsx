@@ -39,15 +39,12 @@ const CourseGridViewItem: FC<CourseGridViewItemProps> = ({ course }) => {
       rounded="lg"
       overflow="hidden"
       _hover={{
-        "& .download-button": { display: "block" },
         "& img": { filter: "auto", brightness: "60%" },
       }}
     >
       <AspectRatio pos="relative" w="full" ratio={3 / 2}>
         <div>
-          <Box display="none" className="download-button">
-            <CourseMaterialDownload link={course.materialLink} />
-          </Box>
+          <CourseMaterialDownload link={course.materialLink} />
           <Image
             alt="Some image"
             src={course.image}
