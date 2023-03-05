@@ -1,13 +1,13 @@
 import { HStack, Link, Spacer } from "@chakra-ui/react";
 import { FC, useState } from "react";
 import NextLink from "next/link";
-import PageTitle from "../components/common/page-title";
-import Seo from "../components/common/seo";
-import CourseListControls from "../components/courses/course-list-controls";
-import CourseOverview from "../components/courses/course-overview";
-import RadioButtonGroup from "../components/common/radio-button-group";
+import PageTitle from "../../components/common/page-title";
+import Seo from "../../components/common/seo";
+import CourseListControls from "../../components/courses/course-list-controls";
+import CourseOverview from "../../components/courses/course-overview";
+import RadioButtonGroup from "../../components/common/radio-button-group";
 import { IoGrid, IoList } from "react-icons/io5";
-import CourseView from "../components/courses/course-view";
+import CourseView from "../../components/courses/course-view";
 
 const courses: Course[] = [
   {
