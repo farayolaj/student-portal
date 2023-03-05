@@ -16,11 +16,11 @@ const SelectCourseView: FC<SelectCourseViewProps> = ({
   selectedCourses,
   onChange,
 }) => {
-  const useGridOnly = useBreakpointValue([true, null, true]);
+  const isMobile = useBreakpointValue([true, null, true]);
 
   return (
     <Box mt={8}>
-      {useGridOnly ? (
+      {isMobile ? (
         <SelectCourseGridView
           courseList={courseList}
           selectedCourses={selectedCourses}

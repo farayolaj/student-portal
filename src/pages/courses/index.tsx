@@ -110,7 +110,7 @@ const Courses: FC = () => {
   const canAddCourses = true;
   const canDeleteCourses = true;
   const [view, setView] = useState("list");
-  const useGridOnly = useBreakpointValue([true, null, false]);
+  const isMobile = useBreakpointValue([true, null, false]);
 
   return (
     <>
@@ -135,7 +135,7 @@ const Courses: FC = () => {
           </Link>
         )}
         <Spacer />
-        {!useGridOnly && (
+        {!isMobile && (
           <>
             <RadioButtonGroup
               options={[<IoList key="list" />, <IoGrid key="grid" />]}

@@ -17,7 +17,7 @@ export default function SelectCourseListControl({
   view,
   onViewChange,
 }: SelectCourseListControlProps) {
-  const useGridOnly = useBreakpointValue([true, null, false]);
+  const isMobile = useBreakpointValue([true, null, false]);
 
   return (
     <Flex
@@ -26,7 +26,7 @@ export default function SelectCourseListControl({
       align="center"
       justify="space-between"
     >
-      {!useGridOnly && (
+      {!isMobile && (
         <>
           <RadioButtonGroup
             options={[<IoList key="list" />, <IoGrid key="grid" />]}

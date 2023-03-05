@@ -9,10 +9,10 @@ type CourseViewProps = {
 };
 
 const CourseView: FC<CourseViewProps> = ({ view, courseList }) => {
-  const useGridOnly = useBreakpointValue([true, null, false]);
+  const isMobile = useBreakpointValue([true, null, false]);
   return (
     <Box mt={8}>
-      {useGridOnly ? (
+      {isMobile ? (
         <CourseGridView courseList={courseList} />
       ) : view == "grid" ? (
         <CourseGridView courseList={courseList} />
