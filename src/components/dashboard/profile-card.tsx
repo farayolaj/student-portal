@@ -14,7 +14,7 @@ import { FC, ReactNode } from "react";
 
 const ProfileCard: FC = () => {
   return (
-    <Card mt={8}>
+    <Card>
       <CardHeader display="flex" justifyContent="space-between">
         <Heading as="h2" fontSize="md">
           Profile

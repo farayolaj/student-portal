@@ -15,11 +15,11 @@ const CourseOverview: FC<CourseOverviewProps> = ({
   registeredUnits,
 }) => {
   return (
-    <SimpleGrid columns={[1, null, 4]} columnGap={8}>
+    <SimpleGrid columns={[1, null, 4]} columnGap={6}>
       <CourseOverviewCard name="Min Units" value={minUnits} />
       <CourseOverviewCard name="Max Units" value={maxUnits} />
       <CourseOverviewCard name="Registered Units" value={registeredUnits} />
-      <CourseOverviewCard name="Courses Registered" value={coursesRegistered} />
+      <CourseOverviewCard name="Registered Courses" value={coursesRegistered} />
     </SimpleGrid>
   );
 };
@@ -39,9 +39,9 @@ const CourseOverviewCard: FC<CourseOverviewCardProps> = ({ name, value }) => {
         flexDirection="row-reverse"
         justifyContent="flex-end"
         alignItems="center"
-        gap={4}
+        gap={3}
       >
-        <Text fontSize="sm" fontWeight="bold">
+        <Text fontSize="sm" fontWeight="bold" w="min-content">
           {name}
         </Text>
         <Flex

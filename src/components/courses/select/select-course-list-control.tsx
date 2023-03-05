@@ -25,7 +25,6 @@ export default function SelectCourseListControl({
       rowGap={4}
       align="center"
       justify="space-between"
-      mt={6}
     >
       {!useGridOnly && (
         <>

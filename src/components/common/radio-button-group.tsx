@@ -24,7 +24,14 @@ const RadioButtonGroup: FC<RadioButtonGroupProps> = (props) => {
     <HStack
       bg="white"
       spacing={0}
-      divider={<StackDivider />}
+      divider={
+        <StackDivider
+          style={{
+            marginTop: "8px",
+            marginBottom: "8px",
+          }}
+        />
+      }
       borderRadius="md"
       align="stretch"
       w="fit-content"

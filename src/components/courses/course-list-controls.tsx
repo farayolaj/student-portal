@@ -22,7 +22,6 @@ const CourseListControls: FC<CourseListControlsProps> = ({
       justify="space-between"
       rowGap={4}
       align="center"
-      mt={2}
       mb={8}
     >
       <FormControl w="fit-content">
