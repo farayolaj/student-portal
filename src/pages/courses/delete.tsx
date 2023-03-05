@@ -1,14 +1,9 @@
-import { Button, Flex, HStack, Link, Spacer } from "@chakra-ui/react";
-import { FC, useState } from "react";
-import NextLink from "next/link";
+import { Flex, Button } from "@chakra-ui/react";
+import { useState } from "react";
 import PageTitle from "../../components/common/page-title";
 import Seo from "../../components/common/seo";
-import CourseListControls from "../../components/courses/course-list-controls";
-import CourseOverview from "../../components/courses/course-overview";
-import RadioButtonGroup from "../../components/common/radio-button-group";
-import { IoGrid, IoList } from "react-icons/io5";
-import CourseView from "../../components/courses/course-view";
-import * as routes from "../../constants/routes";
+import SelectCourseListControl from "../../components/courses/select/select-course-list-control";
+import SelectCourseView from "../../components/courses/select/select-course-view";
 
 const courses: Course[] = [
   {
@@ -97,51 +92,23 @@ const courses: Course[] = [
   },
 ];
 
-const Courses: FC = () => {
-  const [session, setSession] = useState("2020-2021");
+export default function DeleteCoursesPage(): JSX.Element {
   const [semester, setSemester] = useState("all");
-  const canAddCourses = true;
-  const canDeleteCourses = true;
   const [view, setView] = useState("list");
+  const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
 
   return (
     <>
-      <Seo title="Registered Courses" />
-      <PageTitle showBackButton>Registered Courses</PageTitle>
-      <CourseListControls
-        session={session}
-        onSessionChange={setSession}
+      <Seo title="Delete Courses" />
+      <PageTitle showBackButton>Delete Courses</PageTitle>
+      <SelectCourseListControl
+        session="2019/2020"
         semester={semester}
         onSemesterChange={setSemester}
+        view={view}
+        onViewChange={setView}
       />
-      <CourseOverview
-        maxUnits={21}
-        minUnits={12}
-        registeredUnits={15}
-        coursesRegistered={5}
-      />
-      <HStack mt={6}>
-        {canAddCourses && (
-          <Link variant="button" as={NextLink} href={routes.ADD_COURSES}>
-            Add Courses
-          </Link>
-        )}
-        <Spacer />
-        <RadioButtonGroup
-          options={[<IoList key="list" />, <IoGrid key="grid" />]}
-          labels={["List View", "Grid View"]}
-          values={["list", "grid"]}
-          value={view}
-          onChange={setView}
-        />
-        <Spacer />
-        {canDeleteCourses && (
-          <Link variant="button" as={NextLink} href={routes.DELETE_COURSES}>
-            Delete Courses
-          </Link>
-        )}
-      </HStack>
-      <CourseView
+      <SelectCourseView
         courseList={courses.filter(
           (course) =>
             semester === "all" ||
@@ -149,12 +116,12 @@ const Courses: FC = () => {
             (course.semester === 2 && semester === "second")
         )}
         view={view as "list" | "grid"}
+        selectedCourses={selectedCourses}
+        onChange={setSelectedCourses}
       />
       <Flex justify="center" mt={6}>
-        <Button>Print Course Registration</Button>
+        <Button>Delete {selectedCourses.length} Courses</Button>
       </Flex>
     </>
   );
-};
-
-export default Courses;
+}

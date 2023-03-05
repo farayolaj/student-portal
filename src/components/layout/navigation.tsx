@@ -27,49 +27,49 @@ const Navigation: FC<NavigationProps> = ({ isOpen }) => {
         icon={IoHomeOutline}
         href={routes.HOME}
         isOpen={isOpen}
-        isActive={pathname == routes.HOME}
+        isActive={pathname === routes.HOME}
       />
       <NavLink
         title="Courses"
         icon={IoBookOutline}
-        href={routes.COURSES}
+        href={routes.REGISTERED_COURSES}
         isOpen={isOpen}
-        isActive={pathname == routes.COURSES}
+        isActive={pathname.startsWith(routes.REGISTERED_COURSES)}
       />
       <NavLink
         title="Results"
         icon={IoDocumentTextOutline}
         href="#"
         isOpen={isOpen}
-        isActive={pathname == "#"}
+        isActive={pathname.startsWith("#")}
       />
       <NavLink
         title="Payments"
         icon={IoReceiptOutline}
         href="#"
         isOpen={isOpen}
-        isActive={pathname == "#"}
+        isActive={pathname.startsWith("#")}
       />
       <NavLink
         title="Transactions"
         icon={IoCardOutline}
         href="#"
         isOpen={isOpen}
-        isActive={pathname == "#"}
+        isActive={pathname.startsWith("#")}
       />
       <NavLink
         title="Calendar"
         icon={IoCalendarOutline}
         href="#"
         isOpen={isOpen}
-        isActive={pathname == "#"}
+        isActive={pathname.startsWith("#")}
       />
       <NavLink
         title="Profile"
         icon={IoPersonOutline}
         href="#"
         isOpen={isOpen}
-        isActive={pathname == "#"}
+        isActive={pathname.startsWith("#")}
       />
     </VStack>
   );

@@ -26,6 +26,7 @@ const RadioButtonGroup: FC<RadioButtonGroupProps> = (props) => {
       spacing={0}
       divider={<StackDivider />}
       borderRadius="md"
+      align="stretch"
       {...group}
     >
       {props.values.map((value, idx) => {
@@ -62,6 +63,7 @@ const RadioButton: FC<RadioProps> = (props) => {
           borderRightRadius: "md",
         },
       }}
+      h="full"
     >
       <input {...input} />
       <Box
