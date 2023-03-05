@@ -15,9 +15,9 @@ export const Sidebar: FC = () => {
       as="aside"
       minW={isOpen ? "15%" : "unset"}
       flexDir="column"
-      gap={8}
+      gap={2}
       boxShadow="lg"
-      py={6}
+      py={2}
     >
       <Flex justify="center" px={2}>
         <IconButton

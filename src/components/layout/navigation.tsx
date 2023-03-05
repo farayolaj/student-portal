@@ -21,7 +21,7 @@ const Navigation: FC<NavigationProps> = ({ isOpen }) => {
   const { pathname } = useRouter();
 
   return (
-    <VStack align="flex-start" gap={4} px={0} mx={0}>
+    <VStack align="flex-start" gap={2} px={0} mx={0}>
       <NavLink
         title="Dashboard"
         icon={IoHomeOutline}
