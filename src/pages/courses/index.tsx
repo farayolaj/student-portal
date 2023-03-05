@@ -1,11 +1,4 @@
-import {
-  Button,
-  Flex,
-  HStack,
-  Link,
-  Spacer,
-  useBreakpointValue,
-} from "@chakra-ui/react";
+import { Button, Flex, HStack, Link, Spacer } from "@chakra-ui/react";
 import { FC, useState } from "react";
 import NextLink from "next/link";
 import PageTitle from "../../components/common/page-title";
@@ -110,7 +103,6 @@ const Courses: FC = () => {
   const canAddCourses = true;
   const canDeleteCourses = true;
   const [view, setView] = useState("list");
-  const isMobile = useBreakpointValue([true, null, false]);
 
   return (
     <>
@@ -134,21 +126,21 @@ const Courses: FC = () => {
             Add Courses
           </Link>
         )}
+        <Spacer display={["unset", null, "none"]} />
         {canDeleteCourses && (
           <Link variant="button" as={NextLink} href={routes.DELETE_COURSES}>
             Delete Courses
           </Link>
         )}
-        <Spacer />
-        {!isMobile && (
-          <RadioButtonGroup
-            options={[<IoList key="list" />, <IoGrid key="grid" />]}
-            labels={["List View", "Grid View"]}
-            values={["list", "grid"]}
-            value={view}
-            onChange={setView}
-          />
-        )}
+        <Spacer display={["none", null, "unset"]} />
+        <RadioButtonGroup
+          display={["none", null, "flex"]}
+          options={[<IoList key="list" />, <IoGrid key="grid" />]}
+          labels={["List View", "Grid View"]}
+          values={["list", "grid"]}
+          value={view}
+          onChange={setView}
+        />
       </HStack>
       <CourseView
         courseList={courses.filter(

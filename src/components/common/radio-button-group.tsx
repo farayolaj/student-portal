@@ -16,7 +16,7 @@ type RadioButtonGroupProps = {
 } & Omit<RadioGroupProps, "children">;
 
 const RadioButtonGroup: FC<RadioButtonGroupProps> = (props) => {
-  const { getRootProps, getRadioProps } = useRadioGroup(props);
+  const { getRootProps, getRadioProps, htmlProps } = useRadioGroup(props);
 
   const group = getRootProps();
 
@@ -36,6 +36,7 @@ const RadioButtonGroup: FC<RadioButtonGroupProps> = (props) => {
       align="stretch"
       w="fit-content"
       h="fit-content"
+      {...htmlProps}
       {...group}
     >
       {props.values.map((value, idx) => {
