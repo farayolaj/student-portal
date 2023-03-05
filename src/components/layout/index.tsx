@@ -11,7 +11,7 @@ const Layout: FC<PropsWithChildren> = ({ children }) => {
       <Flex w="full" h="calc(100vh - 5rem)" bg="gray.200" overflowY="hidden">
         <Sidebar />
         <Flex w="full" h="full" overflowY="scroll">
-          <Box as="main" w="full" h="100vh" p={6} pr={4}>
+          <Box as="main" w="full" h="100vh" p={6} pr={[null, null, 4]}>
             {children}
           </Box>
           <EventSidebar />

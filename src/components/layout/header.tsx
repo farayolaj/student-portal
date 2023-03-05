@@ -27,7 +27,12 @@ export const Header: FC = () => {
     >
       <Flex gap={4} align="center">
         <Box boxSize={12} bg="black" />
-        <Text as="span" fontSize="lg" fontWeight="semibold">
+        <Text
+          display={["none", null, "initial"]}
+          as="span"
+          fontSize="lg"
+          fontWeight="semibold"
+        >
           University of Ibadan
         </Text>
       </Flex>
@@ -40,7 +45,7 @@ export const Header: FC = () => {
           icon={<IoNotificationsOutline size="2rem" />}
         />
         <HStack>
-          <Text>Adamu Olatunji Ciroma</Text>
+          <Text display={["none", null, "initial"]}>Adamu Olatunji Ciroma</Text>
           <Avatar name="Adamu Olatunji Ciroma" size="md" />
         </HStack>
       </Flex>

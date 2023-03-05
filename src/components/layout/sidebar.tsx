@@ -10,6 +10,7 @@ export const Sidebar: FC = () => {
 
   return (
     <Flex
+      display={["none", null, "flex"]}
       bg="white"
       as="aside"
       minW={isOpen ? "15%" : "unset"}
@@ -18,7 +19,7 @@ export const Sidebar: FC = () => {
       boxShadow="lg"
       py={6}
     >
-      <Flex justify="center" px={6}>
+      <Flex justify="center" px={2}>
         <IconButton
           aria-label="Toggle navigation bar"
           size="lg"

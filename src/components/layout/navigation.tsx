@@ -89,17 +89,18 @@ const NavLink: FC<NavLinkProps> = ({ title, href, icon, isOpen, isActive }) => {
   const Component = icon;
   return (
     <Link
-      bg={isActive ? "green.100" : "transparent"}
+      bg={isActive ? "primary.100" : "transparent"}
       w="full"
       py={2}
-      px={6}
+      px={2}
       as={NextLink}
       display="inline-flex"
       justifyContent={isOpen ? "initial" : "center"}
+      alignItems="center"
       gap={2}
       href={href}
       color="initial"
-      _hover={{ textDecoration: "none", bg: "green.50" }}
+      _hover={{ textDecoration: "none", bg: "primary.50" }}
     >
       <Component size="2em" aria-label={title} />
       <Text as="span" display={isOpen ? "unset" : "none"}>
