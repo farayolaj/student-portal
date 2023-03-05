@@ -1,4 +1,11 @@
-import { Button, Flex, HStack, Link, Spacer } from "@chakra-ui/react";
+import {
+  Button,
+  Flex,
+  HStack,
+  Link,
+  Spacer,
+  useBreakpointValue,
+} from "@chakra-ui/react";
 import { FC, useState } from "react";
 import NextLink from "next/link";
 import PageTitle from "../../components/common/page-title";
@@ -103,6 +110,7 @@ const Courses: FC = () => {
   const canAddCourses = true;
   const canDeleteCourses = true;
   const [view, setView] = useState("list");
+  const useGridOnly = useBreakpointValue([true, null, false]);
 
   return (
     <>
@@ -127,14 +135,18 @@ const Courses: FC = () => {
           </Link>
         )}
         <Spacer />
-        <RadioButtonGroup
-          options={[<IoList key="list" />, <IoGrid key="grid" />]}
-          labels={["List View", "Grid View"]}
-          values={["list", "grid"]}
-          value={view}
-          onChange={setView}
-        />
-        <Spacer />
+        {!useGridOnly && (
+          <>
+            <RadioButtonGroup
+              options={[<IoList key="list" />, <IoGrid key="grid" />]}
+              labels={["List View", "Grid View"]}
+              values={["list", "grid"]}
+              value={view}
+              onChange={setView}
+            />
+            <Spacer />
+          </>
+        )}
         {canDeleteCourses && (
           <Link variant="button" as={NextLink} href={routes.DELETE_COURSES}>
             Delete Courses

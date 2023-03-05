@@ -15,7 +15,7 @@ const CourseOverview: FC<CourseOverviewProps> = ({
   registeredUnits,
 }) => {
   return (
-    <SimpleGrid columns={4} columnGap={8}>
+    <SimpleGrid columns={[1, null, 4]} columnGap={8}>
       <CourseOverviewCard name="Min Units" value={minUnits} />
       <CourseOverviewCard name="Max Units" value={maxUnits} />
       <CourseOverviewCard name="Registered Units" value={registeredUnits} />
