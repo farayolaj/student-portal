@@ -9,6 +9,7 @@ import RadioButtonGroup from "../../components/common/radio-button-group";
 import { IoGrid, IoList } from "react-icons/io5";
 import CourseView from "../../components/courses/course-view";
 import * as routes from "../../constants/routes";
+import DeleteCourseView from "../../components/courses/delete/delete-course-view";
 
 const courses: Course[] = [
   {
@@ -103,6 +104,13 @@ const Courses: FC = () => {
   const canAddCourses = true;
   const canDeleteCourses = true;
   const [view, setView] = useState("list");
+  const [inDeleteCourseView, setInDeleteCourseView] = useState(false);
+  const filteredCourses = courses.filter(
+    (course) =>
+      semester === "all" ||
+      (course.semester === 1 && semester === "first") ||
+      (course.semester === 2 && semester === "second")
+  );
 
   return (
     <>
@@ -121,16 +129,16 @@ const Courses: FC = () => {
         coursesRegistered={5}
       />
       <HStack mt={6} spacing={4}>
-        {canAddCourses && (
+        {!inDeleteCourseView && canAddCourses && (
           <Link variant="button" as={NextLink} href={routes.ADD_COURSES}>
             Add Courses
           </Link>
         )}
         <Spacer display={["unset", null, "none"]} />
         {canDeleteCourses && (
-          <Link variant="button" as={NextLink} href={routes.DELETE_COURSES}>
-            Delete Courses
-          </Link>
+          <Button onClick={() => setInDeleteCourseView((prev) => !prev)}>
+            {inDeleteCourseView ? "Cancel" : "Delete Courses"}
+          </Button>
         )}
         <Spacer display={["none", null, "unset"]} />
         <RadioButtonGroup
@@ -142,18 +150,18 @@ const Courses: FC = () => {
           onChange={setView}
         />
       </HStack>
-      <CourseView
-        courseList={courses.filter(
-          (course) =>
-            semester === "all" ||
-            (course.semester === 1 && semester === "first") ||
-            (course.semester === 2 && semester === "second")
-        )}
-        view={view as "list" | "grid"}
-      />
-      <Flex justify="center" mt={6}>
-        <Button>Print Course Registration</Button>
-      </Flex>
+      {inDeleteCourseView ? (
+        <DeleteCourseView
+          courseList={filteredCourses}
+          onDelete={() => setInDeleteCourseView(false)}
+          view={view as "list" | "grid"}
+        />
+      ) : (
+        <CourseView
+          courseList={filteredCourses}
+          view={view as "list" | "grid"}
+        />
+      )}
     </>
   );
 };

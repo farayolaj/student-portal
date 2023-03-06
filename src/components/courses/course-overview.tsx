@@ -41,7 +41,7 @@ const CourseOverviewCard: FC<CourseOverviewCardProps> = ({ name, value }) => {
         alignItems="center"
         gap={3}
       >
-        <Text fontSize="sm" fontWeight="bold" w="min-content">
+        <Text fontSize="sm" fontWeight="bold" w="fit-content">
           {name}
         </Text>
         <Flex
