@@ -6,7 +6,6 @@ import {
   Flex,
   Heading,
   Link,
-  NumberInputStepper,
   StackDivider,
   Text,
   VStack,
@@ -15,6 +14,7 @@ import { differenceInCalendarDays } from "date-fns";
 import NextLink from "next/link";
 import { FC } from "react";
 import { IoTime } from "react-icons/io5";
+import * as routes from "../../constants/routes";
 
 const PaymentsCard: FC = () => {
   return (
@@ -28,7 +28,7 @@ const PaymentsCard: FC = () => {
           Outstanding Payment
         </Heading>
         <Text as="span" w={["full", null, "initial"]} textAlign="right">
-          <Link as={NextLink} href="#">
+          <Link as={NextLink} href={routes.PAYMENTS}>
             Check all payments &rarr;
           </Link>
         </Text>
