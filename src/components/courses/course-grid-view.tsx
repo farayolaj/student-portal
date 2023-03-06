@@ -19,7 +19,7 @@ type CourseGridViewProps = {
 
 const CourseGridView: FC<CourseGridViewProps> = ({ courseList }) => {
   return (
-    <SimpleGrid columns={[1, null, 2, 3]} gap={8}>
+    <SimpleGrid columns={[1, null, 2, null, 3]} gap={8}>
       {courseList.map((course) => (
         <CourseGridViewItem key={course.id} course={course} />
       ))}

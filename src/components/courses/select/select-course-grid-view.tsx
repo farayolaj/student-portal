@@ -25,7 +25,7 @@ const SelectCourseGridView: FC<SelectCourseGridViewProps> = ({
 }) => {
   return (
     <CheckboxGroup defaultValue={selectedCourses} onChange={onChange}>
-      <SimpleGrid columns={[1, null, 2, 3]} gap={8}>
+      <SimpleGrid columns={[1, null, 2, null, 3]} gap={8}>
         {courseList.map((course) => (
           <SelectCourseGridViewItem
             key={course.id}
@@ -53,13 +53,25 @@ const SelectCourseGridViewItem: FC<SelectCourseGridViewItemProps> = ({
 
   return (
     <Card
+      pos="relative"
       rounded="lg"
       overflow="hidden"
       aria-checked={isChecked}
-      _checked={{ borderWidth: "3px", borderColor: "green.500" }}
+      borderWidth="3px"
+      borderColor="gray.200"
+      _checked={{ borderColor: "green.500" }}
       onClick={() => ref.current?.click()}
     >
-      <Checkbox ref={ref} value={course.id} hidden />
+      <Checkbox
+        pos="absolute"
+        top={4}
+        right={4}
+        colorScheme="primary"
+        size="lg"
+        ref={ref}
+        value={course.id}
+        zIndex={100}
+      />
       <AspectRatio pos="relative" w="full" ratio={3 / 2}>
         <Image
           alt="Some image"

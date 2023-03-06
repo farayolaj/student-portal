@@ -57,10 +57,21 @@ const SelectCourseListViewItem: FC<SelectCourseListViewItemProps> = ({
       overflow="hidden"
       w="full"
       aria-checked={isChecked}
-      _checked={{ borderWidth: "3px", borderColor: "green.500" }}
+      borderWidth="3px"
+      borderColor="transparent"
+      _checked={{ borderColor: "green.500" }}
       onClick={() => ref.current?.click()}
     >
-      <Checkbox ref={ref} value={course.id} hidden />
+      <Checkbox
+        pos="absolute"
+        top={4}
+        right={4}
+        colorScheme="primary"
+        size="lg"
+        zIndex={100}
+        ref={ref}
+        value={course.id}
+      />
       <Flex>
         <Box pos="relative" w="15rem" h="15rem">
           <Image
