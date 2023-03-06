@@ -9,29 +9,31 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
+import isSameDay from "date-fns/isSameDay";
+import format from "date-fns/format";
 import { FC, useState } from "react";
 import Calendar from "../common/calendar";
+import { DATE_ONLY_FORMAT } from "../../constants/date";
 
-const events = {
-  "2023-03-03": [{ name: "GES 101: Use of English", time: "2:00 PM" }],
-  "2023-03-06": [
-    { name: "Classes end", time: "" },
-    { name: "GES 101: Use of English", time: "2:00 PM" },
-    { name: "GES 102: Use of English", time: "9:00 PM" },
-    { name: "GES 103: Use of English", time: "7:00 PM" },
-    { name: "GES 104: Use of English", time: "4:00 PM" },
-    { name: "GES 105: Use of English", time: "1:00 PM" },
-  ],
-} as Record<string, { name: string; time: string }[]>;
+const events = new Map<string, { name: string; time: string }[]>();
+events.set(format(new Date(2023, 2, 3), DATE_ONLY_FORMAT), [
+  { name: "GES 101: Use of English", time: "2:00 PM" },
+  { name: "GES 102: Use of English", time: "9:00 PM" },
+  { name: "GES 103: Use of English", time: "7:00 PM" },
+  { name: "GES 104: Use of English", time: "4:00 PM" },
+  { name: "GES 105: Use of English", time: "1:00 PM" },
+]);
+events.set(format(new Date(2023, 2, 5), DATE_ONLY_FORMAT), [
+  { name: "GES 101: Use of English", time: "2:00 PM" },
+  { name: "GES 102: Use of English", time: "9:00 PM" },
+]);
 
 const EventSidebar: FC = () => {
-  const todaysDate = new Date().toISOString().split("T")[0];
-  const [selectedDate, setSelectedDate] = useState<string>(
-    new Date().toISOString().split("T")[0]
-  );
+  const formattedTodaysDate = format(new Date(), DATE_ONLY_FORMAT);
+  const [selectedDate, setSelectedDate] = useState(formattedTodaysDate);
 
   const onDateClick = (date: Date) => {
-    setSelectedDate(date.toISOString().split("T")[0]);
+    setSelectedDate(format(date, DATE_ONLY_FORMAT));
   };
 
   return (
@@ -52,20 +54,18 @@ const EventSidebar: FC = () => {
           </Text>
         </CardHeader>
         <CardBody>
-          <Calendar
-            eventDates={Object.keys(events)}
-            onDateClick={onDateClick}
-          />
+          <Calendar eventDates={[...events.keys()]} onDateClick={onDateClick} />
           <Box mt={8}>
             <Text as="span" fontSize="lg" fontWeight="bold">
-              {selectedDate === todaysDate
+              {selectedDate === formattedTodaysDate
                 ? "Today's Events"
                 : `Events on ${selectedDate}`}
             </Text>
             <VStack mt={4} divider={<StackDivider />}>
-              {events[selectedDate] ? (
-                events[selectedDate]
-                  .sort((a, b) =>
+              {events.has(selectedDate) ? (
+                events
+                  .get(selectedDate)
+                  ?.sort((a, b) =>
                     a.time == b.time ? 0 : a.time > b.time ? 1 : -1
                   )
                   .map(({ name, time }) => (

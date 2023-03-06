@@ -1,6 +1,8 @@
 import { Box } from "@chakra-ui/react";
+import format from "date-fns/format";
 import { FC } from "react";
 import ReactCalendar from "react-calendar";
+import { DATE_ONLY_FORMAT } from "../../constants/date";
 
 type CalendarProps = {
   eventDates: string[];
@@ -21,7 +23,7 @@ const Calendar: FC<CalendarProps> = ({ eventDates, onDateClick }) => {
         }
         tileContent={({ date, view }) =>
           view == "month" &&
-          eventDates.includes(date.toISOString().split("T")[0]) ? (
+          eventDates.includes(format(date, DATE_ONLY_FORMAT)) ? (
             <Box
               w="6px"
               h="6px"
