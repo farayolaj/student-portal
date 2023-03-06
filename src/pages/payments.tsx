@@ -4,7 +4,7 @@ import Seo from "../components/common/seo";
 export default function Payments() {
   return (
     <>
-      <Seo title="Dashboard" />
+      <Seo title="Payments" />
       <PageTitle showBackButton>Payments</PageTitle>
     </>
   );
