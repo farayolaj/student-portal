@@ -119,8 +119,10 @@ export default function AddCoursesPage(): JSX.Element {
         selectedCourses={selectedCourses}
         onChange={setSelectedCourses}
       />
-      <Flex justify="center" mt={6}>
-        <Button>Add {selectedCourses.length} Courses</Button>
+      <Flex justify="center" mt={6} pos="sticky" bottom={8}>
+        <Button boxShadow="lg" w="80%">
+          Add {selectedCourses.length} Courses
+        </Button>
       </Flex>
     </>
   );
