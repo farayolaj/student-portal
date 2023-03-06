@@ -2,7 +2,7 @@ import { Card, CardBody, Flex, Text } from "@chakra-ui/react";
 
 type NameValueCardProps = {
   name: string;
-  value: number;
+  value: string | number;
 };
 
 export default function NameValueCard({ name, value }: NameValueCardProps) {
