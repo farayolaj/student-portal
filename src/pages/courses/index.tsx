@@ -4,7 +4,7 @@ import NextLink from "next/link";
 import PageTitle from "../../components/common/page-title";
 import Seo from "../../components/common/seo";
 import CourseListControls from "../../components/courses/course-list-controls";
-import CourseOverviewCard from "../../components/courses/course-overview-card";
+import CourseOverview from "../../components/courses/course-overview";
 import RadioButtonGroup from "../../components/common/radio-button-group";
 import { IoGrid, IoList } from "react-icons/io5";
 import CourseView from "../../components/courses/course-view";
@@ -122,7 +122,7 @@ const Courses: FC = () => {
         semester={semester}
         onSemesterChange={setSemester}
       />
-      <CourseOverviewCard
+      <CourseOverview
         maxUnits={21}
         minUnits={12}
         registeredUnits={15}

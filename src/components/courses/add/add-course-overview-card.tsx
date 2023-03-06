@@ -1,6 +1,6 @@
-import { Flex, Card, SimpleGrid, Text, CardBody } from "@chakra-ui/react";
+import { SimpleGrid } from "@chakra-ui/react";
 import { FC } from "react";
-import CourseOverviewCardItem from "../course-overview-card-item";
+import NameValueCard from "../../common/name-value-card";
 
 type AddCourseOverviewProps = {
   maxUnits: number;
@@ -20,13 +20,10 @@ const AddCourseOverviewCard: FC<AddCourseOverviewProps> = ({
 
   return (
     <SimpleGrid mt={8} columns={[1, null, 4]} columnGap={6}>
-      <CourseOverviewCardItem name="Min Units" value={minUnits} />
-      <CourseOverviewCardItem name="Max Units" value={maxUnits} />
-      <CourseOverviewCardItem name="Total Selected Units" value={totalUnits} />
-      <CourseOverviewCardItem
-        name="Selected Courses"
-        value={selectedCourses.length}
-      />
+      <NameValueCard name="Min Units" value={minUnits} />
+      <NameValueCard name="Max Units" value={maxUnits} />
+      <NameValueCard name="Total Selected Units" value={totalUnits} />
+      <NameValueCard name="Selected Courses" value={selectedCourses.length} />
     </SimpleGrid>
   );
 };

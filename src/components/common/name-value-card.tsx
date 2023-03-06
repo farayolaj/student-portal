@@ -1,15 +1,11 @@
 import { Card, CardBody, Flex, Text } from "@chakra-ui/react";
-import { FC } from "react";
 
-type CourseOverviewCardItemProps = {
+type NameValueCardProps = {
   name: string;
   value: number;
 };
 
-const CourseOverviewCardItem: FC<CourseOverviewCardItemProps> = ({
-  name,
-  value,
-}) => {
+export default function NameValueCard({ name, value }: NameValueCardProps) {
   return (
     <Card>
       <CardBody
@@ -37,6 +33,4 @@ const CourseOverviewCardItem: FC<CourseOverviewCardItemProps> = ({
       </CardBody>
     </Card>
   );
-};
-
-export default CourseOverviewCardItem;
+}
