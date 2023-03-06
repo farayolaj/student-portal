@@ -1,13 +1,5 @@
-import {
-  Flex,
-  IconButton,
-  Input,
-  InputGroup,
-  InputRightElement,
-  Spacer,
-  Text,
-} from "@chakra-ui/react";
-import { IoList, IoGrid, IoSearchOutline } from "react-icons/io5";
+import { Flex, Spacer, Text } from "@chakra-ui/react";
+import { IoList, IoGrid } from "react-icons/io5";
 import RadioButtonGroup from "../../common/radio-button-group";
 
 type SelectCourseListControlProps = {
@@ -52,20 +44,6 @@ export default function SelectCourseListControl({
           value={semester}
           onChange={onSemesterChange}
         />
-      </Flex>
-      <Flex mt={4} justify="flex-end">
-        <InputGroup pr={0} w={80} variant="primary">
-          <Input pr={4} type="search" />
-          <InputRightElement>
-            <IconButton
-              aria-label="Search for course"
-              icon={<IoSearchOutline fontSize="1.5rem" />}
-              h="1.75rem"
-              size="sm"
-              // onClick={}
-            />
-          </InputRightElement>
-        </InputGroup>
       </Flex>
     </>
   );
