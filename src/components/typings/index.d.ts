@@ -12,3 +12,22 @@ interface Course {
   status: string;
   materialLink: string;
 }
+
+interface CourseResult {
+  id: string;
+  title: string;
+  status: string;
+  marks: number;
+  gp: number;
+  units: number;
+}
+
+type Result = {
+  id: string;
+  session: string;
+  semester: string;
+  gpa: number;
+  unitsRegistered: number;
+  unitsPassed: number;
+  courses: CourseResult[];
+};
