@@ -35,6 +35,14 @@ interface Result {
   secondSemester: SemesterResult;
 }
 
+interface Transaction {
+  id: string;
+  amount: number;
+  referenceNumber: string;
+  dateInitiated: Date;
+  status: "failed" | "pending" | "success";
+}
+
 interface BasePayment {
   id: string;
   title: string;
@@ -42,6 +50,7 @@ interface BasePayment {
   dueDate?: Date;
   status: "paid" | "unpaid" | "partial";
   type: "tuition" | "secondary" | "general" | "custom";
+  transactions?: Transaction[];
 }
 
 interface TuitionPayment extends BasePayment {
@@ -64,6 +73,10 @@ interface GeneralPayment extends BasePayment {
 }
 
 interface CustomPayment extends BasePayment {
+  session: string;
+  semester: string;
+  programme: string;
+  level: string;
   type: "custom";
 }
 
