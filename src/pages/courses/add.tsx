@@ -126,7 +126,14 @@ export default function AddCoursesPage(): JSX.Element {
       />
       <Flex mt={8} justify="flex-end">
         <InputGroup pr={0} w={80} variant="primary">
-          <Input pr={4} type="search" />
+          <Input
+            pr={4}
+            type="search"
+            placeholder="Search for more courses..."
+            _placeholder={{
+              color: "black",
+            }}
+          />
           <InputRightElement>
             <IconButton
               aria-label="Search for course"
