@@ -34,3 +34,41 @@ interface Result {
   firstSemester: SemesterResult;
   secondSemester: SemesterResult;
 }
+
+interface BasePayment {
+  id: string;
+  title: string;
+  amount: number;
+  dueDate?: Date;
+  status: "paid" | "unpaid" | "partial";
+  type: "tuition" | "secondary" | "general" | "custom";
+}
+
+interface TuitionPayment extends BasePayment {
+  level: string;
+  entryMode: string;
+  programme: string;
+  semester: string;
+  session: string;
+  type: "tuition";
+}
+
+interface SecondaryPayment extends BasePayment {
+  session: string;
+  programme: string;
+  type: "secondary";
+}
+
+interface GeneralPayment extends BasePayment {
+  type: "general";
+}
+
+interface CustomPayment extends BasePayment {
+  type: "custom";
+}
+
+type Payment =
+  | TuitionPayment
+  | SecondaryPayment
+  | GeneralPayment
+  | CustomPayment;
