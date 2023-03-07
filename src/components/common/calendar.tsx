@@ -21,6 +21,7 @@ const Calendar: FC<CalendarProps> = ({ eventDates, onDateClick }) => {
         formatShortWeekday={(_locale, date) =>
           Intl.DateTimeFormat("en-NG", { weekday: "narrow" }).format(date)
         }
+        locale="en-NG"
         tileContent={({ date, view }) =>
           view == "month" &&
           eventDates.includes(format(date, DATE_ONLY_FORMAT)) ? (
