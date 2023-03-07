@@ -21,7 +21,7 @@ export default function PaymentSummary({ payment }: PaymentSummaryProps) {
       : payment.type === "secondary"
       ? payment.session
       : payment.type === "custom"
-      ? "Custom Payment"
+      ? `${payment.session} (Custom Payment)`
       : "";
   let statusColor: string;
   let statusText: string;
