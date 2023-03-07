@@ -8,6 +8,7 @@ import {
   SimpleGrid,
   Spacer,
   Text,
+  useToken,
 } from "@chakra-ui/react";
 import Image from "next/image";
 import { FC, useRef } from "react";
@@ -16,12 +17,14 @@ type SelectCourseGridViewProps = {
   courseList: Course[];
   selectedCourses: string[];
   onChange: (values: string[]) => void;
+  colorScheme?: string;
 };
 
 const SelectCourseGridView: FC<SelectCourseGridViewProps> = ({
   courseList,
   selectedCourses,
   onChange,
+  colorScheme,
 }) => {
   return (
     <CheckboxGroup defaultValue={selectedCourses} onChange={onChange}>
@@ -31,6 +34,7 @@ const SelectCourseGridView: FC<SelectCourseGridViewProps> = ({
             key={course.id}
             course={course}
             isChecked={selectedCourses.includes(course.id)}
+            colorScheme={colorScheme}
           />
         ))}
       </SimpleGrid>
@@ -43,23 +47,29 @@ export default SelectCourseGridView;
 type SelectCourseGridViewItemProps = {
   course: Course;
   isChecked: boolean;
+  colorScheme?: string;
 };
 
 const SelectCourseGridViewItem: FC<SelectCourseGridViewItemProps> = ({
   course,
   isChecked,
+  colorScheme = "primary",
 }) => {
   const ref = useRef<HTMLInputElement>(null);
+  const [colorScheme500, colorScheme300] = useToken("colors", [
+    `${colorScheme}.500`,
+    `${colorScheme}.300`,
+  ]);
 
   return (
     <Card
-      pos="relative"
       rounded="lg"
       overflow="hidden"
       aria-checked={isChecked}
       borderWidth="3px"
       borderColor="gray.200"
-      _checked={{ borderColor: "green.500" }}
+      _checked={{ borderColor: colorScheme500 }}
+      _hover={{ "&[aria-checked=false]": { borderColor: colorScheme300 } }}
       onClick={() => ref.current?.click()}
       cursor="pointer"
     >

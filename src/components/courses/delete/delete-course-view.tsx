@@ -45,18 +45,21 @@ const DeleteCourseView: FC<DeleteCourseViewProps> = ({
             courseList={courseList}
             selectedCourses={selectedCourses}
             onChange={setSelectedCourses}
+            colorScheme="red"
           />
         ) : view == "grid" ? (
           <SelectCourseGridView
             courseList={courseList}
             selectedCourses={selectedCourses}
             onChange={setSelectedCourses}
+            colorScheme="red"
           />
         ) : (
           <SelectCourseListView
             courseList={courseList}
             selectedCourses={selectedCourses}
             onChange={setSelectedCourses}
+            colorScheme="red"
           />
         )}
       </Box>

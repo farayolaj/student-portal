@@ -6,6 +6,7 @@ import {
   CheckboxGroup,
   Flex,
   Text,
+  useToken,
   VStack,
 } from "@chakra-ui/react";
 import Image from "next/image";
@@ -15,12 +16,14 @@ type SelectCourseListViewProps = {
   courseList: Course[];
   selectedCourses: string[];
   onChange: (values: string[]) => void;
+  colorScheme?: string;
 };
 
 const SelectCourseListView: FC<SelectCourseListViewProps> = ({
   courseList,
   selectedCourses,
   onChange,
+  colorScheme,
 }) => {
   return (
     <CheckboxGroup defaultValue={selectedCourses} onChange={onChange}>
@@ -30,6 +33,7 @@ const SelectCourseListView: FC<SelectCourseListViewProps> = ({
             key={course.id}
             course={course}
             isChecked={selectedCourses.includes(course.id)}
+            colorScheme={colorScheme}
           />
         ))}
       </VStack>
@@ -42,13 +46,19 @@ export default SelectCourseListView;
 type SelectCourseListViewItemProps = {
   course: Course;
   isChecked: boolean;
+  colorScheme?: string;
 };
 
 const SelectCourseListViewItem: FC<SelectCourseListViewItemProps> = ({
   course,
   isChecked,
+  colorScheme = "primary",
 }) => {
   const ref = useRef<HTMLInputElement>(null);
+  const [colorScheme500, colorScheme300] = useToken("colors", [
+    `${colorScheme}.500`,
+    `${colorScheme}.300`,
+  ]);
 
   return (
     <Card
@@ -59,7 +69,8 @@ const SelectCourseListViewItem: FC<SelectCourseListViewItemProps> = ({
       aria-checked={isChecked}
       borderWidth="3px"
       borderColor="transparent"
-      _checked={{ borderColor: "green.500" }}
+      _checked={{ borderColor: colorScheme500 }}
+      _hover={{ "&[aria-checked=false]": { borderColor: colorScheme300 } }}
       onClick={() => ref.current?.click()}
       cursor="pointer"
     >
@@ -67,11 +78,12 @@ const SelectCourseListViewItem: FC<SelectCourseListViewItemProps> = ({
         pos="absolute"
         top={4}
         right={4}
-        colorScheme="primary"
+        colorScheme={colorScheme}
         size="lg"
         zIndex={100}
         ref={ref}
         value={course.id}
+        borderColor={colorScheme500}
       />
       <Flex>
         <Box pos="relative" w="15rem" h="15rem">
