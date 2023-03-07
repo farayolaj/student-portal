@@ -62,16 +62,6 @@ const SelectCourseGridViewItem: FC<SelectCourseGridViewItemProps> = ({
       _checked={{ borderColor: "green.500" }}
       onClick={() => ref.current?.click()}
     >
-      <Checkbox
-        pos="absolute"
-        top={4}
-        right={4}
-        colorScheme="primary"
-        size="lg"
-        ref={ref}
-        value={course.id}
-        zIndex={100}
-      />
       <AspectRatio pos="relative" w="full" ratio={3 / 2}>
         <Image
           alt="Some image"
@@ -80,7 +70,18 @@ const SelectCourseGridViewItem: FC<SelectCourseGridViewItemProps> = ({
           fill
         />
       </AspectRatio>
-      <CardBody p={5} display="flex">
+      <CardBody p={5} display="flex" pos="relative">
+        <Checkbox
+          pos="absolute"
+          top={4}
+          right={4}
+          colorScheme={colorScheme}
+          size="lg"
+          ref={ref}
+          value={course.id}
+          zIndex={100}
+          borderColor={colorScheme500}
+        />
         <Flex direction="column" align="flex-start">
           <Text fontSize="sm" fontWeight="bold">
             {course.id}
