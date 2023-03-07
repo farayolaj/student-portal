@@ -9,7 +9,13 @@ type CourseViewProps = {
 };
 
 const CourseView: FC<CourseViewProps> = ({ view, courseList }) => {
-  const isMobile = useBreakpointValue([true, null, false]);
+  const isMobile = useBreakpointValue(
+    { base: true, md: false },
+    { fallback: undefined }
+  );
+
+  if (isMobile === null) return null;
+
   return (
     <>
       <Box mt={8}>

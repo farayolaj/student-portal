@@ -27,10 +27,15 @@ const DeleteCourseView: FC<DeleteCourseViewProps> = ({
   courseList,
   onDelete,
 }) => {
-  const isMobile = useBreakpointValue([true, null, false]);
+  const isMobile = useBreakpointValue(
+    { base: true, md: false },
+    { fallback: undefined }
+  );
   const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef(null);
+
+  if (isMobile === null) return null;
 
   return (
     <>
