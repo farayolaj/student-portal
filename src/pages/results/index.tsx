@@ -1,4 +1,5 @@
 import { SimpleGrid } from "@chakra-ui/react";
+
 import PageTitle from "../../components/common/page-title";
 import Seo from "../../components/common/seo";
 import ResultOverview from "../../components/results/result-overview";
@@ -15,36 +16,11 @@ export default function Results() {
         cumUnitsPassed={102}
       />
       <SimpleGrid mt={8} columns={[1, null, 4]} gap={8}>
-        <ResultSummary
-          id="1"
-          session="2019/2020"
-          semester="First Semester"
-          gpa={3.69}
-        />
-        <ResultSummary
-          id="2"
-          session="2019/2020"
-          semester="Second Semester"
-          gpa={3.42}
-        />
-        <ResultSummary
-          id="3"
-          session="2020/2021"
-          semester="First Semester"
-          gpa={3.79}
-        />
-        <ResultSummary
-          id="4"
-          session="2020/2021"
-          semester="Second Semester"
-          gpa={3.55}
-        />
-        <ResultSummary
-          id="5"
-          session="2021/2022"
-          semester="First Semester"
-          gpa={3.6}
-        />
+        <ResultSummary id="1" session="2019/2020" />
+        <ResultSummary id="2" session="2019/2020" />
+        <ResultSummary id="3" session="2020/2021" />
+        <ResultSummary id="4" session="2020/2021" />
+        <ResultSummary id="5" session="2021/2022" />
       </SimpleGrid>
     </>
   );
