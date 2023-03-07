@@ -46,7 +46,7 @@ const CourseGridViewItem: FC<CourseGridViewItemProps> = ({ course }) => {
         <div>
           <CourseMaterialDownload link={course.materialLink} />
           <Image
-            alt="Some image"
+            alt=""
             src={course.image}
             style={{ objectFit: "cover" }}
             fill

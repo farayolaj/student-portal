@@ -131,7 +131,7 @@ const CourseItem: FC<CourseItemProps> = ({ code, title, units, image }) => {
   return (
     <Box pos="relative" rounded="md" overflow="hidden">
       <Box pos="absolute" w="full" h="full">
-        <Image src={image} alt="Abstract image" role="presentation" fill />
+        <Image src={image} alt="" role="presentation" fill />
       </Box>
       <VStack
         w="full"

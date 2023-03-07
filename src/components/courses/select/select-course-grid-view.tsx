@@ -74,12 +74,7 @@ const SelectCourseGridViewItem: FC<SelectCourseGridViewItemProps> = ({
       cursor="pointer"
     >
       <AspectRatio pos="relative" w="full" ratio={3 / 2}>
-        <Image
-          alt="Some image"
-          src={course.image}
-          style={{ objectFit: "cover" }}
-          fill
-        />
+        <Image alt="" src={course.image} style={{ objectFit: "cover" }} fill />
       </AspectRatio>
       <CardBody p={5} display="flex" pos="relative">
         <Checkbox

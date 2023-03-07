@@ -88,7 +88,7 @@ const SelectCourseListViewItem: FC<SelectCourseListViewItemProps> = ({
       <Flex>
         <Box pos="relative" w="15rem" h="15rem">
           <Image
-            alt="Some image"
+            alt=""
             src={course.image}
             style={{ objectFit: "cover" }}
             fill
