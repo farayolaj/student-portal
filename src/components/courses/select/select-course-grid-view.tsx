@@ -61,6 +61,7 @@ const SelectCourseGridViewItem: FC<SelectCourseGridViewItemProps> = ({
       borderColor="gray.200"
       _checked={{ borderColor: "green.500" }}
       onClick={() => ref.current?.click()}
+      cursor="pointer"
     >
       <AspectRatio pos="relative" w="full" ratio={3 / 2}>
         <Image

@@ -61,6 +61,7 @@ const SelectCourseListViewItem: FC<SelectCourseListViewItemProps> = ({
       borderColor="transparent"
       _checked={{ borderColor: "green.500" }}
       onClick={() => ref.current?.click()}
+      cursor="pointer"
     >
       <Checkbox
         pos="absolute"
