@@ -22,12 +22,15 @@ interface CourseResult {
   units: number;
 }
 
-type Result = {
-  id: string;
-  session: string;
-  semester: string;
-  gpa: number;
+interface SemesterResult {
   unitsRegistered: number;
   unitsPassed: number;
   courses: CourseResult[];
-};
+}
+
+interface Result {
+  id: string;
+  session: string;
+  firstSemester: SemesterResult;
+  secondSemester: SemesterResult;
+}

@@ -55,9 +55,14 @@ export default function ResultDetailPage() {
   return (
     <>
       <Seo title="Result Details" />
-      <PageTitle showBackButton>
-        {result.session} Session - {result.semester} Result
-      </PageTitle>
+      <ResultBarChart
+        courseResults={allResults}
+        display="flex"
+        w="full"
+        justifyContent="center"
+        h={40}
+        showAxes
+      />
       <ResultDetailOverview
         gpa={result.gpa}
         unitsRegistered={result.unitsRegistered}
