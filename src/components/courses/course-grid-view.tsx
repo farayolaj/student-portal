@@ -42,7 +42,7 @@ const CourseGridViewItem: FC<CourseGridViewItemProps> = ({ course }) => {
         "& img": { filter: "auto", brightness: "60%" },
       }}
     >
-      <AspectRatio pos="relative" w="full" ratio={3 / 2}>
+      <AspectRatio pos="relative" w="full" ratio={3 / 2} overflow="hidden">
         <div>
           <CourseMaterialDownload link={course.materialLink} />
           <Image

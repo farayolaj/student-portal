@@ -73,7 +73,7 @@ const SelectCourseGridViewItem: FC<SelectCourseGridViewItemProps> = ({
       onClick={() => ref.current?.click()}
       cursor="pointer"
     >
-      <AspectRatio pos="relative" w="full" ratio={3 / 2}>
+      <AspectRatio pos="relative" w="full" ratio={3 / 2} overflow="hidden">
         <Image alt="" src={course.image} style={{ objectFit: "cover" }} fill />
       </AspectRatio>
       <CardBody p={5} display="flex" pos="relative">
