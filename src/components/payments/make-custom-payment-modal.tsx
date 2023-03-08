@@ -8,6 +8,7 @@ import {
   ModalCloseButton,
   ModalBody,
   FormControl,
+  FormHelperText,
   FormLabel,
   Select,
   Input,
@@ -15,10 +16,18 @@ import {
   Flex,
   InputGroup,
   InputLeftElement,
+  Textarea,
 } from "@chakra-ui/react";
+import { ChangeEventHandler, useState } from "react";
 
 export default function MakeCustomPaymentModal() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [description, setDescription] = useState("");
+  const descriptionCharLeft = 120 - description.length;
+
+  const onDescriptionChange: ChangeEventHandler<HTMLTextAreaElement> = (ev) => {
+    setDescription(ev.target.value.slice(0, 120));
+  };
 
   return (
     <>
@@ -41,8 +50,20 @@ export default function MakeCustomPaymentModal() {
                 <FormLabel>Title</FormLabel>
                 <Select placeholder="Select a suitable title...">
                   <option>Additional Tuition Fee</option>
-                  <option>Fine</option>
+                  <option>Levy</option>
                 </Select>
+              </FormControl>
+              <FormControl>
+                <FormLabel>Description</FormLabel>
+                <Textarea
+                  placeholder="Enter a description..."
+                  noOfLines={3}
+                  value={description}
+                  onChange={onDescriptionChange}
+                />
+                <FormHelperText>
+                  {descriptionCharLeft} characters left.
+                </FormHelperText>
               </FormControl>
               <FormControl isRequired>
                 <FormLabel>Session</FormLabel>
@@ -54,6 +75,7 @@ export default function MakeCustomPaymentModal() {
               <FormControl isRequired>
                 <FormLabel>Semester</FormLabel>
                 <Select placeholder="Select a semester...">
+                  <option>Not Applicable</option>
                   <option>First Semester</option>
                   <option>Second Semester</option>
                 </Select>
