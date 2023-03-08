@@ -1,7 +1,10 @@
 import { extendTheme } from "@chakra-ui/react";
+import { Nunito } from "next/font/google";
 import { buttonTheme } from "./components/Button";
 import { cardTheme } from "./components/Card";
 import { linkTheme } from "./components/Link";
+
+const nunito = Nunito({ subsets: ["latin"] });
 
 const components = {
   Button: buttonTheme,
@@ -30,6 +33,11 @@ const semanticTokens = {
   },
 };
 
-const theme = extendTheme({ components, colors, semanticTokens });
+const fonts = {
+  heading: nunito.style.fontFamily,
+  body: nunito.style.fontFamily,
+};
+
+const theme = extendTheme({ components, colors, fonts, semanticTokens });
 
 export default theme;
