@@ -58,13 +58,6 @@ const Navigation: FC<NavigationProps> = ({ isOpen }) => {
         isActive={pathname.startsWith("#")}
       />
       <NavLink
-        title="Calendar"
-        icon={IoCalendarOutline}
-        href="#"
-        isOpen={isOpen}
-        isActive={pathname.startsWith("#")}
-      />
-      <NavLink
         title="Profile"
         icon={IoPersonOutline}
         href="#"
