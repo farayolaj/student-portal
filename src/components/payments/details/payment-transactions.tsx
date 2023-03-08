@@ -15,13 +15,7 @@ export default function PaymentTransactions({
         Transactions
       </Text>
       <Box mt={4}>
-        {transactions.length === 0 ? (
-          <Flex justify="center" align="center" p={8}>
-            There are no transactions for this payment yet.
-          </Flex>
-        ) : (
-          <TransactionTable transactions={transactions} />
-        )}
+        <TransactionTable transactions={transactions} />
       </Box>
     </Box>
   );

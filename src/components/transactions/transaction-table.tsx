@@ -50,5 +50,11 @@ type TransactionTableProps = {
 export default function TransactionTable({
   transactions,
 }: TransactionTableProps) {
-  return <CustomTable columns={columns} data={transactions} />;
+  return transactions.length === 0 ? (
+    <Flex justify="center" align="center" p={8}>
+      You have not made any transaction yet.
+    </Flex>
+  ) : (
+    <CustomTable columns={columns} data={transactions} />
+  );
 }
