@@ -4,3 +4,4 @@ export const ADD_COURSES = "/courses/add";
 export const DELETE_COURSES = "/courses/delete";
 export const RESULTS = "/results";
 export const PAYMENTS = "/payments";
+export const TRANSACTIONS = "/transactions";

@@ -8,7 +8,6 @@ import {
   IoDocumentTextOutline,
   IoReceiptOutline,
   IoCardOutline,
-  IoCalendarOutline,
   IoPersonOutline,
 } from "react-icons/io5";
 import * as routes from "../../constants/routes";
@@ -53,9 +52,9 @@ const Navigation: FC<NavigationProps> = ({ isOpen }) => {
       <NavLink
         title="Transactions"
         icon={IoCardOutline}
-        href="#"
+        href={routes.TRANSACTIONS}
         isOpen={isOpen}
-        isActive={pathname.startsWith("#")}
+        isActive={pathname.startsWith(routes.TRANSACTIONS)}
       />
       <NavLink
         title="Profile"

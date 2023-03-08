@@ -11,7 +11,8 @@ import {
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { FC } from "react";
-import { IoTime } from "react-icons/io5";
+import { IoCheckmarkCircle } from "react-icons/io5";
+import * as routes from "../../constants/routes";
 
 const TransactionsCard: FC = () => {
   return (
@@ -25,7 +26,7 @@ const TransactionsCard: FC = () => {
           Recent Transactions
         </Heading>
         <Text as="span" w={["full", null, "initial"]} textAlign="right">
-          <Link as={NextLink} href="#">
+          <Link as={NextLink} href={routes.TRANSACTIONS}>
             Check all transactions &rarr;
           </Link>
         </Text>
@@ -101,7 +102,7 @@ const TransactionsCardItem: FC<TransactionsCardItemProps> = ({
           w="fit-content"
           alignItems="center"
         >
-          <IoTime color={statusColor} /> <span>{statusText}</span>
+          <IoCheckmarkCircle color={statusColor} /> <span>{statusText}</span>
         </Text>
       </Flex>
       <Flex direction="column">
