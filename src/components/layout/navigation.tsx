@@ -5,6 +5,7 @@ import { FC } from "react";
 import {
   IoHomeOutline,
   IoBookOutline,
+  IoDocumentsOutline,
   IoDocumentTextOutline,
   IoReceiptOutline,
   IoCardOutline,
@@ -41,6 +42,13 @@ const Navigation: FC<NavigationProps> = ({ isOpen }) => {
         href={routes.RESULTS}
         isOpen={isOpen}
         isActive={pathname.startsWith(routes.RESULTS)}
+      />
+      <NavLink
+        title="Documents"
+        icon={IoDocumentsOutline}
+        href="#"
+        isOpen={isOpen}
+        isActive={pathname.startsWith("#")}
       />
       <NavLink
         title="Payments"
