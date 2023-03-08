@@ -1,5 +1,6 @@
 import { Button, Flex } from "@chakra-ui/react";
 import RadioButtonGroup from "../common/radio-button-group";
+import MakeCustomPaymentModal from "./make-custom-payment-modal";
 
 type PaymentControlProps = {
   statusFilter: string;
@@ -16,7 +17,7 @@ export default function PaymentControl({
       justify={["center", null, "space-between"]}
       gap={4}
     >
-      <Button>Make Custom Payment</Button>
+      <MakeCustomPaymentModal />
       <RadioButtonGroup
         labels={["All", "Unpaid", "Partial", "Paid"]}
         values={["all", "unpaid", "partial", "paid"]}
