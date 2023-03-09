@@ -29,9 +29,6 @@ export default function PaymentSummary({ payment }: PaymentSummaryProps) {
   if (payment.status === "paid") {
     statusColor = "green";
     statusText = "Paid";
-  } else if (payment.status === "partial") {
-    statusColor = "blue";
-    statusText = "Partially Paid";
   } else {
     statusColor = "yellow";
     statusText = "Unpaid";

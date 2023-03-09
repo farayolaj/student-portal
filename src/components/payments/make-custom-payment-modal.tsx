@@ -17,6 +17,7 @@ import {
   InputGroup,
   InputLeftElement,
   Textarea,
+  Checkbox,
 } from "@chakra-ui/react";
 import { ChangeEventHandler, useState } from "react";
 
@@ -25,6 +26,7 @@ const DESCRIPTION_CHAR_LIMIT = 60;
 export default function MakeCustomPaymentModal() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [description, setDescription] = useState("");
+  const [isCustomPayment, setIsCustomPayment] = useState(false);
   const descriptionCharLeft = DESCRIPTION_CHAR_LIMIT - description.length;
 
   const onDescriptionChange: ChangeEventHandler<HTMLTextAreaElement> = (ev) => {
@@ -33,9 +35,9 @@ export default function MakeCustomPaymentModal() {
 
   return (
     <>
-      <Button onClick={onOpen}>Make Custom Payment</Button>
+      <Button onClick={onOpen}>Make Sundry / Custom Payment</Button>
 
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+      <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Make Custom Payment</ModalHeader>
@@ -54,6 +56,13 @@ export default function MakeCustomPaymentModal() {
                   <option>Additional Tuition Fee</option>
                   <option>Levy</option>
                 </Select>
+              </FormControl>
+              <FormControl display="inline-flex" alignItems="center" gap={4}>
+                <Checkbox
+                  isChecked={isCustomPayment}
+                  onChange={(ev) => setIsCustomPayment(ev.target.checked)}
+                />
+                <FormLabel mb={0}>Custom Payment</FormLabel>
               </FormControl>
               <FormControl>
                 <FormLabel>Description</FormLabel>
@@ -90,7 +99,7 @@ export default function MakeCustomPaymentModal() {
                   <option>300</option>
                 </Select>
               </FormControl>
-              <FormControl isRequired>
+              <FormControl isReadOnly={!isCustomPayment} isRequired>
                 <FormLabel>Amount</FormLabel>
                 <InputGroup>
                   <InputLeftElement>₦</InputLeftElement>

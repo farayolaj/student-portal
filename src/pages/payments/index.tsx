@@ -11,8 +11,6 @@ export default function Payments() {
   const sortedPayments = payments.sort((a, b) => {
     if (a.status === b.status) return 0;
     if (a.status === "unpaid") return -1;
-    if (b.status === "unpaid") return 1;
-    if (a.status === "partial") return -1;
     else return 1;
   });
   const filteredPayments = sortedPayments.filter((payment) => {
