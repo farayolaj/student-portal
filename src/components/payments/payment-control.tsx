@@ -19,8 +19,8 @@ export default function PaymentControl({
     >
       <MakeCustomPaymentModal />
       <RadioButtonGroup
-        labels={["All", "Unpaid", "Partial", "Paid"]}
-        values={["all", "unpaid", "partial", "paid"]}
+        labels={["All", "Unpaid", "Paid"]}
+        values={["all", "unpaid", "paid"]}
         value={statusFilter}
         onChange={onStatusFilterChange}
       />

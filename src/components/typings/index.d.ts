@@ -51,7 +51,7 @@ interface BasePayment {
   title: string;
   amount: number;
   dueDate?: Date;
-  status: "paid" | "unpaid" | "partial";
+  status: "paid" | "unpaid";
   type: "tuition" | "secondary" | "general" | "custom";
   transactions?: Transaction[];
 }
