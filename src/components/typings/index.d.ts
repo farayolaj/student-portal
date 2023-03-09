@@ -88,3 +88,13 @@ type Payment =
   | SecondaryPayment
   | GeneralPayment
   | CustomPayment;
+
+interface PortalDocument {
+  id: string;
+  title: string;
+  url: string;
+  fileType: string;
+  programme?: string;
+  session?: string;
+  semester?: string;
+}
