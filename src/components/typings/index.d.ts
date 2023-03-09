@@ -38,9 +38,12 @@ interface Result {
 interface Transaction {
   id: string;
   amount: number;
+  description: string;
   referenceNumber: string;
+  rrr: string;
   dateInitiated: Date;
   status: "failed" | "pending" | "success";
+  datePayed?: Date;
 }
 
 interface BasePayment {

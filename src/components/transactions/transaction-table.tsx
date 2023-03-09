@@ -1,6 +1,7 @@
 import { Badge, Box, Button, Flex } from "@chakra-ui/react";
 import { createColumnHelper } from "@tanstack/react-table";
 import CustomTable from "../common/custom-table";
+import TransactionDetails from "./transaction-details";
 
 const columnHelper = createColumnHelper<Transaction>();
 
@@ -32,12 +33,12 @@ const columns = [
       );
     },
   }),
-  columnHelper.display({
+  columnHelper.accessor((trx) => trx, {
     id: "action",
     header: () => <Box textAlign="center">Action</Box>,
-    cell: () => (
+    cell: (row) => (
       <Flex justify="center">
-        <Button>View Details</Button>
+        <TransactionDetails transaction={row.getValue()} />
       </Flex>
     ),
   }),
