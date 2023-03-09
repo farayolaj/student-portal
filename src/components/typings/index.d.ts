@@ -46,48 +46,19 @@ interface Transaction {
   datePayed?: Date;
 }
 
-interface BasePayment {
+interface Payment {
   id: string;
   title: string;
   amount: number;
   dueDate?: Date;
   status: "paid" | "unpaid";
-  type: "tuition" | "secondary" | "general" | "custom";
-  transactions?: Transaction[];
-}
-
-interface TuitionPayment extends BasePayment {
-  level: string;
+  level?: string;
   entryMode: string;
   programme: string;
-  semester: string;
-  session: string;
-  type: "tuition";
+  session?: string;
+  semester?: string;
+  transactions?: Transaction[];
 }
-
-interface SecondaryPayment extends BasePayment {
-  session: string;
-  programme: string;
-  type: "secondary";
-}
-
-interface GeneralPayment extends BasePayment {
-  type: "general";
-}
-
-interface CustomPayment extends BasePayment {
-  session: string;
-  semester: string;
-  programme: string;
-  level: string;
-  type: "custom";
-}
-
-type Payment =
-  | TuitionPayment
-  | SecondaryPayment
-  | GeneralPayment
-  | CustomPayment;
 
 interface PortalDocument {
   id: string;

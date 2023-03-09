@@ -1,12 +1,4 @@
-import {
-  Button,
-  Card,
-  CardBody,
-  Flex,
-  Link,
-  Spacer,
-  Text,
-} from "@chakra-ui/react";
+import { Card, CardBody, Flex, Link, Text } from "@chakra-ui/react";
 import { IoCheckmarkCircle } from "react-icons/io5";
 import NextLink from "next/link";
 
@@ -15,14 +7,8 @@ type PaymentSummaryProps = {
 };
 
 export default function PaymentSummary({ payment }: PaymentSummaryProps) {
-  const description =
-    payment.type === "tuition"
-      ? `${payment.session} - ${payment.semester}`
-      : payment.type === "secondary"
-      ? payment.session
-      : payment.type === "custom"
-      ? `${payment.session} (Custom Payment)`
-      : "";
+  const descriptionArr = [payment.session, payment.semester];
+  let description = descriptionArr.filter(Boolean).join(" | ");
   let statusColor: string;
   let statusText: string;
 

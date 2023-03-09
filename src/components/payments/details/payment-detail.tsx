@@ -6,14 +6,13 @@ type PaymentDetailProps = {
 };
 
 export default function PaymentDetail({ payment }: PaymentDetailProps) {
-  const description =
-    payment.type === "tuition"
-      ? `${payment.session} - ${payment.semester}`
-      : payment.type === "secondary"
-      ? payment.session
-      : payment.type === "custom"
-      ? `${payment.session} - ${payment.semester} (Custom Payment)`
-      : "";
+  const descriptionArr = [
+    payment.level ? `${payment.level} Level` : undefined,
+    payment.programme,
+    payment.session,
+    payment.semester,
+  ];
+  const description = descriptionArr.filter(Boolean).join(" | ");
   let statusColor: string;
   let statusText: string;
 
