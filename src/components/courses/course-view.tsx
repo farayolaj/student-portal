@@ -27,9 +27,6 @@ const CourseView: FC<CourseViewProps> = ({ view, courseList }) => {
           <CourseListView courseList={courseList} />
         )}
       </Box>
-      <Flex justify="center" mt={6}>
-        <Button>Print Course Registration</Button>
-      </Flex>
     </>
   );
 };
