@@ -18,7 +18,7 @@ import * as routes from "../../constants/routes";
 
 const PaymentsCard: FC = () => {
   return (
-    <Card>
+    <Card mt={8}>
       <CardHeader
         display="flex"
         justifyContent="space-between"

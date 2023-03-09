@@ -13,10 +13,10 @@ export default function Home() {
       <PageTitle>Dashboard</PageTitle>
       <ProfileCard />
       <CoursesCard />
-      <SimpleGrid mt={8} columns={[1, null, null, 2]} gap={8}>
-        <PaymentsCard />
-        <TransactionsCard />
-      </SimpleGrid>
+      {/* <SimpleGrid mt={8} columns={[1, null, null, 2]} gap={8}> */}
+      <PaymentsCard />
+      {/* <TransactionsCard /> */}
+      {/* </SimpleGrid> */}
     </>
   );
 }
