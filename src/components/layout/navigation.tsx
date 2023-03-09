@@ -1,7 +1,8 @@
-import { VStack, Text, Link } from "@chakra-ui/react";
+import { VStack, Text, Link, Icon } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { FC } from "react";
+import { IconType } from "react-icons/lib";
 import {
   IoHomeOutline,
   IoBookOutline,
@@ -80,13 +81,12 @@ export default Navigation;
 type NavLinkProps = {
   title: string;
   href: string;
-  icon: FC<{ size: string; "aria-label": string }>;
+  icon: IconType;
   isOpen: boolean;
   isActive: boolean;
 };
 
 const NavLink: FC<NavLinkProps> = ({ title, href, icon, isOpen, isActive }) => {
-  const Component = icon;
   return (
     <Link
       bg={isActive ? "primary.100" : "transparent"}
@@ -102,7 +102,7 @@ const NavLink: FC<NavLinkProps> = ({ title, href, icon, isOpen, isActive }) => {
       color="initial"
       _hover={{ textDecoration: "none", bg: "primary.50" }}
     >
-      <Component size="1.5em" aria-label={title} />
+      <Icon as={icon} boxSize="1.5em" title={title} aria-label={title} />
       <Text as="span" display={isOpen ? "unset" : "none"}>
         {title}
       </Text>

@@ -7,7 +7,7 @@ import {
   SimpleGrid,
   Text,
 } from "@chakra-ui/react";
-import { IconType } from "react-icons";
+import { IconType } from "react-icons/lib";
 import {
   BsFillFileEarmarkPdfFill,
   BsFillFileEarmarkTextFill,
