@@ -1,4 +1,5 @@
-import { Button, Flex } from "@chakra-ui/react";
+import { Button, Flex, Icon } from "@chakra-ui/react";
+import { IoPrintOutline } from "react-icons/io5";
 import RadioButtonGroup from "../common/radio-button-group";
 import MakeCustomPaymentModal from "./make-custom-payment-modal";
 
@@ -17,7 +18,12 @@ export default function PaymentControl({
       justify={["center", null, "space-between"]}
       gap={4}
     >
-      <MakeCustomPaymentModal />
+      <Flex justify="center" wrap={["wrap", null, "initial"]} gap={4}>
+        <MakeCustomPaymentModal />
+        <Button display="inline-flex" gap={2}>
+          <Icon as={IoPrintOutline} boxSize={6} /> Print Ledger
+        </Button>
+      </Flex>
       <RadioButtonGroup
         labels={["All", "Unpaid", "Paid"]}
         values={["all", "unpaid", "paid"]}
