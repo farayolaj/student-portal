@@ -1,13 +1,11 @@
 import { Button, Card, CardBody, Flex, Text } from "@chakra-ui/react";
 import { IoCheckmarkCircle } from "react-icons/io5";
 
-type PaymentDetailOverviewProps = {
+type PaymentDetailProps = {
   payment: Payment;
 };
 
-export default function PaymentDetailOverview({
-  payment,
-}: PaymentDetailOverviewProps) {
+export default function PaymentDetail({ payment }: PaymentDetailProps) {
   const description =
     payment.type === "tuition"
       ? `${payment.session} - ${payment.semester}`
@@ -58,7 +56,11 @@ export default function PaymentDetailOverview({
             <Button>Print Receipt</Button>
           ) : (
             <Flex direction="column">
-              <Button>Pay Now</Button>
+              <Button
+                isDisabled={payment.transactions?.at(0)?.status === "pending"}
+              >
+                Pay Now
+              </Button>
               <Text as="span" fontSize="sm" fontWeight="semibold" mt={8}>
                 {payment.dueDate &&
                   `Due ${payment.dueDate?.toLocaleDateString()}`}

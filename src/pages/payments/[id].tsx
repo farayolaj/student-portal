@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import PageTitle from "../../components/common/page-title";
 import Seo from "../../components/common/seo";
-import PaymentDetailOverview from "../../components/payments/details/payment-detail-overview";
+import PaymentDetail from "../../components/payments/details/payment-detail";
 import PaymentTransactions from "../../components/payments/details/payment-transactions";
 import { payments } from "../../data/payments";
 
@@ -20,7 +20,7 @@ export default function PaymentDetails() {
     <>
       <Seo title="Payment Details" />
       <PageTitle showBackButton>Payment Details</PageTitle>
-      <PaymentDetailOverview payment={payment} />
+      <PaymentDetail payment={payment} />
       <PaymentTransactions transactions={sortedTransactions} />
     </>
   );
