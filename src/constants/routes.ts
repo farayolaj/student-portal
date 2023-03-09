@@ -5,3 +5,4 @@ export const DELETE_COURSES = "/courses/delete";
 export const RESULTS = "/results";
 export const PAYMENTS = "/payments";
 export const TRANSACTIONS = "/transactions";
+export const DOCUMENTS = "/documents";

@@ -46,9 +46,9 @@ const Navigation: FC<NavigationProps> = ({ isOpen }) => {
       <NavLink
         title="Documents"
         icon={IoDocumentsOutline}
-        href="#"
+        href={routes.DOCUMENTS}
         isOpen={isOpen}
-        isActive={pathname.startsWith("#")}
+        isActive={pathname.startsWith(routes.DOCUMENTS)}
       />
       <NavLink
         title="Payments"
