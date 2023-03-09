@@ -20,8 +20,8 @@ const AddCourseOverviewCard: FC<AddCourseOverviewProps> = ({
 
   return (
     <SimpleGrid mt={8} columns={[1, null, 4]} columnGap={6}>
-      <NameValueCard name="Min Units" value={minUnits} />
-      <NameValueCard name="Max Units" value={maxUnits} />
+      <NameValueCard name="Minimum Units" value={minUnits} />
+      <NameValueCard name="Maximum Units" value={maxUnits} />
       <NameValueCard name="Total Selected Units" value={totalUnits} />
       <NameValueCard name="Selected Courses" value={selectedCourses.length} />
     </SimpleGrid>
