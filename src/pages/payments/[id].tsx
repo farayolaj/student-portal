@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import PageTitle from "../../components/common/page-title";
 import Seo from "../../components/common/seo";
 import PaymentDetail from "../../components/payments/details/payment-detail";
-import PaymentTransactions from "../../components/payments/details/payment-transactions";
+import PaymentTransactionDetail from "../../components/payments/details/payment-transactions";
 import { payments } from "../../data/payments";
 
 export default function PaymentDetails() {
@@ -11,17 +11,12 @@ export default function PaymentDetails() {
   console.log(typeof id);
   const payment = payments.find((p) => p.id == id) as Payment;
 
-  const sortedTransactions =
-    payment.transactions?.sort(
-      (a, b) => b.dateInitiated.getTime() - a.dateInitiated.getTime()
-    ) || [];
-
   return (
     <>
       <Seo title="Payment Details" />
       <PageTitle showBackButton>Payment Details</PageTitle>
       <PaymentDetail payment={payment} />
-      <PaymentTransactions transactions={sortedTransactions} />
+      <PaymentTransactionDetail transaction={payment.transactions?.at(0)} />
     </>
   );
 }

@@ -91,7 +91,7 @@ type DetailItemProps = {
   value: number | string;
 };
 
-function DetailItem({ name, value }: DetailItemProps) {
+export function DetailItem({ name, value }: DetailItemProps) {
   return (
     <VStack align="flex-start" spacing={0.5}>
       <Text fontSize="xs" fontWeight="bold" color="grey">
