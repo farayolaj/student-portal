@@ -1,4 +1,4 @@
-import { Badge, Box, Button, Flex, Text } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import TransactionTable from "../../transactions/transaction-table";
 
 type PaymentTransactionsProps = {
