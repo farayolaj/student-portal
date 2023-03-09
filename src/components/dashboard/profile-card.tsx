@@ -34,6 +34,7 @@ const ProfileCard: FC = () => {
         >
           <ProfileCardItem name="Matric. No." value="217349" />
           <ProfileCardItem name="Level" value="200" />
+          <ProfileCardItem name="Entry Mode" value="UTME" />
           <ProfileCardItem
             name="Programme"
             value={
