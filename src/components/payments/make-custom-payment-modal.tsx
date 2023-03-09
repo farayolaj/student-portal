@@ -20,13 +20,15 @@ import {
 } from "@chakra-ui/react";
 import { ChangeEventHandler, useState } from "react";
 
+const DESCRIPTION_CHAR_LIMIT = 60;
+
 export default function MakeCustomPaymentModal() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [description, setDescription] = useState("");
-  const descriptionCharLeft = 120 - description.length;
+  const descriptionCharLeft = DESCRIPTION_CHAR_LIMIT - description.length;
 
   const onDescriptionChange: ChangeEventHandler<HTMLTextAreaElement> = (ev) => {
-    setDescription(ev.target.value.slice(0, 120));
+    setDescription(ev.target.value.slice(0, DESCRIPTION_CHAR_LIMIT));
   };
 
   return (
@@ -57,7 +59,7 @@ export default function MakeCustomPaymentModal() {
                 <FormLabel>Description</FormLabel>
                 <Textarea
                   placeholder="Enter a description..."
-                  noOfLines={3}
+                  noOfLines={2}
                   value={description}
                   onChange={onDescriptionChange}
                 />
