@@ -98,4 +98,5 @@ export default function ForgotPassword() {
 
 ForgotPassword.layoutProps = {
   show: false,
+  isAuthenticated: false,
 };

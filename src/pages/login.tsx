@@ -93,4 +93,5 @@ export default function Login() {
 
 Login.layoutProps = {
   show: false,
+  isAuthenticated: false,
 };

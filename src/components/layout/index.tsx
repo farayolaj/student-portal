@@ -1,17 +1,35 @@
 import { Box, Flex } from "@chakra-ui/react";
-import { FC, PropsWithChildren } from "react";
+import { useRouter } from "next/router";
+import { FC, PropsWithChildren, useEffect } from "react";
+import { LOGIN } from "../../constants/routes";
+import useAuth from "../../hooks/use-auth";
 import EventSidebar from "./event-sidebar";
 import { Header } from "./header";
 import { Sidebar } from "./sidebar";
 
 export type LayoutProps = {
   show?: boolean;
+  isAuthenticated?: boolean;
 };
 
 const Layout: FC<PropsWithChildren<LayoutProps>> = ({
   children,
   show = true,
+  isAuthenticated = true,
 }) => {
+  const { user } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isAuthenticated && !user) {
+      router.push(LOGIN);
+    }
+  }, [isAuthenticated, user, router]);
+
+  if (isAuthenticated && !user) {
+    return null;
+  }
+
   if (!show) return <>{children}</>;
 
   return (
