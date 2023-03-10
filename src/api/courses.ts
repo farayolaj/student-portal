@@ -1,5 +1,6 @@
 import api from ".";
 import { toCourse, toCourseStatistics } from "../transformers/courses";
+import { toSession } from "../transformers/dashboard";
 
 export async function getRegisteredCourses({ session }: { session: string }) {
   try {
@@ -29,6 +30,18 @@ export async function getCourseStatistics({
       throw new Error("Could not fetch course statistics");
 
     return toCourseStatistics(response.data.data);
+  } catch (e) {
+    throw new Error("Internal server error");
+  }
+}
+
+export async function getAllSessions() {
+  try {
+    const response = await api.get("/allsessions");
+
+    if (!response.data.status) throw new Error("Could not fetch sessions");
+
+    return response.data.payload.map(toSession) as Session[];
   } catch (e) {
     throw new Error("Internal server error");
   }
