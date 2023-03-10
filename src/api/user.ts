@@ -1,8 +1,9 @@
+import parse from "date-fns/parse";
 import api from ".";
 
 export async function getUser() {
   try {
-    // const response = await api.get("user");
+    // const response = await api.get("/user");
 
     // if (!response.data.status) throw new Error("Could not fetch user details");
 
@@ -13,6 +14,9 @@ export async function getUser() {
       lastName: "lastName",
       matricNumber: "matricNumber",
       id: "id",
+      dob: new Date(),
+      gender: "Male",
+      phone: "phone",
     } as User;
   } catch (e) {
     throw new Error("Internal server error");

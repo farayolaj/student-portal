@@ -75,10 +75,11 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     setIsLoggingIn(true);
     let token: string;
     try {
-      token = await login(credential);
+      const loginRes = await login(credential);
+      token = loginRes.token;
 
       setAuthToken(token);
-      const user = await getUser();
+      const user = loginRes.user;
       setUser(user);
       setIsLoggingIn(false);
       opts?.onSuccess(user);

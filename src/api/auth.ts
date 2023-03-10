@@ -1,4 +1,5 @@
 import api from ".";
+import { toUser } from "../transformers/user";
 
 export type LoginCredential = {
   username: string;
@@ -7,15 +8,18 @@ export type LoginCredential = {
 
 export async function login({ username, password }: LoginCredential) {
   try {
-    //   const response = await api.post("authenticate", {
-    //     user_login: username,
-    //     user_pass: password,
-    //   });
+    const response = await api.post("authenticate", {
+      user_login: username,
+      user_pass: password,
+    });
 
-    //   if (!response.data.status) throw new Error("Invalid username or password");
+    if (!response.data.status) throw new Error("Invalid username or password");
 
-    // return response.data.date.token as string;
-    return "token";
+    return {
+      token: response.data.payload.token,
+      user: toUser(response.data.payload.profile),
+      currentSessionId: response.data.payload.current_session,
+    };
   } catch (e) {
     throw new Error("Internal server error");
   }
@@ -23,7 +27,7 @@ export async function login({ username, password }: LoginCredential) {
 
 export async function resetPassword({ username }: { username: string }) {
   try {
-    const response = await api.post("reset_password", {
+    const response = await api.post("/reset_password", {
       user_login: username,
     });
 
