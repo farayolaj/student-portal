@@ -4,6 +4,7 @@ import {
   Card,
   CardBody,
   CardHeader,
+  chakra,
   Flex,
   FormControl,
   FormHelperText,
@@ -68,7 +69,12 @@ export default function ForgotPassword() {
                   </Link>
                 </Flex>
               ) : (
-                <Flex as="form" direction="column" gap={6} align="center">
+                <chakra.form
+                  display="flex"
+                  flexDir="column"
+                  gap={6}
+                  alignItems="center"
+                >
                   <FormControl>
                     <FormLabel fontSize="sm" fontWeight="bold">
                       Matric. Number/Email Address
@@ -86,7 +92,7 @@ export default function ForgotPassword() {
                   <Button onClick={() => setIsResetRequestSent(true)}>
                     Reset Password
                   </Button>
-                </Flex>
+                </chakra.form>
               )}
             </CardBody>
           </Card>
