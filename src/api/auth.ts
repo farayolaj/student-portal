@@ -7,14 +7,15 @@ export type LoginCredential = {
 
 export async function login({ username, password }: LoginCredential) {
   try {
-    const response = await api.post("authenticate", {
-      user_login: username,
-      user_pass: password,
-    });
+    //   const response = await api.post("authenticate", {
+    //     user_login: username,
+    //     user_pass: password,
+    //   });
 
-    if (!response.data.status) throw new Error("Invalid username or password");
+    //   if (!response.data.status) throw new Error("Invalid username or password");
 
-    return response.data.date.token as string;
+    // return response.data.date.token as string;
+    return "token";
   } catch (e) {
     throw new Error("Internal server error");
   }
