@@ -6,6 +6,9 @@ const api = axios.create({
   headers: {
     X_APP_KEY: X_APP_KEY,
   },
+  validateStatus: function (status) {
+    return status < 500;
+  },
 });
 
 api.interceptors.request.use((config) => {
