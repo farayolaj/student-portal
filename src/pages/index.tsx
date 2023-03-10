@@ -19,8 +19,8 @@ export default function Home() {
         matricNo={dashboardInfo?.data?.user?.matricNumber}
         programme={dashboardInfo?.data?.programme?.programme}
       />
-      <CoursesCard />
-      <PaymentsCard />
+      <CoursesCard courses={dashboardInfo.data?.courses || []} />
+      {/* <PaymentsCard /> */}
     </>
   );
 }

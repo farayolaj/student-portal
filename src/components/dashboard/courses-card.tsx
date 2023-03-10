@@ -6,6 +6,7 @@ import {
   Heading,
   Link,
   SimpleGrid,
+  Skeleton,
   Spacer,
   Text,
   VStack,
@@ -14,10 +15,13 @@ import Image from "next/image";
 import NextLink from "next/link";
 import { FC } from "react";
 import * as routes from "../../constants/routes";
-import { courses } from "../../data/courses";
 import randomImage from "../courses/randomImage";
 
-const CoursesCard: FC = () => {
+type CoursesCardProps = {
+  courses: Course[];
+};
+
+const CoursesCard: FC<CoursesCardProps> = ({ courses }) => {
   return (
     <Card mt={8}>
       <CardHeader display="flex" justifyContent="space-between">
@@ -32,15 +36,19 @@ const CoursesCard: FC = () => {
       </CardHeader>
       <CardBody>
         <SimpleGrid gap={4} columns={[2, null, null, 4]}>
-          {courses.slice(0, 4).map((course) => (
-            <CourseItem
-              key={course.id}
-              code={course.id}
-              title={course.title}
-              units={course.units}
-              image={course.image}
-            />
-          ))}
+          {courses.length > 0
+            ? courses
+                .slice(0, 4)
+                .map((course) => (
+                  <CourseItem
+                    key={course.id}
+                    code={course.id}
+                    title={course.title}
+                    units={course.units}
+                    image={course.image}
+                  />
+                ))
+            : [1, 2, 3, 4].map((i) => <Skeleton h={28} key={i} />)}
         </SimpleGrid>
       </CardBody>
     </Card>
