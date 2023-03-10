@@ -8,6 +8,7 @@ import {
 } from "react";
 import { login, LoginCredential } from "../api/auth";
 import { getUser } from "../api/user";
+import useLocalStorage from "./use-local-storage";
 
 export type TAuthAction = {
   /**
@@ -39,6 +40,7 @@ const AuthActionContext = createContext<TAuthAction>({
 
 type TAuthState = {
   user?: User;
+  authToken?: string;
   isLoggingIn: boolean;
   error?: Error | null;
 };
@@ -51,10 +53,14 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const [user, setUser] = useState<User | undefined>();
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [error, setError] = useState<Error | null | undefined>();
+  const [authToken, setAuthToken] = useLocalStorage<string | undefined>(
+    "token",
+    undefined
+  );
 
   useEffect(() => {
     setIsLoggingIn(true);
-    if (localStorage.getItem("token"))
+    if (authToken)
       getUser()
         .then((user) => {
           setUser(user);
@@ -63,7 +69,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
           setIsLoggingIn(false);
         });
     else setIsLoggingIn(false);
-  }, []);
+  }, [authToken]);
 
   const loginFn: TAuthAction["login"] = async (credential, opts) => {
     setIsLoggingIn(true);
@@ -71,7 +77,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     try {
       token = await login(credential);
 
-      localStorage.setItem("token", token);
+      setAuthToken(token);
       const user = await getUser();
       setUser(user);
       setIsLoggingIn(false);
@@ -89,7 +95,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   };
   const logout: TAuthAction["logout"] = async () => {
     setUser(undefined);
-    localStorage.removeItem("token");
+    setAuthToken(undefined);
   };
 
   return (
@@ -99,7 +105,9 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
         logout: logout,
       }}
     >
-      <AuthStateContext.Provider value={{ user, isLoggingIn, error }}>
+      <AuthStateContext.Provider
+        value={{ user, authToken, isLoggingIn, error }}
+      >
         {children}
       </AuthStateContext.Provider>
     </AuthActionContext.Provider>
@@ -112,6 +120,7 @@ const useAuth = () => {
 
   return {
     user: authState.user,
+    authToken: authState.authToken,
     isLoggingIn: authState.isLoggingIn,
     error: authState.error,
     login: authAction.login,

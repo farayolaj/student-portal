@@ -17,14 +17,14 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
   show = true,
   isAuthenticated = true,
 }) => {
-  const { user } = useAuth();
+  const { user, authToken } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (isAuthenticated && !user) {
+    if (isAuthenticated && !authToken) {
       router.push(LOGIN);
     }
-  }, [isAuthenticated, user, router]);
+  }, [isAuthenticated, authToken, router]);
 
   if (isAuthenticated && !user) {
     return null;
