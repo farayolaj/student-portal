@@ -11,22 +11,17 @@ import {
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { FC, ReactNode } from "react";
+import { useDashboardInfo } from "../../hooks/dashboard/use-dashboard-info";
 
-type ProfileCardProps = {
-  matricNo?: string;
-  level?: string;
-  entryMode?: string;
-  programme?: string;
-  cgpa?: number;
-};
+const ProfileCard: FC = () => {
+  const dashboardInfo = useDashboardInfo();
+  const isLoading = dashboardInfo.isLoading;
+  const matricNo = dashboardInfo.data?.user?.matricNumber;
+  const level = dashboardInfo.data?.programme?.level;
+  const entryMode = dashboardInfo.data?.programme?.entryMode;
+  const programme = dashboardInfo.data?.programme?.programme;
+  const cgpa = dashboardInfo.data?.cpga || "N/A";
 
-const ProfileCard: FC<ProfileCardProps> = ({
-  cgpa,
-  entryMode,
-  level,
-  matricNo,
-  programme,
-}) => {
   return (
     <Card>
       <CardHeader display="flex" justifyContent="space-between">
@@ -46,20 +41,27 @@ const ProfileCard: FC<ProfileCardProps> = ({
           rowGap={6}
           justify={["space-between", null, "initial"]}
         >
-          <ProfileCardItem name="Matric. No." value={matricNo} />
-          <ProfileCardItem name="Level" value={level} />
-          <ProfileCardItem name="Entry Mode" value={entryMode} />
           <ProfileCardItem
+            isLoading={isLoading}
+            name="Matric. No."
+            value={matricNo}
+          />
+          <ProfileCardItem isLoading={isLoading} name="Level" value={level} />
+          <ProfileCardItem
+            isLoading={isLoading}
+            name="Entry Mode"
+            value={entryMode}
+          />
+          <ProfileCardItem
+            isLoading={isLoading}
             name="Programme"
             value={
-              programme && (
-                <Text as="span" textAlign="center">
-                  {programme}
-                </Text>
-              )
+              <Text as="span" textAlign="center">
+                {programme}
+              </Text>
             }
           />
-          <ProfileCardItem name="CGPA" value={cgpa} />
+          <ProfileCardItem isLoading={isLoading} name="CGPA" value={cgpa} />
           {/* <ProfileCardItem name="Session" value={session} /> */}
           {/* <ProfileCardItem name="Semester" value={semester} /> */}
         </Flex>
@@ -73,9 +75,14 @@ export default ProfileCard;
 type ProfileCardItemProps = {
   name: string;
   value?: ReactNode;
+  isLoading: boolean;
 };
 
-const ProfileCardItem: FC<ProfileCardItemProps> = ({ name, value }) => {
+const ProfileCardItem: FC<ProfileCardItemProps> = ({
+  name,
+  value,
+  isLoading,
+}) => {
   return (
     <VStack
       align="initial"
@@ -85,7 +92,7 @@ const ProfileCardItem: FC<ProfileCardItemProps> = ({ name, value }) => {
       <Text fontSize="sm" fontWeight="semibold">
         {name}
       </Text>
-      {value ? <Text>{value}</Text> : <SkeletonText w={28} noOfLines={1} />}
+      {isLoading ? <SkeletonText w={28} noOfLines={1} /> : <Text>{value}</Text>}
     </VStack>
   );
 };
