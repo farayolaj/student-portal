@@ -1,7 +1,6 @@
 export const payments: Payment[] = [
   {
     id: "1",
-    type: "tuition",
     amount: 1000000,
     entryMode: "Direct Entry",
     level: "400",
@@ -14,8 +13,8 @@ export const payments: Payment[] = [
   },
   {
     id: "7",
-    type: "custom",
     amount: 1000000,
+    entryMode: "Direct Entry",
     session: "2021/2022",
     semester: "First Semester",
     programme: "Computer Science",
@@ -37,8 +36,8 @@ export const payments: Payment[] = [
   },
   {
     id: "2",
-    type: "secondary",
     amount: 1000000,
+    entryMode: "UTME",
     programme: "Computer Science",
     session: "2021/2022",
     status: "paid",
@@ -68,9 +67,10 @@ export const payments: Payment[] = [
   },
   {
     id: "3",
-    type: "general",
     amount: 1000000,
+    entryMode: "UTME",
     status: "unpaid",
+    programme: "Computer Science",
     title: "Health Fee",
     dueDate: new Date(2021, 2, 1),
     transactions: [
