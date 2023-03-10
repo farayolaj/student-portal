@@ -6,3 +6,5 @@ export const RESULTS = "/results";
 export const PAYMENTS = "/payments";
 export const TRANSACTIONS = "/transactions";
 export const DOCUMENTS = "/documents";
+export const LOGIN = "/login";
+export const FORGOT_PASSWORD = "/forgot-password";

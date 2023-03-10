@@ -24,7 +24,7 @@ export default function Documents() {
         <InputGroup maxW={80}>
           <Input
             type="search"
-            bgColor="white"
+            variant="primary"
             onChange={(e) => setSearch(e.target.value.toLowerCase())}
             placeholder="Search for a document"
           />

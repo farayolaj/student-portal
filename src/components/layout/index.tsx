@@ -4,7 +4,16 @@ import EventSidebar from "./event-sidebar";
 import { Header } from "./header";
 import { Sidebar } from "./sidebar";
 
-const Layout: FC<PropsWithChildren> = ({ children }) => {
+export type LayoutProps = {
+  show?: boolean;
+};
+
+const Layout: FC<PropsWithChildren<LayoutProps>> = ({
+  children,
+  show = true,
+}) => {
+  if (!show) return <>{children}</>;
+
   return (
     <Flex pos="relative" direction="column">
       <Header />
