@@ -47,22 +47,10 @@ const AuthStateContext = createContext<TAuthState>({
   isLoggingIn: false,
 });
 
-type AuthProviderProps = {
-  /**
-   * This is only provided for mocking reasons.
-   * Do not use in production.
-   * @deprecated
-   */
-  value?: TAuthAction & TAuthState;
-};
-
-export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({
-  value,
-  children,
-}) => {
-  const [user, setUser] = useState<User | undefined>(value?.user);
-  const [isLoggingIn, setIsLoggingIn] = useState(value?.isLoggingIn || false);
-  const [error, setError] = useState<Error | null | undefined>(value?.error);
+export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
+  const [user, setUser] = useState<User | undefined>();
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [error, setError] = useState<Error | null | undefined>();
 
   useEffect(() => {
     setIsLoggingIn(true);
@@ -107,8 +95,8 @@ export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({
   return (
     <AuthActionContext.Provider
       value={{
-        login: value?.login || loginFn,
-        logout: value?.logout || logout,
+        login: loginFn,
+        logout: logout,
       }}
     >
       <AuthStateContext.Provider value={{ user, isLoggingIn, error }}>
