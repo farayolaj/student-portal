@@ -8,6 +8,7 @@ import { NextComponentType } from "next";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import queryClient from "../lib/query-client";
+import { AuthProvider } from "../hooks/use-auth";
 
 type CustomAppProps = AppProps & {
   Component: NextComponentType & { layoutProps: LayoutProps };
@@ -18,9 +19,11 @@ export default function App({ Component, pageProps }: CustomAppProps) {
   return (
     <ChakraProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
-        <Layout {...layoutProps}>
-          <Component {...pageProps} />
-        </Layout>
+        <AuthProvider>
+          <Layout {...layoutProps}>
+            <Component {...pageProps} />
+          </Layout>
+        </AuthProvider>
         <ReactQueryDevtools initialIsOpen />
       </QueryClientProvider>
     </ChakraProvider>
