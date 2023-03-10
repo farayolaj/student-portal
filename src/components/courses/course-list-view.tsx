@@ -2,6 +2,7 @@ import { Box, Card, CardBody, Flex, Text, VStack } from "@chakra-ui/react";
 import Image from "next/image";
 import { FC } from "react";
 import CourseMaterialDownload from "./course-material-download";
+import randomImage from "./randomImage";
 
 type CourseListViewProps = {
   courseList: Course[];
@@ -35,11 +36,13 @@ const CourseListViewItem: FC<CourseListViewItemProps> = ({ course }) => {
       }}
     >
       <Flex>
-        <CourseMaterialDownload link={course.materialLink} />
+        {course.materialLink && (
+          <CourseMaterialDownload link={course.materialLink} />
+        )}
         <Box pos="relative" w="15rem" h="15rem" overflow="hidden">
           <Image
             alt=""
-            src={course.image}
+            src={randomImage()}
             style={{ objectFit: "cover" }}
             fill
           />

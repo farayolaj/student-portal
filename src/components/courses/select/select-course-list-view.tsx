@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import Image from "next/image";
 import { FC, useRef } from "react";
+import randomImage from "../randomImage";
 
 type SelectCourseListViewProps = {
   courseList: Course[];
@@ -89,7 +90,7 @@ const SelectCourseListViewItem: FC<SelectCourseListViewItemProps> = ({
         <Box pos="relative" w="15rem" h="15rem" overflow="hidden">
           <Image
             alt=""
-            src={course.image}
+            src={randomImage()}
             style={{ objectFit: "cover" }}
             fill
           />

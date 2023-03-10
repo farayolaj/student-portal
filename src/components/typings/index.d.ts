@@ -1,18 +1,47 @@
-interface Course {
-  id: string;
-  title: string;
-  description: string;
-  lecturer: string;
-  image: string;
-  semester: number;
-  units: number;
-  /**
-   * Whether course is required or compulsory or elective
-   */
-  status: string;
-  materialLink: string;
+interface DashboardInfo {
+  user: User;
+  programme: Programme;
+  courses: Course[];
+  cpga: number;
 }
 
+interface Programme {
+  entryMode: string;
+  entrySession: string;
+  level: string;
+  currentSession: string;
+  currentSessionId: string;
+  department: string;
+  programme: string;
+  faculty: string;
+  modeOfStudy: string | null;
+}
+
+interface Course {
+  id: string;
+  code: string;
+  title: string;
+  description: string;
+  lecturer?: string;
+  /**
+   * C: Completed
+   * E: Enrolled
+   * R: Registered
+   */
+  status: "C" | "E" | "R";
+  image?: string;
+  semester: number;
+  units: number;
+  materialLink?: string;
+}
+
+interface CourseStatistics {
+  id: string;
+  minUnits: number;
+  maxUnits: number;
+  totalUnits: number;
+  totalCourses: number;
+}
 interface CourseResult {
   id: string;
   title: string;
@@ -71,9 +100,18 @@ interface PortalDocument {
 }
 
 interface User {
-  id: string;
   firstName: string;
+  otherNames?: string;
   lastName: string;
   email: string;
   matricNumber: string;
+  gender: string;
+  dob: Date;
+  phone: string;
+}
+
+interface Session {
+  id: string;
+  name: string;
+  level: number;
 }

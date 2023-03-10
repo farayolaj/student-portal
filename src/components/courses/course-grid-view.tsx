@@ -1,17 +1,16 @@
 import {
   AspectRatio,
-  Box,
   Card,
   CardBody,
   Flex,
   SimpleGrid,
   Spacer,
   Text,
-  VStack,
 } from "@chakra-ui/react";
 import Image from "next/image";
 import { FC } from "react";
 import CourseMaterialDownload from "./course-material-download";
+import randomImage from "./randomImage";
 
 type CourseGridViewProps = {
   courseList: Course[];
@@ -44,10 +43,12 @@ const CourseGridViewItem: FC<CourseGridViewItemProps> = ({ course }) => {
     >
       <AspectRatio pos="relative" w="full" ratio={3 / 2} overflow="hidden">
         <div>
-          <CourseMaterialDownload link={course.materialLink} />
+          {course.materialLink && (
+            <CourseMaterialDownload link={course.materialLink} />
+          )}
           <Image
             alt=""
-            src={course.image}
+            src={randomImage()}
             style={{ objectFit: "cover" }}
             fill
           />
