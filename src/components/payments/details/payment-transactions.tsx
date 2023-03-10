@@ -7,7 +7,7 @@ import {
   SimpleGrid,
   Text,
 } from "@chakra-ui/react";
-import { DetailItem } from "../../transactions/transaction-details";
+import DetailItem from "./detail-item";
 
 type PaymentTransactionsProps = {
   transaction?: Transaction;
