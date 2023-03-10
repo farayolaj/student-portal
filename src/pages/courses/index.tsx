@@ -133,6 +133,7 @@ const Courses: FC = () => {
         minUnits={12}
         registeredUnits={15}
         coursesRegistered={5}
+        minMaxActive={session === "2020-2021"}
       />
       <Flex mt={6} gap={4} justify="space-between">
         <Flex gap={4} wrap="wrap" justify={["space-between", null, "initial"]}>
