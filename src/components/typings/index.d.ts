@@ -69,3 +69,11 @@ interface PortalDocument {
   session?: string;
   semester?: string;
 }
+
+interface User {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  matricNumber: string;
+}
