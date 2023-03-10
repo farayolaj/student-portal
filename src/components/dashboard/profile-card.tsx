@@ -3,16 +3,30 @@ import {
   CardHeader,
   Heading,
   CardBody,
-  SimpleGrid,
   Text,
   VStack,
   Link,
   Flex,
+  SkeletonText,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { FC, ReactNode } from "react";
 
-const ProfileCard: FC = () => {
+type ProfileCardProps = {
+  matricNo?: string;
+  level?: string;
+  entryMode?: string;
+  programme?: string;
+  cgpa?: number;
+};
+
+const ProfileCard: FC<ProfileCardProps> = ({
+  cgpa,
+  entryMode,
+  level,
+  matricNo,
+  programme,
+}) => {
   return (
     <Card>
       <CardHeader display="flex" justifyContent="space-between">
@@ -32,20 +46,22 @@ const ProfileCard: FC = () => {
           rowGap={6}
           justify={["space-between", null, "initial"]}
         >
-          <ProfileCardItem name="Matric. No." value="217349" />
-          <ProfileCardItem name="Level" value="200" />
-          <ProfileCardItem name="Entry Mode" value="UTME" />
+          <ProfileCardItem name="Matric. No." value={matricNo} />
+          <ProfileCardItem name="Level" value={level} />
+          <ProfileCardItem name="Entry Mode" value={entryMode} />
           <ProfileCardItem
             name="Programme"
             value={
-              <Text as="span" textAlign="center">
-                Environmental Science (B.Sc)
-              </Text>
+              programme && (
+                <Text as="span" textAlign="center">
+                  {programme}
+                </Text>
+              )
             }
           />
-          <ProfileCardItem name="CGPA" value="3.64" />
-          <ProfileCardItem name="Session" value="2022/2023" />
-          <ProfileCardItem name="Semester" value="First" />
+          <ProfileCardItem name="CGPA" value={cgpa} />
+          {/* <ProfileCardItem name="Session" value={session} /> */}
+          {/* <ProfileCardItem name="Semester" value={semester} /> */}
         </Flex>
       </CardBody>
     </Card>
@@ -56,7 +72,7 @@ export default ProfileCard;
 
 type ProfileCardItemProps = {
   name: string;
-  value: ReactNode;
+  value?: ReactNode;
 };
 
 const ProfileCardItem: FC<ProfileCardItemProps> = ({ name, value }) => {
@@ -69,7 +85,7 @@ const ProfileCardItem: FC<ProfileCardItemProps> = ({ name, value }) => {
       <Text fontSize="sm" fontWeight="semibold">
         {name}
       </Text>
-      <Text>{value}</Text>
+      {value ? <Text>{value}</Text> : <SkeletonText w={28} noOfLines={1} />}
     </VStack>
   );
 };
