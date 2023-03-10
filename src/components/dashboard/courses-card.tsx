@@ -3,6 +3,7 @@ import {
   Card,
   CardBody,
   CardHeader,
+  Flex,
   Heading,
   Link,
   SimpleGrid,
@@ -15,13 +16,41 @@ import Image from "next/image";
 import NextLink from "next/link";
 import { FC } from "react";
 import * as routes from "../../constants/routes";
+import { useDashboardInfo } from "../../hooks/dashboard/use-dashboard-info";
 import randomImage from "../courses/randomImage";
 
-type CoursesCardProps = {
-  courses: Course[];
-};
+const CoursesCard: FC = () => {
+  const dashboardInfo = useDashboardInfo();
+  const courses = dashboardInfo.data?.courses || [];
 
-const CoursesCard: FC<CoursesCardProps> = ({ courses }) => {
+  let content;
+
+  if (dashboardInfo.isLoading) {
+    <SimpleGrid gap={4} columns={[2, null, null, 4]}>
+      {(content = [1, 2, 3, 4].map((i) => <Skeleton h={28} key={i} />))}
+    </SimpleGrid>;
+  } else if (courses.length === 0) {
+    content = (
+      <Flex justify="center" py={8}>
+        <Text>You have not registered for any course.</Text>
+      </Flex>
+    );
+  } else {
+    content = (
+      <SimpleGrid gap={4} columns={[2, null, null, 4]}>
+        {courses.slice(0, 4).map((course) => (
+          <CourseItem
+            key={course.id}
+            code={course.id}
+            title={course.title}
+            units={course.units}
+            image={course.image}
+          />
+        ))}
+      </SimpleGrid>
+    );
+  }
+
   return (
     <Card mt={8}>
       <CardHeader display="flex" justifyContent="space-between">
@@ -34,23 +63,7 @@ const CoursesCard: FC<CoursesCardProps> = ({ courses }) => {
           </Link>
         </Text>
       </CardHeader>
-      <CardBody>
-        <SimpleGrid gap={4} columns={[2, null, null, 4]}>
-          {courses.length > 0
-            ? courses
-                .slice(0, 4)
-                .map((course) => (
-                  <CourseItem
-                    key={course.id}
-                    code={course.id}
-                    title={course.title}
-                    units={course.units}
-                    image={course.image}
-                  />
-                ))
-            : [1, 2, 3, 4].map((i) => <Skeleton h={28} key={i} />)}
-        </SimpleGrid>
-      </CardBody>
+      <CardBody>{content}</CardBody>
     </Card>
   );
 };
