@@ -29,7 +29,6 @@ interface Course {
    * R: Registered
    */
   status: "C" | "E" | "R";
-  image?: string;
   semester: number;
   units: number;
   materialLink?: string;
@@ -42,6 +41,15 @@ interface CourseStatistics {
   totalUnits: number;
   totalCourses: number;
 }
+
+interface CourseConfig {
+  semester: number;
+  readableSemester: string;
+  minUnits: number;
+  maxUnits: number;
+  totalUnitsRegistered?: number;
+}
+
 interface CourseResult {
   id: string;
   title: string;

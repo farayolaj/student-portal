@@ -1,4 +1,4 @@
-import { createMutation } from "react-query-kit";
 import { getUser } from "../../api/user";
+import { createQueryHelper } from "../../lib/create-query-helper";
 
-export const useUser = createMutation(getUser);
+export const useUser = createQueryHelper("user", getUser);

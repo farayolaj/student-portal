@@ -26,8 +26,17 @@ export async function resetPassword({ username }: { username: string }) {
     user_login: username,
   });
 
-  if (!response.data.status)
-    throw new Error("Invalid matric. number or email address");
+  if (!response.data.status) throw new Error(response.data.message);
+
+  return;
+}
+
+export async function validateUsername({ username }: { username: string }) {
+  const response = await api.post("/validate_student", {
+    user_login: username,
+  });
+
+  if (!response.data.status) throw new Error(response.data.message);
 
   return;
 }

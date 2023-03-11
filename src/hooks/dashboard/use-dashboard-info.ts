@@ -1,4 +1,7 @@
-import { createQuery } from "react-query-kit";
 import { getDashboardInfo } from "../../api/dashboard";
+import { createQueryHelper } from "../../lib/create-query-helper";
 
-export const useDashboardInfo = createQuery("dashboard-info", getDashboardInfo);
+export const useDashboardInfo = createQueryHelper(
+  "dashboard-info",
+  getDashboardInfo
+);
