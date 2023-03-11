@@ -3,7 +3,6 @@ import {
   Button,
   Card,
   CardBody,
-  CardHeader,
   chakra,
   Flex,
   FormControl,
@@ -28,17 +27,40 @@ import useAuth from "../hooks/use-auth";
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/router";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
+import { useValidateUsername } from "../hooks/auth/use-validate-username";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [usernameVerified, setUsernameVerified] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
   const auth = useAuth();
   const router = useRouter();
   const toast = useToast();
+  const validateUsername = useValidateUsername();
 
-  const onLogin = async (e: FormEvent<HTMLFormElement>) => {
+  const onValidateUsername = () => {
+    validateUsername.mutate(
+      { username },
+      {
+        onSuccess: () => {
+          setUsernameVerified(true);
+        },
+        onError: (err) => {
+          const error = err as Error;
+          toast({
+            title: "Invalid matric. number or email address",
+            description: error?.message,
+            status: "error",
+            isClosable: true,
+          });
+        },
+      }
+    );
+  };
+
+  const onLogin = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     auth.login(
@@ -118,7 +140,13 @@ export default function Login() {
                   </Text>
                 </Box>
               </Flex>
-              <Flex direction="column" justify="center" w="40%" py={6} px={12}>
+              <Flex
+                direction="column"
+                justify="space-between"
+                w="40%"
+                py={6}
+                px={12}
+              >
                 <Heading textAlign="center" size="md">
                   Log In to Student Portal
                 </Heading>
@@ -129,7 +157,7 @@ export default function Login() {
                   gap={6}
                   onSubmit={onLogin}
                 >
-                  <FormControl>
+                  <FormControl hidden={usernameVerified}>
                     <FormLabel fontSize="sm" fontWeight="bold">
                       Matric. Number/Email Address
                     </FormLabel>
@@ -141,43 +169,61 @@ export default function Login() {
                       autoComplete="username"
                     />
                   </FormControl>
-                  <FormControl>
-                    <FormLabel fontSize="sm" fontWeight="bold">
-                      Password
-                    </FormLabel>
-                    <InputGroup size="sm">
-                      <Input
-                        name="password"
-                        type={showPassword ? "text" : "password"}
-                        placeholder="Default password is your last name in lowercase"
-                        onChange={(e) => setPassword(e.target.value)}
-                        autoComplete="current-password"
-                      />
-                      <InputRightElement>
-                        <IconButton
-                          variant="unstyled"
-                          aria-label="Toggle password visibility"
-                          boxSize={6}
-                          onClick={togglePasswordVisibility}
-                          icon={
-                            showPassword ? (
-                              <IoEyeOutline />
-                            ) : (
-                              <IoEyeOffOutline />
-                            )
-                          }
+                  {usernameVerified && (
+                    <FormControl>
+                      <FormLabel fontSize="sm" fontWeight="bold">
+                        Password
+                      </FormLabel>
+                      <InputGroup size="sm">
+                        <Input
+                          name="password"
+                          type={showPassword ? "text" : "password"}
+                          placeholder="Default password is your last name in lowercase"
+                          onChange={(e) => setPassword(e.target.value)}
+                          autoComplete="current-password"
                         />
-                      </InputRightElement>
-                    </InputGroup>
-                    <FormHelperText>
-                      <Link as={NextLink} href={routes.FORGOT_PASSWORD}>
-                        Forgot password?
-                      </Link>
-                    </FormHelperText>
-                  </FormControl>
-                  <Button type="submit" isDisabled={auth.isLoggingIn}>
-                    Log In
-                  </Button>
+                        <InputRightElement>
+                          <IconButton
+                            variant="unstyled"
+                            aria-label="Toggle password visibility"
+                            boxSize={6}
+                            onClick={togglePasswordVisibility}
+                            icon={
+                              showPassword ? (
+                                <IoEyeOutline />
+                              ) : (
+                                <IoEyeOffOutline />
+                              )
+                            }
+                          />
+                        </InputRightElement>
+                      </InputGroup>
+                      <FormHelperText>
+                        <Link as={NextLink} href={routes.FORGOT_PASSWORD}>
+                          Forgot password?
+                        </Link>
+                      </FormHelperText>
+                    </FormControl>
+                  )}
+                  <Box mt={16} mb={8}>
+                    {usernameVerified ? (
+                      <Button
+                        w="full"
+                        type="submit"
+                        isDisabled={auth.isLoggingIn}
+                      >
+                        Log In
+                      </Button>
+                    ) : (
+                      <Button
+                        w="full"
+                        isDisabled={validateUsername.isLoading}
+                        onClick={onValidateUsername}
+                      >
+                        Next
+                      </Button>
+                    )}
+                  </Box>
                 </chakra.form>
               </Flex>
             </CardBody>
