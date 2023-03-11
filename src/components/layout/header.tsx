@@ -4,13 +4,20 @@ import {
   Flex,
   HStack,
   IconButton,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Spacer,
   Text,
 } from "@chakra-ui/react";
 import { FC } from "react";
 import { IoNotificationsOutline } from "react-icons/io5";
+import useAuth from "../../hooks/use-auth";
 
 export const Header: FC = () => {
+  const auth = useAuth();
+
   return (
     <HStack
       position="sticky"
@@ -46,7 +53,14 @@ export const Header: FC = () => {
         />
         <HStack>
           <Text display={["none", null, "initial"]}>Adamu Olatunji Ciroma</Text>
-          <Avatar name="Adamu Olatunji Ciroma" size="sm" />
+          <Menu>
+            <MenuButton>
+              <Avatar name="Adamu Olatunji Ciroma" size="sm" />
+            </MenuButton>
+            <MenuList boxShadow="md">
+              <MenuItem onClick={auth.logout}>Log Out</MenuItem>
+            </MenuList>
+          </Menu>
         </HStack>
       </Flex>
     </HStack>
