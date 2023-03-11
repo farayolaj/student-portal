@@ -15,16 +15,15 @@ import {
 import NextLink from "next/link";
 import { FC } from "react";
 import { IoNotificationsOutline } from "react-icons/io5";
-import { useDashboardInfo } from "../../api/dashboard/use-dashboard-info";
+import { useUser } from "../../api/user/use-user";
 import useAuth from "../../hooks/use-auth";
 
 export const Header: FC = () => {
   const auth = useAuth();
-  // Change this to use the profile url later
-  const dashboardInfo = useDashboardInfo();
-  const fullName = `${dashboardInfo.data?.user?.firstName} ${
-    dashboardInfo.data?.user.otherNames || ""
-  } ${dashboardInfo.data?.user?.lastName}`;
+  const user = useUser();
+  const fullName = `${user.data?.firstName} ${user.data?.otherNames || ""} ${
+    user.data?.lastName
+  }`;
 
   return (
     <HStack
@@ -62,12 +61,22 @@ export const Header: FC = () => {
         <Menu>
           <MenuButton>
             <HStack>
-              {dashboardInfo.isLoading ? (
+              {user.isLoading ? (
                 <SkeletonText />
               ) : (
                 <Text display={["none", null, "initial"]}>{fullName}</Text>
               )}
-              <Avatar name={fullName} size="sm" />
+              <Avatar
+                name={fullName}
+                size="sm"
+                src={user.data?.profileImage}
+                getInitials={(name) => {
+                  const names = name.split(" ");
+                  return `${names[0].at(0)}${names
+                    .at(-1)
+                    ?.at(0)}`.toUpperCase();
+                }}
+              />
             </HStack>
           </MenuButton>
           <MenuList

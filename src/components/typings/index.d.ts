@@ -111,6 +111,7 @@ interface User {
   otherNames?: string;
   lastName: string;
   email: string;
+  profileImage?: string;
   matricNumber: string;
   gender: string;
   dob: Date;

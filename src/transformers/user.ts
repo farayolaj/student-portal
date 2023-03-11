@@ -1,4 +1,5 @@
 import parse from "date-fns/parse";
+import resolveProfileImageUrl from "../lib/resolve-profile-image-url";
 
 export const toUser = (user: any) =>
   ({
@@ -6,6 +7,7 @@ export const toUser = (user: any) =>
     firstName: user.firstname,
     otherNames: user.othernames,
     lastName: user.lastname,
+    profileImage: user.passport && resolveProfileImageUrl(user.passport),
     matricNumber: user.reg_num,
     dob: parse(user.DoB, "dd/MM/yyyy", new Date()),
     gender: user.gender,
