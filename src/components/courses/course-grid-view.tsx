@@ -10,7 +10,7 @@ import {
 import Image from "next/image";
 import { FC } from "react";
 import CourseMaterialDownload from "./course-material-download";
-import randomImage from "./randomImage";
+import getAbstractImage from "../../lib/get-abstract-image";
 
 type CourseGridViewProps = {
   courseList: Course[];
@@ -48,7 +48,7 @@ const CourseGridViewItem: FC<CourseGridViewItemProps> = ({ course }) => {
           )}
           <Image
             alt=""
-            src={randomImage()}
+            src={getAbstractImage()}
             style={{ objectFit: "cover" }}
             fill
           />

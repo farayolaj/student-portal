@@ -17,7 +17,7 @@ import NextLink from "next/link";
 import { FC } from "react";
 import * as routes from "../../constants/routes";
 import { useDashboardInfo } from "../../hooks/dashboard/use-dashboard-info";
-import randomImage from "../courses/randomImage";
+import getAbstractImage from "../../lib/get-abstract-image";
 
 const CoursesCard: FC = () => {
   const dashboardInfo = useDashboardInfo();
@@ -86,7 +86,7 @@ const CourseItem: FC<CourseItemProps> = ({ code, title, units, image }) => {
   return (
     <Box pos="relative" rounded="md" overflow="hidden">
       <Box pos="absolute" w="full" h="full">
-        <Image src={randomImage()} alt="" role="presentation" fill />
+        <Image src={getAbstractImage()} alt="" role="presentation" fill />
       </Box>
       <VStack
         w="full"

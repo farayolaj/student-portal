@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import Image from "next/image";
 import { FC, useRef } from "react";
-import randomImage from "../randomImage";
+import getAbstractImage from "../../../lib/get-abstract-image";
 
 type SelectCourseGridViewProps = {
   courseList: Course[];
@@ -75,7 +75,12 @@ const SelectCourseGridViewItem: FC<SelectCourseGridViewItemProps> = ({
       cursor="pointer"
     >
       <AspectRatio pos="relative" w="full" ratio={3 / 2} overflow="hidden">
-        <Image alt="" src={randomImage()} style={{ objectFit: "cover" }} fill />
+        <Image
+          alt=""
+          src={getAbstractImage()}
+          style={{ objectFit: "cover" }}
+          fill
+        />
       </AspectRatio>
       <CardBody p={5} display="flex" pos="relative">
         <Checkbox
