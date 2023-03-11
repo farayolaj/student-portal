@@ -7,5 +7,5 @@ export const useCourseConfig = createQuery("course-config", async () => {
 
   if (!response.data.status) throw new Error(response.data.message);
 
-  return response.data.payload.map(toCourseConfig) as CourseConfig[];
+  return (response.data.payload?.map(toCourseConfig) || []) as CourseConfig[];
 });

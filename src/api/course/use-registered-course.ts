@@ -9,6 +9,6 @@ export const useRegisteredCourses = createQuery<Course[], { session: string }>(
 
     if (!response.data.status) throw new Error("Could not fetch courses");
 
-    return response.data.payload.map(toCourse) as Course[];
+    return (response.data.payload?.map(toCourse) || []) as Course[];
   }
 );

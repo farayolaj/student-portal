@@ -14,7 +14,6 @@ import {
 import { FC, useState, useRef } from "react";
 import SelectCourseListView from "../select/select-course-list-view";
 import SelectCourseGridView from "../select/select-course-grid-view";
-import { createNonNullChain } from "typescript";
 
 type DeleteCourseViewProps = {
   view: "list" | "grid";
