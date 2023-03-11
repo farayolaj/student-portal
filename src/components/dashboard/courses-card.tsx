@@ -64,11 +64,13 @@ const CoursesCard: FC = () => {
         <Heading as="h2" fontSize="md">
           Courses
         </Heading>
-        <Text as="span">
-          <Link as={NextLink} href={routes.REGISTERED_COURSES}>
-            See other courses &rarr;
-          </Link>
-        </Text>
+        {courses.length > 0 && (
+          <Text as="span">
+            <Link as={NextLink} href={routes.REGISTERED_COURSES}>
+              See other courses &rarr;
+            </Link>
+          </Text>
+        )}
       </CardHeader>
       <CardBody>{content}</CardBody>
     </Card>
