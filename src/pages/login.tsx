@@ -22,6 +22,7 @@ import Image from "next/image";
 import NextLink from "next/link";
 import Seo from "../components/common/seo";
 import uiLogo from "../images/ui-logo.png";
+import abstractShape from "../images/abstract_shape_1.png";
 import * as routes from "../constants/routes";
 import useAuth from "../hooks/use-auth";
 import { FormEvent, useState } from "react";
@@ -61,7 +62,7 @@ export default function Login() {
   return (
     <>
       <Seo title="Login" />
-      <Box h="100vh" bg="gray.200">
+      <Box minH="100vh" bg="gray.200">
         <Flex align="center" py={8} direction="column" gap={2}>
           <Image src={uiLogo} alt="University of Ibadan Logo" width={64} />
           <Box>
@@ -87,66 +88,98 @@ export default function Login() {
             </Text>
           </Box>
         </Flex>
-        <Flex justify="center">
-          <Card w="40%" py={6} px={12}>
-            <CardHeader>
-              <Heading textAlign="center" size="md">
-                Log In to Student Portal
-              </Heading>
-            </CardHeader>
-            <CardBody>
-              <chakra.form
-                display="flex"
-                flexDir="column"
-                gap={6}
-                onSubmit={onLogin}
-              >
-                <FormControl>
-                  <FormLabel fontSize="sm" fontWeight="bold">
-                    Matric. Number/Email Address
-                  </FormLabel>
-                  <Input
-                    name="username"
-                    placeholder="Enter matric. number or email address"
-                    size="sm"
-                    onChange={(e) => setUsername(e.target.value)}
-                    autoComplete="username"
-                  />
-                </FormControl>
-                <FormControl>
-                  <FormLabel fontSize="sm" fontWeight="bold">
-                    Password
-                  </FormLabel>
-                  <InputGroup size="sm">
+        <Flex mt={8} justify="center">
+          <Card w="60%" overflow="hidden" mb={8}>
+            <CardBody display="flex" p={0}>
+              <Flex align="stretch" pos="relative" w="60%" px={12} py={12}>
+                <Image
+                  src={abstractShape}
+                  fill
+                  alt=""
+                  style={{ objectFit: "cover" }}
+                />
+                <Box pos="relative" h="full" bg="whiteAlpha.900" p={4}>
+                  <Heading size="sm">Welcome to The Student Portal</Heading>
+                  <Text size="sm" mt={2}>
+                    The student portal is your personal website containing all
+                    the information and menu you need as a student. Login to
+                    access your academic schedule, fees, courses and profile.
+                  </Text>
+                  <Heading size="sm" mt={4}>
+                    How to Log In
+                  </Heading>
+                  <Text size="sm" mt={2}>
+                    New here? No worries, we got you covered. Your username is
+                    your matric. number or your email address. Your default
+                    password is your last name in lowercase. If you have
+                    forgotten your password, click on the &ldquo;Forgot
+                    password?&rdquo; link below. If you have any issues, please
+                    contact the ICT Unit.
+                  </Text>
+                </Box>
+              </Flex>
+              <Flex direction="column" justify="center" w="40%" py={6} px={12}>
+                <Heading textAlign="center" size="md">
+                  Log In to Student Portal
+                </Heading>
+                <chakra.form
+                  mt={8}
+                  display="flex"
+                  flexDir="column"
+                  gap={6}
+                  onSubmit={onLogin}
+                >
+                  <FormControl>
+                    <FormLabel fontSize="sm" fontWeight="bold">
+                      Matric. Number/Email Address
+                    </FormLabel>
                     <Input
-                      name="password"
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Default password is your last name in lowercase"
-                      onChange={(e) => setPassword(e.target.value)}
-                      autoComplete="current-password"
+                      name="username"
+                      placeholder="Enter matric. number or email address"
+                      size="sm"
+                      onChange={(e) => setUsername(e.target.value)}
+                      autoComplete="username"
                     />
-                    <InputRightElement>
-                      <IconButton
-                        variant="unstyled"
-                        aria-label="Toggle password visibility"
-                        boxSize={6}
-                        onClick={togglePasswordVisibility}
-                        icon={
-                          showPassword ? <IoEyeOutline /> : <IoEyeOffOutline />
-                        }
+                  </FormControl>
+                  <FormControl>
+                    <FormLabel fontSize="sm" fontWeight="bold">
+                      Password
+                    </FormLabel>
+                    <InputGroup size="sm">
+                      <Input
+                        name="password"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Default password is your last name in lowercase"
+                        onChange={(e) => setPassword(e.target.value)}
+                        autoComplete="current-password"
                       />
-                    </InputRightElement>
-                  </InputGroup>
-                  <FormHelperText>
-                    <Link as={NextLink} href={routes.FORGOT_PASSWORD}>
-                      Forgot password?
-                    </Link>
-                  </FormHelperText>
-                </FormControl>
-                <Button type="submit" isDisabled={auth.isLoggingIn}>
-                  Log In
-                </Button>
-              </chakra.form>
+                      <InputRightElement>
+                        <IconButton
+                          variant="unstyled"
+                          aria-label="Toggle password visibility"
+                          boxSize={6}
+                          onClick={togglePasswordVisibility}
+                          icon={
+                            showPassword ? (
+                              <IoEyeOutline />
+                            ) : (
+                              <IoEyeOffOutline />
+                            )
+                          }
+                        />
+                      </InputRightElement>
+                    </InputGroup>
+                    <FormHelperText>
+                      <Link as={NextLink} href={routes.FORGOT_PASSWORD}>
+                        Forgot password?
+                      </Link>
+                    </FormHelperText>
+                  </FormControl>
+                  <Button type="submit" isDisabled={auth.isLoggingIn}>
+                    Log In
+                  </Button>
+                </chakra.form>
+              </Flex>
             </CardBody>
           </Card>
         </Flex>
