@@ -29,7 +29,10 @@ export const fromDetailsToCourse = (course: any) =>
 
 export const toCourseStatistics = (stat: any) =>
   ({
-    ...stat,
+    maxUnits: parseInt(stat.max_unit),
+    minUnits: parseInt(stat.min_unit),
+    totalUnits: parseInt(stat.total_units_registered),
+    totalCourses: parseInt(stat.total_registered),
   } as CourseStatistics);
 
 export const toCourseConfig = (config: any) =>

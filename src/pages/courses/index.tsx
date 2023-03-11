@@ -1,5 +1,5 @@
-import { Button, Flex, HStack, Icon, Link, Spacer } from "@chakra-ui/react";
-import { FC, useState } from "react";
+import { Button, Flex, Icon, Link } from "@chakra-ui/react";
+import { FC, useEffect, useState } from "react";
 import NextLink from "next/link";
 import PageTitle from "../../components/common/page-title";
 import Seo from "../../components/common/seo";
@@ -17,22 +17,33 @@ import CourseView from "../../components/courses/course-view";
 import * as routes from "../../constants/routes";
 import DeleteCourseView from "../../components/courses/delete/delete-course-view";
 import { courses } from "../../data/courses";
+import { useAllSessions } from "../../api/course/use-all-sessions";
+import { useCourseStatistics } from "../../api/course/use-course-statistics";
 
 const Courses: FC = () => {
   const [sessionId, setSessionId] = useState("");
-  const [session, setSession] = useState("2020-2021");
-  const [semester, setSemester] = useState("all");
+  const [latestSessionId, setLatestSessionId] = useState("");
   const [semester, setSemester] = useState(0);
   const canAddCourses = true;
   const canDeleteCourses = true;
   const [view, setView] = useState("list");
   const [inDeleteCourseView, setInDeleteCourseView] = useState(false);
   const filteredCourses = courses.filter(
-    (course) =>
-      semester === "all" ||
-      (course.semester === 1 && semester === "first") ||
-      (course.semester === 2 && semester === "second")
+    (course) => semester === 0 || course.semester === semester
   );
+  const courseStats = useCourseStatistics({
+    variables: {
+      session: sessionId,
+      semester: semester === 0 ? undefined : semester,
+    },
+  });
+  useAllSessions({
+    onSuccess: (data) => {
+      if (data.length > 0) {
+        setLatestSessionId(data[0].id);
+      }
+    },
+  });
 
   return (
     <>
@@ -45,11 +56,11 @@ const Courses: FC = () => {
         onSemesterChange={setSemester}
       />
       <CourseOverview
-        maxUnits={21}
-        minUnits={12}
-        registeredUnits={15}
-        coursesRegistered={5}
-        minMaxActive={session === "2020-2021"}
+        maxUnits={courseStats.data?.maxUnits || 0}
+        minUnits={courseStats.data?.minUnits || 0}
+        registeredUnits={courseStats.data?.totalUnits || 0}
+        coursesRegistered={courseStats.data?.totalCourses || 0}
+        minMaxActive={sessionId === latestSessionId}
       />
       <Flex mt={6} gap={4} justify="space-between">
         <Flex gap={4} wrap="wrap" justify={["space-between", null, "initial"]}>

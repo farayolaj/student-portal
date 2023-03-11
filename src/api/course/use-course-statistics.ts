@@ -6,7 +6,7 @@ export const useCourseStatistics = createQuery<
   CourseStatistics,
   { session: string; semester?: number }
 >("course-statistics", async ({ queryKey: [_, { session, semester }] }) => {
-  let route = `/course_stats?session=${session}`;
+  let route = `/course_stats?session=${encodeURIComponent(session)}`;
 
   if (semester) route += `&semester=${encodeURIComponent(semester)}`;
 
@@ -15,5 +15,5 @@ export const useCourseStatistics = createQuery<
   if (!response.data.status)
     throw new Error("Could not fetch course statistics");
 
-  return toCourseStatistics(response.data.data);
+  return toCourseStatistics(response.data.payload);
 });

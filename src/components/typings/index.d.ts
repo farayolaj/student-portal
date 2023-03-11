@@ -35,7 +35,6 @@ interface Course {
 }
 
 interface CourseStatistics {
-  id: string;
   minUnits: number;
   maxUnits: number;
   totalUnits: number;
