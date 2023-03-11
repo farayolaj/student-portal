@@ -25,14 +25,21 @@ const CoursesCard: FC = () => {
 
   let content;
 
-  if (dashboardInfo.isLoading) {
-    <SimpleGrid gap={4} columns={[2, null, null, 4]}>
-      {(content = [1, 2, 3, 4].map((i) => <Skeleton h={28} key={i} />))}
-    </SimpleGrid>;
+  if (dashboardInfo.isInitialLoading) {
+    content = (
+      <SimpleGrid gap={4} columns={[2, null, null, 4]}>
+        {[1, 2, 3, 4].map((i) => (
+          <Skeleton h={28} key={i} />
+        ))}
+      </SimpleGrid>
+    );
   } else if (courses.length === 0) {
     content = (
-      <Flex justify="center" py={8}>
+      <Flex direction="column" align="center" justify="center" gap={8} py={8}>
         <Text>You have not registered for any course.</Text>
+        <Link as={NextLink} variant="button" href={routes.ADD_COURSES}>
+          Register Courses
+        </Link>
       </Flex>
     );
   } else {

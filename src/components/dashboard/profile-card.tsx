@@ -15,7 +15,7 @@ import { useDashboardInfo } from "../../hooks/dashboard/use-dashboard-info";
 
 const ProfileCard: FC = () => {
   const dashboardInfo = useDashboardInfo();
-  const isLoading = dashboardInfo.isLoading;
+  const isLoading = dashboardInfo.isInitialLoading;
   const matricNo = dashboardInfo.data?.user?.matricNumber;
   const level = dashboardInfo.data?.programme?.level;
   const entryMode = dashboardInfo.data?.programme?.entryMode;

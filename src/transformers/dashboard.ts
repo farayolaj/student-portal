@@ -3,10 +3,10 @@ import { toUser } from "./user";
 
 export const toDashboardInfo = (data: any) =>
   ({
-    user: toUser(data.biodata),
-    courses: data.courses.map(toCourse) as Course[],
+    user: toUser(data.bioData),
+    courses: data.registered_course.map(toCourse) as Course[],
     cpga: parseFloat(data.cpga),
-    programme: toProgramme(data.programme),
+    programme: toProgramme(data.programmeDetails),
   } as DashboardInfo);
 
 export const toProgramme = (programme: any) =>

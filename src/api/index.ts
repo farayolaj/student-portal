@@ -4,7 +4,7 @@ import { API_URL, X_APP_KEY } from "../constants/config";
 const api = axios.create({
   baseURL: API_URL,
   headers: {
-    X_APP_KEY: X_APP_KEY,
+    "X-APP-KEY": X_APP_KEY,
   },
   validateStatus: function (status) {
     return status < 500;
@@ -12,7 +12,8 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
+  const rawToken = localStorage.getItem("token");
+  const token = rawToken ? JSON.parse(rawToken) : undefined;
 
   if (token) config.headers.set("Authorization", `Bearer ${token}`);
 
