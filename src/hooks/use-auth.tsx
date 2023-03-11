@@ -40,22 +40,23 @@ const AuthActionContext = createContext<TAuthAction>({
 
 type TAuthState = {
   user?: User;
-  authToken?: string;
+  authToken: string | null;
   isLoggingIn: boolean;
   error?: Error | null;
 };
 
 const AuthStateContext = createContext<TAuthState>({
   isLoggingIn: false,
+  authToken: null,
 });
 
 export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const [user, setUser] = useState<User | undefined>();
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [error, setError] = useState<Error | null | undefined>();
-  const [authToken, setAuthToken] = useLocalStorage<string | undefined>(
+  const [authToken, setAuthToken] = useLocalStorage<string | null>(
     "token",
-    undefined
+    null
   );
 
   useEffect(() => {
@@ -84,10 +85,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
       setIsLoggingIn(false);
       opts?.onSuccess(user);
       return user;
-    } catch (err: any) {
-      const error = new Error("Login failed. Check your details.", {
-        cause: err,
-      });
+    } catch (error: any) {
       setError(error);
       setIsLoggingIn(false);
       if (opts?.onError) opts.onError(error);
@@ -96,7 +94,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   };
   const logout: TAuthAction["logout"] = async () => {
     setUser(undefined);
-    setAuthToken(undefined);
+    setAuthToken(null);
   };
 
   return (

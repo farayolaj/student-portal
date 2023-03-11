@@ -10,9 +10,13 @@ import {
   FormHelperText,
   FormLabel,
   Heading,
+  IconButton,
   Input,
+  InputGroup,
+  InputRightElement,
   Link,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import Image from "next/image";
 import NextLink from "next/link";
@@ -22,12 +26,16 @@ import * as routes from "../constants/routes";
 import useAuth from "../hooks/use-auth";
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/router";
+import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
   const auth = useAuth();
   const router = useRouter();
+  const toast = useToast();
 
   const onLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -39,7 +47,12 @@ export default function Login() {
           router.push(routes.HOME);
         },
         onError: (err) => {
-          console.log(err);
+          toast({
+            title: "Login Failed",
+            description: err?.message,
+            status: "error",
+            isClosable: true,
+          });
         },
       }
     );
@@ -97,25 +110,42 @@ export default function Login() {
                     placeholder="Enter matric. number or email address"
                     size="sm"
                     onChange={(e) => setUsername(e.target.value)}
+                    autoComplete="username"
                   />
                 </FormControl>
                 <FormControl>
                   <FormLabel fontSize="sm" fontWeight="bold">
                     Password
                   </FormLabel>
-                  <Input
-                    name="password"
-                    placeholder="Default password is your last name in lowercase"
-                    size="sm"
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
+                  <InputGroup size="sm">
+                    <Input
+                      name="password"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Default password is your last name in lowercase"
+                      onChange={(e) => setPassword(e.target.value)}
+                      autoComplete="current-password"
+                    />
+                    <InputRightElement>
+                      <IconButton
+                        variant="unstyled"
+                        aria-label="Toggle password visibility"
+                        boxSize={6}
+                        onClick={togglePasswordVisibility}
+                        icon={
+                          showPassword ? <IoEyeOutline /> : <IoEyeOffOutline />
+                        }
+                      />
+                    </InputRightElement>
+                  </InputGroup>
                   <FormHelperText>
                     <Link as={NextLink} href={routes.FORGOT_PASSWORD}>
                       Forgot password?
                     </Link>
                   </FormHelperText>
                 </FormControl>
-                <Button type="submit">Log In</Button>
+                <Button type="submit" isDisabled={auth.isLoggingIn}>
+                  Log In
+                </Button>
               </chakra.form>
             </CardBody>
           </Card>

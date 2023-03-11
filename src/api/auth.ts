@@ -7,35 +7,27 @@ export type LoginCredential = {
 };
 
 export async function login({ username, password }: LoginCredential) {
-  try {
-    const response = await api.post("authenticate", {
-      user_login: username,
-      user_pass: password,
-    });
+  const response = await api.post("authenticate", {
+    user_login: username,
+    user_pass: password,
+  });
 
-    if (!response.data.status) throw new Error("Invalid username or password");
+  if (!response.data.status) throw new Error("Invalid username or password");
 
-    return {
-      token: response.data.payload.token,
-      user: toUser(response.data.payload.profile),
-      currentSessionId: response.data.payload.current_session,
-    };
-  } catch (e) {
-    throw new Error("Internal server error");
-  }
+  return {
+    token: response.data.payload.token,
+    user: toUser(response.data.payload.profile),
+    currentSessionId: response.data.payload.current_session,
+  };
 }
 
 export async function resetPassword({ username }: { username: string }) {
-  try {
-    const response = await api.post("/reset_password", {
-      user_login: username,
-    });
+  const response = await api.post("/reset_password", {
+    user_login: username,
+  });
 
-    if (!response.data.status)
-      throw new Error("Invalid matric. number or email address");
+  if (!response.data.status)
+    throw new Error("Invalid matric. number or email address");
 
-    return;
-  } catch (e) {
-    throw new Error("Internal server error");
-  }
+  return;
 }
