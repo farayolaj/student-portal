@@ -19,10 +19,20 @@ import NextLink from "next/link";
 import Seo from "../components/common/seo";
 import uiLogo from "../images/ui-logo.png";
 import * as routes from "../constants/routes";
-import { useState } from "react";
+import { FormEventHandler, useState } from "react";
+import { usePasswordReset } from "../hooks/auth/use-password-reset";
 
 export default function ForgotPassword() {
   const [isResetRequestSent, setIsResetRequestSent] = useState(false);
+  const [username, setUsername] = useState("");
+  const passwordReset = usePasswordReset({
+    onSuccess: () => setIsResetRequestSent(true),
+  });
+
+  const onPasswordReset: FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
+    passwordReset.mutate({ username });
+  };
 
   return (
     <>
@@ -74,14 +84,17 @@ export default function ForgotPassword() {
                   flexDir="column"
                   gap={6}
                   alignItems="center"
+                  onSubmit={onPasswordReset}
                 >
-                  <FormControl>
+                  <FormControl isRequired>
                     <FormLabel fontSize="sm" fontWeight="bold">
                       Matric. Number/Email Address
                     </FormLabel>
                     <Input
                       placeholder="Enter your matric. number or email address"
+                      name="username"
                       size="sm"
+                      onChange={(e) => setUsername(e.target.value)}
                     />
                     <FormHelperText mt={4}>
                       <Link as={NextLink} href={routes.LOGIN}>
@@ -89,7 +102,7 @@ export default function ForgotPassword() {
                       </Link>
                     </FormHelperText>
                   </FormControl>
-                  <Button onClick={() => setIsResetRequestSent(true)}>
+                  <Button isDisabled={passwordReset.isLoading} type="submit">
                     Reset Password
                   </Button>
                 </chakra.form>
