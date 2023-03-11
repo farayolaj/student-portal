@@ -12,6 +12,7 @@ import {
   Spacer,
   Text,
 } from "@chakra-ui/react";
+import NextLink from "next/link";
 import { FC } from "react";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { useDashboardInfo } from "../../hooks/dashboard/use-dashboard-info";
@@ -58,21 +59,27 @@ export const Header: FC = () => {
           variant="transparent"
           icon={<IoNotificationsOutline size="1.5rem" />}
         />
-        <HStack>
-          {dashboardInfo.isLoading ? (
-            <SkeletonText />
-          ) : (
-            <Text display={["none", null, "initial"]}>{fullName}</Text>
-          )}
-          <Menu>
-            <MenuButton>
+        <Menu>
+          <MenuButton>
+            <HStack>
+              {dashboardInfo.isLoading ? (
+                <SkeletonText />
+              ) : (
+                <Text display={["none", null, "initial"]}>{fullName}</Text>
+              )}
               <Avatar name={fullName} size="sm" />
-            </MenuButton>
-            <MenuList boxShadow="md">
-              <MenuItem onClick={auth.logout}>Log Out</MenuItem>
-            </MenuList>
-          </Menu>
-        </HStack>
+            </HStack>
+          </MenuButton>
+          <MenuList
+            boxShadow="md"
+            sx={{ "& > *:hover": { bgColor: "primary.200" } }}
+          >
+            <MenuItem as={NextLink} href={"#"}>
+              Profile
+            </MenuItem>
+            <MenuItem onClick={auth.logout}>Log Out</MenuItem>
+          </MenuList>
+        </Menu>
       </Flex>
     </HStack>
   );
