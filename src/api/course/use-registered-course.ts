@@ -2,11 +2,13 @@ import { createQuery } from "react-query-kit";
 import api from "../api";
 import { toCourse } from "../../transformers/courses";
 
-const useRegisteredCourses = createQuery(
+export const useRegisteredCourses = createQuery<Course[], { session: string }>(
   "registered-courses",
   async ({ queryKey: [_, { session }] }) => {
-    const response = await api.get(`/courseenrollment/${session}`);
+    const response = await api.get(`/courseenrollment/${encodeURI(session)}`);
 
-    return response.data.data.payload.map(toCourse) as Course[];
+    if (!response.data.status) throw new Error("Could not fetch courses");
+
+    return response.data.payload.map(toCourse) as Course[];
   }
 );

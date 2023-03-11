@@ -1,5 +1,5 @@
 import { Button, Flex, Icon, Link } from "@chakra-ui/react";
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import NextLink from "next/link";
 import PageTitle from "../../components/common/page-title";
 import Seo from "../../components/common/seo";
@@ -16,9 +16,9 @@ import {
 import CourseView from "../../components/courses/course-view";
 import * as routes from "../../constants/routes";
 import DeleteCourseView from "../../components/courses/delete/delete-course-view";
-import { courses } from "../../data/courses";
 import { useAllSessions } from "../../api/course/use-all-sessions";
 import { useCourseStatistics } from "../../api/course/use-course-statistics";
+import { useRegisteredCourses } from "../../api/course/use-registered-course";
 
 const Courses: FC = () => {
   const [sessionId, setSessionId] = useState("");
@@ -28,9 +28,13 @@ const Courses: FC = () => {
   const canDeleteCourses = true;
   const [view, setView] = useState("list");
   const [inDeleteCourseView, setInDeleteCourseView] = useState(false);
-  const filteredCourses = courses.filter(
-    (course) => semester === 0 || course.semester === semester
-  );
+  const registeredCourses = useRegisteredCourses({
+    variables: { session: sessionId },
+  });
+  const filteredCourses =
+    registeredCourses.data?.filter(
+      (course) => semester === 0 || course.semester === semester
+    ) || [];
   const courseStats = useCourseStatistics({
     variables: {
       session: sessionId,
@@ -62,7 +66,7 @@ const Courses: FC = () => {
         coursesRegistered={courseStats.data?.totalCourses || 0}
         minMaxActive={sessionId === latestSessionId}
       />
-      <Flex mt={6} gap={4} justify="space-between">
+      <Flex mt={6} gap={4} justify="space-between" align="center">
         <Flex gap={4} wrap="wrap" justify={["space-between", null, "initial"]}>
           {!inDeleteCourseView && canAddCourses && (
             <Link
@@ -114,6 +118,7 @@ const Courses: FC = () => {
         <CourseView
           courseList={filteredCourses}
           view={view as "list" | "grid"}
+          isLoading={registeredCourses.isLoading}
         />
       )}
     </>

@@ -13,6 +13,7 @@ import {
 import Image from "next/image";
 import { FC, useRef } from "react";
 import getAbstractImage from "../../../lib/get-abstract-image";
+import statusCodeToName from "../../../lib/status-code-to-name";
 
 type SelectCourseGridViewProps = {
   courseList: Course[];
@@ -96,15 +97,15 @@ const SelectCourseGridViewItem: FC<SelectCourseGridViewItemProps> = ({
         />
         <Flex direction="column" align="flex-start">
           <Text fontSize="sm" fontWeight="bold">
-            {course.id}
+            {course.code}
           </Text>
           <Text fontSize="2xl" fontWeight="semibold" textOverflow="ellipsis">
             {course.title}
           </Text>
-          <Text fontSize="sm" fontWeight="bold" color="blackAlpha.700">
+          <Text fontSize="sm" fontWeight="bold" color="blackAlpha.700" minH={6}>
             {course.lecturer}
           </Text>
-          <Text my={2} noOfLines={3}>
+          <Text my={2} noOfLines={3} minH={16}>
             {course.description}
           </Text>
           <Spacer />
@@ -112,7 +113,7 @@ const SelectCourseGridViewItem: FC<SelectCourseGridViewItemProps> = ({
             {course.semester == 1 ? "First Semester" : "Second Semester"}
           </Text>
           <Text fontSize="sm">
-            {course.status} - {course.units}{" "}
+            {statusCodeToName(course.status)} - {course.units}{" "}
             {course.units > 1 ? "units" : "unit"}
           </Text>
         </Flex>
