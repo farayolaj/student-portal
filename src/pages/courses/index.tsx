@@ -19,8 +19,10 @@ import DeleteCourseView from "../../components/courses/delete/delete-course-view
 import { courses } from "../../data/courses";
 
 const Courses: FC = () => {
+  const [sessionId, setSessionId] = useState("");
   const [session, setSession] = useState("2020-2021");
   const [semester, setSemester] = useState("all");
+  const [semester, setSemester] = useState(0);
   const canAddCourses = true;
   const canDeleteCourses = true;
   const [view, setView] = useState("list");
@@ -37,8 +39,8 @@ const Courses: FC = () => {
       <Seo title="Registered Courses" />
       <PageTitle showBackButton>Registered Courses</PageTitle>
       <CourseListControls
-        session={session}
-        onSessionChange={setSession}
+        sessionId={sessionId}
+        onSessionIdChange={setSessionId}
         semester={semester}
         onSemesterChange={setSemester}
       />
