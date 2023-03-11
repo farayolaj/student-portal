@@ -8,15 +8,22 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  SkeletonText,
   Spacer,
   Text,
 } from "@chakra-ui/react";
 import { FC } from "react";
 import { IoNotificationsOutline } from "react-icons/io5";
+import { useDashboardInfo } from "../../hooks/dashboard/use-dashboard-info";
 import useAuth from "../../hooks/use-auth";
 
 export const Header: FC = () => {
   const auth = useAuth();
+  // Change this to use the profile url later
+  const dashboardInfo = useDashboardInfo();
+  const fullName = `${dashboardInfo.data?.user?.firstName} ${
+    dashboardInfo.data?.user.otherNames || ""
+  } ${dashboardInfo.data?.user?.lastName}`;
 
   return (
     <HStack
@@ -52,10 +59,14 @@ export const Header: FC = () => {
           icon={<IoNotificationsOutline size="1.5rem" />}
         />
         <HStack>
-          <Text display={["none", null, "initial"]}>Adamu Olatunji Ciroma</Text>
+          {dashboardInfo.isLoading ? (
+            <SkeletonText />
+          ) : (
+            <Text display={["none", null, "initial"]}>{fullName}</Text>
+          )}
           <Menu>
             <MenuButton>
-              <Avatar name="Adamu Olatunji Ciroma" size="sm" />
+              <Avatar name={fullName} size="sm" />
             </MenuButton>
             <MenuList boxShadow="md">
               <MenuItem onClick={auth.logout}>Log Out</MenuItem>
