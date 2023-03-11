@@ -1,6 +1,6 @@
 import { createQuery } from "react-query-kit";
 import api from "../api";
-import { fromDetailsToCourse } from "../../transformers/courses";
+import { toCourse } from "../../transformers/courses";
 
 export const useCourseDetails = createQuery<Course, { courseId: string }>(
   "course-details",
@@ -11,6 +11,6 @@ export const useCourseDetails = createQuery<Course, { courseId: string }>(
     if (!response.data.status)
       throw new Error("Could not fetch course details");
 
-    return fromDetailsToCourse(response.data.payload);
+    return toCourse(response.data.payload);
   }
 );

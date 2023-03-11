@@ -1,10 +1,10 @@
-import { fromEnrollmenttoCourse } from "./courses";
+import { toCourse } from "./courses";
 import { toUser } from "./user";
 
 export const toDashboardInfo = (data: any) =>
   ({
     user: toUser(data.bioData),
-    courses: data.registered_course.map(fromEnrollmenttoCourse) as Course[],
+    courses: data.registered_course.map(toCourse) as Course[],
     cpga: parseFloat(data.cpga),
     programme: toProgramme(data.programmeDetails),
   } as DashboardInfo);

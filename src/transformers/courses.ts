@@ -1,4 +1,4 @@
-export const fromEnrollmenttoCourse = (course: any) =>
+export const toCourse = (course: any) =>
   ({
     id: course.main_course_id,
     code: course.course_code,
@@ -7,18 +7,7 @@ export const fromEnrollmenttoCourse = (course: any) =>
     status: course.course_enrollment_status,
     semester: parseInt(course.course_enrollment_semester),
     units: parseInt(course.course_enrollment_unit),
-  } as Course);
-
-export const fromDetailsToCourse = (course: any) =>
-  ({
-    id: course.id,
-    code: course.code,
-    title: course.title,
-    description: course.description,
     materialLink: course.course_guide_url || undefined,
-    semester: parseInt(course.active),
-    units: parseInt(course.course_unit),
-    status: course.course_status,
     lecturer: course.course_lecturer_id
       ? `${course.firstname} ${course.othernames} ${course.lastname}`.replace(
           "undefined",
