@@ -27,7 +27,7 @@ import useAuth from "../hooks/use-auth";
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/router";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
-import { useValidateUsername } from "../hooks/auth/use-validate-username";
+import { useValidateUsername } from "../api/auth/use-validate-username";
 
 export default function Login() {
   const [username, setUsername] = useState("");

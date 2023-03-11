@@ -6,8 +6,8 @@ import {
   useEffect,
   useState,
 } from "react";
-import { login, LoginCredential } from "../api/auth";
-import { getUser } from "../api/user";
+import { LoginCredential, login } from "../api/auth/use-login";
+import { getUser } from "../api/user/use-user";
 import useLocalStorage from "./use-local-storage";
 
 export type TAuthAction = {

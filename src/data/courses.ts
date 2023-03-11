@@ -6,7 +6,6 @@ export const courses: Course[] = [
     description:
       "Veniam enim exercitation et occaecat do ullamco proident qui labore irure reprehenderit est. Do aliquip cupidatat est mollit irure sint sunt consectetur Lorem amet ipsum occaecat. Dolor mollit cupidatat occaecat dolor esse aliqua esse fugiat non quis ullamco esse.",
     units: 3,
-    image: "/images/pc.png",
     lecturer: "Dr. John Doe",
     semester: 1,
     status: "R",
@@ -19,7 +18,6 @@ export const courses: Course[] = [
     description:
       "Reprehenderit occaecat irure voluptate et nostrud. Aliqua commodo officia velit cupidatat cupidatat. Dolore aliqua sint officia ad consequat veniam quis. Nisi adipisicing in dolor enim sit excepteur enim eu esse Lorem ad. Est duis qui sint mollit.",
     units: 3,
-    image: "/images/pc.png",
     lecturer: "Dr. John Doe",
     semester: 2,
     status: "R",
@@ -32,7 +30,6 @@ export const courses: Course[] = [
     description:
       "Culpa fugiat voluptate consequat in laboris enim magna. Esse eiusmod adipisicing est do duis ex Lorem. Occaecat eu id commodo reprehenderit voluptate laboris.",
     units: 3,
-    image: "/images/pc.png",
     lecturer: "Dr. John Doe",
     semester: 1,
     status: "R",
@@ -45,7 +42,6 @@ export const courses: Course[] = [
     description:
       "Est occaecat labore eu sit elit ex culpa. Cillum magna aute eiusmod cillum qui. Magna in aute minim adipisicing nulla in aliquip occaecat officia exercitation non id incididunt. Sunt aute ex culpa ad culpa. Irure ullamco consectetur reprehenderit dolor aute.",
     units: 3,
-    image: "/images/pc.png",
     lecturer: "Dr. John Doe",
     semester: 1,
     status: "R",
@@ -58,7 +54,6 @@ export const courses: Course[] = [
     description:
       "Amet enim incididunt magna commodo. Laboris ex mollit elit ut dolor duis consequat exercitation in eiusmod occaecat ullamco dolor. Id est exercitation adipisicing eiusmod irure labore in duis.",
     units: 3,
-    image: "/images/pc.png",
     lecturer: "Dr. John Doe",
     semester: 2,
     status: "R",
@@ -71,7 +66,6 @@ export const courses: Course[] = [
     description:
       "Sint ea anim dolor commodo velit. Proident ipsum amet non non mollit voluptate laborum elit. Labore anim dolor enim occaecat. Labore fugiat nulla labore sunt eu. Sint ut excepteur ad nisi officia Lorem duis veniam qui.",
     units: 3,
-    image: "/images/pc.png",
     lecturer: "Dr. John Doe",
     semester: 2,
     status: "R",
@@ -84,7 +78,6 @@ export const courses: Course[] = [
     description:
       "Occaecat sunt nostrud ad exercitation in sit ad excepteur aute id ad minim. Eu irure id incididunt excepteur labore officia fugiat do fugiat sunt. Magna exercitation anim laboris ipsum occaecat in quis.",
     units: 3,
-    image: "/images/pc.png",
     lecturer: "Dr. John Doe",
     semester: 1,
     status: "R",

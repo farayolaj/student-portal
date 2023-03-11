@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { FC, ReactNode } from "react";
-import { useDashboardInfo } from "../../hooks/dashboard/use-dashboard-info";
+import { useDashboardInfo } from "../../api/dashboard/use-dashboard-info";
 
 const ProfileCard: FC = () => {
   const dashboardInfo = useDashboardInfo();

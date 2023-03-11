@@ -12,11 +12,11 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import NextLink from "next/link";
 import { FC } from "react";
+import { useDashboardInfo } from "../../api/dashboard/use-dashboard-info";
 import * as routes from "../../constants/routes";
-import { useDashboardInfo } from "../../hooks/dashboard/use-dashboard-info";
 import getAbstractImage from "../../lib/get-abstract-image";
 
 const CoursesCard: FC = () => {
@@ -51,7 +51,7 @@ const CoursesCard: FC = () => {
             code={course.id}
             title={course.title}
             units={course.units}
-            image={course.image}
+            image={getAbstractImage()}
           />
         ))}
       </SimpleGrid>
@@ -81,14 +81,14 @@ type CourseItemProps = {
   code: string;
   title: string;
   units: number;
-  image?: string;
+  image: string | StaticImageData;
 };
 
 const CourseItem: FC<CourseItemProps> = ({ code, title, units, image }) => {
   return (
     <Box pos="relative" rounded="md" overflow="hidden">
       <Box pos="absolute" w="full" h="full">
-        <Image src={getAbstractImage()} alt="" role="presentation" fill />
+        <Image src={image} alt="" role="presentation" fill />
       </Box>
       <VStack
         w="full"

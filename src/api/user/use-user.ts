@@ -1,5 +1,6 @@
-import api from ".";
-import { toUser } from "../transformers/user";
+import { createQuery } from "react-query-kit";
+import { toUser } from "../../transformers/user";
+import api from "../api";
 
 export async function getUser() {
   const response = await api.get("/profile");
@@ -8,3 +9,5 @@ export async function getUser() {
 
   return toUser(response.data.payload);
 }
+
+export const useUser = createQuery("user", getUser);

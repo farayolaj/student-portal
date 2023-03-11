@@ -20,7 +20,7 @@ import Seo from "../components/common/seo";
 import uiLogo from "../images/ui-logo.png";
 import * as routes from "../constants/routes";
 import { FormEventHandler, useState } from "react";
-import { usePasswordReset } from "../hooks/auth/use-password-reset";
+import { usePasswordReset } from "../api/auth/use-password-reset";
 
 export default function ForgotPassword() {
   const [isResetRequestSent, setIsResetRequestSent] = useState(false);

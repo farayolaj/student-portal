@@ -15,7 +15,7 @@ import {
 import NextLink from "next/link";
 import { FC } from "react";
 import { IoNotificationsOutline } from "react-icons/io5";
-import { useDashboardInfo } from "../../hooks/dashboard/use-dashboard-info";
+import { useDashboardInfo } from "../../api/dashboard/use-dashboard-info";
 import useAuth from "../../hooks/use-auth";
 
 export const Header: FC = () => {
