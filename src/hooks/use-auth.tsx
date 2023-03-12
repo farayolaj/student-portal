@@ -6,9 +6,11 @@ import {
   useEffect,
   useState,
 } from "react";
+import { useRouter } from "next/router";
 import { LoginCredential, login } from "../api/auth/use-login";
 import { getUser } from "../api/user/use-user";
 import useLocalStorage from "./use-local-storage";
+import { LOGIN } from "../constants/routes";
 
 export type TAuthAction = {
   /**
@@ -58,6 +60,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     "token",
     null
   );
+  const router = useRouter();
 
   useEffect(() => {
     setIsLoggingIn(true);
@@ -66,11 +69,16 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
         .then((user) => {
           setUser(user);
         })
+        .catch(() => {
+          setUser(undefined);
+          setAuthToken(null);
+          router.push(LOGIN);
+        })
         .finally(() => {
           setIsLoggingIn(false);
         });
     else setIsLoggingIn(false);
-  }, [authToken]);
+  }, [authToken, router, setAuthToken]);
 
   const loginFn: TAuthAction["login"] = async (credential, opts) => {
     setIsLoggingIn(true);
