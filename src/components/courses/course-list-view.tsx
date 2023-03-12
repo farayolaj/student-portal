@@ -40,7 +40,7 @@ const CourseListViewItem: FC<CourseListViewItemProps> = ({ course }) => {
         {course.materialLink && (
           <CourseMaterialDownload link={course.materialLink} />
         )}
-        <Box pos="relative" w="15rem" h="15rem" overflow="hidden">
+        <Box pos="relative" w="15rem" minH="15rem" overflow="hidden">
           <Image
             alt=""
             src={getAbstractImage()}

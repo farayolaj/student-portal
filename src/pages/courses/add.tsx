@@ -8,6 +8,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
+import { useCourseConfig } from "../../api/course/use-course-config";
 import PageTitle from "../../components/common/page-title";
 import Seo from "../../components/common/seo";
 import AddCourseOverviewCard from "../../components/courses/add/add-course-overview-card";
@@ -16,9 +17,18 @@ import SelectCourseView from "../../components/courses/select/select-course-view
 import { courses } from "../../data/courses";
 
 export default function AddCoursesPage(): JSX.Element {
-  const [semester, setSemester] = useState("all");
+  const [semester, setSemester] = useState(0);
   const [view, setView] = useState("list");
   const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
+  const courseConfig = useCourseConfig();
+  const maxUnits =
+    semester === 0
+      ? courseConfig.data?.reduce((acc, cur) => acc + cur.maxUnits, 0)
+      : courseConfig.data?.find((c) => c.semester === semester)?.maxUnits;
+  const minUnits =
+    semester === 0
+      ? courseConfig.data?.reduce((acc, cur) => acc + cur.minUnits, 0)
+      : courseConfig.data?.find((c) => c.semester === semester)?.minUnits;
 
   return (
     <>
@@ -32,8 +42,8 @@ export default function AddCoursesPage(): JSX.Element {
         onViewChange={setView}
       />
       <AddCourseOverviewCard
-        minUnits={10}
-        maxUnits={20}
+        minUnits={minUnits || 0}
+        maxUnits={maxUnits || 0}
         selectedCourses={courses.filter((course) =>
           selectedCourses.includes(course.id)
         )}
@@ -61,10 +71,7 @@ export default function AddCoursesPage(): JSX.Element {
       </Flex>
       <SelectCourseView
         courseList={courses.filter(
-          (course) =>
-            semester === "all" ||
-            (course.semester === 1 && semester === "first") ||
-            (course.semester === 2 && semester === "second")
+          (course) => semester === 0 || course.semester === semester
         )}
         view={view as "list" | "grid"}
         selectedCourses={selectedCourses}

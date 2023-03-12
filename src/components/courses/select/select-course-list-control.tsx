@@ -4,8 +4,8 @@ import RadioButtonGroup from "../../common/radio-button-group";
 
 type SelectCourseListControlProps = {
   session: string;
-  semester: string;
-  onSemesterChange: (filter: string) => void;
+  semester: number;
+  onSemesterChange: (filter: number) => void;
   view: string;
   onViewChange: (view: string) => void;
 };
@@ -39,10 +39,10 @@ export default function SelectCourseListControl({
         </Text>
         <Spacer />
         <RadioButtonGroup
-          values={["all", "first", "second"]}
+          values={["0", "1", "2"]}
           labels={["All", "1st Semester", "2nd Semester"]}
-          value={semester}
-          onChange={onSemesterChange}
+          value={Number(semester).toString()}
+          onChange={(s) => onSemesterChange(parseInt(s))}
         />
       </Flex>
     </>
