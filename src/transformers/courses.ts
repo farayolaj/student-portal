@@ -32,3 +32,17 @@ export const toCourseConfig = (config: any) =>
     maxUnits: parseInt(config.max_unit),
     totalUnitsRegistered: parseInt(config.total_units_registered),
   } as CourseConfig);
+
+export const fromPreloadToCourse = (course: any) =>
+  ({
+    id: course.course_id,
+    code: course.code,
+    title: course.title,
+    // description: course.description,
+    status: course.status,
+    semester: parseInt(course.semester),
+    units: parseInt(course.unit),
+    materialLink: course.materialLink,
+    lecturer: course.lecturer,
+    preSelected: course.pre_select == 1,
+  } as Course);

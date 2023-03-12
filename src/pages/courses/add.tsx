@@ -8,6 +8,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
+import { useAllCourses } from "../../api/course/use-all-courses";
 import { useCourseConfig } from "../../api/course/use-course-config";
 import PageTitle from "../../components/common/page-title";
 import Seo from "../../components/common/seo";
@@ -17,18 +18,28 @@ import SelectCourseView from "../../components/courses/select/select-course-view
 import { courses } from "../../data/courses";
 
 export default function AddCoursesPage(): JSX.Element {
-  const [semester, setSemester] = useState(0);
+  const [semester, setSemester] = useState(1);
   const [view, setView] = useState("list");
   const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
   const courseConfig = useCourseConfig();
-  const maxUnits =
-    semester === 0
-      ? courseConfig.data?.reduce((acc, cur) => acc + cur.maxUnits, 0)
-      : courseConfig.data?.find((c) => c.semester === semester)?.maxUnits;
-  const minUnits =
-    semester === 0
-      ? courseConfig.data?.reduce((acc, cur) => acc + cur.minUnits, 0)
-      : courseConfig.data?.find((c) => c.semester === semester)?.minUnits;
+  const maxUnits = courseConfig.data?.find(
+    (c) => c.semester === semester
+  )?.maxUnits;
+  const minUnits = courseConfig.data?.find(
+    (c) => c.semester === semester
+  )?.minUnits;
+
+  const allCourses = useAllCourses({
+    variables: { semester },
+    onSuccess: (data) => {
+      if (selectedCourses.length > 0) return;
+
+      const selected = data
+        .filter((course) => course.preSelected)
+        .map((course) => course.id);
+      setSelectedCourses(selected);
+    },
+  });
 
   return (
     <>
@@ -70,9 +81,11 @@ export default function AddCoursesPage(): JSX.Element {
         </InputGroup>
       </Flex>
       <SelectCourseView
-        courseList={courses.filter(
-          (course) => semester === 0 || course.semester === semester
-        )}
+        isLoading={allCourses.isLoading}
+        error={
+          allCourses.isError ? (allCourses.error as Error).message : undefined
+        }
+        courseList={allCourses.data || []}
         view={view as "list" | "grid"}
         selectedCourses={selectedCourses}
         onChange={setSelectedCourses}

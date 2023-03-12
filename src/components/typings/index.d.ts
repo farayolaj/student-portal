@@ -32,6 +32,7 @@ interface Course {
   semester: number;
   units: number;
   materialLink?: string;
+  preSelected?: boolean;
 }
 
 interface CourseStatistics {

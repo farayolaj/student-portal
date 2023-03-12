@@ -39,8 +39,8 @@ export default function SelectCourseListControl({
         </Text>
         <Spacer />
         <RadioButtonGroup
-          values={["0", "1", "2"]}
-          labels={["All", "1st Semester", "2nd Semester"]}
+          values={["1", "2"]}
+          labels={["1st Semester", "2nd Semester"]}
           value={Number(semester).toString()}
           onChange={(s) => onSemesterChange(parseInt(s))}
         />
