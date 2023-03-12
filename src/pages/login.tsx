@@ -111,9 +111,14 @@ export default function Login() {
           </Box>
         </Flex>
         <Flex mt={8} justify="center">
-          <Card w="60%" overflow="hidden" mb={8}>
-            <CardBody display="flex" p={0}>
-              <Flex align="stretch" pos="relative" w="60%" px={12} py={12}>
+          <Card w={["90%", null, "60%"]} overflow="hidden" mb={8}>
+            <CardBody display="flex" flexDir={["column", null, "row"]} p={0}>
+              <Flex
+                align="stretch"
+                pos="relative"
+                w={["full", null, "60%"]}
+                p={[4, null, 12]}
+              >
                 <Image
                   src={abstractShape}
                   fill
@@ -143,7 +148,7 @@ export default function Login() {
               <Flex
                 direction="column"
                 justify="space-between"
-                w="40%"
+                w={["full", null, "40%"]}
                 py={6}
                 px={12}
               >
@@ -151,7 +156,7 @@ export default function Login() {
                   Log In to Student Portal
                 </Heading>
                 <chakra.form
-                  mt={8}
+                  mt={[16, null, 8]}
                   display="flex"
                   flexDir="column"
                   gap={6}
