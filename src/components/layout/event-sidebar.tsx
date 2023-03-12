@@ -9,23 +9,14 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import isSameDay from "date-fns/isSameDay";
 import format from "date-fns/format";
 import { FC, useState } from "react";
 import Calendar from "../common/calendar";
 import { DATE_ONLY_FORMAT } from "../../constants/date";
 
-const events = new Map<string, { name: string; time: string }[]>();
-events.set(format(new Date(2023, 2, 3), DATE_ONLY_FORMAT), [
-  { name: "GES 101: Use of English", time: "2:00 PM" },
-  { name: "GES 102: Use of English", time: "9:00 PM" },
-  { name: "GES 103: Use of English", time: "7:00 PM" },
-  { name: "GES 104: Use of English", time: "4:00 PM" },
-  { name: "GES 105: Use of English", time: "1:00 PM" },
-]);
-events.set(format(new Date(2023, 2, 5), DATE_ONLY_FORMAT), [
-  { name: "GES 101: Use of English", time: "2:00 PM" },
-  { name: "GES 102: Use of English", time: "9:00 PM" },
+const events = new Map<string, { name: string; time?: string }[]>();
+events.set(format(new Date(2023, 2, 20), DATE_ONLY_FORMAT), [
+  { name: "Examination Starts" },
 ]);
 
 const EventSidebar: FC = () => {
@@ -65,9 +56,11 @@ const EventSidebar: FC = () => {
               {events.has(selectedDate) ? (
                 events
                   .get(selectedDate)
-                  ?.sort((a, b) =>
-                    a.time == b.time ? 0 : a.time > b.time ? 1 : -1
-                  )
+                  ?.sort((a, b) => {
+                    if (!a.time) return -1;
+                    if (!b.time) return 1;
+                    return a.time == b.time ? 0 : a.time > b.time ? 1 : -1;
+                  })
                   .map(({ name, time }) => (
                     <Flex
                       direction="column"
