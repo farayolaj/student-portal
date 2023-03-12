@@ -1,5 +1,5 @@
 import { createQuery } from "react-query-kit";
-import { fromPreloadToCourse } from "../../transformers/courses";
+import { toCourse } from "../../transformers/courses";
 import api from "../api";
 
 export const useAllCourses = createQuery<Course[], { semester: number }>(
@@ -11,6 +11,6 @@ export const useAllCourses = createQuery<Course[], { semester: number }>(
 
     if (!response.data.status) throw new Error(response.data.message);
 
-    return (response.data.payload?.map(fromPreloadToCourse) || []) as Course[];
+    return (response.data.payload?.map(toCourse) || []) as Course[];
   }
 );
