@@ -1,4 +1,4 @@
-import { Button, Flex, Icon, Link } from "@chakra-ui/react";
+import { Button, Flex, Icon, Link, useToast } from "@chakra-ui/react";
 import { FC, useState } from "react";
 import NextLink from "next/link";
 import PageTitle from "../../components/common/page-title";
@@ -20,6 +20,7 @@ import { useAllSessions } from "../../api/course/use-all-sessions";
 import { useCourseStatistics } from "../../api/course/use-course-statistics";
 import { useRegisteredCourses } from "../../api/course/use-registered-course";
 import { useRegistrationOpen } from "../../api/course/use-registration-open";
+import { useDeleteCourses } from "../../api/course/use-delete-courses";
 
 const Courses: FC = () => {
   const [sessionId, setSessionId] = useState("");
@@ -49,6 +50,34 @@ const Courses: FC = () => {
       }
     },
   });
+
+  const toast = useToast();
+  const deleteCourses = useDeleteCourses();
+  const onDelete = (ids: string[]) => {
+    deleteCourses.mutate(
+      { ids },
+      {
+        onSuccess: () => {
+          registeredCourses.refetch();
+          setInDeleteCourseView(false);
+          toast({
+            title: "Courses deleted successfully",
+            status: "success",
+            isClosable: true,
+          });
+        },
+        onError: (err) => {
+          const error = err as Error;
+          toast({
+            title: "Error deleting courses",
+            description: error.message,
+            status: "error",
+            isClosable: true,
+          });
+        },
+      }
+    );
+  };
 
   return (
     <>
@@ -112,7 +141,7 @@ const Courses: FC = () => {
       {inDeleteCourseView ? (
         <DeleteCourseView
           courseList={filteredCourses}
-          onDelete={() => setInDeleteCourseView(false)}
+          onDelete={onDelete}
           view={view as "list" | "grid"}
         />
       ) : (

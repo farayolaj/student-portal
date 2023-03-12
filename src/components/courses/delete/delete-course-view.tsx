@@ -18,7 +18,7 @@ import SelectCourseGridView from "../select/select-course-grid-view";
 type DeleteCourseViewProps = {
   view: "list" | "grid";
   courseList: Course[];
-  onDelete: () => void;
+  onDelete: (ids: string[]) => void;
 };
 
 const DeleteCourseView: FC<DeleteCourseViewProps> = ({
@@ -94,7 +94,7 @@ const DeleteCourseView: FC<DeleteCourseViewProps> = ({
                 colorScheme="red"
                 onClick={() => {
                   onClose();
-                  onDelete();
+                  onDelete(selectedCourses);
                 }}
                 ml={3}
               >
