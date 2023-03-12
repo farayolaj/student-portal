@@ -78,7 +78,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
           setIsLoggingIn(false);
         });
     else setIsLoggingIn(false);
-  }, [authToken, router, setAuthToken]);
+  }, []);
 
   const loginFn: TAuthAction["login"] = async (credential, opts) => {
     setIsLoggingIn(true);
