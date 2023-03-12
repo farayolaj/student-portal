@@ -9,4 +9,4 @@ async function addCourses({ courseIds }: { courseIds: Course["id"][] }) {
   return;
 }
 
-const useAddCourses = createMutation(addCourses);
+export const useAddCourses = createMutation(addCourses);
