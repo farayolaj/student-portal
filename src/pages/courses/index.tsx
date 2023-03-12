@@ -19,12 +19,13 @@ import DeleteCourseView from "../../components/courses/delete/delete-course-view
 import { useAllSessions } from "../../api/course/use-all-sessions";
 import { useCourseStatistics } from "../../api/course/use-course-statistics";
 import { useRegisteredCourses } from "../../api/course/use-registered-course";
+import { useRegistrationOpen } from "../../api/course/use-registration-open";
 
 const Courses: FC = () => {
   const [sessionId, setSessionId] = useState("");
   const [latestSessionId, setLatestSessionId] = useState("");
   const [semester, setSemester] = useState(0);
-  const canAddCourses = true;
+  const canRegister = useRegistrationOpen();
   const canDeleteCourses = true;
   const [view, setView] = useState("list");
   const [inDeleteCourseView, setInDeleteCourseView] = useState(false);
@@ -68,7 +69,7 @@ const Courses: FC = () => {
       />
       <Flex mt={6} gap={4} justify="space-between" align="center">
         <Flex gap={4} wrap="wrap" justify={["space-between", null, "initial"]}>
-          {!inDeleteCourseView && canAddCourses && (
+          {!inDeleteCourseView && canRegister.data && (
             <Link
               variant="button"
               as={NextLink}
