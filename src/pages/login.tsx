@@ -203,11 +203,11 @@ export default function Login() {
                           />
                         </InputRightElement>
                       </InputGroup>
-                      <FormHelperText>
+                      {/* <FormHelperText>
                         <Link as={NextLink} href={routes.FORGOT_PASSWORD}>
                           Forgot password?
                         </Link>
-                      </FormHelperText>
+                      </FormHelperText> */}
                     </FormControl>
                   )}
                   <Box mt={16} mb={8}>
