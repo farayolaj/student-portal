@@ -60,6 +60,7 @@ const Courses: FC = () => {
         onSuccess: () => {
           registeredCourses.refetch();
           setInDeleteCourseView(false);
+          courseStats.refetch();
           toast({
             title: "Courses deleted successfully",
             status: "success",
