@@ -48,7 +48,7 @@ const CoursesCard: FC = () => {
         {courses.slice(0, 4).map((course) => (
           <CourseItem
             key={course.id}
-            code={course.id}
+            code={course.code}
             title={course.title}
             units={course.units}
             image={getAbstractImage(course.id)}
