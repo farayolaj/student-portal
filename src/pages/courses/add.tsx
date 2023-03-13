@@ -50,8 +50,6 @@ export default function AddCoursesPage(): JSX.Element {
     },
   });
 
-  const allCoursesWithExtras = [...(allCourses.data || []), ...extraCourses];
-
   const addCourses = useAddCourses();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef(null);
@@ -62,6 +60,12 @@ export default function AddCoursesPage(): JSX.Element {
   const registeredCourses = useRegisteredCourses({
     variables: { session: currentSession?.id || "" },
   });
+  const allCoursesWithExtras = [
+    ...(allCourses.data || []),
+    ...extraCourses,
+  ].filter(
+    (c) => registeredCourses.data?.findIndex((r) => r.id === c.id) == -1
+  );
 
   return (
     <>
@@ -134,8 +138,8 @@ export default function AddCoursesPage(): JSX.Element {
             </AlertDialogHeader>
 
             <AlertDialogBody>
-              Are you sure you want to add these {selectedCourses.length}{" "}
-              courses?
+              Are you sure you want to add {selectedCourses.length}{" "}
+              {selectedCourses.length === 1 ? "course" : "courses"}?
             </AlertDialogBody>
 
             <AlertDialogFooter>
