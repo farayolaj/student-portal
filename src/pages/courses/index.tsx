@@ -97,7 +97,7 @@ const Courses: FC = () => {
         minMaxActive={sessionId === latestSessionId}
       />
       <Flex mt={6} gap={4} justify="space-between" align="center">
-        <Flex gap={4} wrap="wrap" justify={["space-between", null, "initial"]}>
+        <Flex gap={4} wrap="wrap" justify={["center", null, "initial"]}>
           {!inDeleteCourseView && canRegister.data && (
             <Link
               variant="button"
@@ -106,7 +106,7 @@ const Courses: FC = () => {
               display="inline-flex"
               gap={4}
               alignItems="center"
-              py={0}
+              h={10}
             >
               <Icon as={IoAdd} boxSize={6} />
               Add Courses

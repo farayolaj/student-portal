@@ -15,7 +15,7 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
 import { useSearchCourses } from "../../../api/course/use-search-courses";
 import useDebounce from "../../../hooks/use-debounce";
