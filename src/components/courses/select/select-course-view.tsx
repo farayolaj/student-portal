@@ -3,13 +3,11 @@ import {
   Card,
   CardBody,
   Flex,
-  Link,
   Spinner,
   Text,
   useBreakpointValue,
 } from "@chakra-ui/react";
 import { FC } from "react";
-import { ADD_COURSES } from "../../../constants/routes";
 import SelectCourseGridView from "./select-course-grid-view";
 import SelectCourseListView from "./select-course-list-view";
 
@@ -19,7 +17,7 @@ type SelectCourseViewProps = {
   error?: string | null;
   courseList: Course[];
   selectedCourses: string[];
-  onChange: (values: string[]) => void;
+  onToggleSelection: (value: string) => void;
 };
 
 const SelectCourseView: FC<SelectCourseViewProps> = ({
@@ -28,7 +26,7 @@ const SelectCourseView: FC<SelectCourseViewProps> = ({
   selectedCourses,
   isLoading,
   error,
-  onChange,
+  onToggleSelection,
 }) => {
   const isMobile = useBreakpointValue(
     { base: true, md: false },
@@ -73,19 +71,19 @@ const SelectCourseView: FC<SelectCourseViewProps> = ({
         <SelectCourseGridView
           courseList={courseList}
           selectedCourses={selectedCourses}
-          onChange={onChange}
+          onToggleSelection={onToggleSelection}
         />
       ) : view == "grid" ? (
         <SelectCourseGridView
           courseList={courseList}
           selectedCourses={selectedCourses}
-          onChange={onChange}
+          onToggleSelection={onToggleSelection}
         />
       ) : (
         <SelectCourseListView
           courseList={courseList}
           selectedCourses={selectedCourses}
-          onChange={onChange}
+          onToggleSelection={onToggleSelection}
         />
       )}
     </Box>

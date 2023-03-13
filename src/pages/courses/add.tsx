@@ -1,12 +1,6 @@
 import {
   Flex,
   Button,
-  IconButton,
-  Input,
-  InputGroup,
-  InputRightElement,
-  InputLeftElement,
-  Icon,
   AlertDialog,
   AlertDialogBody,
   AlertDialogContent,
@@ -18,24 +12,22 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
-import { IoSearchOutline } from "react-icons/io5";
 import { useAddCourses } from "../../api/course/use-add-courses";
 import { useAllCourses } from "../../api/course/use-all-courses";
 import { useCourseConfig } from "../../api/course/use-course-config";
-import { useSearchCourses } from "../../api/course/use-search-courses";
 import PageTitle from "../../components/common/page-title";
 import Seo from "../../components/common/seo";
 import AddCourseOverviewCard from "../../components/courses/add/add-course-overview-card";
+import AddMoreCoursesModal from "../../components/courses/add/add-more-courses-modal";
 import SelectCourseListControl from "../../components/courses/select/select-course-list-control";
 import SelectCourseView from "../../components/courses/select/select-course-view";
 import { REGISTERED_COURSES } from "../../constants/routes";
-import { courses } from "../../data/courses";
-import useDebounce from "../../hooks/use-debounce";
 
 export default function AddCoursesPage(): JSX.Element {
   const [semester, setSemester] = useState(1);
   const [view, setView] = useState("list");
   const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
+  const [extraCourses, setExtraCourses] = useState<Course[]>([]);
   const courseConfig = useCourseConfig();
   const maxUnits = courseConfig.data?.find(
     (c) => c.semester === semester
@@ -56,14 +48,7 @@ export default function AddCoursesPage(): JSX.Element {
     },
   });
 
-  const [searchTerm, setSearchTerm] = useState("");
-  const debouncedSearchTerm = useDebounce(searchTerm, 500);
-  const [searchResults, setSearchResults] = useState<Course[]>([]);
-  useSearchCourses({
-    variables: { searchTerm: debouncedSearchTerm },
-    onSuccess: setSearchResults,
-    enabled: !!debouncedSearchTerm,
-  });
+  const allCoursesWithExtras = [...(allCourses.data || []), ...extraCourses];
 
   const addCourses = useAddCourses();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -86,38 +71,38 @@ export default function AddCoursesPage(): JSX.Element {
         minUnits={minUnits || 0}
         maxUnits={maxUnits || 0}
         selectedCourses={
-          allCourses.data?.filter((course) =>
+          allCoursesWithExtras.filter((course) =>
             selectedCourses.includes(course.id)
           ) || []
         }
       />
       <Flex mt={8} justify="flex-end">
-        <InputGroup pr={0} w={80} variant="primary">
-          <Input
-            pr={4}
-            type="search"
-            placeholder="Search for more courses..."
-            _placeholder={{
-              color: "black",
-            }}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <InputLeftElement>
-            <Icon as={IoSearchOutline} boxSize={4} />
-          </InputLeftElement>
-        </InputGroup>
+        <AddMoreCoursesModal
+          onAdd={(course) => {
+            setExtraCourses((prev) => [...prev, course]);
+            setSelectedCourses((prev) => [...prev, course.id]);
+          }}
+          onRemove={(course) => {
+            setExtraCourses((prev) => prev.filter((c) => c.id !== course.id));
+            setSelectedCourses((prev) => prev.filter((c) => c !== course.id));
+          }}
+        />
       </Flex>
       <SelectCourseView
         isLoading={allCourses.isLoading}
         error={
           allCourses.isError ? (allCourses.error as Error).message : undefined
         }
-        courseList={
-          searchTerm.length === 0 ? allCourses.data || [] : searchResults
-        }
+        courseList={allCoursesWithExtras}
         view={view as "list" | "grid"}
         selectedCourses={selectedCourses}
-        onChange={setSelectedCourses}
+        onToggleSelection={(value) => {
+          if (selectedCourses.includes(value)) {
+            setSelectedCourses((prev) => prev.filter((c) => c !== value));
+          } else {
+            setSelectedCourses((prev) => [...prev, value]);
+          }
+        }}
       />
       <Flex justify="center" mt={6} pos="sticky" bottom={8}>
         {selectedCourses.length > 0 && (

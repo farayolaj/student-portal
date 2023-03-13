@@ -3,43 +3,41 @@ import {
   Card,
   CardBody,
   Checkbox,
-  CheckboxGroup,
   Flex,
   Text,
   useToken,
   VStack,
 } from "@chakra-ui/react";
 import Image from "next/image";
-import { FC, useRef } from "react";
+import { FC } from "react";
 import getAbstractImage from "../../../lib/get-abstract-image";
 import statusCodeToName from "../../../lib/status-code-to-name";
 
 type SelectCourseListViewProps = {
   courseList: Course[];
   selectedCourses: string[];
-  onChange: (values: string[]) => void;
+  onToggleSelection: (value: string) => void;
   colorScheme?: string;
 };
 
 const SelectCourseListView: FC<SelectCourseListViewProps> = ({
   courseList,
   selectedCourses,
-  onChange,
+  onToggleSelection,
   colorScheme,
 }) => {
   return (
-    <CheckboxGroup defaultValue={selectedCourses} onChange={onChange}>
-      <VStack spacing={8}>
-        {courseList.map((course) => (
-          <SelectCourseListViewItem
-            key={course.id}
-            course={course}
-            isChecked={selectedCourses.includes(course.id)}
-            colorScheme={colorScheme}
-          />
-        ))}
-      </VStack>
-    </CheckboxGroup>
+    <VStack spacing={8}>
+      {courseList.map((course) => (
+        <SelectCourseListViewItem
+          key={course.id}
+          course={course}
+          onToggleSelection={onToggleSelection}
+          isChecked={selectedCourses.includes(course.id)}
+          colorScheme={colorScheme}
+        />
+      ))}
+    </VStack>
   );
 };
 
@@ -48,15 +46,16 @@ export default SelectCourseListView;
 type SelectCourseListViewItemProps = {
   course: Course;
   isChecked: boolean;
+  onToggleSelection: (value: string) => void;
   colorScheme?: string;
 };
 
 const SelectCourseListViewItem: FC<SelectCourseListViewItemProps> = ({
   course,
   isChecked,
+  onToggleSelection,
   colorScheme = "primary",
 }) => {
-  const ref = useRef<HTMLInputElement>(null);
   const [colorScheme500, colorScheme300] = useToken("colors", [
     `${colorScheme}.500`,
     `${colorScheme}.300`,
@@ -73,7 +72,7 @@ const SelectCourseListViewItem: FC<SelectCourseListViewItemProps> = ({
       borderColor="transparent"
       _checked={{ borderColor: colorScheme500 }}
       _hover={{ "&[aria-checked=false]": { borderColor: colorScheme300 } }}
-      onClick={() => ref.current?.click()}
+      onClick={() => onToggleSelection(course.id)}
       cursor="pointer"
     >
       <Checkbox
@@ -83,8 +82,8 @@ const SelectCourseListViewItem: FC<SelectCourseListViewItemProps> = ({
         colorScheme={colorScheme}
         size="lg"
         zIndex={100}
-        ref={ref}
         value={course.id}
+        isChecked={isChecked}
         borderColor={colorScheme500}
       />
       <Flex>

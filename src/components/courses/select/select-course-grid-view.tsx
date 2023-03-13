@@ -3,7 +3,6 @@ import {
   Card,
   CardBody,
   Checkbox,
-  CheckboxGroup,
   Flex,
   SimpleGrid,
   Spacer,
@@ -11,36 +10,35 @@ import {
   useToken,
 } from "@chakra-ui/react";
 import Image from "next/image";
-import { FC, useRef } from "react";
+import { FC } from "react";
 import getAbstractImage from "../../../lib/get-abstract-image";
 import statusCodeToName from "../../../lib/status-code-to-name";
 
 type SelectCourseGridViewProps = {
   courseList: Course[];
   selectedCourses: string[];
-  onChange: (values: string[]) => void;
+  onToggleSelection: (value: string) => void;
   colorScheme?: string;
 };
 
 const SelectCourseGridView: FC<SelectCourseGridViewProps> = ({
   courseList,
   selectedCourses,
-  onChange,
+  onToggleSelection,
   colorScheme,
 }) => {
   return (
-    <CheckboxGroup defaultValue={selectedCourses} onChange={onChange}>
-      <SimpleGrid columns={[1, null, 2, null, 3]} gap={8}>
-        {courseList.map((course) => (
-          <SelectCourseGridViewItem
-            key={course.id}
-            course={course}
-            isChecked={selectedCourses.includes(course.id)}
-            colorScheme={colorScheme}
-          />
-        ))}
-      </SimpleGrid>
-    </CheckboxGroup>
+    <SimpleGrid columns={[1, null, 2, null, 3]} gap={8}>
+      {courseList.map((course) => (
+        <SelectCourseGridViewItem
+          key={course.id}
+          course={course}
+          onToggleSelection={onToggleSelection}
+          isChecked={selectedCourses.includes(course.id)}
+          colorScheme={colorScheme}
+        />
+      ))}
+    </SimpleGrid>
   );
 };
 
@@ -49,15 +47,16 @@ export default SelectCourseGridView;
 type SelectCourseGridViewItemProps = {
   course: Course;
   isChecked: boolean;
+  onToggleSelection: (value: string) => void;
   colorScheme?: string;
 };
 
 const SelectCourseGridViewItem: FC<SelectCourseGridViewItemProps> = ({
   course,
   isChecked,
+  onToggleSelection,
   colorScheme = "primary",
 }) => {
-  const ref = useRef<HTMLInputElement>(null);
   const [colorScheme500, colorScheme300] = useToken("colors", [
     `${colorScheme}.500`,
     `${colorScheme}.300`,
@@ -72,7 +71,7 @@ const SelectCourseGridViewItem: FC<SelectCourseGridViewItemProps> = ({
       borderColor="gray.200"
       _checked={{ borderColor: colorScheme500 }}
       _hover={{ "&[aria-checked=false]": { borderColor: colorScheme300 } }}
-      onClick={() => ref.current?.click()}
+      onClick={() => onToggleSelection(course.id)}
       cursor="pointer"
     >
       <AspectRatio pos="relative" w="full" ratio={3 / 2} overflow="hidden">
@@ -90,8 +89,8 @@ const SelectCourseGridViewItem: FC<SelectCourseGridViewItemProps> = ({
           right={4}
           colorScheme={colorScheme}
           size="lg"
-          ref={ref}
           value={course.id}
+          isChecked={isChecked}
           zIndex={100}
           borderColor={colorScheme500}
         />

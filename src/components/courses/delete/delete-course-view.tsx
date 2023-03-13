@@ -34,6 +34,14 @@ const DeleteCourseView: FC<DeleteCourseViewProps> = ({
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef(null);
 
+  const onToggleSelection = (id: string) => {
+    if (selectedCourses.includes(id)) {
+      setSelectedCourses((prev) => prev.filter((c) => c !== id));
+    } else {
+      setSelectedCourses((prev) => [...prev, id]);
+    }
+  };
+
   if (isMobile === null) return null;
 
   return (
@@ -43,21 +51,21 @@ const DeleteCourseView: FC<DeleteCourseViewProps> = ({
           <SelectCourseGridView
             courseList={courseList}
             selectedCourses={selectedCourses}
-            onChange={setSelectedCourses}
+            onToggleSelection={onToggleSelection}
             colorScheme="red"
           />
         ) : view == "grid" ? (
           <SelectCourseGridView
             courseList={courseList}
             selectedCourses={selectedCourses}
-            onChange={setSelectedCourses}
+            onToggleSelection={onToggleSelection}
             colorScheme="red"
           />
         ) : (
           <SelectCourseListView
             courseList={courseList}
             selectedCourses={selectedCourses}
-            onChange={setSelectedCourses}
+            onToggleSelection={onToggleSelection}
             colorScheme="red"
           />
         )}
