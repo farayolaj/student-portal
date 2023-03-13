@@ -36,7 +36,7 @@ const Navigation: FC<NavigationProps> = ({ isOpen }) => {
         isOpen={isOpen}
         isActive={pathname.startsWith(routes.REGISTERED_COURSES)}
       />
-      <NavLink
+      {/* <NavLink
         title="Payments"
         icon={IoReceiptOutline}
         href={routes.PAYMENTS}
@@ -63,7 +63,7 @@ const Navigation: FC<NavigationProps> = ({ isOpen }) => {
         href="#"
         isOpen={isOpen}
         isActive={pathname.startsWith("#")}
-      />
+      /> */}
     </VStack>
   );
 };

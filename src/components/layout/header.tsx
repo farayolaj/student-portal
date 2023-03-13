@@ -54,12 +54,12 @@ export const Header: FC = () => {
       </Flex>
       <Spacer h="min-content" />
       <Flex gap={8}>
-        <IconButton
+        {/* <IconButton
           aria-label="Check Notifications"
           size="md"
           variant="transparent"
           icon={<IoNotificationsOutline size="1.5rem" />}
-        />
+        /> */}
         <Menu>
           <MenuButton>
             <HStack>
@@ -85,9 +85,9 @@ export const Header: FC = () => {
             boxShadow="md"
             sx={{ "& > *:hover": { bgColor: "primary.200" } }}
           >
-            <MenuItem as={NextLink} href={"#"}>
+            {/* <MenuItem as={NextLink} href={"#"}>
               Profile
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem onClick={auth.logout}>Log Out</MenuItem>
           </MenuList>
         </Menu>

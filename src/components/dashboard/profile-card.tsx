@@ -28,11 +28,11 @@ const ProfileCard: FC = () => {
         <Heading as="h2" fontSize="md">
           Profile
         </Heading>
-        <Text>
+        {/* <Text>
           <Link as={NextLink} href="#">
             See more &rarr;
           </Link>
-        </Text>
+        </Text> */}
       </CardHeader>
       <CardBody>
         <Flex
