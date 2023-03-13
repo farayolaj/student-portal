@@ -117,6 +117,7 @@ interface User {
   gender: string;
   dob: Date;
   phone: string;
+  sessionId: string;
 }
 
 interface Session {

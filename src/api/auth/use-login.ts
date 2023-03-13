@@ -17,8 +17,10 @@ export async function login({ username, password }: LoginCredential) {
 
   return {
     token: response.data.payload.token,
-    user: toUser(response.data.payload.profile),
-    currentSessionId: response.data.payload.current_session,
+    user: toUser({
+      ...response.data.payload.profile,
+      current_session: response.data.payload.current_session,
+    }),
   };
 }
 
