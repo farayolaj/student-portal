@@ -1,9 +1,7 @@
 import {
   Avatar,
-  Box,
   Flex,
   HStack,
-  IconButton,
   Menu,
   MenuButton,
   MenuItem,
@@ -13,12 +11,11 @@ import {
   Text,
 } from "@chakra-ui/react";
 import Image from "next/image";
-import NextLink from "next/link";
 import { FC } from "react";
-import { IoNotificationsOutline } from "react-icons/io5";
 import { useUser } from "../../api/user/use-user";
 import useAuth from "../../hooks/use-auth";
 import logo from "../../images/ui-logo.png";
+import MobileNavBar from "./mobile-nav-bar";
 
 export const Header: FC = () => {
   const auth = useAuth();
@@ -42,6 +39,7 @@ export const Header: FC = () => {
       w="full"
     >
       <Flex gap={4} align="center">
+        <MobileNavBar />
         <Image height={48} src={logo} alt="Logo" />
         <Text
           display={["none", null, "initial"]}
