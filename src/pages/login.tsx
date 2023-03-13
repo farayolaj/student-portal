@@ -3,6 +3,7 @@ import {
   Button,
   Card,
   CardBody,
+  CardHeader,
   chakra,
   Flex,
   FormControl,
@@ -21,7 +22,6 @@ import Image from "next/image";
 import NextLink from "next/link";
 import Seo from "../components/common/seo";
 import uiLogo from "../images/ui-logo.png";
-import abstractShape from "../images/abstract_shape_1.png";
 import * as routes from "../constants/routes";
 import useAuth from "../hooks/use-auth";
 import { FormEvent, useState } from "react";
@@ -60,9 +60,7 @@ export default function Login() {
     );
   };
 
-  const onLogin = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const onLogin = () => {
     auth.login(
       { username, password },
       {
@@ -79,6 +77,13 @@ export default function Login() {
         },
       }
     );
+  };
+
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!usernameVerified) onValidateUsername();
+    else onLogin();
   };
 
   return (
@@ -111,56 +116,26 @@ export default function Login() {
           </Box>
         </Flex>
         <Flex mt={8} justify="center">
-          <Card w={["90%", null, "60%"]} overflow="hidden" mb={8}>
-            <CardBody display="flex" flexDir={["column", null, "row"]} p={0}>
-              <Flex
-                align="stretch"
-                pos="relative"
-                w={["full", null, "60%"]}
-                p={[4, null, 12]}
-              >
-                <Image
-                  src={abstractShape}
-                  fill
-                  alt=""
-                  style={{ objectFit: "cover" }}
-                />
-                <Box pos="relative" h="full" bg="whiteAlpha.900" p={4}>
-                  <Heading size="sm">Welcome to The Student Portal</Heading>
-                  <Text size="sm" mt={2}>
-                    The student portal is your personal website containing all
-                    the information and menu you need as a student. Login to
-                    access your academic schedule, fees, courses and profile.
-                  </Text>
-                  <Heading size="sm" mt={4}>
-                    How to Log In
-                  </Heading>
-                  <Text size="sm" mt={2}>
-                    New here? No worries, we got you covered. Your username is
-                    your matric. number or your email address. Your default
-                    password is your last name in lowercase. If you have
-                    forgotten your password, click on the &ldquo;Forgot
-                    password?&rdquo; link below. If you have any issues, please
-                    contact the ICT Unit.
-                  </Text>
-                </Box>
-              </Flex>
-              <Flex
-                direction="column"
-                justify="space-between"
-                w={["full", null, "40%"]}
-                py={6}
-                px={12}
-              >
-                <Heading textAlign="center" size="md">
-                  Log In to Student Portal
-                </Heading>
+          <Card
+            w={["full", null, "40%"]}
+            py={6}
+            px={12}
+            overflow="hidden"
+            mb={8}
+          >
+            <CardHeader>
+              <Heading textAlign="center" size="md">
+                Log In to Student Portal
+              </Heading>
+            </CardHeader>
+            <CardBody>
+              <Flex direction="column" gap={6}>
                 <chakra.form
                   mt={[16, null, 8]}
                   display="flex"
                   flexDir="column"
                   gap={6}
-                  onSubmit={onLogin}
+                  onSubmit={onSubmit}
                 >
                   <FormControl hidden={usernameVerified}>
                     <FormLabel fontSize="sm" fontWeight="bold">
@@ -223,7 +198,7 @@ export default function Login() {
                       <Button
                         w="full"
                         isDisabled={validateUsername.isLoading}
-                        onClick={onValidateUsername}
+                        type="submit"
                       >
                         Next
                       </Button>
