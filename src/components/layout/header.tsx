@@ -3,6 +3,7 @@ import {
   Box,
   Flex,
   HStack,
+  Icon,
   Menu,
   MenuButton,
   MenuItem,
@@ -13,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import Image from "next/image";
 import { FC } from "react";
+import { MdArrowDropDown } from "react-icons/md";
 import { useUser } from "../../api/user/use-user";
 import useAuth from "../../hooks/use-auth";
 import logo from "../../images/ui-logo.png";
@@ -82,6 +84,7 @@ export const Header: FC = () => {
                     ?.at(0)}`.toUpperCase();
                 }}
               />
+              <Icon as={MdArrowDropDown} />
             </HStack>
           </MenuButton>
           <MenuList

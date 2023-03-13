@@ -122,12 +122,12 @@ const Courses: FC = () => {
               {inDeleteCourseView ? "Cancel" : "Delete Courses"}
             </Button>
           )}
-          {!inDeleteCourseView && (
+          {/* !inDeleteCourseView && (
             <Button mx="auto" display="inline-flex" gap={4}>
               <Icon as={IoPrintOutline} boxSize={6} />
               Print Course Registration
             </Button>
-          )}
+          ) */}
         </Flex>
         <RadioButtonGroup
           display={["none", null, "flex"]}
