@@ -85,6 +85,7 @@ const SelectCourseListViewItem: FC<SelectCourseListViewItemProps> = ({
         value={course.id}
         isChecked={isChecked}
         borderColor={colorScheme500}
+        onClick={() => onToggleSelection(course.id)}
       />
       <Flex>
         <Box pos="relative" w="15rem" minH="15rem" overflow="hidden">

@@ -93,6 +93,7 @@ const SelectCourseGridViewItem: FC<SelectCourseGridViewItemProps> = ({
           isChecked={isChecked}
           zIndex={100}
           borderColor={colorScheme500}
+          onClick={() => onToggleSelection(course.id)}
         />
         <Flex direction="column" align="flex-start">
           <Text fontSize="sm" fontWeight="bold">
