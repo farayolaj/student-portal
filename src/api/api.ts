@@ -1,12 +1,17 @@
 import axios from "axios";
 import { API_URL, X_APP_KEY } from "../constants/config";
 
+const headers: Record<string, string> = {
+  "X-APP-KEY": X_APP_KEY,
+};
+
+if (process.env.NODE_ENV === "development")
+  headers["ngrok-skip-browser-warning"] = ",";
+
 const api = axios.create({
   baseURL: API_URL,
-  headers: {
-    "X-APP-KEY": X_APP_KEY,
-    "ngrok-skip-browser-warning": ",",
-  },
+  headers,
+
   validateStatus: function (status) {
     return status < 500;
   },
