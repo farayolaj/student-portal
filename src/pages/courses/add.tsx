@@ -15,6 +15,7 @@ import { useRef, useState } from "react";
 import { useAddCourses } from "../../api/course/use-add-courses";
 import { useAllCourses } from "../../api/course/use-all-courses";
 import { useCourseConfig } from "../../api/course/use-course-config";
+import useCurrentSession from "../../api/user/use-current-session";
 import PageTitle from "../../components/common/page-title";
 import Seo from "../../components/common/seo";
 import AddCourseOverviewCard from "../../components/courses/add/add-course-overview-card";
@@ -55,13 +56,14 @@ export default function AddCoursesPage(): JSX.Element {
   const cancelRef = useRef(null);
   const router = useRouter();
   const toast = useToast();
+  const currentSession = useCurrentSession();
 
   return (
     <>
       <Seo title="Add Courses" />
       <PageTitle showBackButton>Add Courses</PageTitle>
       <SelectCourseListControl
-        session="2019/2020"
+        session={currentSession?.name || ""}
         semester={semester}
         onSemesterChange={setSemester}
         view={view}
