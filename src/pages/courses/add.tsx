@@ -15,6 +15,7 @@ import { useRef, useState } from "react";
 import { useAddCourses } from "../../api/course/use-add-courses";
 import { useAllCourses } from "../../api/course/use-all-courses";
 import { useCourseConfig } from "../../api/course/use-course-config";
+import { useRegisteredCourses } from "../../api/course/use-registered-course";
 import useCurrentSession from "../../api/user/use-current-session";
 import PageTitle from "../../components/common/page-title";
 import Seo from "../../components/common/seo";
@@ -58,6 +59,10 @@ export default function AddCoursesPage(): JSX.Element {
   const toast = useToast();
   const currentSession = useCurrentSession();
 
+  const registeredCourses = useRegisteredCourses({
+    variables: { session: currentSession?.id || "" },
+  });
+
   return (
     <>
       <Seo title="Add Courses" />
@@ -72,11 +77,12 @@ export default function AddCoursesPage(): JSX.Element {
       <AddCourseOverviewCard
         minUnits={minUnits || 0}
         maxUnits={maxUnits || 0}
-        selectedCourses={
-          allCoursesWithExtras.filter((course) =>
+        selectedCourses={[
+          ...(registeredCourses.data || []),
+          ...allCoursesWithExtras.filter((course) =>
             selectedCourses.includes(course.id)
-          ) || []
-        }
+          ),
+        ]}
       />
       <Flex mt={8} justify="flex-end">
         <AddMoreCoursesModal
