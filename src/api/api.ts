@@ -5,6 +5,7 @@ const api = axios.create({
   baseURL: API_URL,
   headers: {
     "X-APP-KEY": X_APP_KEY,
+    "ngrok-skip-browser-warning": ",",
   },
   validateStatus: function (status) {
     return status < 500;

@@ -85,9 +85,11 @@ export default function AddCoursesPage(): JSX.Element {
       <AddCourseOverviewCard
         minUnits={minUnits || 0}
         maxUnits={maxUnits || 0}
-        selectedCourses={courses.filter((course) =>
-          selectedCourses.includes(course.id)
-        )}
+        selectedCourses={
+          allCourses.data?.filter((course) =>
+            selectedCourses.includes(course.id)
+          ) || []
+        }
       />
       <Flex mt={8} justify="flex-end">
         <InputGroup pr={0} w={80} variant="primary">
@@ -134,7 +136,7 @@ export default function AddCoursesPage(): JSX.Element {
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Delete {selectedCourses.length} Course
+              Add {selectedCourses.length} Course
               {selectedCourses.length > 1 && "s"}
             </AlertDialogHeader>
 
