@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Box,
   Flex,
   HStack,
   Menu,
@@ -15,6 +16,7 @@ import { FC } from "react";
 import { useUser } from "../../api/user/use-user";
 import useAuth from "../../hooks/use-auth";
 import logo from "../../images/ui-logo.png";
+import MobileCalendar from "./mobile-calendar";
 import MobileNavBar from "./mobile-nav-bar";
 
 export const Header: FC = () => {
@@ -58,6 +60,9 @@ export const Header: FC = () => {
           variant="transparent"
           icon={<IoNotificationsOutline size="1.5rem" />}
         /> */}
+        <Box display={["unset", null, "none"]}>
+          <MobileCalendar />
+        </Box>
         <Menu>
           <MenuButton>
             <HStack>
