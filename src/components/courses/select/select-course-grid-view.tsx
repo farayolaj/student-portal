@@ -77,7 +77,7 @@ const SelectCourseGridViewItem: FC<SelectCourseGridViewItemProps> = ({
       <AspectRatio pos="relative" w="full" ratio={3 / 2} overflow="hidden">
         <Image
           alt=""
-          src={getAbstractImage()}
+          src={getAbstractImage(course.id)}
           style={{ objectFit: "cover" }}
           fill
         />

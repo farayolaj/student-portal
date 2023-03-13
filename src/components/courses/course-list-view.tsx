@@ -43,7 +43,7 @@ const CourseListViewItem: FC<CourseListViewItemProps> = ({ course }) => {
         <Box pos="relative" w="15rem" minH="15rem" overflow="hidden">
           <Image
             alt=""
-            src={getAbstractImage()}
+            src={getAbstractImage(course.id)}
             style={{ objectFit: "cover" }}
             fill
           />

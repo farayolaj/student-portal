@@ -8,6 +8,7 @@ import abstractSeven from "../images/abstract_7.jpg";
 import abstractEight from "../images/abstract_8.jpg";
 import abstractNine from "../images/abstract_9.jpg";
 import abstractTen from "../images/abstract_10.jpg";
+import { StaticImageData } from "next/image";
 
 let idx = 0;
 
@@ -24,9 +25,15 @@ const abstractImages = [
   abstractTen,
 ];
 
-const getAbstractImage = () => {
+const map = new Map<string, StaticImageData>();
+
+const getAbstractImage = (id: string) => {
+  if (map.has(id)) return map.get(id) as StaticImageData;
+
   const image = abstractImages[idx];
   idx = (idx + 1) % abstractImages.length;
+
+  map.set(id, image);
   return image;
 };
 

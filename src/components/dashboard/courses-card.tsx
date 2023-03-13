@@ -51,7 +51,7 @@ const CoursesCard: FC = () => {
             code={course.id}
             title={course.title}
             units={course.units}
-            image={getAbstractImage()}
+            image={getAbstractImage(course.id)}
           />
         ))}
       </SimpleGrid>
