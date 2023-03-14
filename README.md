@@ -1,5 +1,14 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## Deployment
+
+To deploy statically, you can take the following steps:
+
+1. Run `yarn` to make sure all dependencies are installed.
+2. Make sure the environment variables are set. There is a `.env.sample` file that shows the needed variables.
+3. Run `yarn build` to build and export the app as static files. It exports to `/out`.
+4. The output directory, `/out` can be deployed on a static host.
+
 ## Getting Started
 
 First, run the development server:
