@@ -1,29 +1,37 @@
-import axios from "axios";
-import { API_URL, X_APP_KEY } from "../constants/config";
+import axios, { AxiosInstance } from "axios";
+import { X_APP_KEY } from "../constants/config";
 
-const headers: Record<string, string> = {
-  "X-APP-KEY": X_APP_KEY,
-};
+let api: AxiosInstance;
 
-if (process.env.NODE_ENV === "development")
-  headers["ngrok-skip-browser-warning"] = ",";
+export default function getApi() {
+  if (api) return api;
 
-const api = axios.create({
-  baseURL: API_URL,
-  headers,
+  const apiBaseUrl = global.localStorage.getItem("apiBaseUrl") || "";
 
-  validateStatus: function (status) {
-    return status < 500;
-  },
-});
+  const headers: Record<string, string> = {
+    "X-APP-KEY": X_APP_KEY,
+  };
 
-api.interceptors.request.use((config) => {
-  const rawToken = localStorage.getItem("token");
-  const token = rawToken ? JSON.parse(rawToken) : undefined;
+  if (process.env.NODE_ENV === "development")
+    headers["ngrok-skip-browser-warning"] = ",";
 
-  if (token) config.headers.set("Authorization", `Bearer ${token}`);
+  api = axios.create({
+    baseURL: apiBaseUrl,
+    headers,
 
-  return config;
-});
+    validateStatus: function (status) {
+      return status < 500;
+    },
+  });
 
-export default api;
+  api.interceptors.request.use((config) => {
+    const rawToken = localStorage.getItem("token");
+    const token = rawToken ? JSON.parse(rawToken) : undefined;
+
+    if (token) config.headers.set("Authorization", `Bearer ${token}`);
+
+    return config;
+  });
+
+  return api;
+}

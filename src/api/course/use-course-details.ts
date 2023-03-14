@@ -1,12 +1,12 @@
 import { createQuery } from "react-query-kit";
-import api from "../api";
+import getApi from "../api";
 import { toCourse } from "../../transformers/courses";
 
 export const useCourseDetails = createQuery<Course, { courseId: string }>(
   "course-details",
   async ({ queryKey: [_, { courseId }] }) => {
     const route = `/course_details/${encodeURIComponent(courseId)}`;
-    const response = await api.get(route);
+    const response = await getApi().get(route);
 
     if (!response.data.status)
       throw new Error("Could not fetch course details");

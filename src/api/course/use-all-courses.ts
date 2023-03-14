@@ -1,11 +1,11 @@
 import { createQuery } from "react-query-kit";
 import { toCourse } from "../../transformers/courses";
-import api from "../api";
+import getApi from "../api";
 
 export const useAllCourses = createQuery<Course[], { semester: number }>(
   "all-courses",
   async ({ queryKey: [_, { semester }] }) => {
-    const response = await api.get(
+    const response = await getApi().get(
       `/allcourses/${encodeURI(Number(semester).toString())}`
     );
 
