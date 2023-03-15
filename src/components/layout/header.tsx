@@ -55,16 +55,8 @@ export const Header: FC = () => {
         </Text>
       </Flex>
       <Spacer h="min-content" />
-      <Flex gap={8}>
-        {/* <IconButton
-          aria-label="Check Notifications"
-          size="md"
-          variant="transparent"
-          icon={<IoNotificationsOutline size="1.5rem" />}
-        /> */}
-        <Box display={["unset", null, "none"]}>
-          <MobileCalendar />
-        </Box>
+      <Flex gap={8} align="center">
+        <MobileCalendar />
         <Menu>
           <MenuButton>
             <HStack>

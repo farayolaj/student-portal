@@ -5,8 +5,8 @@ import EventCalendar from "../common/event-calendar";
 export default function MobileCalendar() {
   return (
     <Menu>
-      <MenuButton>
-        <IoCalendarOutline size="2rem" />
+      <MenuButton display={["unset", null, "none"]}>
+        <IoCalendarOutline size="1.5rem" />
       </MenuButton>
       <MenuList boxShadow="md">
         <EventCalendar />
