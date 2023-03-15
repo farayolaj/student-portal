@@ -56,14 +56,14 @@ const Navigation: FC<NavigationProps> = ({ isOpen }) => {
         href={routes.DOCUMENTS}
         isOpen={isOpen}
         isActive={pathname.startsWith(routes.DOCUMENTS)}
-      />
+      /> */}
       <NavLink
         title="Profile"
         icon={IoPersonOutline}
-        href="#"
+        href={routes.PROFILE}
         isOpen={isOpen}
-        isActive={pathname.startsWith("#")}
-      /> */}
+        isActive={pathname.startsWith(routes.PROFILE)}
+      />
     </VStack>
   );
 };

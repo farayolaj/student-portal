@@ -1,3 +1,4 @@
+import { PROFILE } from "@/constants/routes";
 import {
   Card,
   CardHeader,
@@ -10,6 +11,7 @@ import {
   Avatar,
   SimpleGrid,
   GridProps,
+  Link,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { FC, ReactNode } from "react";
@@ -35,11 +37,11 @@ const ProfileCard: FC = () => {
         <Heading as="h2" fontSize="md">
           Profile
         </Heading>
-        {/* <Text>
-          <Link as={NextLink} href="#">
-            See more &rarr;
+        <Text>
+          <Link as={NextLink} href={PROFILE}>
+            Check your profile &rarr;
           </Link>
-        </Text> */}
+        </Text>
       </CardHeader>
       <CardBody>
         <Flex direction="column" gap={4}>
@@ -132,14 +134,10 @@ const ProfileCardItem: FC<ProfileCardItemProps> = ({
       spacing="0.125rem"
       gridColumn={gridColumn}
     >
-      <Text fontSize="xs" fontWeight="bold">
+      <Text fontSize="sm" fontWeight="bold">
         {name}
       </Text>
-      {isLoading ? (
-        <SkeletonText w={28} noOfLines={1} />
-      ) : (
-        <Text size="sm">{value}</Text>
-      )}
+      {isLoading ? <SkeletonText w={28} noOfLines={1} /> : <Text>{value}</Text>}
     </VStack>
   );
 };
