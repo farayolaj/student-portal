@@ -112,7 +112,7 @@ const SelectCourseListViewItem: FC<SelectCourseListViewItemProps> = ({
             >
               {course.lecturer}
             </Text>
-            <Text my={2} noOfLines={3} minH={16}>
+            <Text my={2} noOfLines={3} minH={16} title={course.description}>
               {course.description}
             </Text>
             <Text mt={2} fontSize="sm" fontWeight="semibold">
