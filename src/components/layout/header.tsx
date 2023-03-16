@@ -8,6 +8,7 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  SkeletonCircle,
   SkeletonText,
   Spacer,
   Text,
@@ -73,17 +74,19 @@ export const Header: FC = () => {
               ) : (
                 <Text display={["none", null, "initial"]}>{fullName}</Text>
               )}
-              <Avatar
-                name={fullName}
-                size="sm"
-                src={user.data?.profileImage}
-                getInitials={(name) => {
-                  const names = name.split(" ");
-                  return `${names[0].at(0)}${names
-                    .at(-1)
-                    ?.at(0)}`.toUpperCase();
-                }}
-              />
+              <SkeletonCircle isLoaded={!user.isLoading}>
+                <Avatar
+                  name={fullName}
+                  size="sm"
+                  src={user.data?.profileImage}
+                  getInitials={(name) => {
+                    const names = name.split(" ");
+                    return `${names[0].at(0)}${names
+                      .at(-1)
+                      ?.at(0)}`.toUpperCase();
+                  }}
+                />
+              </SkeletonCircle>
               <Icon as={MdArrowDropDown} />
             </HStack>
           </MenuButton>
