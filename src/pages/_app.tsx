@@ -16,8 +16,7 @@ type CustomAppProps = AppProps & {
 };
 
 export default function App({ Component, pageProps }: CustomAppProps) {
-
-  const loadBasePath = async ()=>{
+  const loadBasePath = async () => {
     const initialBaseUrl = process.env.NEXT_PUBLIC_API_URL;
     const hostname = encodeURIComponent(window.location.hostname);
     const url = `${initialBaseUrl}/baseUrl?domain=${hostname}`;
@@ -25,7 +24,7 @@ export default function App({ Component, pageProps }: CustomAppProps) {
     localStorage.setItem("apiBaseUrl", res.data.payload);
   };
 
-  useEffect( () => {
+  useEffect(() => {
     loadBasePath();
   }, []);
 
