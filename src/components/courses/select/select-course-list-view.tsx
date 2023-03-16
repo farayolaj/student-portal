@@ -72,9 +72,17 @@ const SelectCourseListViewItem: FC<SelectCourseListViewItemProps> = ({
       borderColor="transparent"
       _checked={{ borderColor: colorScheme500 }}
       _hover={{ "&[aria-checked=false]": { borderColor: colorScheme300 } }}
-      onClick={() => onToggleSelection(course.id)}
       cursor="pointer"
     >
+      <Box
+        pos="absolute"
+        zIndex={200}
+        w="full"
+        h="full"
+        top={0}
+        left={0}
+        onClick={() => onToggleSelection(course.id)}
+      />
       <Checkbox
         pos="absolute"
         top={4}
@@ -85,7 +93,6 @@ const SelectCourseListViewItem: FC<SelectCourseListViewItemProps> = ({
         value={course.id}
         isChecked={isChecked}
         borderColor={colorScheme500}
-        onClick={() => onToggleSelection(course.id)}
       />
       <Flex>
         <Box pos="relative" w="15rem" minH="15rem" overflow="hidden">
