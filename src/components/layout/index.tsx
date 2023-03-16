@@ -47,6 +47,7 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
               top="0rem"
               p={6}
               pr={[null, null, 4]}
+              pb={16}
             >
               {children}
             </Box>
