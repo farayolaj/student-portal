@@ -6,13 +6,7 @@ import Seo from "../../components/common/seo";
 import CourseListControls from "../../components/courses/course-list-controls";
 import CourseOverview from "../../components/courses/course-overview";
 import RadioButtonGroup from "../../components/common/radio-button-group";
-import {
-  IoAdd,
-  IoGrid,
-  IoList,
-  IoPrintOutline,
-  IoTrashOutline,
-} from "react-icons/io5";
+import { IoAdd, IoGrid, IoList, IoTrashOutline } from "react-icons/io5";
 import CourseView from "../../components/courses/course-view";
 import * as routes from "../../constants/routes";
 import DeleteCourseView from "../../components/courses/delete/delete-course-view";

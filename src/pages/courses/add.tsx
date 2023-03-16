@@ -73,6 +73,14 @@ export default function AddCoursesPage(): JSX.Element {
   const toast = useToast();
   const allCoursesWithExtras = [...(allCourses.data || []), ...extraCourses];
 
+  const onSelectAll = () => {
+    setSelectedCourses(allCoursesWithExtras.map((course) => course.id));
+  };
+
+  const onUnselectAll = () => {
+    setSelectedCourses([]);
+  };
+
   return (
     <>
       <Seo title="Add Courses" />
@@ -94,7 +102,7 @@ export default function AddCoursesPage(): JSX.Element {
           ),
         ]}
       />
-      <Flex mt={8} justify="flex-end">
+      <Flex mt={8} justify="space-between">
         <AddMoreCoursesModal
           onAdd={(course) => {
             setExtraCourses((prev) => [...prev, course]);
@@ -105,6 +113,11 @@ export default function AddCoursesPage(): JSX.Element {
             setSelectedCourses((prev) => prev.filter((c) => c !== course.id));
           }}
         />
+        {selectedCourses.length === allCoursesWithExtras.length ? (
+          <Button onClick={onUnselectAll}>Unselect All</Button>
+        ) : (
+          <Button onClick={onSelectAll}>Select All</Button>
+        )}
       </Flex>
       <SelectCourseView
         isLoading={allCourses.isLoading}

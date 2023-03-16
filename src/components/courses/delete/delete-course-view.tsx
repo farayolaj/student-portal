@@ -42,10 +42,25 @@ const DeleteCourseView: FC<DeleteCourseViewProps> = ({
     }
   };
 
+  const onSelectAll = () => {
+    setSelectedCourses(courseList.map((course) => course.id));
+  };
+
+  const onUnselectAll = () => {
+    setSelectedCourses([]);
+  };
+
   if (isMobile === null) return null;
 
   return (
     <>
+      <Flex mt={8} justify="flex-end">
+        {selectedCourses.length === courseList.length ? (
+          <Button onClick={onUnselectAll}>Unselect All</Button>
+        ) : (
+          <Button onClick={onSelectAll}>Select All</Button>
+        )}
+      </Flex>
       <Box mt={8}>
         {isMobile ? (
           <SelectCourseGridView
