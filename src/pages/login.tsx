@@ -101,7 +101,7 @@ export default function Login() {
               textTransform="uppercase"
               fontWeight="bold"
             >
-              Distance Learning Center
+              Distance Learning Centre
             </Text>
             <Text
               as="span"
