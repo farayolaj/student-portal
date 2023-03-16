@@ -1,5 +1,5 @@
 import { createQuery } from "react-query-kit";
-import api from "../api";
+import getApi from "../api";
 import { toCourseStatistics } from "../../transformers/courses";
 
 export const useCourseStatistics = createQuery<
@@ -10,7 +10,7 @@ export const useCourseStatistics = createQuery<
 
   if (semester) route += `&semester=${encodeURIComponent(semester)}`;
 
-  const response = await api.get(route);
+  const response = await getApi().get(route);
 
   if (!response.data.status)
     throw new Error("Could not fetch course statistics");

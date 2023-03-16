@@ -49,7 +49,7 @@ export default function ForgotPassword() {
               textTransform="uppercase"
               fontWeight="bold"
             >
-              Distance Learning Center
+              Distance Learning Centre
             </Text>
             <Text
               as="span"

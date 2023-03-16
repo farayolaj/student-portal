@@ -1,8 +1,8 @@
 import { createMutation } from "react-query-kit";
-import api from "../api";
+import getApi from "../api";
 
 async function resetPassword({ username }: { username: string }) {
-  const response = await api.post("/reset_password", {
+  const response = await getApi().post("/reset_password", {
     user_login: username,
   });
 
