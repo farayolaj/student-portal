@@ -32,6 +32,7 @@ const Courses: FC = () => {
   const [inDeleteCourseView, setInDeleteCourseView] = useState(false);
   const registeredCourses = useRegisteredCourses({
     variables: { session: sessionId },
+    enabled: !!sessionId,
   });
   const filteredCourses =
     registeredCourses.data?.filter(
