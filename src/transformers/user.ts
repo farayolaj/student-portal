@@ -8,7 +8,7 @@ export const toUser = (user: any) =>
     otherNames: user.othernames,
     lastName: user.lastname,
     profileImage: user.passport && resolveProfileImageUrl(user.passport),
-    matricNumber: user.reg_num,
+    matricNumber: user.matric_number || "",
     dob: parse(user.DoB, "dd/MM/yyyy", new Date()),
     gender: user.gender,
     phone: user.phone,
