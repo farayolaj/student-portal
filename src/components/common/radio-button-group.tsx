@@ -62,6 +62,7 @@ const RadioButton: FC<RadioProps> = (props) => {
   return (
     <Box
       as="label"
+      display="contents"
       {...getLabelProps()}
       _first={{
         "& > div": {
@@ -77,6 +78,10 @@ const RadioButton: FC<RadioProps> = (props) => {
     >
       <input {...input} />
       <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        textAlign="center"
         {...checkbox}
         cursor="pointer"
         _checked={{

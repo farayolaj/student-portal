@@ -8,11 +8,20 @@ import {
   DrawerOverlay,
   Box,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { IoMenuOutline } from "react-icons/io5";
 import Navigation from "./navigation";
 
 export default function MobileNavBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { pathname } = useRouter();
+  const [currPath, setCurrPath] = useState(pathname);
+
+  useEffect(() => {
+    setCurrPath(pathname);
+    if (currPath !== pathname) onClose();
+  }, [currPath, onClose, pathname]);
 
   return (
     <>
