@@ -53,6 +53,9 @@ export default function AddCoursesPage(): JSX.Element {
           registeredCourses.data?.findIndex((r) => r.id === course.id) == -1
       );
     },
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
     onSuccess: (data) => {
       if (selectedCourses.length > 0) return;
 
