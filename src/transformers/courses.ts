@@ -8,12 +8,12 @@ export const toCourse = (course: any) =>
     semester: parseInt(course.course_enrollment_semester || course.semester),
     units: parseInt(course.course_enrollment_unit || course.course_unit),
     materialLink: course.course_guide_url || undefined,
-    lecturer: course.course_lecturer_id
-      ? `${course.firstname} ${course.othernames} ${course.lastname}`.replace(
-          "undefined",
-          ""
-        )
-      : undefined,
+    lecturer:
+      course.firstname || course.lastname
+        ? `${course.firstname} ${course.othernames} ${course.lastname}`
+            .replace("undefined", "")
+            .replace("null", "")
+        : undefined,
     preSelected: course.pre_select ? course.pre_select == 1 : undefined,
   } as Course);
 
