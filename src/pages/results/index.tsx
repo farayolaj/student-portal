@@ -1,3 +1,4 @@
+import { useAllResults } from "@/api/result/use-all-results";
 import { SimpleGrid } from "@chakra-ui/react";
 
 import PageTitle from "../../components/common/page-title";
@@ -6,21 +7,40 @@ import ResultOverview from "../../components/results/result-overview";
 import ResultSummary from "../../components/results/result-summary";
 
 export default function Results() {
+  const { data: allResults = [] } = useAllResults();
+  const totalUnitsRegistered = allResults.reduce((acc, session) => {
+    return (
+      acc +
+      session.results.reduce((acc, result) => {
+        return acc + result.units;
+      }, 0)
+    );
+  }, 0);
+  const totalUnitsPassed = allResults.reduce((acc, session) => {
+    return (
+      acc +
+      session.results.reduce((acc, result) => {
+        return acc + (result.remark === "pass" ? result.units : 0);
+      }, 0)
+    );
+  }, 0);
+
   return (
     <>
       <Seo title="Results" />
       <PageTitle showBackButton>Results</PageTitle>
       <ResultOverview
-        cgpa={3.69}
-        cumUnitsRegistered={102}
-        cumUnitsPassed={102}
+        cgpa={NaN}
+        cumUnitsRegistered={totalUnitsRegistered}
+        cumUnitsPassed={totalUnitsPassed}
       />
       <SimpleGrid mt={8} columns={[1, null, 4]} gap={8}>
-        <ResultSummary id="1" session="2019/2020" />
-        <ResultSummary id="2" session="2019/2020" />
-        <ResultSummary id="3" session="2020/2021" />
-        <ResultSummary id="4" session="2020/2021" />
-        <ResultSummary id="5" session="2021/2022" />
+        {allResults.map((sessionResult) => (
+          <ResultSummary
+            key={sessionResult.session.id}
+            sessionResultSummary={sessionResult}
+          />
+        ))}
       </SimpleGrid>
     </>
   );

@@ -11,7 +11,7 @@ import { Bar } from "react-chartjs-2";
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
 
 type ResultBarChartProps = {
-  courseResults: CourseResult[];
+  courseResults: ResultSummary[];
   showAxes?: boolean;
 } & BoxProps;
 
@@ -28,13 +28,17 @@ export default function ResultBarChart({
     <Box {...boxProps}>
       <Bar
         data={{
-          labels: courseResults.map((cr) => cr.id),
+          labels: courseResults.map((cr) => cr.courseCode),
           datasets: [
             {
               backgroundColor: courseResults.map((cr) =>
-                cr.marks >= 70 ? green500 : cr.marks >= 45 ? blue500 : red500
+                cr.totalScore >= 70
+                  ? green500
+                  : cr.totalScore >= 45
+                  ? blue500
+                  : red500
               ),
-              data: courseResults.map((cr) => cr.marks),
+              data: courseResults.map((cr) => cr.totalScore),
               label: "Score",
             },
           ],
