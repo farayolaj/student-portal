@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Flex,
   Icon,
@@ -64,7 +65,7 @@ export default function AddMoreCoursesModal({
         isCentered
       >
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent overflow="hidden">
           <ModalBody>
             <VStack align="stretch" spacing={8} pos="relative">
               <Flex
