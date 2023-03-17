@@ -3,14 +3,11 @@ import {
   Card,
   CardBody,
   Flex,
-  Link,
   Spinner,
   Text,
   useBreakpointValue,
 } from "@chakra-ui/react";
 import { FC } from "react";
-import NextLink from "next/link";
-import { ADD_COURSES } from "../../constants/routes";
 import CourseGridView from "./course-grid-view";
 import CourseListView from "./course-list-view";
 
@@ -51,10 +48,7 @@ const CourseView: FC<CourseViewProps> = ({ view, isLoading, courseList }) => {
             gap={8}
             py={8}
           >
-            <Text>You have not registered for any course.</Text>
-            <Link as={NextLink} variant="button" href={ADD_COURSES}>
-              Register Courses
-            </Link>
+            <Text>You are not registered for any course.</Text>
           </Flex>
         </CardBody>
       </Card>

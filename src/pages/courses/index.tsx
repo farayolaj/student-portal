@@ -109,20 +109,22 @@ const Courses: FC = () => {
       />
       <Flex mt={6} gap={4} justify="space-between" align="center">
         <Flex gap={4} wrap="wrap" justify={["center", null, "initial"]}>
-          {!inDeleteCourseView && canRegister.data && (
-            <Link
-              variant="button"
-              as={NextLink}
-              href={routes.ADD_COURSES}
-              display="inline-flex"
-              gap={4}
-              alignItems="center"
-              h={10}
-            >
-              <Icon as={IoAdd} boxSize={6} />
-              Add Courses
-            </Link>
-          )}
+          {sessionId === latestSessionId &&
+            !inDeleteCourseView &&
+            canRegister.data && (
+              <Link
+                variant="button"
+                as={NextLink}
+                href={routes.ADD_COURSES}
+                display="inline-flex"
+                gap={4}
+                alignItems="center"
+                h={10}
+              >
+                <Icon as={IoAdd} boxSize={6} />
+                Add Courses
+              </Link>
+            )}
           {canDeleteCourses && (
             <Button
               onClick={() => setInDeleteCourseView((prev) => !prev)}
