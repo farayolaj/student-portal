@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import getApi from "../api";
 
-export function useResultPrintUrl(sessionId: string) {
+export function useCourseRegPrintUrl(sessionId: string, semester: number) {
+  const semesterString = semester == 1 ? "first" : "second";
   const [url, setUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -9,9 +10,9 @@ export function useResultPrintUrl(sessionId: string) {
   useEffect(() => {
     const response = getApi()
       .get(
-        `/coursesummaryprint?session=${encodeURIComponent(
+        `/courseregistrationprint?session=${encodeURIComponent(
           sessionId.split(".")[0]
-        )}`,
+        )}&semester=${semesterString}`,
         { responseType: "blob" }
       )
       .then((response) => {
@@ -24,9 +25,13 @@ export function useResultPrintUrl(sessionId: string) {
       })
       .catch((error) => {
         setIsLoading(false);
-        setError(new Error("Error generating result print", { cause: error }));
+        setError(
+          new Error("Error generating course registration print", {
+            cause: error,
+          })
+        );
       });
-  }, [sessionId]);
+  }, [semesterString, sessionId]);
 
   return { url, isLoading, error };
 }

@@ -1,4 +1,4 @@
-import { Button, Flex, Icon, Link, useToast } from "@chakra-ui/react";
+import { Button, Flex, Icon, Link, Spinner, useToast } from "@chakra-ui/react";
 import { FC, useState } from "react";
 import NextLink from "next/link";
 import PageTitle from "../../components/common/page-title";
@@ -6,7 +6,13 @@ import Seo from "../../components/common/seo";
 import CourseListControls from "../../components/courses/course-list-controls";
 import CourseOverview from "../../components/courses/course-overview";
 import RadioButtonGroup from "../../components/common/radio-button-group";
-import { IoAdd, IoGrid, IoList, IoTrashOutline } from "react-icons/io5";
+import {
+  IoAdd,
+  IoGrid,
+  IoList,
+  IoPrintOutline,
+  IoTrashOutline,
+} from "react-icons/io5";
 import CourseView from "../../components/courses/course-view";
 import * as routes from "../../constants/routes";
 import DeleteCourseView from "../../components/courses/delete/delete-course-view";
@@ -15,6 +21,7 @@ import { useCourseStatistics } from "../../api/course/use-course-statistics";
 import { useRegisteredCourses } from "../../api/course/use-registered-course";
 import { useRegistrationOpen } from "../../api/course/use-registration-open";
 import { useDeleteCourses } from "../../api/course/use-delete-courses";
+import { useCourseRegPrintUrl } from "@/api/course/use-course-reg-print-url";
 
 const Courses: FC = () => {
   const [sessionId, setSessionId] = useState("");
@@ -75,6 +82,11 @@ const Courses: FC = () => {
     );
   };
 
+  const printUrl = useCourseRegPrintUrl(
+    sessionId,
+    semester === 0 ? 1 : semester
+  );
+
   return (
     <>
       <Seo title="Registered Courses" />
@@ -118,12 +130,25 @@ const Courses: FC = () => {
               {inDeleteCourseView ? "Cancel" : "Delete Courses"}
             </Button>
           )}
-          {/* !inDeleteCourseView && (
-            <Button mx="auto" display="inline-flex" gap={4}>
-              <Icon as={IoPrintOutline} boxSize={6} />
+          {!inDeleteCourseView && (
+            <Button
+              mx="auto"
+              display="inline-flex"
+              gap={4}
+              isDisabled={printUrl.isLoading || !!printUrl.error}
+              onClick={() => {
+                window.open(printUrl.url as string);
+              }}
+              title={printUrl.error?.message}
+            >
+              {printUrl.isLoading ? (
+                <Spinner size="xs" color="white" />
+              ) : (
+                <Icon as={IoPrintOutline} boxSize={6} />
+              )}
               Print Course Registration
             </Button>
-          ) */}
+          )}
         </Flex>
         <RadioButtonGroup
           display={["none", null, "flex"]}
