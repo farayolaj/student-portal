@@ -28,7 +28,7 @@ const Courses: FC = () => {
   const [latestSessionId, setLatestSessionId] = useState("");
   const [semester, setSemester] = useState(0);
   const canRegister = useRegistrationOpen();
-  const canDeleteCourses = true;
+  const canDeleteCourses = sessionId === latestSessionId;
   const [view, setView] = useState("list");
   const [inDeleteCourseView, setInDeleteCourseView] = useState(false);
   const registeredCourses = useRegisteredCourses({
