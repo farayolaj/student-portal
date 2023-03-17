@@ -15,7 +15,7 @@ export default function CustomTable<T>(props: CustomTableProps<T>) {
   });
 
   return (
-    <Card>
+    <Card w="full" overflowX="auto">
       <CardBody>
         <Table className="w-full ">
           <Thead>
