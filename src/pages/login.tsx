@@ -19,7 +19,6 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import Image from "next/image";
-import NextLink from "next/link";
 import Seo from "../components/common/seo";
 import uiLogo from "../images/ui-logo.png";
 import * as routes from "../constants/routes";
@@ -50,7 +49,7 @@ export default function Login() {
         onError: (err) => {
           const error = err as Error;
           toast({
-            title: "Invalid matric. number or email address",
+            title: "Username Verification Failed",
             description: error?.message,
             status: "error",
             isClosable: true,
