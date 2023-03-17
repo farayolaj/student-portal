@@ -57,7 +57,7 @@ export default function AddMoreCoursesModal({
 
   return (
     <>
-      <Button onClick={onOpen}>Add More Courses</Button>{" "}
+      <Button onClick={onOpen}>Search For More Courses</Button>{" "}
       <Modal
         isOpen={isOpen}
         onClose={onClose}
@@ -142,10 +142,10 @@ function CourseItem({
         </Text>
       </VStack>
       {selected ? (
-        <Button onClick={() => onUnselect(course)}>Remove</Button>
+        <Button onClick={() => onUnselect(course)}>Unselect</Button>
       ) : (
         <Button variant="outline" onClick={() => onSelect(course)}>
-          Add
+          Select
         </Button>
       )}
     </Flex>
