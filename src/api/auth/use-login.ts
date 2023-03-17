@@ -20,6 +20,7 @@ export async function login({ username, password }: LoginCredential) {
     user: toUser({
       ...response.data.payload.profile,
       current_session: response.data.payload.current_session,
+      current_semester: response.data.payload.current_semester,
     }),
   };
 }

@@ -1,3 +1,4 @@
+import { useCurrentPeriod } from "@/api/user/use-current-period";
 import {
   Flex,
   Button,
@@ -16,7 +17,6 @@ import { useAddCourses } from "../../api/course/use-add-courses";
 import { useAllCourses } from "../../api/course/use-all-courses";
 import { useCourseConfig } from "../../api/course/use-course-config";
 import { useRegisteredCourses } from "../../api/course/use-registered-course";
-import useLatestSession from "../../api/user/use-latest-session";
 import PageTitle from "../../components/common/page-title";
 import Seo from "../../components/common/seo";
 import AddCourseOverviewCard from "../../components/courses/add/add-course-overview-card";
@@ -38,10 +38,10 @@ export default function AddCoursesPage(): JSX.Element {
     (c) => c.semester === semester
   )?.minUnits;
 
-  const latestSession = useLatestSession();
+  const { period } = useCurrentPeriod();
   const registeredCourses = useRegisteredCourses({
-    variables: { session: latestSession?.id as string },
-    enabled: !!latestSession?.id,
+    variables: { session: period?.session?.id as string },
+    enabled: !!period,
   });
 
   const allCourses = useAllCourses({
@@ -86,7 +86,7 @@ export default function AddCoursesPage(): JSX.Element {
       <Seo title="Add Courses" />
       <PageTitle showBackButton>Add Courses</PageTitle>
       <SelectCourseListControl
-        session={latestSession?.name || ""}
+        session={period?.session?.name || ""}
         semester={semester}
         onSemesterChange={setSemester}
         view={view}

@@ -16,13 +16,7 @@ const CourseListControls: FC<CourseListControlsProps> = ({
   semester,
   onSemesterChange,
 }) => {
-  const allSessions = useAllSessions({
-    onSuccess: (data) => {
-      if (data.length > 0) {
-        onSessionIdChange(data[0].id);
-      }
-    },
-  });
+  const allSessions = useAllSessions();
 
   return (
     <Flex

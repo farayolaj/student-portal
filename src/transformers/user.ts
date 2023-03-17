@@ -12,5 +12,6 @@ export const toUser = (user: any) =>
     dob: parse(user.DoB, "dd/MM/yyyy", new Date()),
     gender: user.gender,
     phone: user.phone,
-    sessionId: user.session_key || user.current_session,
+    currentSessionId: user.current_session,
+    currentSemester: parseInt(user.current_semester),
   } as User);

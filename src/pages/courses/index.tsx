@@ -16,19 +16,24 @@ import {
 import CourseView from "../../components/courses/course-view";
 import * as routes from "../../constants/routes";
 import DeleteCourseView from "../../components/courses/delete/delete-course-view";
-import { useAllSessions } from "../../api/course/use-all-sessions";
 import { useCourseStatistics } from "../../api/course/use-course-statistics";
 import { useRegisteredCourses } from "../../api/course/use-registered-course";
 import { useRegistrationOpen } from "../../api/course/use-registration-open";
 import { useDeleteCourses } from "../../api/course/use-delete-courses";
 import { useCourseRegPrintUrl } from "@/api/course/use-course-reg-print-url";
+import { useCurrentPeriod } from "@/api/user/use-current-period";
 
 const Courses: FC = () => {
-  const [sessionId, setSessionId] = useState("");
-  const [latestSessionId, setLatestSessionId] = useState("");
+  const { period } = useCurrentPeriod({
+    onSuccess(data) {
+      if (!sessionId) setSessionId(data?.session?.id as string);
+    },
+  });
+  const [sessionId, setSessionId] = useState(period?.session.id || "");
+  const currentSessionId = period?.session.id as string;
   const [semester, setSemester] = useState(0);
   const canRegister = useRegistrationOpen();
-  const canDeleteCourses = sessionId === latestSessionId;
+  const canDeleteCourses = sessionId === currentSessionId;
   const [view, setView] = useState("list");
   const [inDeleteCourseView, setInDeleteCourseView] = useState(false);
   const registeredCourses = useRegisteredCourses({
@@ -44,16 +49,6 @@ const Courses: FC = () => {
       session: sessionId,
       semester: semester === 0 ? undefined : semester,
     },
-  });
-  useAllSessions({
-    onSuccess: (data) => {
-      if (data.length > 0) {
-        setLatestSessionId(data[0].id);
-      }
-    },
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
   });
 
   const toast = useToast();
@@ -105,11 +100,11 @@ const Courses: FC = () => {
         minUnits={courseStats.data?.minUnits || 0}
         registeredUnits={courseStats.data?.totalUnits || 0}
         coursesRegistered={courseStats.data?.totalCourses || 0}
-        minMaxActive={sessionId === latestSessionId}
+        minMaxActive={sessionId === currentSessionId}
       />
       <Flex mt={6} gap={4} justify="space-between" align="center">
         <Flex gap={4} wrap="wrap" justify={["center", null, "initial"]}>
-          {sessionId === latestSessionId &&
+          {sessionId === currentSessionId &&
             !inDeleteCourseView &&
             canRegister.data && (
               <Link
