@@ -19,6 +19,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import Image from "next/image";
+import NextLink from "next/link";
 import Seo from "../components/common/seo";
 import uiLogo from "../images/ui-logo.png";
 import * as routes from "../constants/routes";
