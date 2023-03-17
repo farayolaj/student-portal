@@ -27,7 +27,7 @@ export const Header: FC = () => {
   const user = useUser();
   const fullName = `${user.data?.firstName} ${user.data?.otherNames || ""} ${
     user.data?.lastName
-  }`;
+  }`.replace("undefined", "");
 
   return (
     <HStack
