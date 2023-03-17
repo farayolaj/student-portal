@@ -4,7 +4,14 @@ import Seo from "../../components/common/seo";
 import Table from "../../components/common/custom-table";
 import ResultDetailOverview from "../../components/results/details/result-detail-overview";
 import { createColumnHelper } from "@tanstack/react-table";
-import { Box, chakra, Flex, Link, SkeletonText } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  chakra,
+  Flex,
+  Link,
+  SkeletonText,
+} from "@chakra-ui/react";
 import { useState } from "react";
 import RadioButtonGroup from "../../components/common/radio-button-group";
 import ResultBarChart from "../../components/results/result-bar-chart";
@@ -43,6 +50,8 @@ export default function ResultDetailPage() {
     },
     enabled: !!resultSession,
   });
+  // const printUrl = useResultPrintUrl(sessionId);
+  const printUrl = useResultPrintUrl(sessionId);
 
   let allResults: CourseResult[];
   let unitsRegistered: number;
@@ -84,6 +93,15 @@ export default function ResultDetailPage() {
           <SkeletonText />
         )}
       </PageTitle>
+      <Flex justify="space-between" mb={8}>
+        <Button
+          onClick={() => {
+            window.open(printUrl.url as string);
+          }}
+          isDisabled={printUrl.isLoading && !printUrl.error}
+        >
+          Print Result
+        </Button>
         <RadioButtonGroup
           labels={["All", "1st Semester", "2nd Semester"]}
           values={["0", "1", "2"]}
