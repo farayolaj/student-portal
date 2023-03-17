@@ -15,6 +15,7 @@ interface Programme {
   programme: string;
   faculty: string;
   modeOfStudy: string | null;
+  examCentre: string;
 }
 
 interface Course {

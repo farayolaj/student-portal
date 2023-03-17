@@ -6,7 +6,10 @@ export const toDashboardInfo = (data: any) =>
     user: toUser(data.bioData),
     courses: data.registered_course.map(toCourse) as Course[],
     cpga: parseFloat(data.cpga),
-    programme: toProgramme(data.programmeDetails),
+    programme: toProgramme({
+      exam_center: data.bioData.exam_center,
+      ...data.programmeDetails,
+    }),
   } as DashboardInfo);
 
 export const toProgramme = (programme: any) =>
@@ -20,6 +23,7 @@ export const toProgramme = (programme: any) =>
     level: programme.level,
     modeOfStudy: programme.mode_of_study,
     programme: programme.programme,
+    examCentre: programme.exam_center,
   } as Programme);
 
 export const toSession = (session: any) =>

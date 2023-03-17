@@ -27,6 +27,7 @@ const ProfileCard: FC = () => {
     dashboardInfo.data?.user?.otherNames || ""
   } ${dashboardInfo.data?.user?.lastName}`;
   const session = dashboardInfo.data?.programme.currentSession;
+  const examCentre = dashboardInfo.data?.programme.examCentre;
 
   return (
     <Card>
@@ -88,7 +89,17 @@ const ProfileCard: FC = () => {
                     {programme}
                   </Text>
                 }
-                gridColumn="1 / -1"
+                gridColumn="1 / span 3"
+              />
+              <ProfileCardItem
+                isLoading={isLoading}
+                name="Examination Centre"
+                value={
+                  <Text as="span" textAlign="center">
+                    {examCentre}
+                  </Text>
+                }
+                gridColumn="4 / span 2"
               />
             </SimpleGrid>
           </Flex>
