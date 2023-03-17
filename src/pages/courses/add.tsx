@@ -16,7 +16,7 @@ import { useAddCourses } from "../../api/course/use-add-courses";
 import { useAllCourses } from "../../api/course/use-all-courses";
 import { useCourseConfig } from "../../api/course/use-course-config";
 import { useRegisteredCourses } from "../../api/course/use-registered-course";
-import useCurrentSession from "../../api/user/use-current-session";
+import useLatestSession from "../../api/user/use-latest-session";
 import PageTitle from "../../components/common/page-title";
 import Seo from "../../components/common/seo";
 import AddCourseOverviewCard from "../../components/courses/add/add-course-overview-card";
@@ -38,8 +38,24 @@ export default function AddCoursesPage(): JSX.Element {
     (c) => c.semester === semester
   )?.minUnits;
 
+  const latestSession = useLatestSession();
+  const registeredCourses = useRegisteredCourses({
+    variables: { session: latestSession?.id as string },
+    enabled: !!latestSession?.id,
+  });
+
   const allCourses = useAllCourses({
     variables: { semester },
+    enabled: !!registeredCourses.data,
+    select: (data) => {
+      return data.filter(
+        (course) =>
+          registeredCourses.data?.findIndex((r) => r.id === course.id) == -1
+      );
+    },
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
     onSuccess: (data) => {
       if (selectedCourses.length > 0) return;
 
@@ -55,24 +71,22 @@ export default function AddCoursesPage(): JSX.Element {
   const cancelRef = useRef(null);
   const router = useRouter();
   const toast = useToast();
-  const currentSession = useCurrentSession();
+  const allCoursesWithExtras = [...(allCourses.data || []), ...extraCourses];
 
-  const registeredCourses = useRegisteredCourses({
-    variables: { session: currentSession?.id || "" },
-  });
-  const allCoursesWithExtras = [
-    ...(allCourses.data || []),
-    ...extraCourses,
-  ].filter(
-    (c) => registeredCourses.data?.findIndex((r) => r.id === c.id) == -1
-  );
+  const onSelectAll = () => {
+    setSelectedCourses(allCoursesWithExtras.map((course) => course.id));
+  };
+
+  const onUnselectAll = () => {
+    setSelectedCourses([]);
+  };
 
   return (
     <>
       <Seo title="Add Courses" />
       <PageTitle showBackButton>Add Courses</PageTitle>
       <SelectCourseListControl
-        session={currentSession?.name || ""}
+        session={latestSession?.name || ""}
         semester={semester}
         onSemesterChange={setSemester}
         view={view}
@@ -88,7 +102,7 @@ export default function AddCoursesPage(): JSX.Element {
           ),
         ]}
       />
-      <Flex mt={8} justify="flex-end">
+      <Flex mt={8} justify="space-between">
         <AddMoreCoursesModal
           onAdd={(course) => {
             setExtraCourses((prev) => [...prev, course]);
@@ -99,6 +113,11 @@ export default function AddCoursesPage(): JSX.Element {
             setSelectedCourses((prev) => prev.filter((c) => c !== course.id));
           }}
         />
+        {selectedCourses.length === allCoursesWithExtras.length ? (
+          <Button onClick={onUnselectAll}>Unselect All</Button>
+        ) : (
+          <Button onClick={onSelectAll}>Select All</Button>
+        )}
       </Flex>
       <SelectCourseView
         isLoading={allCourses.isLoading}

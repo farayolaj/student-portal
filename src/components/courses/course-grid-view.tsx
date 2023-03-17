@@ -66,7 +66,7 @@ const CourseGridViewItem: FC<CourseGridViewItemProps> = ({ course }) => {
           <Text fontSize="sm" fontWeight="bold" color="blackAlpha.700" minH={6}>
             {course.lecturer}
           </Text>
-          <Text my={2} noOfLines={3} minH={16}>
+          <Text my={2} noOfLines={3} minH={16} title={course.description}>
             {course.description}
           </Text>
           <Spacer />

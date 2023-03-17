@@ -15,6 +15,7 @@ interface Programme {
   programme: string;
   faculty: string;
   modeOfStudy: string | null;
+  examCentre: string;
 }
 
 interface Course {
@@ -50,13 +51,35 @@ interface CourseConfig {
   totalUnitsRegistered?: number;
 }
 
+interface SessionResultSummary {
+  session: ResultSession;
+  results: ResultSummary[];
+}
+
+interface ResultSummary {
+  courseCode: string;
+  units: number;
+  totalScore: number;
+  remark: "pass" | "fail";
+}
+
+interface ResultSession {
+  id: string;
+  name: string;
+}
+
 interface CourseResult {
   id: string;
+  code: string;
   title: string;
-  status: string;
-  marks: number;
-  gp: number;
+  status: "C" | "E" | "R";
+  caScore: number;
+  examScore: number;
+  totalScore: number;
+  semester: number;
+  grade: number;
   units: number;
+  remark: "pass" | "fail";
 }
 
 interface SemesterResult {
@@ -66,10 +89,17 @@ interface SemesterResult {
 }
 
 interface Result {
-  id: string;
-  session: string;
+  session: ResultSession;
+  printUrl: string;
   firstSemester: SemesterResult;
   secondSemester: SemesterResult;
+}
+
+interface SessionResultStats {
+  tcu: number;
+  twgp: number;
+  gpa: number;
+  cgpa: number;
 }
 
 interface Transaction {

@@ -1,5 +1,6 @@
 import {
   AspectRatio,
+  Box,
   Card,
   CardBody,
   Checkbox,
@@ -71,9 +72,18 @@ const SelectCourseGridViewItem: FC<SelectCourseGridViewItemProps> = ({
       borderColor="gray.200"
       _checked={{ borderColor: colorScheme500 }}
       _hover={{ "&[aria-checked=false]": { borderColor: colorScheme300 } }}
-      onClick={() => onToggleSelection(course.id)}
       cursor="pointer"
+      pos="relative"
     >
+      <Box
+        pos="absolute"
+        zIndex={200}
+        w="full"
+        h="full"
+        top={0}
+        left={0}
+        onClick={() => onToggleSelection(course.id)}
+      />
       <AspectRatio pos="relative" w="full" ratio={3 / 2} overflow="hidden">
         <Image
           alt=""
@@ -93,7 +103,6 @@ const SelectCourseGridViewItem: FC<SelectCourseGridViewItemProps> = ({
           isChecked={isChecked}
           zIndex={100}
           borderColor={colorScheme500}
-          onClick={() => onToggleSelection(course.id)}
         />
         <Flex direction="column" align="flex-start">
           <Text fontSize="sm" fontWeight="bold">
@@ -105,7 +114,7 @@ const SelectCourseGridViewItem: FC<SelectCourseGridViewItemProps> = ({
           <Text fontSize="sm" fontWeight="bold" color="blackAlpha.700" minH={6}>
             {course.lecturer}
           </Text>
-          <Text my={2} noOfLines={3} minH={16}>
+          <Text my={2} noOfLines={3} minH={16} title={course.description}>
             {course.description}
           </Text>
           <Spacer />

@@ -11,6 +11,7 @@ import { LoginCredential, login } from "../api/auth/use-login";
 import { getUser } from "../api/user/use-user";
 import useLocalStorage from "./use-local-storage";
 import { LOGIN } from "../constants/routes";
+import { useQueryClient } from "@tanstack/react-query";
 
 export type TAuthAction = {
   /**
@@ -61,6 +62,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     null
   );
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     setIsLoggingIn(true);
@@ -72,12 +74,14 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
         .catch(() => {
           setUser(undefined);
           setAuthToken(null);
+          queryClient.clear();
           router.push(LOGIN);
         })
         .finally(() => {
           setIsLoggingIn(false);
         });
     else setIsLoggingIn(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loginFn: TAuthAction["login"] = async (credential, opts) => {
@@ -103,6 +107,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const logout: TAuthAction["logout"] = async () => {
     setUser(undefined);
     setAuthToken(null);
+    queryClient.clear();
   };
 
   return (

@@ -19,7 +19,10 @@ export default function ResultOverview({
         value={cumUnitsRegistered}
       />
       <NameValueCard name="Cumulative Units Passed" value={cumUnitsPassed} />
-      <NameValueCard name="CGPA" value={cgpa.toFixed(2)} />
+      <NameValueCard
+        name="CGPA"
+        value={Number.isNaN(cgpa) ? "N/A" : cgpa.toFixed(2)}
+      />
     </SimpleGrid>
   );
 }
