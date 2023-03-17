@@ -96,7 +96,7 @@ export default function ResultDetailPage() {
           <SkeletonText />
         )}
       </PageTitle>
-      <Flex justify="space-between" mb={8}>
+      <Flex justify="space-between" mb={8} wrap="wrap" gap={4}>
         <Button
           display="inline-flex"
           gap={4}
