@@ -5,11 +5,11 @@ import {
   CardBody,
   Text,
   VStack,
-  Link,
   Flex,
   SkeletonText,
   Avatar,
   SimpleGrid,
+  GridProps,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { FC, ReactNode } from "react";
@@ -83,23 +83,23 @@ const ProfileCard: FC = () => {
               />
               <ProfileCardItem
                 isLoading={isLoading}
-                name="Programme"
-                value={
-                  <Text as="span" textAlign="center">
-                    {programme}
-                  </Text>
-                }
-                gridColumn="1 / span 3"
-              />
-              <ProfileCardItem
-                isLoading={isLoading}
                 name="Examination Centre"
                 value={
                   <Text as="span" textAlign="center">
                     {examCentre}
                   </Text>
                 }
-                gridColumn="4 / span 2"
+                gridColumn={["initial", null, "1 / span 2"]}
+              />
+              <ProfileCardItem
+                isLoading={isLoading}
+                name="Programme"
+                value={
+                  <Text as="span" textAlign="center">
+                    {programme}
+                  </Text>
+                }
+                gridColumn={["1 / -1", null, "3 / -1"]}
               />
             </SimpleGrid>
           </Flex>
@@ -115,7 +115,7 @@ type ProfileCardItemProps = {
   name: string;
   value?: ReactNode;
   isLoading: boolean;
-  gridColumn?: string;
+  gridColumn?: GridProps["gridColumn"];
 };
 
 const ProfileCardItem: FC<ProfileCardItemProps> = ({
