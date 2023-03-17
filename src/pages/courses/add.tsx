@@ -135,9 +135,15 @@ export default function AddCoursesPage(): JSX.Element {
           }
         }}
       />
-      <Flex justify="center" mt={6} pos="sticky" bottom={8} zIndex={500}>
+      <Flex justify="center" mt={12} pos="sticky" bottom={8} zIndex={500}>
         {selectedCourses.length > 0 && (
-          <Button boxShadow="lg" w="80%" onClick={onOpen}>
+          <Button
+            boxShadow="lg"
+            w="80%"
+            h="3.75rem"
+            fontSize="xl"
+            onClick={onOpen}
+          >
             Add {selectedCourses.length} Course
             {selectedCourses.length > 1 && "s"}
           </Button>
