@@ -126,6 +126,10 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   );
 };
 
+/**
+ * Users of this hook within authenticated routes can expect it to always return the user immediately escept if there's an error.
+ * This happens because rendering of authenticated routes is blocked until the user is fetched.
+ */
 const useAuth = () => {
   const authState = useContext(AuthStateContext);
   const authAction = useContext(AuthActionContext);

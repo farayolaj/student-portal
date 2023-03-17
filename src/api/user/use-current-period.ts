@@ -1,44 +1,32 @@
+import useAuth from "@/hooks/use-auth";
 import { useAllSessions } from "../course/use-all-sessions";
-import { useUser } from "./use-user";
 
 type Period = {
   session: { id: string; name: string };
   semester: { id: number; name: "First" | "Second" };
 };
 
-type UseCurrentPeriodOpts = {
-  onSuccess?: (data: Period) => void;
-  onError?: (err: unknown) => void;
-};
-
 /**
  * Provides the current session id and semester.
  */
-export function useCurrentPeriod(opts?: UseCurrentPeriodOpts) {
+export function useCurrentPeriod() {
   const allSessionsRes = useAllSessions();
-  const periodRes = useUser({
-    select: (data) =>
-      ({
-        semester: {
-          id: data.currentSemester,
-          name: data.currentSemester === 1 ? "First" : "Second",
-        },
-        session: {
-          id: data.currentSessionId,
-          name: allSessionsRes.data?.find(
-            (session) => session.id === data.currentSessionId
-          )?.name,
-        },
-      } as Period),
-    onSuccess: opts?.onSuccess,
-    onError: opts?.onError,
-    enabled: !!allSessionsRes.data,
-  });
+  const auth = useAuth();
 
   return {
-    period: periodRes.data,
-    isLoading: periodRes.isLoading,
-    isError: periodRes.isError,
-    error: periodRes.error,
+    period: {
+      semester: {
+        id: auth.user?.currentSemester,
+        name: auth.user?.currentSemester === 2 ? "Second" : "First",
+      },
+      session: {
+        id: auth.user?.currentSessionId,
+        name: allSessionsRes.data?.find(
+          (session) => session.id === auth.user?.currentSessionId
+        )?.name,
+      },
+    } as Period,
+    isLoading: auth.isLoggingIn,
+    error: auth.error,
   };
 }

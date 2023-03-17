@@ -24,13 +24,9 @@ import { useCourseRegPrintUrl } from "@/api/course/use-course-reg-print-url";
 import { useCurrentPeriod } from "@/api/user/use-current-period";
 
 const Courses: FC = () => {
-  const { period } = useCurrentPeriod({
-    onSuccess(data) {
-      if (!sessionId) setSessionId(data?.session?.id as string);
-    },
-  });
-  const [sessionId, setSessionId] = useState(period?.session.id || "");
-  const currentSessionId = period?.session.id as string;
+  const { period } = useCurrentPeriod();
+  const [sessionId, setSessionId] = useState(period.session.id);
+  const currentSessionId = period.session.id as string;
   const [semester, setSemester] = useState(0);
   const canRegister = useRegistrationOpen();
   const canDeleteCourses = sessionId === currentSessionId;

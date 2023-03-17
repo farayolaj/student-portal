@@ -16,7 +16,6 @@ import {
 import Image from "next/image";
 import { FC } from "react";
 import { MdArrowDropDown } from "react-icons/md";
-import { useUser } from "../../api/user/use-user";
 import useAuth from "../../hooks/use-auth";
 import logo from "../../images/ui-logo.png";
 import MobileCalendar from "./mobile-calendar";
@@ -24,9 +23,9 @@ import MobileNavBar from "./mobile-nav-bar";
 
 export const Header: FC = () => {
   const auth = useAuth();
-  const user = useUser();
-  const fullName = `${user.data?.firstName} ${user.data?.otherNames || ""} ${
-    user.data?.lastName
+  const user = auth.user;
+  const fullName = `${user?.firstName} ${user?.otherNames || ""} ${
+    user?.lastName
   }`.replace("undefined", "");
 
   return (
@@ -69,16 +68,16 @@ export const Header: FC = () => {
         <Menu>
           <MenuButton>
             <HStack>
-              {user.isLoading ? (
+              {auth.isLoggingIn ? (
                 <SkeletonText />
               ) : (
                 <Text display={["none", null, "initial"]}>{fullName}</Text>
               )}
-              <SkeletonCircle isLoaded={!user.isLoading}>
+              <SkeletonCircle isLoaded={!auth.isLoggingIn}>
                 <Avatar
                   name={fullName}
                   size="sm"
-                  src={user.data?.profileImage}
+                  src={user?.profileImage}
                   getInitials={(name) => {
                     const names = name.split(" ");
                     return `${names[0].at(0)}${names
