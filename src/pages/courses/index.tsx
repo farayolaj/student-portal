@@ -51,6 +51,9 @@ const Courses: FC = () => {
         setLatestSessionId(data[0].id);
       }
     },
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });
 
   const toast = useToast();
