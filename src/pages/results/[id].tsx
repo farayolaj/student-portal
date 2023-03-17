@@ -29,16 +29,28 @@ const columns = [
   columnHelper.accessor("title", { header: "Course Title" }),
   columnHelper.accessor("units", { header: "Units" }),
   columnHelper.accessor("status", { header: "Status" }),
-  columnHelper.accessor("totalScore", { header: "Marks" }),
-  columnHelper.accessor("grade", { header: "GP" }),
-  columnHelper.accessor((row) => row.units * row.grade, { header: "WGP" }),
+  columnHelper.accessor("totalScore", {
+    header: "Marks",
+    cell: (row) => (!!row.getValue() ? row.getValue() : "N/A"),
+  }),
+  columnHelper.accessor("grade", {
+    header: "GP",
+    cell: (row) => (!!row.getValue() ? row.getValue() : "N/A"),
+  }),
+  columnHelper.accessor((row) => row.units * row.grade, {
+    header: "WGP",
+    cell: (row) => (!!row.getValue() ? row.getValue() : "N/A"),
+  }),
   columnHelper.accessor("remark", {
     header: "Remark",
-    cell: (row) => (
-      <chakra.span textTransform="capitalize">
-        {row.getValue() === "pass" ? "Passed" : "Failed"}
-      </chakra.span>
-    ),
+    cell: (row) => {
+      if (!row.row.original.totalScore) return "N/A";
+      return (
+        <chakra.span textTransform="capitalize">
+          {row.getValue() === "pass" ? "Passed" : "Failed"}
+        </chakra.span>
+      );
+    },
   }),
 ];
 
@@ -81,10 +93,9 @@ export default function ResultDetailPage() {
     unitsPassed = result?.secondSemester?.unitsPassed || 0;
   }
 
-  const gpa = (
+  const gpa =
     allResults.reduce((total, cr) => total + cr.grade * cr.units, 0) /
-      unitsRegistered || 0
-  ).toFixed(2);
+      unitsRegistered || 0;
 
   return (
     <>
