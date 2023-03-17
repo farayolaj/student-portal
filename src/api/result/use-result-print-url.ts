@@ -24,7 +24,7 @@ export function useResultPrintUrl(sessionId: string) {
       })
       .catch((error) => {
         setIsLoading(false);
-        setError(error);
+        setError(new Error("Error generating result print", { cause: error }));
       });
   }, [sessionId]);
 

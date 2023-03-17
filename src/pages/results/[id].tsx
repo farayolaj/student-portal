@@ -9,8 +9,10 @@ import {
   Button,
   chakra,
   Flex,
+  Icon,
   Link,
   SkeletonText,
+  Spinner,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import RadioButtonGroup from "../../components/common/radio-button-group";
@@ -18,6 +20,7 @@ import ResultBarChart from "../../components/results/result-bar-chart";
 import { useSingleResultSession } from "@/api/result/use-single-result-session";
 import { useResult } from "@/api/result/use-result";
 import { useResultPrintUrl } from "@/api/result/use-result-print-url";
+import { IoPrintOutline } from "react-icons/io5";
 
 const columnHelper = createColumnHelper<CourseResult>();
 
@@ -95,11 +98,19 @@ export default function ResultDetailPage() {
       </PageTitle>
       <Flex justify="space-between" mb={8}>
         <Button
+          display="inline-flex"
+          gap={4}
           onClick={() => {
             window.open(printUrl.url as string);
           }}
-          isDisabled={printUrl.isLoading && !printUrl.error}
+          isDisabled={printUrl.isLoading || !!printUrl.error}
+          title={printUrl.error?.message}
         >
+          {printUrl.isLoading ? (
+            <Spinner size="xs" color="white" />
+          ) : (
+            <Icon as={IoPrintOutline} boxSize={6} />
+          )}
           Print Result
         </Button>
         <RadioButtonGroup
