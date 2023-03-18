@@ -1,3 +1,4 @@
+import useAuth from "@/hooks/use-auth";
 import { CheckIcon, CloseIcon, EditIcon } from "@chakra-ui/icons";
 import {
   VStack,
@@ -7,7 +8,6 @@ import {
   Editable,
   EditableInput,
   EditablePreview,
-  Input,
   useEditableControls,
   ButtonGroup,
   IconButton,
@@ -16,6 +16,12 @@ import {
 } from "@chakra-ui/react";
 
 export default function ProfileDetails() {
+  const auth = useAuth();
+  const user = auth.user as User;
+  const fullName = `${user.firstName} ${user.otherNames || ""} ${
+    user.lastName
+  }`.replace("undefined", "");
+
   return (
     <VStack spacing={8}>
       <Box w="full">
@@ -35,20 +41,17 @@ export default function ProfileDetails() {
           gridRow="1 / -1"
           gridColumn="2"
         >
-          <ProfileDetailsItem name="Full Name" value="John Doe" />
-          <ProfileDetailsItem
-            name="Email Address"
-            value="e0493939@john.doe@ui.edu.ng"
-          />
-          <ProfileDetailsItem name="Gender" value="Male" />
+          <ProfileDetailsItem name="Full Name" value={fullName} />
+          <ProfileDetailsItem name="Email Address" value={user.email} />
+          <ProfileDetailsItem name="Gender" value={user.gender} />
           <ProfileDetailsItem
             name="Phone Number"
-            value="08034583953"
+            value={user.phone}
             isEditable
           />
           <ProfileDetailsItem
             name="Alternate Email Address"
-            value="john.doe@gmail.com"
+            value={user.alternativeEmail || ""}
             isEditable
           />
         </VStack>

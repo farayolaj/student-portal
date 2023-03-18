@@ -147,6 +147,7 @@ interface User {
   gender: string;
   dob: Date;
   phone: string;
+  alternativeEmail?: string;
   currentSessionId: string;
   currentSemester: number;
 }
