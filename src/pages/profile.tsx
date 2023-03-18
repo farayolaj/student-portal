@@ -35,5 +35,5 @@ export default function Profile() {
 }
 
 Profile.layoutProps = {
-  isAuthenticated: false,
+  isAuthenticated: true,
 };
