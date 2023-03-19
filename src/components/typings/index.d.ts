@@ -143,13 +143,27 @@ interface User {
   lastName: string;
   email: string;
   profileImage?: string;
-  matricNumber: string;
   gender: string;
   dob: Date;
   phone: string;
   alternativeEmail?: string;
   currentSessionId: string;
   currentSemester: number;
+}
+
+interface AcademicProfile {
+  matricNumber: string;
+  level: string;
+  entryMode: string;
+  programme: string;
+  department: string;
+  faculty: string;
+  examCenter: string;
+}
+
+interface Profile {
+  user: User;
+  academicProfile: AcademicProfile;
 }
 
 interface Session {

@@ -1,5 +1,5 @@
 import { toCourse } from "./courses";
-import { toUser } from "./user";
+import { toUser } from "./profile";
 
 export const toDashboardInfo = (data: any) =>
   ({

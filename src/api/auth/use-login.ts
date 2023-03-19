@@ -1,6 +1,6 @@
 import { createMutation } from "react-query-kit";
 import getApi from "../api";
-import { toUser } from "../../transformers/user";
+import { toUser } from "../../transformers/profile";
 
 export type LoginCredential = {
   username: string;

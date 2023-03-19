@@ -8,7 +8,7 @@ import {
 } from "react";
 import { useRouter } from "next/router";
 import { LoginCredential, login } from "../api/auth/use-login";
-import { getUser } from "../api/user/use-user";
+import { getProfile } from "../api/user/use-profile";
 import useLocalStorage from "./use-local-storage";
 import { LOGIN } from "../constants/routes";
 import { useQueryClient } from "@tanstack/react-query";
@@ -67,9 +67,9 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   useEffect(() => {
     setIsLoggingIn(true);
     if (authToken)
-      getUser()
+      getProfile()
         .then((user) => {
-          setUser(user);
+          setUser(user.user);
         })
         .catch(() => {
           setUser(undefined);

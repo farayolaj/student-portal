@@ -1,3 +1,4 @@
+import { useProfile } from "@/api/user/use-profile";
 import { PROFILE } from "@/constants/routes";
 import {
   Card,
@@ -19,8 +20,9 @@ import { useDashboardInfo } from "../../api/dashboard/use-dashboard-info";
 
 const ProfileCard: FC = () => {
   const dashboardInfo = useDashboardInfo();
+  const { data: profile } = useProfile();
   const isLoading = dashboardInfo.isInitialLoading;
-  const matricNo = dashboardInfo.data?.user?.matricNumber;
+  const matricNo = profile?.academicProfile?.matricNumber;
   const level = dashboardInfo.data?.programme?.level;
   const entryMode = dashboardInfo.data?.programme?.entryMode;
   const programme = dashboardInfo.data?.programme?.programme;
