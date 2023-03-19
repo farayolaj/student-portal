@@ -1,23 +1,28 @@
-import { Box, VStack, StackDivider, Flex, Badge, Text } from "@chakra-ui/react";
+import {
+  Box,
+  VStack,
+  StackDivider,
+  Flex,
+  Badge,
+  Text,
+  Spinner,
+} from "@chakra-ui/react";
 import format from "date-fns/format";
 import { useState } from "react";
 import Calendar from "./calendar";
 import { DATE_ONLY_FORMAT } from "../../constants/date";
-
-const events = new Map<string, { name: string; time?: string }[]>();
-events.set(format(new Date(2023, 2, 20), DATE_ONLY_FORMAT), [
-  { name: "Examination Starts" },
-]);
+import { useEvents } from "@/api/event/use-events";
 
 export default function EventCalendar() {
   const formattedTodaysDate = format(new Date(), DATE_ONLY_FORMAT);
+  const { data: events } = useEvents();
   const [selectedDate, setSelectedDate] = useState(formattedTodaysDate);
 
   const onDateClick = (date: Date) => {
     setSelectedDate(format(date, DATE_ONLY_FORMAT));
   };
 
-  return (
+  return events ? (
     <>
       <Calendar eventDates={[...events.keys()]} onDateClick={onDateClick} />
       <Box mt={8}>
@@ -56,5 +61,9 @@ export default function EventCalendar() {
         </VStack>
       </Box>
     </>
+  ) : (
+    <Flex w="full" h="full" justify="center" align="center">
+      <Spinner size="xs" color="white" />
+    </Flex>
   );
 }

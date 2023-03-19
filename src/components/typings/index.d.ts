@@ -171,3 +171,16 @@ interface Session {
   name: string;
   level: number;
 }
+
+interface CalendarEvent {
+  name: string;
+  time?: string;
+  date: Date;
+}
+
+/**
+ * A mapping of events to dates.
+ */
+interface EventDateMapping {
+  [key: string]: CalendarEvent[];
+}
