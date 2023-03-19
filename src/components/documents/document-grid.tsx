@@ -63,7 +63,7 @@ function DocumentItem({ document }: DocumentItemProps) {
       </Flex>
       <CardBody>
         <Flex direction="column" gap={2}>
-          <Text>{document.title}</Text>
+          <Text h={12}>{document.title}</Text>
           <Text
             fontSize="xs"
             minH={10}
@@ -76,6 +76,7 @@ function DocumentItem({ document }: DocumentItemProps) {
             variant="button"
             href={document.url}
             display="inline-flex"
+            alignItems="center"
             gap={3}
             mt={4}
             w="fit-content"
