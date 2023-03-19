@@ -1,11 +1,14 @@
 import {
+  Button,
   Card,
   CardBody,
   Flex,
   Icon,
   Link,
   SimpleGrid,
+  Spinner,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { IconType } from "react-icons/lib";
 import {
@@ -14,6 +17,7 @@ import {
   BsFillFileEarmarkWordFill,
 } from "react-icons/bs";
 import { IoDownloadOutline } from "react-icons/io5";
+import { useFetchDocument } from "@/api/document/use-fetch-document";
 
 type DocumentGridProps = {
   documents: PortalDocument[];
@@ -34,6 +38,19 @@ type DocumentItemProps = {
 };
 
 function DocumentItem({ document }: DocumentItemProps) {
+  const toast = useToast();
+  const { intiateFetch, isLoading } = useFetchDocument({
+    url: document.url,
+    onError: (error) => {
+      toast({
+        title: error.message,
+        description: `${document.title} could not be downloaded. Please try again later.`,
+        status: "error",
+        isClosable: true,
+      });
+    },
+  });
+
   let icon: IconType;
 
   switch (document.fileType) {
@@ -72,20 +89,23 @@ function DocumentItem({ document }: DocumentItemProps) {
           >
             {description}
           </Text>
-          <Link
-            variant="button"
-            href={document.url}
+          <Button
             display="inline-flex"
             alignItems="center"
             gap={3}
             mt={4}
             w="fit-content"
             mx="auto"
-            download={document.title}
+            onClick={() => intiateFetch()}
+            isDisabled={isLoading}
           >
-            <Icon fontSize="1.5rem" as={IoDownloadOutline} />
+            {isLoading ? (
+              <Spinner size="xs" color="white" />
+            ) : (
+              <Icon fontSize="1.5rem" as={IoDownloadOutline} />
+            )}
             Download
-          </Link>
+          </Button>
         </Flex>
       </CardBody>
     </Card>
