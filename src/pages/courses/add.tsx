@@ -40,7 +40,10 @@ export default function AddCoursesPage(): JSX.Element {
 
   const { period } = useCurrentPeriod();
   const registeredCourses = useRegisteredCourses({
-    variables: { session: period?.session?.id as string },
+    variables: {
+      session: period?.session?.id as string,
+      semester: period.semester.id,
+    },
     enabled: !!period,
   });
 

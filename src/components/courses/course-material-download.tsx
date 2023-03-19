@@ -1,27 +1,51 @@
-import { Box, Icon, Link } from "@chakra-ui/react";
+import { Icon, IconButton, Link, Text } from "@chakra-ui/react";
 import { FC } from "react";
 import { IoDownloadOutline } from "react-icons/io5";
 
 type CourseMaterialDownloadProps = {
   link: string;
+  yPlacement?: "top" | "bottom";
+  xPlacement?: "left" | "right";
+  includeText?: boolean;
 };
 
-const CourseMaterialDownload: FC<CourseMaterialDownloadProps> = ({ link }) => {
+const CourseMaterialDownload: FC<CourseMaterialDownloadProps> = ({
+  link,
+  yPlacement,
+  xPlacement,
+  includeText = false,
+}) => {
+  const placement: {
+    top?: number;
+    bottom?: number;
+    left?: number;
+    right?: number;
+  } = {};
+
+  placement[yPlacement || "top"] = 4;
+  placement[xPlacement || "right"] = 4;
+
   return (
     <Link
-      variant="button"
       href={link}
       pos="absolute"
-      top={4}
-      right={4}
+      {...placement}
       p={2}
       zIndex={100}
       lineHeight={0}
-      colorScheme="primary"
+      display="inline-flex"
+      gap={4}
+      alignItems="center"
       title="Download course material"
       isExternal
     >
-      <Icon as={IoDownloadOutline} boxSize={6} />
+      {includeText && <Text as="span">Download Course Material</Text>}
+      <IconButton
+        aria-label="Download course material"
+        role="presentation"
+        as={IoDownloadOutline}
+        size="xs"
+      />
     </Link>
   );
 };

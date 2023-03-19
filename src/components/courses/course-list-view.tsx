@@ -38,7 +38,11 @@ const CourseListViewItem: FC<CourseListViewItemProps> = ({ course }) => {
     >
       <Flex>
         {course.materialLink && (
-          <CourseMaterialDownload link={course.materialLink} />
+          <CourseMaterialDownload
+            link={course.materialLink}
+            yPlacement="bottom"
+            includeText
+          />
         )}
         <Box pos="relative" w="15rem" minH="15rem" overflow="hidden">
           <Image
