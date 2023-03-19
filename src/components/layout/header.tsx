@@ -1,6 +1,6 @@
+import { PROFILE } from "@/constants/routes";
 import {
   Avatar,
-  Box,
   Flex,
   HStack,
   Icon,
@@ -14,6 +14,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import Image from "next/image";
+import NextLink from "next/link";
 import { FC } from "react";
 import { MdArrowDropDown } from "react-icons/md";
 import useAuth from "../../hooks/use-auth";
@@ -85,9 +86,9 @@ export const Header: FC = () => {
             boxShadow="md"
             sx={{ "& > *:hover": { bgColor: "primary.200" } }}
           >
-            {/* <MenuItem as={NextLink} href={"#"}>
+            <MenuItem as={NextLink} href={PROFILE}>
               Profile
-            </MenuItem> */}
+            </MenuItem>
             <MenuItem onClick={auth.logout}>Log Out</MenuItem>
           </MenuList>
         </Menu>

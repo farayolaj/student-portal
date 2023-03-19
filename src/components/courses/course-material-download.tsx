@@ -1,4 +1,4 @@
-import { Icon, IconButton, Link, Text } from "@chakra-ui/react";
+import { IconButton, Link, Text } from "@chakra-ui/react";
 import { FC } from "react";
 import { IoDownloadOutline } from "react-icons/io5";
 
@@ -44,7 +44,8 @@ const CourseMaterialDownload: FC<CourseMaterialDownloadProps> = ({
         aria-label="Download course material"
         role="presentation"
         as={IoDownloadOutline}
-        size="xs"
+        size="sm"
+        p={1}
       />
     </Link>
   );

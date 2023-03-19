@@ -25,7 +25,7 @@ export default function EventCalendar() {
   return events ? (
     <>
       <Calendar eventDates={[...events.keys()]} onDateClick={onDateClick} />
-      <Box mt={8}>
+      <Box mt={8} p={4}>
         <Text as="span" fontSize="lg" fontWeight="bold">
           {selectedDate === formattedTodaysDate
             ? "Today's Events"
