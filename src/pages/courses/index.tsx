@@ -25,9 +25,10 @@ import { useCurrentPeriod } from "@/api/user/use-current-period";
 
 const Courses: FC = () => {
   const { period } = useCurrentPeriod();
-  const currentSessionId = period.session.id as string;
+  const currentSessionId = period.session.id;
+  const currentSemester = period.semester.id;
   const [sessionId, setSessionId] = useState(currentSessionId);
-  const [semester, setSemester] = useState(period.semester.id);
+  const [semester, setSemester] = useState(currentSemester);
   const [inDeleteCourseView, setInDeleteCourseView] = useState(false);
   const canRegister = useRegistrationOpen({ variables: { semester } });
   const [view, setView] = useState("list");
@@ -51,11 +52,14 @@ const Courses: FC = () => {
   const courses = registeredCourses.data || [];
   const canAddCourses =
     sessionId === currentSessionId &&
+    semester === currentSemester &&
     !inDeleteCourseView &&
     canRegister.data &&
     !registeredCourses.error;
   const canDeleteCourses =
-    sessionId === currentSessionId && !registeredCourses.error;
+    sessionId === currentSessionId &&
+    semester === currentSemester &&
+    !registeredCourses.error;
 
   const toast = useToast();
   const deleteCourses = useDeleteCourses();
