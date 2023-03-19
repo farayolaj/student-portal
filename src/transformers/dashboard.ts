@@ -30,5 +30,4 @@ export const toSession = (session: any) =>
   ({
     id: session.id,
     name: session.date,
-    level: parseInt(session.level),
   } as Session);

@@ -18,17 +18,17 @@ export const toUser = (user: any) =>
 
 export const toAcademicProfile = (profile: any) =>
   ({
-    matricNumber: profile.matric_number,
-    entryMode: profile.entry_mode,
-    programme: profile.programme,
-    department: profile.department,
-    faculty: profile.faculty,
-    level: profile.current_level + "00",
-    examCenter: profile.exam_center,
+    matricNumber: profile.academicRecord.matric_number,
+    entryMode: profile.academicRecord.entry_mode,
+    programme: profile.programmeDetails.programme,
+    department: profile.programmeDetails.department,
+    faculty: profile.programmeDetails.faculty,
+    level: profile.programmeDetails.level,
+    examCenter: profile.academicRecord.exam_center,
   } as AcademicProfile);
 
 export const toProfile = (profile: any) =>
   ({
     user: toUser(profile),
-    academicProfile: toAcademicProfile(profile.academicRecord),
+    academicProfile: toAcademicProfile(profile),
   } as Profile);

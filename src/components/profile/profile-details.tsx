@@ -1,3 +1,5 @@
+import { useCurrentPeriod } from "@/api/user/use-current-period";
+import { useProfile } from "@/api/user/use-profile";
 import useAuth from "@/hooks/use-auth";
 import { CheckIcon, CloseIcon, EditIcon } from "@chakra-ui/icons";
 import {
@@ -13,13 +15,16 @@ import {
   IconButton,
   Box,
   Heading,
+  SkeletonText,
 } from "@chakra-ui/react";
 
 export default function ProfileDetails() {
-  const auth = useAuth();
-  const user = auth.user as User;
-  const fullName = `${user.firstName} ${user.otherNames || ""} ${
-    user.lastName
+  const profileRes = useProfile();
+  const currentPeriod = useCurrentPeriod();
+  const user = profileRes?.data?.user;
+  const academicProfile = profileRes?.data?.academicProfile;
+  const fullName = `${user?.firstName} ${user?.otherNames || ""} ${
+    user?.lastName
   }`.replace("undefined", "");
 
   return (
@@ -41,17 +46,26 @@ export default function ProfileDetails() {
           gridRow="1 / -1"
           gridColumn="2"
         >
-          <ProfileDetailsItem name="Full Name" value={fullName} />
-          <ProfileDetailsItem name="Email Address" value={user.email} />
-          <ProfileDetailsItem name="Gender" value={user.gender} />
           <ProfileDetailsItem
+            isLoading={profileRes.isLoading}
+            name="Full Name"
+            value={fullName}
+          />
+          <ProfileDetailsItem
+            isLoading={profileRes.isLoading}
+            name="Email Address"
+            value={user?.email}
+          />
+          <ProfileDetailsItem
+            isLoading={profileRes.isLoading}
             name="Phone Number"
-            value={user.phone}
+            value={user?.phone}
             isEditable
           />
           <ProfileDetailsItem
+            isLoading={profileRes.isLoading}
             name="Alternate Email Address"
-            value={user.alternativeEmail || ""}
+            value={user?.alternativeEmail || ""}
             isEditable
           />
         </VStack>
@@ -73,20 +87,46 @@ export default function ProfileDetails() {
           gridRow="1 / -1"
           gridColumn="2"
         >
-          <ProfileDetailsItem name="Matric. Number" value="E083940" />
-          <ProfileDetailsItem name="Level" value="100 Level" />
-          <ProfileDetailsItem name="Entry Mode" value="UTME" />
           <ProfileDetailsItem
+            isLoading={profileRes.isLoading}
+            name="Matric. Number"
+            value={academicProfile?.matricNumber}
+          />
+          <ProfileDetailsItem
+            isLoading={profileRes.isLoading}
+            name="Level"
+            value={academicProfile?.level}
+          />
+          <ProfileDetailsItem
+            isLoading={profileRes.isLoading}
+            name="Entry Mode"
+            value={academicProfile?.entryMode}
+          />
+          <ProfileDetailsItem
+            isLoading={profileRes.isLoading}
             name="Programme"
-            value="Bachelor of Science (Computer Science)"
+            value={academicProfile?.programme}
           />
           <ProfileDetailsItem
+            isLoading={profileRes.isLoading}
             name="Department"
-            value="Department of Computer Science"
+            value={academicProfile?.department}
           />
-          <ProfileDetailsItem name="Faculty" value="Faculty of Science" />
-          <ProfileDetailsItem name="Session" value="2021/2022" />
-          <ProfileDetailsItem name="Semester" value="First Semester" />
+          <ProfileDetailsItem
+            isLoading={profileRes.isLoading}
+            name="Faculty"
+            value={academicProfile?.faculty}
+          />
+          <ProfileDetailsItem
+            isLoading={profileRes.isLoading || currentPeriod.isLoading}
+            name="Session"
+            value={currentPeriod.period.session.name}
+          />
+          <ProfileDetailsItem
+            isLoading={profileRes.isLoading}
+            name="Semester"
+            value={`${currentPeriod.period.semester.name} Semester`}
+          />
         </VStack>
       </Box>
     </VStack>
@@ -95,7 +135,8 @@ export default function ProfileDetails() {
 
 type ProfileItemProps = {
   name: string;
-  value: string;
+  value?: string;
+  isLoading?: boolean;
   isEditable?: boolean;
   onSubmit?: (value: string) => void;
 };
@@ -103,6 +144,7 @@ type ProfileItemProps = {
 function ProfileDetailsItem({
   name,
   value,
+  isLoading = false,
   isEditable = false,
   onSubmit,
 }: ProfileItemProps) {
@@ -111,20 +153,24 @@ function ProfileDetailsItem({
       <Text as="span" fontSize="sm" fontWeight="bold">
         {name}
       </Text>
-      <Editable
-        size="md"
-        defaultValue={value}
-        isPreviewFocusable={false}
-        onSubmit={onSubmit}
-      >
-        <Flex gap={4} w="full" justify="space-between">
-          <Box>
-            <EditablePreview />
-            <EditableInput />
-          </Box>
-          {isEditable && <EditableControls />}
-        </Flex>
-      </Editable>
+      {isLoading ? (
+        <SkeletonText noOfLines={1} />
+      ) : (
+        <Editable
+          size="md"
+          defaultValue={value}
+          isPreviewFocusable={false}
+          onSubmit={onSubmit}
+        >
+          <Flex gap={4} w="full" justify="space-between">
+            <Box>
+              <EditablePreview />
+              <EditableInput />
+            </Box>
+            {isEditable && <EditableControls />}
+          </Flex>
+        </Editable>
+      )}
     </Flex>
   );
 }
