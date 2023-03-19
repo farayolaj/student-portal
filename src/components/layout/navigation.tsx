@@ -51,14 +51,13 @@ const Navigation: FC<NavigationProps> = ({ isOpen }) => {
                   isOpen={isOpen}
                   isActive={pathname.startsWith(routes.RESULTS)}
                 /> */}
-      {/* <NavLink
-                  title="Documents"
-                  icon={IoDocumentsOutline}
-                  href={routes.DOCUMENTS}
-                  isOpen={isOpen}
-                  isActive={pathname.startsWith(routes.DOCUMENTS)}
-                />
-            */}
+      <NavLink
+        title="Documents"
+        icon={IoDocumentsOutline}
+        href={routes.DOCUMENTS}
+        isOpen={isOpen}
+        isActive={pathname.startsWith(routes.DOCUMENTS)}
+      />
       <NavLink
         title="Profile"
         icon={IoPersonOutline}
