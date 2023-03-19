@@ -1,22 +1,18 @@
 import { useCurrentPeriod } from "@/api/user/use-current-period";
 import { useProfile } from "@/api/user/use-profile";
-import useAuth from "@/hooks/use-auth";
-import { CheckIcon, CloseIcon, EditIcon } from "@chakra-ui/icons";
+import { EditIcon } from "@chakra-ui/icons";
 import {
   VStack,
   StackDivider,
   Flex,
   Text,
-  Editable,
-  EditableInput,
-  EditablePreview,
-  useEditableControls,
-  ButtonGroup,
   IconButton,
   Box,
   Heading,
   SkeletonText,
+  useDisclosure,
 } from "@chakra-ui/react";
+import EditProfileModal from "./edit-profile-modal";
 
 export default function ProfileDetails() {
   const profileRes = useProfile();
@@ -26,110 +22,126 @@ export default function ProfileDetails() {
   const fullName = `${user?.firstName} ${user?.otherNames || ""} ${
     user?.lastName
   }`.replace("undefined", "");
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <VStack spacing={8}>
-      <Box w="full">
-        <Heading
-          size="sm"
-          textTransform="uppercase"
-          color="gray.500"
-          fontWeight="extrabold"
-          fontSize="sm"
-        >
-          Personal Details
-        </Heading>
-        <VStack
-          mt={4}
-          divider={<StackDivider />}
-          align="flex-start"
-          gridRow="1 / -1"
-          gridColumn="2"
-        >
-          <ProfileDetailsItem
-            isLoading={profileRes.isLoading}
-            name="Full Name"
-            value={fullName}
-          />
-          <ProfileDetailsItem
-            isLoading={profileRes.isLoading}
-            name="Email Address"
-            value={user?.email}
-          />
-          <ProfileDetailsItem
-            isLoading={profileRes.isLoading}
-            name="Phone Number"
-            value={user?.phone}
-            isEditable
-          />
-          <ProfileDetailsItem
-            isLoading={profileRes.isLoading}
-            name="Alternate Email Address"
-            value={user?.alternativeEmail || ""}
-            isEditable
-          />
-        </VStack>
-      </Box>
-      <Box w="full">
-        <Heading
-          size="sm"
-          textTransform="uppercase"
-          color="gray.500"
-          fontWeight="extrabold"
-          fontSize="sm"
-        >
-          Academic Details
-        </Heading>
-        <VStack
-          mt={4}
-          divider={<StackDivider />}
-          align="flex-start"
-          gridRow="1 / -1"
-          gridColumn="2"
-        >
-          <ProfileDetailsItem
-            isLoading={profileRes.isLoading}
-            name="Matric. Number"
-            value={academicProfile?.matricNumber}
-          />
-          <ProfileDetailsItem
-            isLoading={profileRes.isLoading}
-            name="Level"
-            value={academicProfile?.level}
-          />
-          <ProfileDetailsItem
-            isLoading={profileRes.isLoading}
-            name="Entry Mode"
-            value={academicProfile?.entryMode}
-          />
-          <ProfileDetailsItem
-            isLoading={profileRes.isLoading}
-            name="Programme"
-            value={academicProfile?.programme}
-          />
-          <ProfileDetailsItem
-            isLoading={profileRes.isLoading}
-            name="Department"
-            value={academicProfile?.department}
-          />
-          <ProfileDetailsItem
-            isLoading={profileRes.isLoading}
-            name="Faculty"
-            value={academicProfile?.faculty}
-          />
-          <ProfileDetailsItem
-            isLoading={profileRes.isLoading || currentPeriod.isLoading}
-            name="Session"
-            value={currentPeriod.period.session.name}
-          />
-          <ProfileDetailsItem
-            isLoading={profileRes.isLoading}
-            name="Semester"
-            value={`${currentPeriod.period.semester.name} Semester`}
-          />
-        </VStack>
-      </Box>
-    </VStack>
+    <>
+      <VStack spacing={8}>
+        <Box w="full">
+          <Heading
+            size="sm"
+            textTransform="uppercase"
+            color="gray.500"
+            fontWeight="extrabold"
+            fontSize="sm"
+          >
+            Personal Details
+          </Heading>
+          <VStack
+            mt={4}
+            divider={<StackDivider />}
+            align="flex-start"
+            gridRow="1 / -1"
+            gridColumn="2"
+          >
+            <ProfileDetailsItem
+              isLoading={profileRes.isLoading}
+              name="Full Name"
+              value={fullName}
+            />
+            <ProfileDetailsItem
+              isLoading={profileRes.isLoading}
+              name="Email Address"
+              value={user?.email}
+            />
+            <ProfileDetailsItem
+              isLoading={profileRes.isLoading}
+              name="Phone Number"
+              value={user?.phone}
+              onEdit={onOpen}
+              isEditable
+            />
+            <ProfileDetailsItem
+              isLoading={profileRes.isLoading}
+              name="Alternate Email Address"
+              value={user?.alternativeEmail || ""}
+              onEdit={onOpen}
+              isEditable
+            />
+          </VStack>
+        </Box>
+        <Box w="full">
+          <Heading
+            size="sm"
+            textTransform="uppercase"
+            color="gray.500"
+            fontWeight="extrabold"
+            fontSize="sm"
+          >
+            Academic Details
+          </Heading>
+          <VStack
+            mt={4}
+            divider={<StackDivider />}
+            align="flex-start"
+            gridRow="1 / -1"
+            gridColumn="2"
+          >
+            <ProfileDetailsItem
+              isLoading={profileRes.isLoading}
+              name="Matric. Number"
+              value={academicProfile?.matricNumber}
+            />
+            <ProfileDetailsItem
+              isLoading={profileRes.isLoading}
+              name="Level"
+              value={academicProfile?.level}
+            />
+            <ProfileDetailsItem
+              isLoading={profileRes.isLoading}
+              name="Entry Mode"
+              value={academicProfile?.entryMode}
+            />
+            <ProfileDetailsItem
+              isLoading={profileRes.isLoading}
+              name="Programme"
+              value={academicProfile?.programme}
+            />
+            <ProfileDetailsItem
+              isLoading={profileRes.isLoading}
+              name="Department"
+              value={academicProfile?.department}
+            />
+            <ProfileDetailsItem
+              isLoading={profileRes.isLoading}
+              name="Faculty"
+              value={academicProfile?.faculty}
+            />
+            <ProfileDetailsItem
+              isLoading={profileRes.isLoading || currentPeriod.isLoading}
+              name="Session"
+              value={currentPeriod.period.session.name}
+            />
+            <ProfileDetailsItem
+              isLoading={profileRes.isLoading}
+              name="Semester"
+              value={`${currentPeriod.period.semester.name} Semester`}
+            />
+          </VStack>
+        </Box>
+      </VStack>
+      {user && (
+        <EditProfileModal
+          isOpen={isOpen}
+          onClose={onClose}
+          initialData={{
+            alternativeEmail: user.alternativeEmail || "",
+            phone: user.phone,
+          }}
+          onSuccess={() => profileRes.refetch()}
+        />
+      )}
+    </>
   );
 }
 
@@ -138,7 +150,7 @@ type ProfileItemProps = {
   value?: string;
   isLoading?: boolean;
   isEditable?: boolean;
-  onSubmit?: (value: string) => void;
+  onEdit?: () => void;
 };
 
 function ProfileDetailsItem({
@@ -146,7 +158,7 @@ function ProfileDetailsItem({
   value,
   isLoading = false,
   isEditable = false,
-  onSubmit,
+  onEdit,
 }: ProfileItemProps) {
   return (
     <Flex direction="column" gap={2} px={2} w="full">
@@ -156,54 +168,20 @@ function ProfileDetailsItem({
       {isLoading ? (
         <SkeletonText noOfLines={1} />
       ) : (
-        <Editable
-          size="md"
-          defaultValue={value}
-          isPreviewFocusable={false}
-          onSubmit={onSubmit}
-        >
-          <Flex gap={4} w="full" justify="space-between">
-            <Box>
-              <EditablePreview />
-              <EditableInput />
-            </Box>
-            {isEditable && <EditableControls />}
-          </Flex>
-        </Editable>
+        <Flex gap={4} w="full">
+          <Text as="span" fontSize="sm" w="full">
+            {value}
+          </Text>
+          {isEditable && (
+            <IconButton
+              icon={<EditIcon />}
+              size="xs"
+              aria-label="Edit"
+              onClick={onEdit}
+            />
+          )}
+        </Flex>
       )}
-    </Flex>
-  );
-}
-
-function EditableControls() {
-  const {
-    isEditing,
-    getSubmitButtonProps,
-    getCancelButtonProps,
-    getEditButtonProps,
-  } = useEditableControls();
-
-  return isEditing ? (
-    <ButtonGroup justifyContent="center" size="xs" alignItems="center">
-      <IconButton
-        aria-label="Confirm edit"
-        icon={<CheckIcon />}
-        {...getSubmitButtonProps()}
-      />
-      <IconButton
-        aria-label="Cancel edit"
-        icon={<CloseIcon />}
-        {...getCancelButtonProps()}
-      />
-    </ButtonGroup>
-  ) : (
-    <Flex justifyContent="center" align="center">
-      <IconButton
-        aria-label="Edit"
-        size="xs"
-        icon={<EditIcon />}
-        {...getEditButtonProps()}
-      />
     </Flex>
   );
 }
