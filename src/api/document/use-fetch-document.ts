@@ -6,18 +6,18 @@ type UseFetchDocument = {
   onError?: (error: Error) => void;
 };
 
-export function useFetchDocument({ url: printUrl, onError }: UseFetchDocument) {
+export function useFetchDocument({ url, onError }: UseFetchDocument) {
   const [isLoading, setIsLoading] = useState(false);
 
   const intiateFetch = useCallback(async () => {
     try {
       setIsLoading(true);
-      const response = await getApi().get(printUrl, { responseType: "blob" });
-      const url = URL.createObjectURL(
+      const response = await getApi().get(url, { responseType: "blob" });
+      const blobUrl = URL.createObjectURL(
         new Blob([response.data], { type: "application/pdf" })
       );
       setIsLoading(false);
-      window.open(url, "_blank");
+      window.open(blobUrl, "_blank");
     } catch (error) {
       setIsLoading(false);
       if (onError)
@@ -27,7 +27,7 @@ export function useFetchDocument({ url: printUrl, onError }: UseFetchDocument) {
           })
         );
     }
-  }, [onError, printUrl]);
+  }, [onError, url]);
 
   return {
     intiateFetch,
