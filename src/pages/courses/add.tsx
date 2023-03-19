@@ -16,7 +16,7 @@ import { useRef, useState } from "react";
 import { useAddCourses } from "../../api/course/use-add-courses";
 import { useAllCourses } from "../../api/course/use-all-courses";
 import { useCourseConfig } from "../../api/course/use-course-config";
-import { useRegisteredCourses } from "../../api/course/use-registered-course";
+import { useRegisteredCourses } from "../../api/course/use-registered-courses";
 import PageTitle from "../../components/common/page-title";
 import Seo from "../../components/common/seo";
 import AddCourseOverviewCard from "../../components/courses/add/add-course-overview-card";

@@ -17,7 +17,7 @@ import CourseView from "../../components/courses/course-view";
 import * as routes from "../../constants/routes";
 import DeleteCourseView from "../../components/courses/delete/delete-course-view";
 import { useCourseStatistics } from "../../api/course/use-course-statistics";
-import { useRegisteredCourses } from "../../api/course/use-registered-course";
+import { useRegisteredCourses } from "../../api/course/use-registered-courses";
 import { useRegistrationOpen } from "../../api/course/use-registration-open";
 import { useDeleteCourses } from "../../api/course/use-delete-courses";
 import { useCourseRegPrintUrl } from "@/api/course/use-course-reg-print-url";
@@ -25,27 +25,37 @@ import { useCurrentPeriod } from "@/api/user/use-current-period";
 
 const Courses: FC = () => {
   const { period } = useCurrentPeriod();
-  const [sessionId, setSessionId] = useState(period.session.id);
   const currentSessionId = period.session.id as string;
-  const [semester, setSemester] = useState(0);
-  const canRegister = useRegistrationOpen();
-  const canDeleteCourses = sessionId === currentSessionId;
-  const [view, setView] = useState("list");
+  const [sessionId, setSessionId] = useState(currentSessionId);
+  const [semester, setSemester] = useState(period.semester.id);
   const [inDeleteCourseView, setInDeleteCourseView] = useState(false);
+  const canRegister = useRegistrationOpen({ variables: { semester } });
+  const [view, setView] = useState("list");
   const registeredCourses = useRegisteredCourses({
-    variables: { session: sessionId },
+    variables: { session: sessionId, semester: semester },
     enabled: !!sessionId,
+    retry: (errorCount, error) => {
+      const err = error as Error;
+      if (err.message.includes("payment")) return false;
+      else return errorCount < 3;
+    },
+    refetchOnWindowFocus: false,
   });
-  const filteredCourses =
-    registeredCourses.data?.filter(
-      (course) => semester === 0 || course.semester === semester
-    ) || [];
   const courseStats = useCourseStatistics({
     variables: {
       session: sessionId,
-      semester: semester === 0 ? undefined : semester,
+      semester: semester,
     },
   });
+
+  const courses = registeredCourses.data || [];
+  const canAddCourses =
+    sessionId === currentSessionId &&
+    !inDeleteCourseView &&
+    canRegister.data &&
+    !registeredCourses.error;
+  const canDeleteCourses =
+    sessionId === currentSessionId && !registeredCourses.error;
 
   const toast = useToast();
   const deleteCourses = useDeleteCourses();
@@ -76,10 +86,7 @@ const Courses: FC = () => {
     );
   };
 
-  const printUrl = useCourseRegPrintUrl(
-    sessionId,
-    semester === 0 ? 1 : semester
-  );
+  const printUrl = useCourseRegPrintUrl(sessionId, semester);
 
   return (
     <>
@@ -100,22 +107,20 @@ const Courses: FC = () => {
       />
       <Flex mt={6} gap={4} justify="space-between" align="center">
         <Flex gap={4} wrap="wrap" justify={["center", null, "initial"]}>
-          {sessionId === currentSessionId &&
-            !inDeleteCourseView &&
-            canRegister.data && (
-              <Link
-                variant="button"
-                as={NextLink}
-                href={routes.ADD_COURSES}
-                display="inline-flex"
-                gap={4}
-                alignItems="center"
-                h={10}
-              >
-                <Icon as={IoAdd} boxSize={6} />
-                Add Courses
-              </Link>
-            )}
+          {canAddCourses && (
+            <Link
+              variant="button"
+              as={NextLink}
+              href={routes.ADD_COURSES}
+              display="inline-flex"
+              gap={4}
+              alignItems="center"
+              h={10}
+            >
+              <Icon as={IoAdd} boxSize={6} />
+              Add Courses
+            </Link>
+          )}
           {canDeleteCourses && (
             <Button
               onClick={() => setInDeleteCourseView((prev) => !prev)}
@@ -157,15 +162,16 @@ const Courses: FC = () => {
       </Flex>
       {inDeleteCourseView ? (
         <DeleteCourseView
-          courseList={filteredCourses}
+          courseList={courses}
           onDelete={onDelete}
           view={view as "list" | "grid"}
         />
       ) : (
         <CourseView
-          courseList={filteredCourses}
+          courseList={courses}
           view={view as "list" | "grid"}
           isLoading={registeredCourses.isLoading}
+          error={registeredCourses.error as Error}
         />
       )}
     </>

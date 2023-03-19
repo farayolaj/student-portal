@@ -15,9 +15,15 @@ type CourseViewProps = {
   view: "list" | "grid";
   isLoading: boolean;
   courseList: Course[];
+  error?: Error;
 };
 
-const CourseView: FC<CourseViewProps> = ({ view, isLoading, courseList }) => {
+const CourseView: FC<CourseViewProps> = ({
+  view,
+  isLoading,
+  courseList,
+  error,
+}) => {
   const isMobile = useBreakpointValue(
     { base: true, md: false },
     { fallback: undefined }
@@ -36,6 +42,24 @@ const CourseView: FC<CourseViewProps> = ({ view, isLoading, courseList }) => {
         />
       </Flex>
     );
+
+  if (error) {
+    return (
+      <Card mt={8}>
+        <CardBody>
+          <Flex
+            direction="column"
+            align="center"
+            justify="center"
+            gap={8}
+            py={8}
+          >
+            <Text>{error.message}</Text>
+          </Flex>
+        </CardBody>
+      </Card>
+    );
+  }
 
   if (courseList.length === 0) {
     return (
