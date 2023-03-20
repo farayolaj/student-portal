@@ -20,10 +20,10 @@ export const toAcademicProfile = (profile: any) =>
   ({
     matricNumber: profile.academicRecord.matric_number,
     entryMode: profile.academicRecord.entry_mode,
-    programme: profile.programmeDetails.programme,
-    department: profile.programmeDetails.department,
-    faculty: profile.programmeDetails.faculty,
-    level: profile.programmeDetails.level,
+    programme: profile.programmeDetails?.programme,
+    department: profile.programmeDetails?.department,
+    faculty: profile.programmeDetails?.faculty,
+    level: profile.programmeDetails?.level,
     examCenter: profile.academicRecord.exam_center,
   } as AcademicProfile);
 

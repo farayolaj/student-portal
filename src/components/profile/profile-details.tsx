@@ -169,8 +169,8 @@ function ProfileDetailsItem({
         <SkeletonText noOfLines={1} />
       ) : (
         <Flex gap={4} w="full">
-          <Text as="span" fontSize="sm" w="full">
-            {value}
+          <Text minH={5} as="span" fontSize="sm" w="full">
+            {value ?? ""}
           </Text>
           {isEditable && (
             <IconButton
