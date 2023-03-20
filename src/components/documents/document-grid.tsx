@@ -4,7 +4,6 @@ import {
   CardBody,
   Flex,
   Icon,
-  Link,
   SimpleGrid,
   Spinner,
   Text,
@@ -24,6 +23,15 @@ type DocumentGridProps = {
 };
 
 export default function DocumentGrid({ documents }: DocumentGridProps) {
+  if (documents.length === 0)
+    return (
+      <Card p={8}>
+        <CardBody>
+          <Flex justify="center">You currently have no documents.</Flex>
+        </CardBody>
+      </Card>
+    );
+
   return (
     <SimpleGrid columns={[1, null, 3]} gap={8}>
       {documents.map((document) => (
