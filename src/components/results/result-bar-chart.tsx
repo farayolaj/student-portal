@@ -22,7 +22,7 @@ export default function ResultBarChart({
 }: ResultBarChartProps) {
   const green400 = useToken("colors", "green.400");
   const blue400 = useToken("colors", "blue.400");
-  const red400 = useToken("colors", "red.400");
+  const gray400 = useToken("colors", "gray.400");
   const yellow400 = useToken("colors", "yellow.400");
 
   return (
@@ -39,7 +39,7 @@ export default function ResultBarChart({
                   ? blue400
                   : cr.totalScore >= 40
                   ? green400
-                  : red400
+                  : gray400
               ),
               data: courseResults.map((cr) => cr.totalScore),
               label: "Score",
