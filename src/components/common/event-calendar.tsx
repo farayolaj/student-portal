@@ -25,7 +25,7 @@ export default function EventCalendar() {
   return events ? (
     <>
       <Calendar eventDates={[...events.keys()]} onDateClick={onDateClick} />
-      <Box mt={8} p={4}>
+      <Box mt={8} p={[4, null, 0]}>
         <Text as="span" fontSize="lg" fontWeight="bold">
           {selectedDate === formattedTodaysDate
             ? "Today's Events"
@@ -36,23 +36,30 @@ export default function EventCalendar() {
             events
               .get(selectedDate)
               ?.sort((a, b) => {
-                if (!a.time) return -1;
-                if (!b.time) return 1;
-                return a.time == b.time ? 0 : a.time > b.time ? 1 : -1;
+                if (!a.startTime) return -1;
+                if (!b.startTime) return 1;
+                return a.startTime == b.startTime
+                  ? 0
+                  : a.startTime > b.startTime
+                  ? 1
+                  : -1;
               })
-              .map(({ name, time }) => (
+              .map(({ id, name, startTime, endTime, batch, location }) => (
                 <Flex
                   direction="column"
                   justify="space-between"
                   flexWrap={["wrap", null, null, null, "initial"]}
-                  gap={2}
+                  gap={1}
                   w="full"
-                  key={name}
+                  key={id}
                 >
                   <Badge w="fit-content" colorScheme="primary">
-                    {time}
+                    {startTime} {startTime && endTime ? `- ${endTime}` : ""}
                   </Badge>
-                  <Text>{name}</Text>
+                  <Text as="span">{name}</Text>
+                  <Text as="span" fontSize="xs" fontWeight="bold">
+                    {location} {batch && `(${batch})`}
+                  </Text>
                 </Flex>
               ))
           ) : (
