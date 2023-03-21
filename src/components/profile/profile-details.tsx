@@ -41,6 +41,7 @@ export default function ProfileDetails() {
             mt={4}
             divider={<StackDivider />}
             align="flex-start"
+            spacing="1rem"
             gridRow="1 / -1"
             gridColumn="2"
           >
@@ -84,6 +85,7 @@ export default function ProfileDetails() {
             mt={4}
             divider={<StackDivider />}
             align="flex-start"
+            spacing="1rem"
             gridRow="1 / -1"
             gridColumn="2"
           >
