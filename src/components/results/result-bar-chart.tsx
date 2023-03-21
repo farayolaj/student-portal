@@ -20,9 +20,10 @@ export default function ResultBarChart({
   showAxes = false,
   ...boxProps
 }: ResultBarChartProps) {
-  const green500 = useToken("colors", "green.500");
-  const blue500 = useToken("colors", "blue.500");
-  const red500 = useToken("colors", "red.500");
+  const green400 = useToken("colors", "green.400");
+  const blue400 = useToken("colors", "blue.400");
+  const red400 = useToken("colors", "red.400");
+  const yellow400 = useToken("colors", "yellow.400");
 
   return (
     <Box {...boxProps}>
@@ -33,10 +34,12 @@ export default function ResultBarChart({
             {
               backgroundColor: courseResults.map((cr) =>
                 cr.totalScore >= 70
-                  ? green500
-                  : cr.totalScore >= 45
-                  ? blue500
-                  : red500
+                  ? yellow400
+                  : cr.totalScore >= 50
+                  ? blue400
+                  : cr.totalScore >= 40
+                  ? green400
+                  : red400
               ),
               data: courseResults.map((cr) => cr.totalScore),
               label: "Score",
