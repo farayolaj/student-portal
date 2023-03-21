@@ -4,17 +4,18 @@ import format from "date-fns/format";
 
 export function toCalendarEvent(event: any) {
   const [startTime, endTime] =
-    (event.event_extra.start_time || event.events.start_time)?.split("-") || [];
+    (event.event_extra?.start_time || event.events.start_time)?.split("-") ||
+    [];
   return {
     id: event.events.main_event_id,
     name: event.course_title,
     startTime,
     endTime,
-    date: parse(event.events.start_date, "yyyy-MM-dd", new Date()),
+    date: parse(event.events.event_date, "yyyy-MM-dd", new Date()),
     batch: event.event_extra?.batch_type,
     category: event.events.event_category,
     centre: event.exam_center,
-    location: event.event_extra.location || event.events.location,
+    location: event.event_extra?.location || event.events.location,
   } as CalendarEvent;
 }
 

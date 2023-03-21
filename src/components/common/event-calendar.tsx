@@ -8,12 +8,19 @@ import EventList from "./event-list";
 
 export default function EventCalendar() {
   const formattedTodaysDate = format(new Date(), DATE_ONLY_FORMAT);
-  const { data: events } = useEvents();
+  const { data: events, isLoading } = useEvents();
   const [selectedDate, setSelectedDate] = useState(formattedTodaysDate);
 
   const onDateClick = (date: Date) => {
     setSelectedDate(format(date, DATE_ONLY_FORMAT));
   };
+
+  if (isLoading)
+    return (
+      <Flex w="full" py={10} justify="center" align="center">
+        <Spinner size="xl" color="black" />
+      </Flex>
+    );
 
   return events ? (
     <>
@@ -25,8 +32,6 @@ export default function EventCalendar() {
       />
     </>
   ) : (
-    <Flex w="full" h="full" justify="center" align="center">
-      <Spinner size="xs" color="white" />
-    </Flex>
+    <Calendar eventDates={[]} onDateClick={onDateClick} />
   );
 }
