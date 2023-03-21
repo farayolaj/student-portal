@@ -173,9 +173,17 @@ interface Session {
 }
 
 interface CalendarEvent {
+  id: string;
   name: string;
-  time?: string;
+  startTime?: string;
+  endTime?: string;
   date: Date;
+  location?: string;
+  /**
+   * For events that apply to students in batches.
+   */
+  batch?: string;
+  category?: string;
 }
 
 /**
