@@ -179,6 +179,7 @@ interface CalendarEvent {
   endTime?: string;
   date: Date;
   location?: string;
+  centre?: string;
   /**
    * For events that apply to students in batches.
    */

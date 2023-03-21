@@ -3,10 +3,18 @@ import parse from "date-fns/parse";
 import format from "date-fns/format";
 
 export function toCalendarEvent(event: any) {
+  const [startTime, endTime] =
+    (event.event_extra.start_time || event.events.start_time)?.split("-") || [];
   return {
-    name: event.name,
-    startTime: event.time,
-    date: parse(event.start_date, "yyyy-MM-dd", new Date()),
+    id: event.events.main_event_id,
+    name: event.course_title,
+    startTime,
+    endTime,
+    date: parse(event.events.start_date, "yyyy-MM-dd", new Date()),
+    batch: event.event_extra?.batch_type,
+    category: event.events.event_category,
+    centre: event.exam_center,
+    location: event.event_extra.location || event.events.location,
   } as CalendarEvent;
 }
 
