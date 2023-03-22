@@ -8,7 +8,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import queryClient from "../lib/query-client";
 import { AuthProvider } from "../hooks/use-auth";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import getApi from "../api/api";
 import { useRouter } from "next/router";
 import { ERROR_PAGE } from "@/constants/routes";
@@ -19,24 +19,26 @@ type CustomAppProps = AppProps & {
 
 export default function App({ Component, pageProps }: CustomAppProps) {
   const router = useRouter();
-
-  const loadBasePath = async () => {
-    try {
-      const initialBaseUrl = process.env.NEXT_PUBLIC_API_URL;
-      const hostname = encodeURIComponent(window.location.hostname);
-      const url = `${initialBaseUrl}/baseUrl?domain=${hostname}`;
-      const res = await getApi().get(url);
-      localStorage.setItem("apiBaseUrl", res.data.payload);
-    } catch (error) {
-      router.push(ERROR_PAGE);
-    }
-  };
+  const [hasApiBaseUrl, setHasApiBaseUrl] = useState(false);
 
   useEffect(() => {
-    loadBasePath();
+    const initialBaseUrl = process.env.NEXT_PUBLIC_API_URL;
+    const hostname = encodeURIComponent(window.location.hostname);
+    const url = `${initialBaseUrl}/baseUrl?domain=${hostname}`;
+    getApi()
+      .get(url)
+      .then((res) => {
+        localStorage.setItem("apiBaseUrl", res.data.payload);
+        setHasApiBaseUrl(true);
+      })
+      .catch((_error) => router.push(ERROR_PAGE));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const layoutProps = Component.layoutProps || {};
+
+  if (!hasApiBaseUrl) return null;
+
   return (
     <ChakraProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
