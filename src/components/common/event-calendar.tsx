@@ -8,14 +8,14 @@ import EventList from "./event-list";
 
 export default function EventCalendar() {
   const formattedTodaysDate = format(new Date(), DATE_ONLY_FORMAT);
-  const { data: events, isLoading } = useEvents();
+  const { data: events, isInitialLoading } = useEvents();
   const [selectedDate, setSelectedDate] = useState(formattedTodaysDate);
 
   const onDateClick = (date: Date) => {
     setSelectedDate(format(date, DATE_ONLY_FORMAT));
   };
 
-  if (isLoading)
+  if (isInitialLoading)
     return (
       <Flex w="full" py={10} justify="center" align="center">
         <Spinner size="xl" color="black" />
