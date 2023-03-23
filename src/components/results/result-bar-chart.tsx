@@ -62,6 +62,12 @@ export default function ResultBarChart({
               grid: {
                 display: false,
               },
+              ticks: {
+                autoSkip: false,
+                font: {
+                  size: 12,
+                },
+              },
             },
           },
         }}
