@@ -61,8 +61,28 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
         <Header />
         <Flex>
           <Sidebar />
-          <Box h="calc(100vh - 4rem)" pos="relative" overflowY="auto" w="full">
-            <Flex pos="relative" minH="full" bg="gray.200">
+          <Box
+            h="calc(100vh - 4rem)"
+            pos="relative"
+            overflowY="auto"
+            w="full"
+            bg="gray.200"
+            sx={{
+              scrollbarGutter: "stable",
+              scrollbarWidth: "thin",
+              "&::-webkit-scrollbar": {
+                width: "10px",
+              },
+              "&::-webkit-scrollbar-track": {
+                background: "gray.200",
+              },
+              "&::-webkit-scrollbar-thumb": {
+                background: "gray.400",
+                borderRadius: "10px",
+              },
+            }}
+          >
+            <Flex pos="relative" minH="full">
               <Box
                 alignSelf="flex-start"
                 as="main"
