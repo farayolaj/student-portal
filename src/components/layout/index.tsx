@@ -69,7 +69,6 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
             bg="gray.200"
             sx={{
               scrollbarGutter: "stable",
-              scrollbarWidth: "thin",
               "&::-webkit-scrollbar": {
                 width: "10px",
               },
@@ -78,7 +77,7 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
               },
               "&::-webkit-scrollbar-thumb": {
                 background: "gray.400",
-                borderRadius: "10px",
+                borderRadius: "16px",
               },
             }}
           >
