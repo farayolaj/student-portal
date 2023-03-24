@@ -1,6 +1,6 @@
 import { Menu, MenuButton, MenuList } from "@chakra-ui/react";
 import { IoCalendarOutline } from "react-icons/io5";
-import EventCalendar from "../common/event-calendar";
+import EventCalendar from "../common/events/event-calendar";
 
 export default function MobileCalendar() {
   return (

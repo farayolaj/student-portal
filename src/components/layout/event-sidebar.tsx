@@ -1,6 +1,6 @@
 import { Card, CardBody, CardHeader, Text, VStack } from "@chakra-ui/react";
 import { FC } from "react";
-import EventCalendar from "../common/event-calendar";
+import EventCalendar from "../common/events/event-calendar";
 
 const EventSidebar: FC = () => {
   return (

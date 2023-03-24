@@ -6,7 +6,7 @@ import { DATE_ONLY_FORMAT } from "../../constants/date";
 
 type CalendarProps = {
   eventDates: string[];
-  onDateClick: (date: Date) => void;
+  onDateClick?: (date: Date) => void;
 };
 
 const Calendar: FC<CalendarProps> = ({ eventDates, onDateClick }) => {
