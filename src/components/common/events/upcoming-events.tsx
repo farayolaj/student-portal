@@ -9,21 +9,25 @@ type UpcomingEventsProps = {
 };
 
 export default function UpcomingEvents({ eventMap }: UpcomingEventsProps) {
-  if (!eventMap) return <Text as="span">You have no upcoming event.</Text>;
-
   return (
     <VStack align="stretch" spacing={6}>
-      {Array.from(eventMap.entries()).map(([date, events]) => (
-        <Box key={date}>
-          <Heading as="h3" size="sm">
-            {format(
-              parse(date, DATE_ONLY_FORMAT, new Date()),
-              "EEEE, MMMM do, yyyy"
-            )}
-          </Heading>
-          <EventList events={events} />
-        </Box>
-      ))}
+      {!eventMap || eventMap.size === 0 ? (
+        <Text my="4" as="span" color="black" textAlign="center">
+          You have no upcoming event.
+        </Text>
+      ) : (
+        Array.from(eventMap.entries()).map(([date, events]) => (
+          <Box key={date}>
+            <Heading as="h3" size="sm">
+              {format(
+                parse(date, DATE_ONLY_FORMAT, new Date()),
+                "EEEE, MMMM do, yyyy"
+              )}
+            </Heading>
+            <EventList events={events} />
+          </Box>
+        ))
+      )}
     </VStack>
   );
 }

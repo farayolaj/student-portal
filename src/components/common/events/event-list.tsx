@@ -16,7 +16,7 @@ export default function EventList({ events }: EventListProps) {
       {events.length > 0 ? (
         events.map((event) => <EventListItem key={event.id} event={event} />)
       ) : (
-        <Text>No events on this day.</Text>
+        <Text my={4}>You have no event today.</Text>
       )}
     </VStack>
   );

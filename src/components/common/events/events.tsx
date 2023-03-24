@@ -13,7 +13,7 @@ export default function Events({ eventMap }: EventsProps) {
 
   return (
     <Tabs mt={8} variant="solid-rounded" colorScheme="primary">
-      <TabList w="full" justifyContent="space-between">
+      <TabList w="full" justifyContent="space-around">
         <Tab fontSize="sm">Upcoming Events</Tab>
         <Tab fontSize="sm">Today&apos;s Events</Tab>
       </TabList>
