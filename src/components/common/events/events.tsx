@@ -14,15 +14,15 @@ export default function Events({ eventMap }: EventsProps) {
   return (
     <Tabs mt={8} variant="solid-rounded" colorScheme="primary">
       <TabList w="full" justifyContent="space-around">
-        <Tab fontSize="sm">Upcoming Events</Tab>
         <Tab fontSize="sm">Today&apos;s Events</Tab>
+        <Tab fontSize="sm">All Upcoming Events</Tab>
       </TabList>
       <TabPanels mt={4}>
         <TabPanel p={0}>
-          <UpcomingEvents eventMap={eventMap} />
+          <EventList events={eventMap?.get(formattedTodaysDate) || []} />
         </TabPanel>
         <TabPanel p={0}>
-          <EventList events={eventMap?.get(formattedTodaysDate) || []} />
+          <UpcomingEvents eventMap={eventMap} />
         </TabPanel>
       </TabPanels>
     </Tabs>

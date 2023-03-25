@@ -174,6 +174,8 @@ interface Session {
 
 interface CalendarEvent {
   id: string;
+  /** Course code for course related events. */
+  code?: string;
   name: string;
   startTime?: string;
   endTime?: string;

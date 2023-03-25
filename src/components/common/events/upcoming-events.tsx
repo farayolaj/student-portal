@@ -12,28 +12,23 @@ type UpcomingEventsProps = {
 };
 
 export default function UpcomingEvents({ eventMap }: UpcomingEventsProps) {
+  const events = Array.from(eventMap?.entries() || [])
+    .map(
+      ([date, events]) =>
+        [parse(date, DATE_ONLY_FORMAT, new Date()), events] as const
+    )
+    .filter(([date]) => isToday(date) || isFuture(date))
+    .sort(([dateA], [dateB]) => compareAsc(dateA, dateB))
+    .flatMap(([_date, events]) => events);
+
   return (
     <VStack align="stretch" spacing={6}>
-      {!eventMap || eventMap.size === 0 ? (
+      {events.length === 0 ? (
         <Text my="4" as="span" color="black" textAlign="center">
           You have no upcoming event.
         </Text>
       ) : (
-        Array.from(eventMap.entries())
-          .map(
-            ([date, events]) =>
-              [parse(date, DATE_ONLY_FORMAT, new Date()), events] as const
-          )
-          .filter(([date]) => isToday(date) || isFuture(date))
-          .sort(([dateA], [dateB]) => compareAsc(dateA, dateB))
-          .map(([date, events]) => (
-            <Box key={date.getTime()}>
-              <Heading as="h3" size="sm">
-                {format(date, "EEEE, MMMM do, yyyy")}
-              </Heading>
-              <EventList events={events} />
-            </Box>
-          ))
+        <EventList events={events} />
       )}
     </VStack>
   );

@@ -8,6 +8,7 @@ export function toCalendarEvent(event: any) {
     [];
   return {
     id: event.events.main_event_id,
+    code: event.course_code,
     name: event.course_title,
     startTime,
     endTime,
