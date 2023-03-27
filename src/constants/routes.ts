@@ -9,3 +9,4 @@ export const LOGIN = "/login";
 export const FORGOT_PASSWORD = "/forgot-password";
 export const ERROR_PAGE = "/error";
 export const PROFILE = "/profile";
+export const EVENTS = "/events";

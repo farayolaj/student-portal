@@ -1,11 +1,13 @@
 import { Flex, Badge, Text, StackDivider, VStack } from "@chakra-ui/react";
 import format from "date-fns/format";
+import { CSSProperties } from "react";
 
 type EventListProps = {
   events: CalendarEvent[];
+  variant?: "default" | "expanded";
 };
 
-export default function EventList({ events }: EventListProps) {
+export default function EventList({ events, variant }: EventListProps) {
   return (
     <VStack
       w="full"
@@ -15,7 +17,15 @@ export default function EventList({ events }: EventListProps) {
       spacing={2}
     >
       {events.length > 0 ? (
-        events.map((event) => <EventListItem key={event.id} event={event} />)
+        events.map((event) => (
+          <EventListItem
+            key={event.id}
+            event={event}
+            size={variant == "expanded" ? "lg" : undefined}
+            bg={variant == "expanded" ? "white" : undefined}
+            padding={variant == "expanded" ? 2 : undefined}
+          />
+        ))
       ) : (
         <Text my={4}>You have no event today.</Text>
       )}
@@ -25,31 +35,54 @@ export default function EventList({ events }: EventListProps) {
 
 type EventListItemProps = {
   event: CalendarEvent;
+  size?: "base" | "lg";
+  bg?: CSSProperties["color"];
+  padding?: CSSProperties["padding"];
 };
 
-function EventListItem({ event }: EventListItemProps) {
+function EventListItem({
+  event,
+  size = "base",
+  bg,
+  padding,
+}: EventListItemProps) {
   const eventLocation = [event.location, event.centre]
     .filter(Boolean)
     .join(", ");
 
+  const style = {
+    base: {
+      day: { fontSize: "xl", fontWeight: "bold" },
+      month: { fontSize: "xs", fontWeight: "bold" },
+    },
+    lg: {
+      day: { fontSize: "3xl", fontWeight: "bold" },
+      month: { fontSize: "md", fontWeight: "bold" },
+    },
+  };
+
   return (
-    <Flex w="full" align="center" gap={2}>
+    <Flex w="full" align="center" gap={2} rounded="md" bg={bg} p={padding}>
       <Flex
         direction="column"
         rounded="md"
         bg="primary.500"
         justify="center"
         align="center"
-        py={2}
         px={3}
-        h="fit-content"
+        sx={{ aspectRatio: "1 / 1" }}
         color="white"
       >
-        <Text as="span" fontSize="xl" fontWeight="bold">
+        <Text as="span" {...style[size].day}>
           {format(event.date, "dd")}
         </Text>
-        <Text as="span" fontSize="xs" fontWeight="bold">
-          {format(event.date, "MMM").toUpperCase()}
+        <Text
+          as="span"
+          {...style[size].month}
+          mt="-1.5"
+          textTransform="uppercase"
+        >
+          {format(event.date, "MMM")}
         </Text>
       </Flex>
       <Flex

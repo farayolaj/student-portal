@@ -1,10 +1,11 @@
 import { DATE_ONLY_FORMAT } from "@/constants/date";
-import { Box, Heading, Text, VStack } from "@chakra-ui/react";
+import { EVENTS } from "@/constants/routes";
+import { Link, Text, VStack } from "@chakra-ui/react";
 import compareAsc from "date-fns/compareAsc";
-import format from "date-fns/format";
 import isFuture from "date-fns/isFuture";
 import isToday from "date-fns/isToday";
 import parse from "date-fns/parse";
+import NextLink from "next/link";
 import EventList from "./event-list";
 
 type UpcomingEventsProps = {
@@ -19,7 +20,8 @@ export default function UpcomingEvents({ eventMap }: UpcomingEventsProps) {
     )
     .filter(([date]) => isToday(date) || isFuture(date))
     .sort(([dateA], [dateB]) => compareAsc(dateA, dateB))
-    .flatMap(([_date, events]) => events);
+    .flatMap(([_date, events]) => events)
+    .slice(-5);
 
   return (
     <VStack align="stretch" spacing={6}>
@@ -28,7 +30,12 @@ export default function UpcomingEvents({ eventMap }: UpcomingEventsProps) {
           You have no upcoming event.
         </Text>
       ) : (
-        <EventList events={events} />
+        <>
+          <EventList events={events} />
+          <Link textAlign="center" as={NextLink} href={EVENTS}>
+            See all events &rarr;
+          </Link>
+        </>
       )}
     </VStack>
   );
