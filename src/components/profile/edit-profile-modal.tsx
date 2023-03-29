@@ -107,7 +107,7 @@ export default function EditProfileModal({
                 isInvalid={!isMobile(phone || "", "en-NG")}
               />
             </FormControl>
-            <FormControl>
+            <FormControl mt={4}>
               <FormLabel>Alternative Email</FormLabel>
               <Input
                 type="email"
