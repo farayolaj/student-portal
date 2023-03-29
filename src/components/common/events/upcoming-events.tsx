@@ -21,7 +21,7 @@ export default function UpcomingEvents({ eventMap }: UpcomingEventsProps) {
     .filter(([date]) => isToday(date) || isFuture(date))
     .sort(([dateA], [dateB]) => compareAsc(dateA, dateB))
     .flatMap(([_date, events]) => events)
-    .slice(-5);
+    .slice(0, 5);
 
   return (
     <VStack align="stretch" spacing={6}>
