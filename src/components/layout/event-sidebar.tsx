@@ -7,7 +7,7 @@ const EventSidebar: FC = () => {
     <VStack
       display={["none", null, "flex"]}
       as="aside"
-      minW="25%"
+      w="25%"
       p={4}
       gap={8}
       position="sticky"
