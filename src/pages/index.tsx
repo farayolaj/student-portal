@@ -11,7 +11,7 @@ export default function Home() {
       <PageTitle>Dashboard</PageTitle>
       <ProfileCard />
       <CoursesCard />
-      {/* <PaymentsCard /> */}
+      <PaymentsCard />
     </>
   );
 }
