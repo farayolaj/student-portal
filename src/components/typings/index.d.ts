@@ -120,8 +120,8 @@ interface Payment {
   dueDate?: Date;
   status: "paid" | "unpaid";
   level?: string;
-  entryMode: string;
-  programme: string;
+  entryMode?: string;
+  programme?: string;
   session?: string;
   semester?: string;
   transactions?: Transaction[];
