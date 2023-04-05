@@ -23,7 +23,7 @@ export default function App({ Component, pageProps }: CustomAppProps) {
 
   useEffect(() => {
     const initialBaseUrl = process.env.NEXT_PUBLIC_API_URL;
-    const hostname = encodeURIComponent(window.location.hostname);
+    const hostname = encodeURIComponent(window.location.hostname).replace("starrising", "localhost");
     const url = `${initialBaseUrl}/baseUrl?domain=${hostname}`;
     getApi()
       .get(url)

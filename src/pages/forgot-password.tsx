@@ -12,6 +12,7 @@ import {
   Heading,
   Input,
   Link,
+  Spinner,
   Text,
 } from "@chakra-ui/react";
 import Image from "next/image";
@@ -103,7 +104,11 @@ export default function ForgotPassword() {
                     </FormHelperText>
                   </FormControl>
                   <Button isDisabled={passwordReset.isLoading} type="submit">
-                    Reset Password
+                    {passwordReset.isLoading ? (
+                      <Spinner size="sm" />
+                    ) : (
+                      "Reset Password"
+                    )}
                   </Button>
                 </chakra.form>
               )}

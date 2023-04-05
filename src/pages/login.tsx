@@ -15,6 +15,7 @@ import {
   InputGroup,
   InputRightElement,
   Link,
+  Spinner,
   Text,
   useToast,
 } from "@chakra-ui/react";
@@ -192,7 +193,7 @@ export default function Login() {
                         type="submit"
                         isDisabled={auth.isLoggingIn}
                       >
-                        Log In
+                        {auth.isLoggingIn ? <Spinner size="sm" /> : "Log In"}
                       </Button>
                     ) : (
                       <Button
@@ -200,7 +201,11 @@ export default function Login() {
                         isDisabled={validateUsername.isLoading}
                         type="submit"
                       >
-                        Next
+                        {validateUsername.isLoading ? (
+                          <Spinner size="sm" />
+                        ) : (
+                          "Next"
+                        )}
                       </Button>
                     )}
                   </Box>

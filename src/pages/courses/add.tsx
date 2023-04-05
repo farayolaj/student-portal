@@ -10,6 +10,7 @@ import {
   AlertDialogOverlay,
   useDisclosure,
   useToast,
+  Spinner,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
@@ -211,7 +212,7 @@ export default function AddCoursesPage(): JSX.Element {
                 }}
                 ml={3}
               >
-                Add
+                {addCourses.isLoading ? <Spinner size="sm" /> : "Add"}
               </Button>
             </AlertDialogFooter>
           </AlertDialogContent>
