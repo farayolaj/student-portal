@@ -44,7 +44,7 @@ const CoursesCard: FC = () => {
     );
   } else {
     content = (
-      <SimpleGrid gap={4} columns={[2, null, null, 4]}>
+      <SimpleGrid gap={4} columns={[1, null, 2, 4]}>
         {courses.slice(0, 4).map((course) => (
           <CourseItem
             key={course.id}
@@ -88,7 +88,13 @@ const CourseItem: FC<CourseItemProps> = ({ code, title, units, image }) => {
   return (
     <Box pos="relative" rounded="md" overflow="hidden">
       <Box pos="absolute" w="full" h="full">
-        <Image src={image} alt="" role="presentation" fill />
+        <Image
+          src={image}
+          alt=""
+          role="presentation"
+          style={{ objectFit: "cover" }}
+          fill
+        />
       </Box>
       <VStack
         w="full"
