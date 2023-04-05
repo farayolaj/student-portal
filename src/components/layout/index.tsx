@@ -68,16 +68,16 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
             w="full"
             bg="gray.200"
             sx={{
-              scrollbarGutter: "stable",
+              scrollbarGutter: [null, null, "stable"],
               "&::-webkit-scrollbar": {
-                width: "10px",
+                width: [null, null, "10px"],
               },
               "&::-webkit-scrollbar-track": {
-                background: "gray.200",
+                background: [null, null, "gray.200"],
               },
               "&::-webkit-scrollbar-thumb": {
-                background: "gray.400",
-                borderRadius: "16px",
+                background: [null, null, "gray.400"],
+                borderRadius: [null, null, "16px"],
               },
             }}
           >
