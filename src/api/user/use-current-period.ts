@@ -1,5 +1,5 @@
 import useAuth from "@/hooks/use-auth";
-import { useAllSessions } from "../course/use-all-sessions";
+import { useAllSessions } from "./use-all-sessions";
 
 type Period = {
   session: { id: string; name: string };

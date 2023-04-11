@@ -1,6 +1,6 @@
 import { Flex, FormControl, FormLabel, Select } from "@chakra-ui/react";
 import { FC } from "react";
-import { useAllSessions } from "../../api/course/use-all-sessions";
+import { useAllSessions } from "../../api/user/use-all-sessions";
 import RadioButtonGroup from "../common/radio-button-group";
 
 type CourseListControlsProps = {
