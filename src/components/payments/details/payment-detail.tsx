@@ -113,7 +113,7 @@ export default function PaymentDetail({
               <Spinner color="white" />
             </Button>
           ) : payment.status === "paid" ? (
-            <Button>Print Receipt</Button>
+            <Button isDisabled>Print Receipt</Button>
           ) : (
             <Flex direction="column">
               <Button

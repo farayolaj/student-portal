@@ -35,7 +35,7 @@ export default function MakeCustomPaymentModal() {
 
   return (
     <>
-      <Button onClick={onOpen}>Make Sundry / Custom Payment</Button>
+      <Button onClick={onOpen} isDisabled>Make Sundry / Custom Payment</Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

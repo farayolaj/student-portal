@@ -20,7 +20,7 @@ export default function PaymentControl({
     >
       <Flex justify="center" wrap={["wrap", null, "initial"]} gap={4}>
         <MakeCustomPaymentModal />
-        <Button display="inline-flex" gap={2}>
+        <Button display="inline-flex" gap={2} isDisabled>
           <Icon as={IoPrintOutline} boxSize={6} /> Print Ledger
         </Button>
       </Flex>
