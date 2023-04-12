@@ -1,3 +1,4 @@
+import { useVerifyTransaction } from "@/api/payment/use-verify-transaction";
 import {
   Box,
   Button,
@@ -11,11 +12,15 @@ import DetailItem from "./detail-item";
 
 type PaymentTransactionsProps = {
   transaction?: Transaction;
+  onRequery: (status: boolean) => void;
 };
 
 export default function PaymentTransactionDetail({
   transaction,
+  onRequery,
 }: PaymentTransactionsProps) {
+  const verifyTransaction = useVerifyTransaction();
+
   return (
     <Box mt={8}>
       <Text as="h2" fontSize="lg" fontWeight="bold">
@@ -59,7 +64,17 @@ export default function PaymentTransactionDetail({
               </SimpleGrid>
               {transaction.status === "pending" && (
                 <Flex justify="center" mt={8}>
-                  <Button w="fit-content" justifySelf="center">
+                  <Button
+                    w="fit-content"
+                    isDisabled={verifyTransaction.isLoading}
+                    justifySelf="center"
+                    onClick={() => {
+                      verifyTransaction.mutate(
+                        { rrr: transaction.rrr },
+                        { onSuccess: onRequery }
+                      );
+                    }}
+                  >
                     Re-query Transaction
                   </Button>
                 </Flex>

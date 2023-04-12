@@ -15,7 +15,12 @@ export default function PaymentDetails() {
       <Seo title="Payment Details" />
       <PageTitle showBackButton>Payment Details</PageTitle>
       <PaymentDetail payment={paymentRes.data} />
-      <PaymentTransactionDetail transaction={paymentRes.data?.transaction} />
+      <PaymentTransactionDetail
+        transaction={paymentRes.data?.transaction}
+        onRequery={(_) => {
+          paymentRes.refetch();
+        }}
+      />
     </>
   );
 }
