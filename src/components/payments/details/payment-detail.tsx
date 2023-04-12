@@ -8,6 +8,7 @@ import {
   CardBody,
   Flex,
   Skeleton,
+  SkeletonText,
   Spinner,
   Text,
 } from "@chakra-ui/react";
@@ -18,6 +19,7 @@ type PaymentDetailProps = {
 };
 
 export default function PaymentDetail({ payment }: PaymentDetailProps) {
+  // payment = undefined;
   const profileRes = useProfile();
   const sessionRes = useSession(payment?.sessionId || "");
   const descriptionArr = [
@@ -43,27 +45,62 @@ export default function PaymentDetail({ payment }: PaymentDetailProps) {
       <CardBody>
         <Flex justify="space-between" align="center">
           <Flex direction="column" fontSize="xl">
-            <Skeleton isLoaded={!!payment}>
+            {payment ? (
               <Text as="span" fontWeight="semibold">
                 {payment?.title || "Loading..."}
               </Text>
-            </Skeleton>
-            <Skeleton isLoaded={!!payment}>
+            ) : (
+              <SkeletonText
+                mt={2}
+                skeletonHeight="1.68rem"
+                w="15rem"
+                noOfLines={1}
+                isLoaded={!!payment}
+              />
+            )}
+            {payment ? (
               <Text as="span" fontSize="3xl" fontWeight="bold">
                 {new Intl.NumberFormat("en-NG", {
                   style: "currency",
                   currency: "NGN",
                 }).format(payment?.amount || 0)}
               </Text>
-            </Skeleton>
-            <Text as="span" mt={2} fontSize="sm">
-              {description}
-            </Text>
+            ) : (
+              <SkeletonText
+                mt={2}
+                skeletonHeight="2.5rem"
+                w="9.8rem"
+                noOfLines={1}
+              />
+            )}
+            {payment ? (
+              <Text as="span" mt={2} fontSize="sm">
+                {description}
+              </Text>
+            ) : (
+              <SkeletonText
+                mt={4}
+                skeletonHeight="1.18rem"
+                w="9rem"
+                noOfLines={1}
+                isLoaded={!!payment}
+              />
+            )}
             <Flex gap={2} align="center" mt={4}>
               <IoCheckmarkCircle color={statusColor} />
-              <Text as="span" fontSize="md">
-                {statusText}
-              </Text>
+              {payment ? (
+                <Text as="span" fontSize="md">
+                  {statusText}
+                </Text>
+              ) : (
+                <SkeletonText
+                  mt={2}
+                  skeletonHeight="1.4rem"
+                  w="3rem"
+                  noOfLines={1}
+                  isLoaded={!!payment}
+                />
+              )}
             </Flex>
           </Flex>
           {!payment ? (
