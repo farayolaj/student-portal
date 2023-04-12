@@ -7,19 +7,22 @@ import {
   Card,
   CardBody,
   Flex,
-  Skeleton,
   SkeletonText,
   Spinner,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { IoCheckmarkCircle } from "react-icons/io5";
 
 type PaymentDetailProps = {
   payment?: Payment;
+  onPaymentSuccess: () => void;
 };
 
-export default function PaymentDetail({ payment }: PaymentDetailProps) {
-  // payment = undefined;
+export default function PaymentDetail({
+  payment,
+  onPaymentSuccess,
+}: PaymentDetailProps) {
   const profileRes = useProfile();
   const sessionRes = useSession(payment?.sessionId || "");
   const descriptionArr = [
@@ -31,6 +34,8 @@ export default function PaymentDetail({ payment }: PaymentDetailProps) {
   const description = descriptionArr.filter(Boolean).join(" | ");
   let statusColor: string;
   let statusText: string;
+
+  const toast = useToast();
 
   if (payment?.status === "paid") {
     statusColor = "green";
@@ -132,17 +137,21 @@ export default function PaymentDetail({ payment }: PaymentDetailProps) {
                     ],
                   },
                 }}
-                onSuccess={(response: any) => {
-                  // function callback when payment is successful
-                  console.log("callback Successful Response", response);
+                onSuccess={() => {
+                  onPaymentSuccess();
+                  toast({
+                    status: "success",
+                    title: "Payment Successful",
+                    description:
+                      "If payment doesn't reflect immediately, requery transaction status later.",
+                  });
                 }}
-                onError={(response: any) => {
-                  // function callback when payment fails
-                  console.log("callback Error Response", response);
-                }}
-                onClose={() => {
-                  // function callback when payment modal is closed
-                  console.log("closed");
+                onError={() => {
+                  toast({
+                    status: "error",
+                    title: "Payment Failed",
+                    description: "Please try again later.",
+                  });
                 }}
                 text="Pay Now"
               />
