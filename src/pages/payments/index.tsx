@@ -1,13 +1,15 @@
-import { SimpleGrid } from "@chakra-ui/react";
+import { useAllPayments } from "@/api/payment/use-all-payments";
+import { Center, SimpleGrid, Spinner } from "@chakra-ui/react";
 import { useState } from "react";
 import PageTitle from "../../components/common/page-title";
 import Seo from "../../components/common/seo";
 import PaymentControl from "../../components/payments/payment-control";
 import PaymentSummary from "../../components/payments/payment-summary";
-import { payments } from "../../data/payments";
 
 export default function Payments() {
   const [statusFilter, setStatusFilter] = useState("all");
+  const paymentsRes = useAllPayments();
+  const payments = paymentsRes.data || [];
   const sortedPayments = payments.sort((a, b) => {
     if (a.status === b.status) return 0;
     if (a.status === "unpaid") return -1;
@@ -26,11 +28,22 @@ export default function Payments() {
         statusFilter={statusFilter}
         onStatusFilterChange={setStatusFilter}
       />
-      <SimpleGrid columns={[1, null, 3]} gap={8} mt={8}>
-        {filteredPayments.map((payment) => (
-          <PaymentSummary payment={payment} key={payment.title} />
-        ))}
-      </SimpleGrid>
+      {paymentsRes.isLoading ? (
+        <Center py={16}>
+          <Spinner
+            size="xl"
+            emptyColor="gray.200"
+            color="primary.500"
+            thickness="4px"
+          />
+        </Center>
+      ) : (
+        <SimpleGrid columns={[1, null, 3]} gap={8} mt={8}>
+          {filteredPayments.map((payment) => (
+            <PaymentSummary payment={payment} key={payment.title} />
+          ))}
+        </SimpleGrid>
+      )}
     </>
   );
 }

@@ -1,13 +1,18 @@
 import { Card, CardBody, Flex, Link, Text } from "@chakra-ui/react";
 import { IoCheckmarkCircle } from "react-icons/io5";
 import NextLink from "next/link";
+import { useAllSessions } from "@/api/user/use-all-sessions";
 
 type PaymentSummaryProps = {
   payment: Payment;
 };
 
 export default function PaymentSummary({ payment }: PaymentSummaryProps) {
-  const descriptionArr = [payment.session, payment.semester];
+  const { data: session } = useAllSessions({
+    select: (sessions) =>
+      sessions.find((session) => session.id === payment.sessionId),
+  });
+  const descriptionArr = [session?.name, payment.semester];
   let description = descriptionArr.filter(Boolean).join(" | ");
   let statusColor: string;
   let statusText: string;
@@ -31,7 +36,7 @@ export default function PaymentSummary({ payment }: PaymentSummaryProps) {
             {new Intl.NumberFormat("en-NG", {
               style: "currency",
               currency: "NGN",
-            }).format(payment.amount / 100)}
+            }).format(payment.amount)}
           </Text>
           <Text as="span" mt={2} minH={6} fontSize="sm">
             {description}
