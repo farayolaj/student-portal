@@ -122,9 +122,9 @@ interface Payment {
   level?: string;
   entryMode?: string;
   programme?: string;
-  session?: string;
+  sessionId?: string;
   semester?: string;
-  transactions?: Transaction[];
+  transaction?: Transaction;
 }
 
 interface PortalDocument {
