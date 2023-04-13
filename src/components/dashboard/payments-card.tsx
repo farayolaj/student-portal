@@ -1,5 +1,8 @@
 import { useAllPayments } from "@/api/payment/use-all-payments";
+import { usePaymentDetail } from "@/api/payment/use-payment-detail";
 import { useAllSessions } from "@/api/user/use-all-sessions";
+import { useProfile } from "@/api/user/use-profile";
+import { useSession } from "@/api/user/use-session";
 import {
   Button,
   Card,
@@ -12,6 +15,7 @@ import {
   Spinner,
   StackDivider,
   Text,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import { differenceInCalendarDays } from "date-fns";
@@ -19,6 +23,7 @@ import NextLink from "next/link";
 import { FC } from "react";
 import { IoTime } from "react-icons/io5";
 import * as routes from "../../constants/routes";
+import RemitaInline from "../common/remita-inline";
 
 const PaymentsCard: FC = () => {
   const outstandingPaymentsRes = useAllPayments({
@@ -26,7 +31,6 @@ const PaymentsCard: FC = () => {
       return payments.filter((payment) => payment.status === "unpaid");
     },
   });
-  const sessions = useAllSessions();
 
   return (
     <Card mt={8}>
@@ -55,12 +59,10 @@ const PaymentsCard: FC = () => {
             {outstandingPaymentsRes.data.map((payment) => (
               <PaymentItem
                 key={payment.id}
-                title={payment.title}
-                amount={payment.amount}
-                session={
-                  sessions.data?.find((s) => s.id === payment.sessionId)?.name
-                }
-                dueDate={payment.dueDate}
+                paymentId={payment.id}
+                onPaymentSuccess={() => {
+                  outstandingPaymentsRes.refetch();
+                }}
               />
             ))}
           </VStack>
@@ -77,23 +79,27 @@ const PaymentsCard: FC = () => {
 export default PaymentsCard;
 
 type PaymentItemProps = {
-  title: string;
-  amount: number;
-  session?: string;
-  dueDate: Date;
+  paymentId: string;
+  onPaymentSuccess: () => void;
 };
 
-const PaymentItem: FC<PaymentItemProps> = ({
-  title,
-  amount,
-  session,
-  dueDate,
-}) => {
-  const isDue = dueDate.getTime() < Date.now();
+const PaymentItem: FC<PaymentItemProps> = ({ paymentId, onPaymentSuccess }) => {
+  const profileRes = useProfile();
+  const paymentRes = usePaymentDetail({ variables: { id: paymentId } });
+  const payment = paymentRes.data;
+  const sessionRes = useSession(payment?.sessionId || "");
+  const toast = useToast();
+
+  if (!payment) return null;
+
+  const isDue = payment.dueDate.getTime() < Date.now();
   const statusColor = isDue ? "red" : "yellow";
   const statusText = isDue
     ? "Payment is due"
-    : `Payment due in ${differenceInCalendarDays(dueDate, new Date())} days`;
+    : `Payment due in ${differenceInCalendarDays(
+        payment.dueDate,
+        new Date()
+      )} days`;
 
   return (
     <Flex w="full" align="center">
@@ -102,11 +108,11 @@ const PaymentItem: FC<PaymentItemProps> = ({
           {Intl.NumberFormat("en-NG", {
             style: "currency",
             currency: "NGN",
-          }).format(amount)}
+          }).format(payment.amount)}
         </Text>
         <Text>
-          {title}
-          {session && " | " + session}
+          {payment.title}
+          {sessionRes.data && " | " + sessionRes.data.name}
         </Text>
         <Text
           mt={4}
@@ -119,7 +125,45 @@ const PaymentItem: FC<PaymentItemProps> = ({
           <IoTime color={statusColor} /> <span>{statusText}</span>
         </Text>
       </Flex>
-      <Button>Pay Now</Button>
+      <Button
+        as={RemitaInline}
+        data={{
+          key: payment.transaction?.publicKey || "",
+          customerId: profileRes.data?.user?.email as string,
+          firstName: profileRes.data?.user?.firstName as string,
+          lastName: profileRes.data?.user?.lastName as string,
+          email: profileRes.data?.user?.email as string,
+          amount: payment.amount,
+          narration: payment.title,
+          processRrr: true,
+          transactionId: payment.transaction?.referenceNumber,
+          extendedData: {
+            customFields: [
+              {
+                name: "rrr",
+                value: payment.transaction?.rrr,
+              },
+            ],
+          },
+        }}
+        onSuccess={() => {
+          onPaymentSuccess();
+          toast({
+            status: "success",
+            title: "Payment Successful",
+            description:
+              "If payment doesn't reflect immediately, requery transaction status later.",
+          });
+        }}
+        onError={() => {
+          toast({
+            status: "error",
+            title: "Payment Failed",
+            description: "Please try again later.",
+          });
+        }}
+        text="Pay Now"
+      />
     </Flex>
   );
 };
