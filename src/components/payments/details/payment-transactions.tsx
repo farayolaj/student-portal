@@ -57,12 +57,14 @@ export default function PaymentTransactionDetail({
                   }
                   isLoading={isLoading}
                 />
-                {transaction?.datePayed && (
+                {transaction?.status === "success" && (
                   <DetailItem
                     name="Date Payed"
-                    value={transaction.datePayed.toLocaleDateString("en-NG", {
-                      dateStyle: "long",
-                    })}
+                    value={
+                      transaction.datePayed?.toLocaleDateString("en-NG", {
+                        dateStyle: "long",
+                      }) || ""
+                    }
                     isLoading={isLoading}
                   />
                 )}

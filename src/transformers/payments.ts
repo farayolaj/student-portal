@@ -13,14 +13,20 @@ export function toPayment(data: any): Payment {
       ? {
           id: data.transaction.order_id,
           amount: data.total,
-          // Todo: Get the correct initiation date
-          dateInitiated: new Date(),
+          dateInitiated: parse(
+            data.transaction.date_performed,
+            "MMM. dd, yyyy",
+            new Date()
+          ),
           description: data.description,
           referenceNumber: data.transaction.order_id,
           rrr: data.transaction.rrr,
           status: data.paid ? "success" : "pending",
-          // Todo: Get the correct date paid
-          datePayed: new Date(),
+          datePayed: parse(
+            data.transaction.date_completed,
+            "MMM. dd, yyyy",
+            new Date()
+          ),
           publicKey: data.transaction.public_key,
         }
       : undefined,
