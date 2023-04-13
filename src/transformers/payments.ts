@@ -21,6 +21,7 @@ export function toPayment(data: any): Payment {
           status: data.paid ? "success" : "pending",
           // Todo: Get the correct date paid
           datePayed: new Date(),
+          publicKey: data.transaction.public_key,
         }
       : undefined,
   };

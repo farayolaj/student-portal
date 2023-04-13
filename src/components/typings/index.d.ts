@@ -111,6 +111,7 @@ interface Transaction {
   dateInitiated: Date;
   status: "failed" | "pending" | "success";
   datePayed?: Date;
+  publicKey?: string;
 }
 
 interface Payment {

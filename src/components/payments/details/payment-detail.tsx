@@ -1,7 +1,6 @@
 import { useProfile } from "@/api/user/use-profile";
 import { useSession } from "@/api/user/use-session";
 import RemitaInline from "@/components/common/remita-inline";
-import { REMITA_PUBLIC_KEY } from "@/constants/config";
 import {
   Button,
   Card,
@@ -119,7 +118,7 @@ export default function PaymentDetail({
               <Button
                 as={RemitaInline}
                 data={{
-                  key: REMITA_PUBLIC_KEY || "",
+                  key: payment.transaction?.publicKey || "",
                   customerId: profileRes.data?.user?.email as string,
                   firstName: profileRes.data?.user?.firstName as string,
                   lastName: profileRes.data?.user?.lastName as string,
