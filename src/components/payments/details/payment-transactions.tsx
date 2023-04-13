@@ -13,11 +13,13 @@ import DetailItem from "./detail-item";
 type PaymentTransactionsProps = {
   transaction?: Transaction;
   onRequery: (status: boolean) => void;
+  isLoading?: boolean;
 };
 
 export default function PaymentTransactionDetail({
   transaction,
   onRequery,
+  isLoading,
 }: PaymentTransactionsProps) {
   const verifyTransaction = useVerifyTransaction();
 
@@ -28,41 +30,54 @@ export default function PaymentTransactionDetail({
       </Text>
       <Card mt={4}>
         <CardBody>
-          {transaction ? (
+          {isLoading || transaction ? (
             <Box>
               <SimpleGrid columns={[1, null, 3]} gap={4}>
                 <DetailItem
                   name="Transaction Reference"
-                  value={transaction.referenceNumber}
+                  value={transaction?.referenceNumber || ""}
+                  isLoading={isLoading}
                 />
-                <DetailItem name="RRR" value={transaction.rrr} />
+                <DetailItem
+                  name="RRR"
+                  value={transaction?.rrr || ""}
+                  isLoading={isLoading}
+                />
                 <DetailItem
                   name="Description"
-                  value={transaction.description}
+                  value={transaction?.description || ""}
+                  isLoading={isLoading}
                 />
                 <DetailItem
                   name="Date Initiated"
-                  value={transaction.dateInitiated.toLocaleDateString("en-NG", {
-                    dateStyle: "long",
-                  })}
+                  value={
+                    transaction?.dateInitiated?.toLocaleDateString("en-NG", {
+                      dateStyle: "long",
+                    }) || ""
+                  }
+                  isLoading={isLoading}
                 />
-                {transaction.datePayed && (
+                {transaction?.datePayed && (
                   <DetailItem
                     name="Date Payed"
                     value={transaction.datePayed.toLocaleDateString("en-NG", {
                       dateStyle: "long",
                     })}
+                    isLoading={isLoading}
                   />
                 )}
                 <DetailItem
                   name="Status"
                   value={
-                    transaction.status[0].toUpperCase() +
-                    transaction.status.slice(1)
+                    transaction
+                      ? transaction.status[0].toUpperCase() +
+                        transaction.status.slice(1)
+                      : ""
                   }
+                  isLoading={isLoading}
                 />
               </SimpleGrid>
-              {transaction.status === "pending" && (
+              {transaction?.status === "pending" && (
                 <Flex justify="center" mt={8}>
                   <Button
                     w="fit-content"
@@ -88,5 +103,18 @@ export default function PaymentTransactionDetail({
         </CardBody>
       </Card>
     </Box>
+  );
+}
+
+function PaymentTransactionDetailsSkeleton() {
+  return (
+    <SimpleGrid columns={[1, null, 3]} gap={4}>
+      <DetailItem name="Transaction Reference" value="" isLoading />
+      <DetailItem name="RRR" value="" isLoading />
+      <DetailItem name="Description" value="" isLoading />
+      <DetailItem name="Date Initiated" value="" isLoading />
+      <DetailItem name="Date Payed" value="" isLoading />
+      <DetailItem name="Status" value="" isLoading />
+    </SimpleGrid>
   );
 }

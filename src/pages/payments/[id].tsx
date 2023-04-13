@@ -23,6 +23,7 @@ export default function PaymentDetails() {
         onRequery={(_) => {
           paymentRes.refetch();
         }}
+        isLoading={paymentRes.isLoading}
       />
     </>
   );
