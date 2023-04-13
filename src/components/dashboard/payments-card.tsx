@@ -1,11 +1,15 @@
+import { useAllPayments } from "@/api/payment/use-all-payments";
+import { useAllSessions } from "@/api/user/use-all-sessions";
 import {
   Button,
   Card,
   CardBody,
   CardHeader,
+  Center,
   Flex,
   Heading,
   Link,
+  Spinner,
   StackDivider,
   Text,
   VStack,
@@ -17,6 +21,13 @@ import { IoTime } from "react-icons/io5";
 import * as routes from "../../constants/routes";
 
 const PaymentsCard: FC = () => {
+  const outstandingPaymentsRes = useAllPayments({
+    select: (payments) => {
+      return payments.filter((payment) => payment.status === "unpaid");
+    },
+  });
+  const sessions = useAllSessions();
+
   return (
     <Card mt={8}>
       <CardHeader
@@ -34,20 +45,30 @@ const PaymentsCard: FC = () => {
         </Text>
       </CardHeader>
       <CardBody>
-        <VStack divider={<StackDivider />} gap={6}>
-          <PaymentItem
-            title="Acceptance Fee"
-            amount={25000}
-            session="2022/2023"
-            dueDate={new Date(2023, 2, 1)}
-          />
-          <PaymentItem
-            title="Acceptance Fee"
-            amount={25000}
-            session="2022/2023"
-            dueDate={new Date(2023, 5, 12)}
-          />
-        </VStack>
+        {outstandingPaymentsRes.isLoading ? (
+          <Center py={10}>
+            <Spinner size="lg" color="primary" />
+          </Center>
+        ) : outstandingPaymentsRes.data &&
+          outstandingPaymentsRes.data.length > 0 ? (
+          <VStack divider={<StackDivider />} gap={6}>
+            {outstandingPaymentsRes.data.map((payment) => (
+              <PaymentItem
+                key={payment.id}
+                title={payment.title}
+                amount={payment.amount}
+                session={
+                  sessions.data?.find((s) => s.id === payment.sessionId)?.name
+                }
+                dueDate={payment.dueDate}
+              />
+            ))}
+          </VStack>
+        ) : (
+          <Center py={10}>
+            <Text>You have no outstanding payments</Text>
+          </Center>
+        )}
       </CardBody>
     </Card>
   );

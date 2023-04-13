@@ -118,7 +118,7 @@ interface Payment {
   id: string;
   title: string;
   amount: number;
-  dueDate?: Date;
+  dueDate: Date;
   status: "paid" | "unpaid";
   level?: string;
   entryMode?: string;
