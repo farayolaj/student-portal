@@ -51,9 +51,14 @@ export default function PaymentTransactionDetail({
                 <DetailItem
                   name="Date Initiated"
                   value={
-                    transaction?.dateInitiated?.toLocaleDateString("en-NG", {
-                      dateStyle: "long",
-                    }) || ""
+                    Number.isNaN(transaction?.dateInitiated?.valueOf())
+                      ? "-"
+                      : transaction?.dateInitiated?.toLocaleDateString(
+                          "en-NG",
+                          {
+                            dateStyle: "long",
+                          }
+                        ) || ""
                   }
                   isLoading={isLoading}
                 />
@@ -61,9 +66,11 @@ export default function PaymentTransactionDetail({
                   <DetailItem
                     name="Date Payed"
                     value={
-                      transaction.datePayed?.toLocaleDateString("en-NG", {
-                        dateStyle: "long",
-                      }) || ""
+                      Number.isNaN(transaction?.datePayed?.valueOf())
+                        ? "-"
+                        : transaction?.datePayed?.toLocaleDateString("en-NG", {
+                            dateStyle: "long",
+                          }) || ""
                     }
                     isLoading={isLoading}
                   />
