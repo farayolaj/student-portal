@@ -117,6 +117,7 @@ export default function PaymentDetail({
             <Flex direction="column">
               <Button
                 as={RemitaInline}
+                isLive={process.env.NODE_ENV === "production"}
                 data={{
                   key: payment.transaction?.publicKey || "",
                   customerId: profileRes.data?.user?.email as string,

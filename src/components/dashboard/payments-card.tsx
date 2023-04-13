@@ -127,6 +127,7 @@ const PaymentItem: FC<PaymentItemProps> = ({ paymentId, onPaymentSuccess }) => {
       </Flex>
       <Button
         as={RemitaInline}
+        isLive={process.env.NODE_ENV === "production"}
         data={{
           key: payment.transaction?.publicKey || "",
           customerId: profileRes.data?.user?.email as string,
