@@ -9,7 +9,8 @@ export const usePaymentDetail = createQuery<Payment, { id: string }>(
       `/fee_details?pid=${encodeURIComponent(id)}`
     );
 
-    if (!response.data.status) throw new Error(response.data.message);
+    if (!response.data.status && !response.data.payload)
+      throw new Error(response.data.message);
 
     const data = response.data.payload;
     return toPayment({
