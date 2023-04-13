@@ -27,7 +27,7 @@ export default function EventList({ events, variant }: EventListProps) {
           />
         ))
       ) : (
-        <Text my={4}>You have no event today.</Text>
+        <Text my={4}>You have no upcoming event.</Text>
       )}
     </VStack>
   );
