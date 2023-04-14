@@ -27,18 +27,24 @@ export default function PaymentSummary({ payment }: PaymentSummaryProps) {
 
   return (
     <Card>
-      <CardBody minH={40}>
+      <CardBody minH={40} pt="1.5rem" px="1.875rem" pb="2rem">
         <Flex direction="column" h="full">
           <Text as="span" fontWeight="semibold">
             {payment.title}
           </Text>
-          <Text as="span" fontSize="xl" fontWeight="bold">
+          <Text
+            as="span"
+            fontSize="xl"
+            fontWeight="bold"
+            mt={2}
+            color="gray.700"
+          >
             {new Intl.NumberFormat("en-NG", {
               style: "currency",
               currency: "NGN",
             }).format(payment.amount)}
           </Text>
-          <Text as="span" mt={2} minH={6} fontSize="sm">
+          <Text as="span" mt={2} minH={6} fontSize="sm" color="gray.600">
             {description}
           </Text>
           <Flex gap={2} align="center">
