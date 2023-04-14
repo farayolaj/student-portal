@@ -138,7 +138,10 @@ export default function Login() {
                   gap={6}
                   onSubmit={onSubmit}
                 >
-                  <FormControl hidden={usernameVerified}>
+                  <FormControl
+                    hidden={usernameVerified}
+                    isReadOnly={usernameVerified}
+                  >
                     <FormLabel fontSize="sm" fontWeight="bold">
                       Matric. Number/Email Address
                     </FormLabel>
