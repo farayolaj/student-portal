@@ -1,10 +1,6 @@
 import { useAllPayments } from "@/api/payment/use-all-payments";
-import { usePaymentDetail } from "@/api/payment/use-payment-detail";
-import { useAllSessions } from "@/api/user/use-all-sessions";
-import { useProfile } from "@/api/user/use-profile";
 import { useSession } from "@/api/user/use-session";
 import {
-  Button,
   Card,
   CardBody,
   CardHeader,
@@ -15,7 +11,6 @@ import {
   Spinner,
   StackDivider,
   Text,
-  useToast,
   VStack,
 } from "@chakra-ui/react";
 import { differenceInCalendarDays } from "date-fns";
@@ -23,7 +18,6 @@ import NextLink from "next/link";
 import { FC } from "react";
 import { IoTime } from "react-icons/io5";
 import * as routes from "../../constants/routes";
-import RemitaInline from "../common/remita-inline";
 
 const PaymentsCard: FC = () => {
   const outstandingPaymentsRes = useAllPayments({
@@ -57,13 +51,7 @@ const PaymentsCard: FC = () => {
           outstandingPaymentsRes.data.length > 0 ? (
           <VStack divider={<StackDivider />} gap={6}>
             {outstandingPaymentsRes.data.map((payment) => (
-              <PaymentItem
-                key={payment.id}
-                paymentId={payment.id}
-                onPaymentSuccess={() => {
-                  outstandingPaymentsRes.refetch();
-                }}
-              />
+              <PaymentItem key={payment.id} payment={payment} />
             ))}
           </VStack>
         ) : (
@@ -79,16 +67,11 @@ const PaymentsCard: FC = () => {
 export default PaymentsCard;
 
 type PaymentItemProps = {
-  paymentId: string;
-  onPaymentSuccess: () => void;
+  payment: Payment;
 };
 
-const PaymentItem: FC<PaymentItemProps> = ({ paymentId, onPaymentSuccess }) => {
-  const profileRes = useProfile();
-  const paymentRes = usePaymentDetail({ variables: { id: paymentId } });
-  const payment = paymentRes.data;
+const PaymentItem: FC<PaymentItemProps> = ({ payment }) => {
   const sessionRes = useSession(payment?.sessionId || "");
-  const toast = useToast();
 
   if (!payment) return null;
 
@@ -102,8 +85,8 @@ const PaymentItem: FC<PaymentItemProps> = ({ paymentId, onPaymentSuccess }) => {
       )} days`;
 
   return (
-    <Flex w="full" align="center">
-      <Flex direction="column" w="full">
+    <Flex w="full" align="center" justify="space-between">
+      <Flex direction="column" w="max-content">
         <Text as="span" fontSize="2xl">
           {Intl.NumberFormat("en-NG", {
             style: "currency",
@@ -125,46 +108,14 @@ const PaymentItem: FC<PaymentItemProps> = ({ paymentId, onPaymentSuccess }) => {
           <IoTime color={statusColor} /> <span>{statusText}</span>
         </Text>
       </Flex>
-      <Button
-        as={RemitaInline}
-        isLive={process.env.NODE_ENV === "production"}
-        data={{
-          key: payment.transaction?.publicKey || "",
-          customerId: profileRes.data?.user?.email as string,
-          firstName: profileRes.data?.user?.firstName as string,
-          lastName: profileRes.data?.user?.lastName as string,
-          email: profileRes.data?.user?.email as string,
-          amount: payment.amount,
-          narration: payment.title,
-          processRrr: true,
-          transactionId: payment.transaction?.referenceNumber,
-          extendedData: {
-            customFields: [
-              {
-                name: "rrr",
-                value: payment.transaction?.rrr,
-              },
-            ],
-          },
-        }}
-        onSuccess={() => {
-          onPaymentSuccess();
-          toast({
-            status: "success",
-            title: "Payment Successful",
-            description:
-              "If payment doesn't reflect immediately, requery transaction status later.",
-          });
-        }}
-        onError={() => {
-          toast({
-            status: "error",
-            title: "Payment Failed",
-            description: "Please try again later.",
-          });
-        }}
-        text="Pay Now"
-      />
+      <Link
+        as={NextLink}
+        href={`/payments/${payment.id}`}
+        variant="button"
+        w="fit-content"
+      >
+        View Details
+      </Link>
     </Flex>
   );
 };
