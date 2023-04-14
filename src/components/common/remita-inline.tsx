@@ -9,12 +9,12 @@ import {
 type RemitaInlineData = {
   key: string;
   transactionId?: string;
-  customerId: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  amount: number;
-  narration: string;
+  customerId?: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  amount?: number;
+  narration?: string;
   processRrr?: boolean;
   extendedData?: {
     customFields?: { name?: string; value?: string }[];
