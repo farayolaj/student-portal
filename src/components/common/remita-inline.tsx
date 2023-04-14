@@ -85,7 +85,7 @@ const RemitaInline = forwardRef(function RemitaInline(
       };
 
       // @ts-ignore
-      var paymentEngine = RmPaymentEngine.init(payload);
+      const paymentEngine = RmPaymentEngine.init(payload);
       paymentEngine.showPaymentWidget();
     }
   }, [isLoaded, props.data, props.onClose, props.onError, props.onSuccess]);
