@@ -34,7 +34,9 @@ export default function PaymentDetail({
   let statusColor: string;
   let statusText: string;
 
-  const toast = useToast();
+  const toast = useToast({
+    isClosable: true,
+  });
 
   if (payment?.status === "paid") {
     statusColor = "green";
@@ -120,12 +122,6 @@ export default function PaymentDetail({
                 isLive={process.env.NODE_ENV === "production"}
                 data={{
                   key: payment.transaction?.publicKey || "",
-                  customerId: profileRes.data?.user?.email as string,
-                  firstName: profileRes.data?.user?.firstName as string,
-                  lastName: profileRes.data?.user?.lastName as string,
-                  email: profileRes.data?.user?.email as string,
-                  amount: payment.amount,
-                  narration: payment.title,
                   processRrr: true,
                   transactionId: payment.transaction?.referenceNumber,
                   extendedData: {
@@ -137,7 +133,9 @@ export default function PaymentDetail({
                     ],
                   },
                 }}
-                onSuccess={() => {
+                onSuccess={(res: any) => {
+                  if (process.env.NODE_ENV === "development") console.log(res);
+
                   onPaymentSuccess();
                   toast({
                     status: "success",
@@ -146,7 +144,10 @@ export default function PaymentDetail({
                       "If payment doesn't reflect immediately, requery transaction status later.",
                   });
                 }}
-                onError={() => {
+                onError={(res: any) => {
+                  if (process.env.NODE_ENV === "development")
+                    console.error(res);
+
                   toast({
                     status: "error",
                     title: "Payment Failed",
