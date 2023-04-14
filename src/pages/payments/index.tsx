@@ -40,7 +40,7 @@ export default function Payments() {
       ) : (
         <SimpleGrid columns={[1, null, 3]} gap={8} mt={8}>
           {filteredPayments.map((payment) => (
-            <PaymentSummary payment={payment} key={payment.title} />
+            <PaymentSummary payment={payment} key={payment.id} />
           ))}
         </SimpleGrid>
       )}
