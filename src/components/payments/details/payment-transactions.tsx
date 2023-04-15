@@ -29,7 +29,7 @@ export default function PaymentTransactionDetail({
         Transaction Details
       </Text>
       <Card mt={4}>
-        <CardBody>
+        <CardBody p="1.5rem">
           {isLoading || transaction ? (
             <Box>
               <SimpleGrid columns={[1, null, 3]} gap={4}>

@@ -48,7 +48,7 @@ export default function PaymentDetail({
 
   return (
     <Card>
-      <CardBody>
+      <CardBody pt="1.5rem" px="1.875rem" pb="2rem">
         <Flex justify="space-between" align="center">
           <Flex direction="column" fontSize="xl">
             {payment ? (
