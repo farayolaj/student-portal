@@ -11,6 +11,7 @@ import {
   IoReceiptOutline,
   IoPersonOutline,
   IoCalendarOutline,
+  IoPhonePortraitOutline,
 } from "react-icons/io5";
 import * as routes from "../../constants/routes";
 
@@ -36,6 +37,13 @@ const Navigation: FC<NavigationProps> = ({ isOpen }) => {
         href={routes.REGISTERED_COURSES}
         isOpen={isOpen}
         isActive={pathname.startsWith(routes.REGISTERED_COURSES)}
+      />
+      <NavLink
+        title="Mobile Class LMS"
+        icon={IoPhonePortraitOutline}
+        href="https://dlclms.ui.edu.ng"
+        isOpen={isOpen}
+        isActive={false}
       />
       <NavLink
         title="Results"
