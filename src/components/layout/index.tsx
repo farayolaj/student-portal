@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { FC, PropsWithChildren, ReactNode, useEffect, useState } from "react";
 import { LOGIN } from "../../constants/routes";
 import useAuth from "../../hooks/use-auth";
-import EventSidebar from "./event-sidebar";
+import SchoolBoardSidebar from "./schoolboard-sidebar";
 import { Header } from "./header";
 import { Sidebar } from "./sidebar";
 
@@ -94,7 +94,7 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
               >
                 {children}
               </Box>
-              <EventSidebar />
+              <SchoolBoardSidebar />
             </Flex>
           </Box>
         </Flex>

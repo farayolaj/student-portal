@@ -2,7 +2,7 @@ import { Card, CardBody, CardHeader, Text, VStack } from "@chakra-ui/react";
 import { FC } from "react";
 import EventCalendar from "../common/events/event-calendar";
 
-const EventSidebar: FC = () => {
+const SchoolBoardSidebar: FC = () => {
   return (
     <VStack
       display={["none", null, "flex"]}
@@ -17,7 +17,7 @@ const EventSidebar: FC = () => {
       <Card w="full">
         <CardHeader>
           <Text as="span" fontSize="lg" fontWeight="bold">
-            Smart Table
+            School Board
           </Text>
         </CardHeader>
         <CardBody>
@@ -28,4 +28,4 @@ const EventSidebar: FC = () => {
   );
 };
 
-export default EventSidebar;
+export default SchoolBoardSidebar;

@@ -15,7 +15,7 @@ export default function Events({ eventMap }: EventsProps) {
     <Tabs mt={8} variant="solid-rounded" colorScheme="primary">
       <TabList w="full" justifyContent="space-around">
         <Tab fontSize="sm">Today&apos;s Events</Tab>
-        <Tab fontSize="sm">All Upcoming Events</Tab>
+        <Tab fontSize="sm">Upcoming Events</Tab>
       </TabList>
       <TabPanels mt={4}>
         <TabPanel p={0}>
