@@ -127,7 +127,7 @@ export default function Login() {
             w="80%"
             mx="auto"
           >
-            <FormControl isReadOnly={usernameVerified}>
+            <FormControl isReadOnly={usernameVerified} isRequired>
               <FormLabel fontSize="sm" fontWeight="bold">
                 Matric. Number/Email Address
               </FormLabel>
@@ -146,7 +146,7 @@ export default function Login() {
               )}
             </FormControl>
             {usernameVerified && (
-              <FormControl>
+              <FormControl isRequired>
                 <FormLabel fontSize="sm" fontWeight="bold">
                   Password
                 </FormLabel>
