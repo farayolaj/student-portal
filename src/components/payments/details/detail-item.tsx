@@ -1,18 +1,19 @@
-import { SkeletonText, Text, VStack } from "@chakra-ui/react";
+import { SkeletonText, StackProps, Text, VStack } from "@chakra-ui/react";
 
 type DetailItemProps = {
   name: string;
   value: number | string;
   isLoading?: boolean;
-};
+} & StackProps;
 
 export default function DetailItem({
   name,
   value,
   isLoading,
+  ...stackProps
 }: DetailItemProps) {
   return (
-    <VStack align="flex-start" spacing={0.5}>
+    <VStack align="flex-start" spacing={0.5} {...stackProps}>
       <Text fontSize="xs" fontWeight="bold" color="grey">
         {name.toUpperCase()}
       </Text>

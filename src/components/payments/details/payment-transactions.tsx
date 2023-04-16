@@ -44,8 +44,13 @@ export default function PaymentTransactionDetail({
                   isLoading={isLoading}
                 />
                 <DetailItem
-                  name="Description"
-                  value={transaction?.description || ""}
+                  name="Status"
+                  value={
+                    transaction
+                      ? transaction.status[0].toUpperCase() +
+                        transaction.status.slice(1)
+                      : ""
+                  }
                   isLoading={isLoading}
                 />
                 <DetailItem
@@ -76,14 +81,10 @@ export default function PaymentTransactionDetail({
                   />
                 )}
                 <DetailItem
-                  name="Status"
-                  value={
-                    transaction
-                      ? transaction.status[0].toUpperCase() +
-                        transaction.status.slice(1)
-                      : ""
-                  }
+                  name="Programme"
+                  value={transaction?.description || ""}
                   isLoading={isLoading}
+                  gridColumn="1 / -1"
                 />
               </SimpleGrid>
               {transaction?.status === "pending" && (
@@ -120,10 +121,10 @@ function PaymentTransactionDetailsSkeleton() {
     <SimpleGrid columns={[1, null, 3]} gap={4}>
       <DetailItem name="Transaction Reference" value="" isLoading />
       <DetailItem name="RRR" value="" isLoading />
-      <DetailItem name="Description" value="" isLoading />
+      <DetailItem name="Status" value="" isLoading />
       <DetailItem name="Date Initiated" value="" isLoading />
       <DetailItem name="Date Payed" value="" isLoading />
-      <DetailItem name="Status" value="" isLoading />
+      <DetailItem name="Programme" value="" isLoading gridColumn="1 / -1" />
     </SimpleGrid>
   );
 }
