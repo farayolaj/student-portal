@@ -4,6 +4,7 @@ import {
   Button,
   Card,
   CardBody,
+  Divider,
   Flex,
   SimpleGrid,
   Text,
@@ -25,93 +26,90 @@ export default function PaymentTransactionDetail({
 
   return (
     <Box mt={8}>
-      <Text as="h2" fontSize="lg" fontWeight="bold">
-        Transaction Details
-      </Text>
-      <Card mt={4}>
-        <CardBody p="1.5rem">
-          {isLoading || transaction ? (
-            <Box>
-              <SimpleGrid columns={[1, null, 3]} gap={4}>
-                <DetailItem
-                  name="Transaction Reference"
-                  value={transaction?.referenceNumber || ""}
-                  isLoading={isLoading}
-                />
-                <DetailItem
-                  name="RRR"
-                  value={transaction?.rrr || ""}
-                  isLoading={isLoading}
-                />
-                <DetailItem
-                  name="Status"
-                  value={
-                    transaction
-                      ? transaction.status[0].toUpperCase() +
-                        transaction.status.slice(1)
-                      : ""
-                  }
-                  isLoading={isLoading}
-                />
-                <DetailItem
-                  name="Date Initiated"
-                  value={
-                    Number.isNaN(transaction?.dateInitiated?.valueOf())
-                      ? "-"
-                      : transaction?.dateInitiated?.toLocaleDateString(
-                          "en-NG",
-                          {
-                            dateStyle: "long",
-                          }
-                        ) || ""
-                  }
-                  isLoading={isLoading}
-                />
-                {transaction?.status === "success" && (
-                  <DetailItem
-                    name="Date Payed"
-                    value={
-                      Number.isNaN(transaction?.datePayed?.valueOf())
-                        ? "-"
-                        : transaction?.datePayed?.toLocaleDateString("en-NG", {
-                            dateStyle: "long",
-                          }) || ""
-                    }
-                    isLoading={isLoading}
-                  />
-                )}
-                <DetailItem
-                  name="Programme"
-                  value={transaction?.description || ""}
-                  isLoading={isLoading}
-                  gridColumn="1 / -1"
-                />
-              </SimpleGrid>
-              {transaction?.status === "pending" && (
-                <Flex justify="center" mt={8}>
-                  <Button
-                    w="fit-content"
-                    isDisabled={verifyTransaction.isLoading}
-                    justifySelf="center"
-                    onClick={() => {
-                      verifyTransaction.mutate(
-                        { rrr: transaction.rrr },
-                        { onSuccess: onRequery }
-                      );
-                    }}
-                  >
-                    Re-query Transaction
-                  </Button>
-                </Flex>
-              )}
-            </Box>
-          ) : (
-            <Flex justify="center" align="center" p={8}>
-              You have not made any transaction yet.
+      <Flex justify="space-evenly" align="center" mb={8}>
+        <Divider w="35%" borderColor="gray.500" />
+        <Text as="h2" fontSize="lg" fontWeight="bold">
+          Transaction Details
+        </Text>
+        <Divider w="35%" borderColor="gray.500" />
+      </Flex>
+      {isLoading || transaction ? (
+        <Box>
+          <SimpleGrid columns={[1, null, 3]} gap={4}>
+            <DetailItem
+              name="Transaction Reference"
+              value={transaction?.referenceNumber || ""}
+              isLoading={isLoading}
+            />
+            <DetailItem
+              name="RRR"
+              value={transaction?.rrr || ""}
+              isLoading={isLoading}
+            />
+            <DetailItem
+              name="Status"
+              value={
+                transaction
+                  ? transaction.status[0].toUpperCase() +
+                    transaction.status.slice(1)
+                  : ""
+              }
+              isLoading={isLoading}
+            />
+            <DetailItem
+              name="Date Initiated"
+              value={
+                Number.isNaN(transaction?.dateInitiated?.valueOf())
+                  ? "-"
+                  : transaction?.dateInitiated?.toLocaleDateString("en-NG", {
+                      dateStyle: "long",
+                    }) || ""
+              }
+              isLoading={isLoading}
+            />
+            {transaction?.status === "success" && (
+              <DetailItem
+                name="Date Payed"
+                value={
+                  Number.isNaN(transaction?.datePayed?.valueOf())
+                    ? "-"
+                    : transaction?.datePayed?.toLocaleDateString("en-NG", {
+                        dateStyle: "long",
+                      }) || ""
+                }
+                isLoading={isLoading}
+              />
+            )}
+            <DetailItem
+              name="Programme"
+              value={transaction?.description || ""}
+              isLoading={isLoading}
+              gridColumn="1 / -1"
+            />
+          </SimpleGrid>
+          {transaction?.status === "pending" && (
+            <Flex justify="center" mt={8}>
+              <Button
+                w="fit-content"
+                isDisabled={verifyTransaction.isLoading}
+                justifySelf="center"
+                onClick={() => {
+                  verifyTransaction.mutate(
+                    { rrr: transaction.rrr },
+                    { onSuccess: onRequery }
+                  );
+                }}
+              >
+                Re-query Transaction
+              </Button>
             </Flex>
           )}
-        </CardBody>
-      </Card>
+        </Box>
+      ) : (
+        <Flex justify="center" align="center" p={8}>
+          You have not made any transaction yet.
+        </Flex>
+      )}
     </Box>
   );
 }

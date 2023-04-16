@@ -47,123 +47,117 @@ export default function PaymentDetail({
   }
 
   return (
-    <Card>
-      <CardBody pt="1.5rem" px="1.875rem" pb="2rem">
-        <Flex justify="space-between" align="center">
-          <Flex direction="column" fontSize="xl">
-            {payment ? (
-              <Text as="span" fontWeight="semibold">
-                {payment?.title || "Loading..."}
-              </Text>
-            ) : (
-              <SkeletonText
-                mt={2}
-                skeletonHeight="1.68rem"
-                w="15rem"
-                noOfLines={1}
-                isLoaded={!!payment}
-              />
-            )}
-            {payment ? (
-              <Text as="span" fontSize="3xl" fontWeight="bold">
-                {new Intl.NumberFormat("en-NG", {
-                  style: "currency",
-                  currency: "NGN",
-                }).format(payment?.amount || 0)}
-              </Text>
-            ) : (
-              <SkeletonText
-                mt={2}
-                skeletonHeight="2.5rem"
-                w="9.8rem"
-                noOfLines={1}
-              />
-            )}
-            {payment ? (
-              <Text as="span" mt={2} fontSize="sm">
-                {description}
-              </Text>
-            ) : (
-              <SkeletonText
-                mt={4}
-                skeletonHeight="1.18rem"
-                w="9rem"
-                noOfLines={1}
-                isLoaded={!!payment}
-              />
-            )}
-            <Flex gap={2} align="center" mt={4}>
-              <IoCheckmarkCircle color={statusColor} />
-              {payment ? (
-                <Text as="span" fontSize="md">
-                  {statusText}
-                </Text>
-              ) : (
-                <SkeletonText
-                  mt={2}
-                  skeletonHeight="1.4rem"
-                  w="3rem"
-                  noOfLines={1}
-                  isLoaded={!!payment}
-                />
-              )}
-            </Flex>
-          </Flex>
-          {!payment ? (
-            <Button paddingInline={16}>
-              <Spinner color="white" />
-            </Button>
-          ) : payment.status === "paid" ? (
-            <Button isDisabled>Print Receipt</Button>
+    <Flex justify="space-between" align="center">
+      <Flex direction="column" fontSize="xl">
+        {payment ? (
+          <Text as="span" fontWeight="semibold">
+            {payment?.title || "Loading..."}
+          </Text>
+        ) : (
+          <SkeletonText
+            mt={2}
+            skeletonHeight="1.68rem"
+            w="15rem"
+            noOfLines={1}
+            isLoaded={!!payment}
+          />
+        )}
+        {payment ? (
+          <Text as="span" fontSize="3xl" fontWeight="bold">
+            {new Intl.NumberFormat("en-NG", {
+              style: "currency",
+              currency: "NGN",
+            }).format(payment?.amount || 0)}
+          </Text>
+        ) : (
+          <SkeletonText
+            mt={2}
+            skeletonHeight="2.5rem"
+            w="9.8rem"
+            noOfLines={1}
+          />
+        )}
+        {payment ? (
+          <Text as="span" mt={2} fontSize="sm">
+            {description}
+          </Text>
+        ) : (
+          <SkeletonText
+            mt={4}
+            skeletonHeight="1.18rem"
+            w="9rem"
+            noOfLines={1}
+            isLoaded={!!payment}
+          />
+        )}
+        <Flex gap={2} align="center" mt={4}>
+          <IoCheckmarkCircle color={statusColor} />
+          {payment ? (
+            <Text as="span" fontSize="md">
+              {statusText}
+            </Text>
           ) : (
-            <Flex direction="column">
-              <Button
-                as={RemitaInline}
-                isLive={process.env.NODE_ENV === "production"}
-                data={{
-                  key: payment.transaction?.publicKey || "",
-                  processRrr: true,
-                  transactionId: payment.transaction?.referenceNumber,
-                  extendedData: {
-                    customFields: [
-                      {
-                        name: "rrr",
-                        value: payment.transaction?.rrr,
-                      },
-                    ],
-                  },
-                }}
-                onSuccess={(res: any) => {
-                  if (process.env.NODE_ENV === "development") console.log(res);
-
-                  onPaymentSuccess();
-                  toast({
-                    status: "success",
-                    title: "Payment Successful",
-                    description:
-                      "If payment doesn't reflect immediately, requery transaction status later.",
-                  });
-                }}
-                onError={(res: any) => {
-                  if (process.env.NODE_ENV === "development")
-                    console.error(res);
-
-                  toast({
-                    status: "error",
-                    title: "Payment Failed",
-                    description: "Please try again later.",
-                  });
-                }}
-                text="Pay Now"
-              />
-              <Text as="span" fontSize="sm" fontWeight="semibold" mt={8}>
-                {payment.dueDate &&
-                  `Due ${payment.dueDate?.toLocaleDateString()}`}
-              </Text>
-            </Flex>
+            <SkeletonText
+              mt={2}
+              skeletonHeight="1.4rem"
+              w="3rem"
+              noOfLines={1}
+              isLoaded={!!payment}
+            />
           )}
         </Flex>
-      </CardBody>
-    </Card>
+      </Flex>
+      {!payment ? (
+        <Button paddingInline={16}>
+          <Spinner color="white" />
+        </Button>
+      ) : payment.status === "paid" ? (
+        <Button isDisabled>Print Receipt</Button>
+      ) : (
+        <Flex direction="column">
+          <Button
+            as={RemitaInline}
+            isLive={process.env.NODE_ENV === "production"}
+            data={{
+              key: payment.transaction?.publicKey || "",
+              processRrr: true,
+              transactionId: payment.transaction?.referenceNumber,
+              extendedData: {
+                customFields: [
+                  {
+                    name: "rrr",
+                    value: payment.transaction?.rrr,
+                  },
+                ],
+              },
+            }}
+            onSuccess={(res: any) => {
+              if (process.env.NODE_ENV === "development") console.log(res);
+
+              onPaymentSuccess();
+              toast({
+                status: "success",
+                title: "Payment Successful",
+                description:
+                  "If payment doesn't reflect immediately, requery transaction status later.",
+              });
+            }}
+            onError={(res: any) => {
+              if (process.env.NODE_ENV === "development") console.error(res);
+
+              toast({
+                status: "error",
+                title: "Payment Failed",
+                description: "Please try again later.",
+              });
+            }}
+            text="Pay Now"
+          />
+          <Text as="span" fontSize="sm" fontWeight="semibold" mt={8}>
+            {payment.dueDate && `Due ${payment.dueDate?.toLocaleDateString()}`}
+          </Text>
+        </Flex>
+      )}
+    </Flex>
   );
 }

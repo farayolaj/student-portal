@@ -1,4 +1,5 @@
 import { usePaymentDetail } from "@/api/payment/use-payment-detail";
+import { Card, CardBody } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import PageTitle from "../../components/common/page-title";
 import Seo from "../../components/common/seo";
@@ -14,17 +15,21 @@ export default function PaymentDetails() {
     <>
       <Seo title="Payment Details" />
       <PageTitle showBackButton>Payment Details</PageTitle>
-      <PaymentDetail
-        payment={paymentRes.data}
-        onPaymentSuccess={() => paymentRes.refetch()}
-      />
-      <PaymentTransactionDetail
-        transaction={paymentRes.data?.transaction}
-        onRequery={(_) => {
-          paymentRes.refetch();
-        }}
-        isLoading={paymentRes.isLoading}
-      />
+      <Card>
+        <CardBody pt="1.5rem" px="1.875rem" pb="2rem">
+          <PaymentDetail
+            payment={paymentRes.data}
+            onPaymentSuccess={() => paymentRes.refetch()}
+          />
+          <PaymentTransactionDetail
+            transaction={paymentRes.data?.transaction}
+            onRequery={(_) => {
+              paymentRes.refetch();
+            }}
+            isLoading={paymentRes.isLoading}
+          />
+        </CardBody>
+      </Card>
     </>
   );
 }
