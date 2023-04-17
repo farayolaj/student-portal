@@ -1,5 +1,5 @@
 import { Card, CardBody, Flex, Link, Text } from "@chakra-ui/react";
-import { IoCheckmarkCircle } from "react-icons/io5";
+import { IoCheckmarkCircle, IoTime } from "react-icons/io5";
 import NextLink from "next/link";
 import { useAllSessions } from "@/api/user/use-all-sessions";
 
@@ -14,14 +14,14 @@ export default function PaymentSummary({ payment }: PaymentSummaryProps) {
   });
   const descriptionArr = [session?.name, payment.semester];
   let description = descriptionArr.filter(Boolean).join(" | ");
-  let statusColor: string;
+  let statusIcon: JSX.Element;
   let statusText: string;
 
   if (payment.status === "paid") {
-    statusColor = "green";
+    statusIcon = <IoCheckmarkCircle color="green" />;
     statusText = "Paid";
   } else {
-    statusColor = "yellow";
+    statusIcon = <IoTime color="orange" />;
     statusText = "Unpaid";
   }
 
@@ -48,7 +48,7 @@ export default function PaymentSummary({ payment }: PaymentSummaryProps) {
             {description}
           </Text>
           <Flex gap={2} align="center">
-            <IoCheckmarkCircle color={statusColor} />
+            {statusIcon}
             <Text as="span" fontSize="sm">
               {statusText}
             </Text>

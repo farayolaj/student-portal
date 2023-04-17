@@ -11,7 +11,7 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
-import { IoCheckmarkCircle } from "react-icons/io5";
+import { IoCheckmarkCircle, IoTime } from "react-icons/io5";
 
 type PaymentDetailProps = {
   payment?: Payment;
@@ -31,7 +31,7 @@ export default function PaymentDetail({
     payment?.semester,
   ];
   const description = descriptionArr.filter(Boolean).join(" | ");
-  let statusColor: string;
+  let statusIcon: JSX.Element;
   let statusText: string;
 
   const toast = useToast({
@@ -39,10 +39,10 @@ export default function PaymentDetail({
   });
 
   if (payment?.status === "paid") {
-    statusColor = "green";
+    statusIcon = <IoCheckmarkCircle color="green" />;
     statusText = "Paid";
   } else {
-    statusColor = "yellow";
+    statusIcon = <IoTime color="orange" />;
     statusText = "Unpaid";
   }
 
@@ -91,7 +91,7 @@ export default function PaymentDetail({
           />
         )}
         <Flex gap={2} align="center" mt={4}>
-          <IoCheckmarkCircle color={statusColor} />
+          {statusIcon}
           {payment ? (
             <Text as="span" fontSize="md">
               {statusText}
