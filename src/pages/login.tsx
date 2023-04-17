@@ -29,6 +29,31 @@ import useAuth from "../hooks/use-auth";
 import uiLogo from "../images/ui-logo.png";
 import greenery from "../images/greenery.png";
 
+const textContent = [
+  {
+    title: "Student Portal",
+    content: [
+      "Student Portal is your personal website containing all the " +
+        "information and menu you need as a student. Login to access your " +
+        "academic schedule, fees, courses, documents and more.",
+    ],
+  },
+  {
+    title: "Sign In",
+    content: [
+      "New students: Sign in with your application number or email address as username.",
+      "Registered students: Use matric number or @dlc email. The default password is your surname.",
+    ],
+  },
+  {
+    title: "Student Support",
+    content: [
+      "If you have any questions or are experiencing technical difficulties please contact us at " +
+        "student support or use the life chat during office hours.",
+    ],
+  },
+];
+
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -41,10 +66,12 @@ export default function Login() {
   const validateUsername = useValidateUsername();
 
   const [imgScaleX, setImgScaleX] = useState(1);
+  const [selectedText, setSelectedText] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setImgScaleX((prev) => -prev);
+      setSelectedText((prev) => (prev + 1) % textContent.length);
     }, 6000);
     return () => clearInterval(interval);
   }, []);
@@ -154,12 +181,14 @@ export default function Login() {
               color="white"
             >
               <Heading as="h2" size="lg">
-                Student Portal
+                {textContent[selectedText].title}
               </Heading>
               <Text mt={2}>
-                Student Portal is your personal website containing all the
-                information and menu you need as a student. Login to access your
-                academic schedule, fees, courses, documents and more.
+                {textContent[selectedText].content.map((content) => (
+                  <>
+                    {content} <br />
+                  </>
+                ))}
               </Text>
             </Box>
           </Box>
