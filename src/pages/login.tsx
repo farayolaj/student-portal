@@ -26,10 +26,7 @@ import * as routes from "../constants/routes";
 import useAuth from "../hooks/use-auth";
 
 import uiLogo from "../images/ui-logo.png";
-import blueGreenDiamonds from "../images/blue_green_diamonds.png";
 import greenery from "../images/greenery.png";
-
-const bgImages = [blueGreenDiamonds, greenery];
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -42,14 +39,14 @@ export default function Login() {
   const toast = useToast();
   const validateUsername = useValidateUsername();
 
-  const [bgImageIdx, setBgImageIdx] = useState(0);
+  const [imgScaleX, setImgScaleX] = useState(1);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setBgImageIdx((bgImageIdx + 1) % bgImages.length);
-    }, 10000);
+      setImgScaleX((prev) => -prev);
+    }, 6000);
     return () => clearInterval(interval);
-  }, [bgImageIdx]);
+  }, []);
 
   const onValidateUsername = () => {
     validateUsername.mutate(
@@ -139,10 +136,10 @@ export default function Login() {
             }}
           >
             <Image
-              src={bgImages[bgImageIdx]}
+              src={greenery}
               alt=""
               fill
-              style={{ objectFit: "cover" }}
+              style={{ objectFit: "cover", transform: `scaleX(${imgScaleX})` }}
             />
             <Box
               w={[null, null, "50%"]}
