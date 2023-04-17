@@ -1,12 +1,12 @@
 import { useCallback, useState } from "react";
 import getApi from "../api";
 
-type UseFetchDocument = {
+export type UseFetchDocumentOpts = {
   url: string;
   onError?: (error: Error) => void;
 };
 
-export function useFetchDocument({ url, onError }: UseFetchDocument) {
+export function useFetchDocument({ url, onError }: UseFetchDocumentOpts) {
   const [isLoading, setIsLoading] = useState(false);
 
   const intiateFetch = useCallback(async () => {

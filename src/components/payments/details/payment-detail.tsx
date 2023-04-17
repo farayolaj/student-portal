@@ -1,10 +1,8 @@
-import { useProfile } from "@/api/user/use-profile";
+import { useFetchReceipt } from "@/api/payment/use-fetch-receipt";
 import { useSession } from "@/api/user/use-session";
 import RemitaInline from "@/components/common/remita-inline";
 import {
   Button,
-  Card,
-  CardBody,
   Flex,
   SkeletonText,
   Spinner,
@@ -22,7 +20,6 @@ export default function PaymentDetail({
   payment,
   onPaymentSuccess,
 }: PaymentDetailProps) {
-  const profileRes = useProfile();
   const sessionRes = useSession(payment?.sessionId || "");
   const descriptionArr = [
     payment?.level ? `${payment.level} Level` : undefined,
@@ -36,6 +33,16 @@ export default function PaymentDetail({
 
   const toast = useToast({
     isClosable: true,
+  });
+  const receipt = useFetchReceipt({
+    trxId: payment?.transaction?.id || "",
+    onError: (error) => {
+      toast({
+        status: "error",
+        title: "Error",
+        description: error.message,
+      });
+    },
   });
 
   if (payment?.status === "paid") {
@@ -112,7 +119,19 @@ export default function PaymentDetail({
           <Spinner color="white" />
         </Button>
       ) : payment.status === "paid" ? (
-        <Button isDisabled>Print Receipt</Button>
+        <Button
+          onClick={() => {
+            receipt.intiateFetch();
+          }}
+          isDisabled={receipt.isLoading}
+          minW="7.8rem"
+        >
+          {receipt.isLoading ? (
+            <Spinner color="white" size="xs" />
+          ) : (
+            "Print Receipt"
+          )}
+        </Button>
       ) : (
         <Flex direction="column">
           <Button
