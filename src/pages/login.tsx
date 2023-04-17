@@ -114,12 +114,7 @@ export default function Login() {
         w="full"
       >
         <Image height={48} src={uiLogo} alt="University of Ibadan Logo" />
-        <Text
-          display={["none", null, "initial"]}
-          as="span"
-          fontSize="lg"
-          fontWeight="semibold"
-        >
+        <Text as="span" fontSize="lg" fontWeight="semibold">
           University of Ibadan
         </Text>
       </Flex>
@@ -161,10 +156,9 @@ export default function Login() {
                 Student Portal
               </Heading>
               <Text mt={2}>
-                Get to know your new community! This special section for
-                admitted students includes a welcome message, posts from your
-                new classmates, and important information about preparing to
-                enroll.
+                Student Portal is your personal website containing all the
+                information and menu you need as a student. Login to access your
+                academic schedule, fees, courses, documents and more.
               </Text>
             </Box>
           </Box>
