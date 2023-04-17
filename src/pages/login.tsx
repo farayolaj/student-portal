@@ -12,6 +12,7 @@ import {
   InputGroup,
   InputRightElement,
   Link,
+  Spacer,
   Text,
   useToast,
 } from "@chakra-ui/react";
@@ -114,6 +115,9 @@ export default function Login() {
         <Text as="span" fontSize="lg" fontWeight="semibold">
           University of Ibadan
         </Text>
+        <Spacer />
+        <Link href="https://dlcportal.ui.edu.ng/i-help">i-Help</Link>
+        <Spacer display={["none", null, "initial"]} />
       </Flex>
       <Flex wrap={["wrap", null, "nowrap"]} minH="calc(100vh - 4rem)">
         <Box
