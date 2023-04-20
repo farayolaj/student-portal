@@ -125,6 +125,12 @@ interface Payment {
   programme?: string;
   sessionId?: string;
   semester?: string;
+  containsPreselected: boolean;
+  preselected?: {
+    id: string;
+    title: string;
+    amount: number;
+  };
   transaction?: Transaction;
 }
 

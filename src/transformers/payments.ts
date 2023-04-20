@@ -2,13 +2,24 @@ import parse from "date-fns/parse";
 
 export function toPayment(data: any): Payment {
   return {
-    id: data.payment_id,
+    id: data.id || data.payment_id,
     amount: data.total,
     status: data.paid ? "paid" : "unpaid",
     title: data.description,
     dueDate: parse(data.date_due || data.due_date, "MMM. dd, yyyy", new Date()),
     level: data.level ? data.level + "00" : undefined,
     sessionId: data.session,
+    containsPreselected: data.is_preselected_fee
+      ? data.is_preselected_fee !== null
+      : false,
+    preselected:
+      data.preselected_amount === 0
+        ? undefined
+        : {
+            id: data.preselected,
+            title: data.preselected_fee_readable,
+            amount: data.preselected_amount,
+          },
     transaction: data.transaction
       ? {
           id: data.transaction.order_id,
