@@ -1,7 +1,7 @@
 import { Button, Flex, Icon } from "@chakra-ui/react";
 import { IoPrintOutline } from "react-icons/io5";
 import RadioButtonGroup from "../common/radio-button-group";
-import MakeCustomPaymentModal from "./make-custom-payment-modal";
+import MakeSundryPaymentModal from "./make-sundry-payment-modal";
 
 type PaymentControlProps = {
   statusFilter: string;
@@ -19,7 +19,7 @@ export default function PaymentControl({
       gap={4}
     >
       <Flex justify="center" wrap={["wrap", null, "initial"]} gap={4}>
-        <MakeCustomPaymentModal />
+        <MakeSundryPaymentModal />
         <Button display="inline-flex" gap={2} isDisabled>
           <Icon as={IoPrintOutline} boxSize={6} /> Print Ledger
         </Button>
