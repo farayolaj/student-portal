@@ -185,9 +185,9 @@ export default function Login() {
               </Heading>
               <Text mt={2}>
                 {textContent[selectedText].content.map((content) => (
-                  <>
+                  <span key={content}>
                     {content} <br />
-                  </>
+                  </span>
                 ))}
               </Text>
             </Box>
