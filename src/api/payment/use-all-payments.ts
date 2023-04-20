@@ -7,8 +7,9 @@ export const useAllPayments = createQuery("all-payments", async () => {
 
   if (!response.data.status) throw new Error(response.data.message);
 
-  return [
-    ...(response.data.payload?.main_fees?.map(toPayment) || []),
-    ...(response.data.payload?.sundry_fees?.map(toPayment) || []),
-  ] as Payment[];
+  return {
+    main: (response.data.payload?.main_fees?.map(toPayment) || []) as Payment[],
+    sundry: (response.data.payload?.sundry_fees?.map(toPayment) ||
+      []) as Payment[],
+  };
 });

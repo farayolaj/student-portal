@@ -22,7 +22,7 @@ import * as routes from "../../constants/routes";
 const PaymentsCard: FC = () => {
   const outstandingPaymentsRes = useAllPayments({
     select: (payments) => {
-      return payments.filter((payment) => payment.status === "unpaid");
+      return payments.main.filter((payment) => payment.status === "unpaid");
     },
   });
 

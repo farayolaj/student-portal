@@ -8,9 +8,9 @@ import PaymentSummary from "../../components/payments/payment-summary";
 
 export default function Payments() {
   const [statusFilter, setStatusFilter] = useState("all");
-  const paymentsRes = useAllPayments();
-  const payments = paymentsRes.data || [];
-  const sortedPayments = payments.sort((a, b) => {
+  const paymentsRes = useAllPayments({ select: (payments) => payments.main });
+  const mainPayments = paymentsRes.data || [];
+  const sortedPayments = mainPayments.sort((a, b) => {
     if (a.status === b.status) return 0;
     if (a.status === "unpaid") return -1;
     else return 1;
