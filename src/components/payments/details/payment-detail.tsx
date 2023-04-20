@@ -1,6 +1,7 @@
 import { useFetchReceipt } from "@/api/payment/use-fetch-receipt";
+import { useInitiateTransaction } from "@/api/payment/use-initiate-transaction";
 import { useSession } from "@/api/user/use-session";
-import RemitaInline from "@/components/common/remita-inline";
+import useRemitaInline from "@/components/common/remita-inline";
 import {
   Box,
   Button,
@@ -14,31 +15,13 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoCheckmarkCircle, IoTime } from "react-icons/io5";
 
 type PaymentDetailProps = {
   payment?: Payment;
   onPaymentSuccess: () => void;
 };
-
-const additionalItems = [
-  {
-    id: "1",
-    title: "Additional Item 1",
-    price: 1000,
-  },
-  {
-    id: "2",
-    title: "Additional Item 2",
-    price: 2000,
-  },
-  {
-    id: "3",
-    title: "Additional Item 3",
-    price: 3000,
-  },
-];
 
 export default function PaymentDetail({
   payment,
@@ -77,15 +60,78 @@ export default function PaymentDetail({
     statusText = "Unpaid";
   }
 
-  const [selectedAdditionalItems, setSelectedAdditionalItems] = useState<
-    string[]
-  >([]);
+  const [isPreselectedSelected, setIsPreselectedSelected] = useState(true);
   const total = payment?.amount
     ? payment.amount +
-      additionalItems
-        .filter((item) => selectedAdditionalItems.includes(item.id))
-        .reduce((acc, item) => acc + item.price, 0)
+      (isPreselectedSelected ? payment.preselected?.amount || 0 : 0)
     : 0;
+
+  useEffect(() => {
+    if (payment?.transaction) {
+      setIsPreselectedSelected(payment.containsPreselected);
+    }
+  }, [payment?.transaction, payment?.containsPreselected]);
+
+  const initiateTransaction = useInitiateTransaction();
+  const { initPayment } = useRemitaInline({
+    isLive: process.env.NODE_ENV === "production",
+    onSuccess: (res: any) => {
+      if (process.env.NODE_ENV === "development") console.log(res);
+
+      onPaymentSuccess();
+      toast({
+        status: "success",
+        title: "Payment Successful",
+        description:
+          "If payment doesn't reflect immediately, requery transaction status later.",
+      });
+    },
+    onError: (res: any) => {
+      if (process.env.NODE_ENV === "development") console.error(res);
+
+      toast({
+        status: "error",
+        title: "Payment Failed",
+        description: "Please try again later.",
+      });
+    },
+  });
+
+  const initialisePayment = () => {
+    initiateTransaction.mutate(
+      {
+        id: payment?.id || "",
+        preselectedId: isPreselectedSelected
+          ? payment?.preselected?.id
+          : undefined,
+      },
+      {
+        onError: (error) => {
+          const err = error as Error;
+          toast({
+            status: "error",
+            title: "Error initializing payment",
+            description: err.message,
+          });
+        },
+        onSuccess: (data) => {
+          initPayment({
+            key: data.transaction?.publicKey || "",
+            processRrr: true,
+            transactionId: data.transaction?.referenceNumber,
+            extendedData: {
+              customFields: [
+                {
+                  name: "rrr",
+                  value: data.transaction?.rrr,
+                },
+              ],
+            },
+          });
+        },
+      }
+    );
+  };
 
   return (
     <Box>
@@ -170,43 +216,15 @@ export default function PaymentDetail({
         ) : (
           <Flex direction="column">
             <Button
-              as={RemitaInline}
-              isLive={process.env.NODE_ENV === "production"}
-              data={{
-                key: payment.transaction?.publicKey || "",
-                processRrr: true,
-                transactionId: payment.transaction?.referenceNumber,
-                extendedData: {
-                  customFields: [
-                    {
-                      name: "rrr",
-                      value: payment.transaction?.rrr,
-                    },
-                  ],
-                },
-              }}
-              onSuccess={(res: any) => {
-                if (process.env.NODE_ENV === "development") console.log(res);
-
-                onPaymentSuccess();
-                toast({
-                  status: "success",
-                  title: "Payment Successful",
-                  description:
-                    "If payment doesn't reflect immediately, requery transaction status later.",
-                });
-              }}
-              onError={(res: any) => {
-                if (process.env.NODE_ENV === "development") console.error(res);
-
-                toast({
-                  status: "error",
-                  title: "Payment Failed",
-                  description: "Please try again later.",
-                });
-              }}
-              text="Pay Now"
-            />
+              onClick={initialisePayment}
+              isDisabled={initiateTransaction.isLoading}
+            >
+              {initiateTransaction.isLoading ? (
+                <Spinner color="white" size="xs" />
+              ) : (
+                "Pay Now"
+              )}
+            </Button>
             <Text as="span" fontSize="sm" fontWeight="semibold" mt={8}>
               {payment.dueDate &&
                 `Due ${payment.dueDate?.toLocaleDateString()}`}
@@ -218,7 +236,6 @@ export default function PaymentDetail({
         Items
       </Heading>
       <CheckboxGroup
-        onChange={(values) => setSelectedAdditionalItems(values as string[])}
         colorScheme="primary"
         isDisabled={Boolean(payment?.transaction)}
       >
@@ -231,16 +248,19 @@ export default function PaymentDetail({
             }).format(payment?.amount || 0)}
             )
           </Checkbox>
-          {additionalItems.map((item) => (
-            <Checkbox key={item.id} value={item.id}>
-              {item.title} (
+          {payment?.preselected && (
+            <Checkbox
+              isChecked={isPreselectedSelected}
+              onChange={(_e) => setIsPreselectedSelected((prev) => !prev)}
+            >
+              {payment.preselected.title} (
               {Intl.NumberFormat("en-NG", {
                 style: "currency",
                 currency: "NGN",
-              }).format(item.price)}
+              }).format(payment.preselected.amount)}
               )
             </Checkbox>
-          ))}
+          )}
         </SimpleGrid>
       </CheckboxGroup>
     </Box>

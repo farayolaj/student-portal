@@ -23,18 +23,18 @@ type RemitaInlineData = {
 
 type RemitaInlineProps = {
   data: RemitaInlineData;
-  isLive: boolean;
   className?: string;
   text?: string;
-  onSuccess: (response: any) => void;
-  onError: (response: any) => void;
-  onClose: () => void;
 };
 
-const RemitaInline = forwardRef(function RemitaInline(
-  props: RemitaInlineProps,
-  ref: ForwardedRef<HTMLButtonElement | null>
-) {
+type UseRemitaInlineProps = {
+  isLive: boolean;
+  onSuccess?: (response: any) => void;
+  onError?: (response: any) => void;
+  onClose?: () => void;
+};
+
+function useRemitaInline(props: UseRemitaInlineProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(false);
 
@@ -75,31 +75,44 @@ const RemitaInline = forwardRef(function RemitaInline(
     };
   }, [props.isLive]);
 
-  const startPayment = useCallback(() => {
-    if (isLoaded) {
-      const payload = {
-        ...props.data,
-        onSuccess: props.onSuccess,
-        onError: props.onError,
-        onClose: props.onClose,
-      };
+  const initPayment = useCallback(
+    (data: RemitaInlineData) => {
+      if (isLoaded) {
+        const payload = {
+          ...data,
+          onSuccess: props.onSuccess,
+          onError: props.onError,
+          onClose: props.onClose,
+        };
 
-      // @ts-ignore
-      const paymentEngine = RmPaymentEngine.init(payload);
-      paymentEngine.showPaymentWidget();
-    }
-  }, [isLoaded, props.data, props.onClose, props.onError, props.onSuccess]);
-
-  return (
-    <button
-      onClick={startPayment}
-      className={props.className}
-      disabled={!isLoaded || error}
-      ref={ref}
-    >
-      {props.text || "Pay"}
-    </button>
+        // @ts-ignore
+        const paymentEngine = RmPaymentEngine.init(payload);
+        paymentEngine.showPaymentWidget();
+      }
+    },
+    [isLoaded, props.onClose, props.onError, props.onSuccess]
   );
-});
 
-export default RemitaInline;
+  const RemitaInline = forwardRef(function RemitaInline(
+    props: RemitaInlineProps,
+    ref: ForwardedRef<HTMLButtonElement | null>
+  ) {
+    return (
+      <button
+        onClick={() => initPayment(props.data)}
+        className={props.className}
+        disabled={!isLoaded || error}
+        ref={ref}
+      >
+        {props.text || "Pay"}
+      </button>
+    );
+  });
+
+  return {
+    initPayment,
+    RemitaInline,
+  };
+}
+
+export default useRemitaInline;
