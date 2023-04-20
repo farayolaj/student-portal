@@ -13,6 +13,7 @@ import {
   InputRightElement,
   Link,
   Spacer,
+  Spinner,
   Text,
   useToast,
 } from "@chakra-ui/react";
@@ -262,7 +263,11 @@ export default function Login() {
               <Box mt={16} mb={8}>
                 {usernameVerified ? (
                   <Button w="full" type="submit" isDisabled={auth.isLoggingIn}>
-                    Log In
+                    {auth.isLoggingIn ? (
+                      <Spinner color="white" size="xs" />
+                    ) : (
+                      "Log In"
+                    )}
                   </Button>
                 ) : (
                   <Button
@@ -270,7 +275,11 @@ export default function Login() {
                     isDisabled={validateUsername.isLoading}
                     type="submit"
                   >
-                    Next
+                    {validateUsername.isLoading ? (
+                      <Spinner color="white" size="xs" />
+                    ) : (
+                      "Next"
+                    )}
                   </Button>
                 )}
               </Box>
