@@ -240,7 +240,17 @@ export default function PaymentDetail({
         colorScheme="primary"
         isDisabled={Boolean(payment?.transaction)}
       >
-        <SimpleGrid columns={[1, null, 2]} spacing={4} mt={4}>
+        <SimpleGrid
+          columns={[1, null, 2]}
+          spacing={4}
+          mt={4}
+          color="blackAlpha.700"
+          sx={{
+            "& span[data-disabled]": {
+              opacity: 1,
+            },
+          }}
+        >
           <Checkbox isChecked isDisabled>
             Main (
             {Intl.NumberFormat("en-NG", {

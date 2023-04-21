@@ -8,7 +8,12 @@ import PaymentSummary from "../../components/payments/payment-summary";
 
 export default function Payments() {
   const [statusFilter, setStatusFilter] = useState("all");
-  const paymentsRes = useAllPayments({ select: (payments) => payments.main });
+  const paymentsRes = useAllPayments({
+    select: (payments) => [
+      ...payments.main,
+      ...payments.sundry.filter((payment) => payment.status === "paid"),
+    ],
+  });
   const mainPayments = paymentsRes.data || [];
   const sortedPayments = mainPayments.sort((a, b) => {
     if (a.status === b.status) return 0;
