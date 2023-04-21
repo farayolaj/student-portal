@@ -172,6 +172,7 @@ export default function Login() {
               alt=""
               fill
               style={{ objectFit: "cover", transform: `scaleX(${imgScaleX})` }}
+              priority
             />
             <Box
               w={[null, null, "50%"]}
