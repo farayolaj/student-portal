@@ -44,6 +44,7 @@ const Navigation: FC<NavigationProps> = ({ isOpen }) => {
         href="https://dlclms.ui.edu.ng"
         isOpen={isOpen}
         isActive={false}
+        isExternal
       />
       <NavLink
         title="Results"
@@ -92,9 +93,17 @@ type NavLinkProps = {
   icon: IconType;
   isOpen: boolean;
   isActive: boolean;
+  isExternal?: boolean;
 };
 
-const NavLink: FC<NavLinkProps> = ({ title, href, icon, isOpen, isActive }) => {
+const NavLink: FC<NavLinkProps> = ({
+  title,
+  href,
+  icon,
+  isOpen,
+  isActive,
+  isExternal,
+}) => {
   return (
     <Link
       bg={isActive ? "primary.100" : "transparent"}
@@ -109,6 +118,7 @@ const NavLink: FC<NavLinkProps> = ({ title, href, icon, isOpen, isActive }) => {
       href={href}
       color="initial"
       _hover={{ textDecoration: "none", bg: "primary.50" }}
+      isExternal={isExternal}
     >
       <Icon as={icon} boxSize="1.5em" title={title} aria-label={title} />
       <Text as="span" display={isOpen ? "unset" : "none"}>
