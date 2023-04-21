@@ -104,6 +104,7 @@ export default function PaymentDetail({
         preselectedId: isPreselectedSelected
           ? payment?.preselected?.id
           : undefined,
+        paymentType: "main",
       },
       {
         onError: (error) => {

@@ -1,5 +1,5 @@
 import { useAllPayments } from "@/api/payment/use-all-payments";
-import { useAllSessions } from "@/api/user/use-all-sessions";
+import { useInitiateTransaction } from "@/api/payment/use-initiate-transaction";
 import {
   useDisclosure,
   Button,
@@ -17,11 +17,13 @@ import {
   Flex,
   InputGroup,
   InputLeftElement,
+  useToast,
+  Spinner,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import useRemitaInline from "../common/remita-inline";
 
 export default function MakeSundryPaymentModal() {
-  const { data: session } = useAllSessions();
   const paymentsRes = useAllPayments({ select: (payments) => payments.sundry });
   const sundryPayments = paymentsRes.data || [];
   const [selectedPaymentId, setSelectedPaymentId] = useState<
@@ -32,7 +34,66 @@ export default function MakeSundryPaymentModal() {
   );
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [isCustomPayment, setIsCustomPayment] = useState(false);
+  const toast = useToast();
+
+  const initiateTransaction = useInitiateTransaction();
+  const { initPayment } = useRemitaInline({
+    isLive: process.env.NODE_ENV === "production",
+    onSuccess: (res: any) => {
+      if (process.env.NODE_ENV === "development") console.log(res);
+
+      toast({
+        status: "success",
+        title: "Payment Successful",
+        description:
+          "If payment doesn't reflect immediately, requery transaction status later.",
+      });
+    },
+    onError: (res: any) => {
+      if (process.env.NODE_ENV === "development") console.error(res);
+
+      toast({
+        status: "error",
+        title: "Payment Failed",
+        description: "Please try again later.",
+      });
+    },
+  });
+
+  const initialisePayment = () => {
+    initiateTransaction.mutate(
+      {
+        id: selectedPayment?.id || "",
+        paymentType: "sundry",
+      },
+      {
+        onError: (error) => {
+          const err = error as Error;
+          toast({
+            status: "error",
+            title: "Error initializing payment",
+            description: err.message,
+          });
+        },
+        onSuccess: (data) => {
+          onClose();
+          initPayment({
+            key: data.transaction?.publicKey || "",
+            processRrr: true,
+            transactionId: data.transaction?.referenceNumber,
+            extendedData: {
+              customFields: [
+                {
+                  name: "rrr",
+                  value: data.transaction?.rrr,
+                },
+              ],
+            },
+          });
+        },
+      }
+    );
+  };
 
   return (
     <>
@@ -60,58 +121,39 @@ export default function MakeSundryPaymentModal() {
                   }}
                 >
                   {sundryPayments.map((payment) => (
-                    <option key={payment.id}>{payment.title}</option>
-                  ))}
-                </Select>
-              </FormControl>
-              {/* <FormControl display="inline-flex" alignItems="center" gap={4}>
-                <Checkbox
-                  isChecked={isCustomPayment}
-                  onChange={(ev) => setIsCustomPayment(ev.target.checked)}
-                />
-                <FormLabel mb={0}>Custom Payment</FormLabel>
-              </FormControl> */}
-              <FormControl isDisabled={!isCustomPayment} isRequired>
-                <FormLabel>Session</FormLabel>
-                <Select
-                  placeholder="Select a session..."
-                  value={
-                    isCustomPayment
-                      ? undefined
-                      : session?.find(
-                          (session) => selectedPayment?.sessionId === session.id
-                        )?.id
-                  }
-                >
-                  {session?.map((session) => (
-                    <option key={session.id} value={session.id}>
-                      {session.name}
+                    <option key={payment.id} value={payment.id}>
+                      {payment.title}
                     </option>
                   ))}
                 </Select>
               </FormControl>
-              <FormControl isDisabled={!isCustomPayment} isRequired>
-                <FormLabel>Level</FormLabel>
-                <Select placeholder="Select applicable level...">
-                  {session?.map((session) => (
-                    <option key={session.id} value={session.id}>
-                      {session.level}
-                    </option>
-                  ))}
-                </Select>
-              </FormControl>
-              <FormControl isDisabled={!isCustomPayment} isRequired>
+              <FormControl isDisabled isRequired>
                 <FormLabel>Amount</FormLabel>
                 <InputGroup>
                   <InputLeftElement>₦</InputLeftElement>
-                  <Input type="number" placeholder="Enter an emount" />
+                  <Input
+                    type="number"
+                    placeholder="Enter an emount"
+                    value={selectedPayment?.amount || ""}
+                  />
                 </InputGroup>
               </FormControl>
               <Flex justify="center" gap={8} w="100%">
                 <Button colorScheme="red" onClick={onClose}>
                   Cancel
                 </Button>
-                <Button type="submit">Submit</Button>
+                <Button
+                  type="submit"
+                  onClick={initialisePayment}
+                  isDisabled={!selectedPaymentId}
+                  minW={24}
+                >
+                  {initiateTransaction.isLoading ? (
+                    <Spinner color="white" size="xs" />
+                  ) : (
+                    "Pay"
+                  )}
+                </Button>
               </Flex>
             </VStack>
           </ModalBody>
