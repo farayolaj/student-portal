@@ -116,6 +116,7 @@ export default function MakeSundryPaymentModal() {
                 <FormLabel>Title</FormLabel>
                 <Select
                   placeholder="Select a fee..."
+                  value={selectedPaymentId}
                   onInput={(ev) => {
                     setSelectedPaymentId(ev.currentTarget.value);
                   }}
