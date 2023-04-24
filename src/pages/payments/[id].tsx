@@ -1,15 +1,31 @@
 import { usePaymentDetail } from "@/api/payment/use-payment-detail";
-import { Card, CardBody } from "@chakra-ui/react";
+import { Card, CardBody, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import PageTitle from "../../components/common/page-title";
 import Seo from "../../components/common/seo";
 import PaymentDetail from "../../components/payments/details/payment-detail";
 import PaymentTransactionDetail from "../../components/payments/details/payment-transactions";
+import { useEffect } from "react";
 
 export default function PaymentDetails() {
   const router = useRouter();
   const id = router.query.id as string;
+  const toast = useToast();
   const paymentRes = usePaymentDetail({ variables: { id } });
+
+  useEffect(() => {
+    if (paymentRes.error) {
+      const error = paymentRes.error as any;
+      toast({
+        title: "Error fetching payment details",
+        description: error.message,
+        status: "error",
+        duration: 3000,
+        id: `payment-detail-error-${id}`,
+        isClosable: true,
+      });
+    }
+  }, [paymentRes.error, id, toast]);
 
   return (
     <>
