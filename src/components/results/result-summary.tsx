@@ -26,7 +26,11 @@ export default function ResultSummary({
         borderColor: "primary",
       }}
     >
-      <ResultBarChart w="full" courseResults={sessionResultSummary.results} />
+      <ResultBarChart
+        w="full"
+        courseResults={sessionResultSummary.results}
+        px={2}
+      />
       <CardBody>
         <Flex direction="column">
           <LinkOverlay

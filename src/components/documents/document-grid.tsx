@@ -86,7 +86,7 @@ function DocumentItem({ document }: DocumentItemProps) {
       <Flex justify="center" align="center" p={6} color="primary.500">
         <Icon fontSize="5rem" as={icon} />
       </Flex>
-      <CardBody>
+      <CardBody p={6} pt={0}>
         <Flex direction="column" gap={2}>
           <Text h={12}>{document.title}</Text>
           <Text
