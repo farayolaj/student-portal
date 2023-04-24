@@ -129,7 +129,7 @@ export default function MakeSundryPaymentModal() {
                 </Select>
               </FormControl>
               <FormControl isDisabled isRequired>
-                <FormLabel>Amount</FormLabel>
+                <FormLabel _disabled={{ opacity: 1 }}>Amount</FormLabel>
                 <InputGroup>
                   <InputLeftElement>₦</InputLeftElement>
                   <Input

@@ -241,7 +241,7 @@ export default function PaymentDetail({
         isDisabled={Boolean(payment?.transaction)}
       >
         <SimpleGrid
-          columns={[1, null, 2]}
+          columns={1}
           spacing={4}
           mt={4}
           color="blackAlpha.700"
