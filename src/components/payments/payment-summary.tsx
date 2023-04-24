@@ -25,6 +25,14 @@ export default function PaymentSummary({ payment }: PaymentSummaryProps) {
     statusText = "Unpaid";
   }
 
+  let amount = payment.amount;
+
+  if (payment.transaction && payment.containsPreselected) {
+    amount += payment.preselected?.amount || 0;
+  } else if (payment.preselected) {
+    amount += payment.preselected.amount;
+  }
+
   return (
     <Card>
       <CardBody minH={40} pt="1.5rem" px="1.875rem" pb="2rem">
@@ -42,7 +50,7 @@ export default function PaymentSummary({ payment }: PaymentSummaryProps) {
             {new Intl.NumberFormat("en-NG", {
               style: "currency",
               currency: "NGN",
-            }).format(payment.amount)}
+            }).format(amount)}
           </Text>
           <Text as="span" mt={2} minH={6} fontSize="sm" color="gray.600">
             {description}
