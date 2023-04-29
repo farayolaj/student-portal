@@ -74,7 +74,8 @@ export default function PaymentDetail({
 
   const initiateTransaction = useInitiateTransaction();
   const { initPayment } = useRemitaInline({
-    isLive: process.env.NODE_ENV === "production",
+    isLive: true,
+    // isLive: process.env.NODE_ENV === "production",
     onSuccess: (res: any) => {
       if (process.env.NODE_ENV === "development") console.log(res);
 
@@ -119,7 +120,7 @@ export default function PaymentDetail({
           initPayment({
             key: data.transaction?.publicKey || "",
             processRrr: true,
-            transactionId: data.transaction?.referenceNumber,
+            transactionId: data.transaction?.id,
             extendedData: {
               customFields: [
                 {

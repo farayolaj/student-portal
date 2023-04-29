@@ -22,7 +22,7 @@ export function toPayment(data: any): Payment {
           },
     transaction: data.transaction
       ? {
-          id: data.transaction.order_id,
+          id: data.transaction.transaction_id,
           amount: data.total,
           dateInitiated: parse(
             data.transaction.date_performed,

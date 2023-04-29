@@ -80,7 +80,7 @@ export default function MakeSundryPaymentModal() {
           initPayment({
             key: data.transaction?.publicKey || "",
             processRrr: true,
-            transactionId: data.transaction?.referenceNumber,
+            transactionId: data.transaction?.id,
             extendedData: {
               customFields: [
                 {

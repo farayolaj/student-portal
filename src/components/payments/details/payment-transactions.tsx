@@ -37,6 +37,11 @@ export default function PaymentTransactionDetail({
         <Box>
           <SimpleGrid columns={[1, null, 3]} gap={4}>
             <DetailItem
+              name="Transaction Id"
+              value={transaction?.id || ""}
+              isLoading={isLoading}
+            />
+            <DetailItem
               name="Transaction Reference"
               value={transaction?.referenceNumber || ""}
               isLoading={isLoading}
