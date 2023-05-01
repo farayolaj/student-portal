@@ -119,6 +119,7 @@ interface Payment {
   title: string;
   amount: number;
   dueDate: Date;
+  isActive: boolean;
   status: "paid" | "unpaid";
   level?: string;
   entryMode?: string;

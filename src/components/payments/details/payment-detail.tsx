@@ -74,8 +74,7 @@ export default function PaymentDetail({
 
   const initiateTransaction = useInitiateTransaction();
   const { initPayment } = useRemitaInline({
-    isLive: true,
-    // isLive: process.env.NODE_ENV === "production",
+    isLive: process.env.NODE_ENV === "production",
     onSuccess: (res: any) => {
       if (process.env.NODE_ENV === "development") console.log(res);
 
@@ -219,12 +218,14 @@ export default function PaymentDetail({
           <Flex direction="column">
             <Button
               onClick={initialisePayment}
-              isDisabled={initiateTransaction.isLoading}
+              isDisabled={!payment.isActive || initiateTransaction.isLoading}
             >
               {initiateTransaction.isLoading ? (
                 <Spinner color="white" size="xs" />
-              ) : (
+              ) : payment.isActive ? (
                 "Pay Now"
+              ) : (
+                "Payment Closed"
               )}
             </Button>
             <Text as="span" fontSize="sm" fontWeight="semibold" mt={8}>

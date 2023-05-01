@@ -4,6 +4,7 @@ export function toPayment(data: any): Payment {
   return {
     id: data.id || data.payment_id,
     amount: data.total,
+    isActive: data.is_active === "1",
     status: data.paid ? "paid" : "unpaid",
     title: data.description,
     dueDate: parse(data.date_due || data.due_date, "MMM. dd, yyyy", new Date()),

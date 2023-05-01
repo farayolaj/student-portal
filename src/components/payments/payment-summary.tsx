@@ -1,13 +1,14 @@
-import { Card, CardBody, Flex, Link, Text } from "@chakra-ui/react";
+import { Button, Card, CardBody, Flex, Text } from "@chakra-ui/react";
 import { IoCheckmarkCircle, IoTime } from "react-icons/io5";
-import NextLink from "next/link";
 import { useAllSessions } from "@/api/user/use-all-sessions";
+import { useRouter } from "next/router";
 
 type PaymentSummaryProps = {
   payment: Payment;
 };
 
 export default function PaymentSummary({ payment }: PaymentSummaryProps) {
+  const { push } = useRouter();
   const { data: session } = useAllSessions({
     select: (sessions) =>
       sessions.find((session) => session.id === payment.sessionId),
@@ -73,16 +74,15 @@ export default function PaymentSummary({ payment }: PaymentSummaryProps) {
               payment.status !== "paid" &&
               `Due ${payment.dueDate?.toLocaleDateString()}`}
           </Text>
-          <Link
-            as={NextLink}
-            variant="button"
-            href={`/payments/${payment.id}`}
+          <Button
+            onClick={() => push(`/payments/${payment.id}`)}
             mx="auto"
             w="fit-content"
             mt="auto"
+            isDisabled={!payment.isActive}
           >
-            View Details
-          </Link>
+            {payment.isActive ? "View Details" : "Payment Closed"}
+          </Button>
         </Flex>
       </CardBody>
     </Card>

@@ -1,6 +1,7 @@
 import { useAllPayments } from "@/api/payment/use-all-payments";
 import { useSession } from "@/api/user/use-session";
 import {
+  Button,
   Card,
   CardBody,
   CardHeader,
@@ -18,6 +19,7 @@ import NextLink from "next/link";
 import { FC } from "react";
 import { IoTime } from "react-icons/io5";
 import * as routes from "../../constants/routes";
+import { useRouter } from "next/router";
 
 const PaymentsCard: FC = () => {
   const outstandingPaymentsRes = useAllPayments({
@@ -71,6 +73,7 @@ type PaymentItemProps = {
 };
 
 const PaymentItem: FC<PaymentItemProps> = ({ payment }) => {
+  const { push } = useRouter();
   const sessionRes = useSession(payment?.sessionId || "");
 
   if (!payment) return null;
@@ -108,14 +111,13 @@ const PaymentItem: FC<PaymentItemProps> = ({ payment }) => {
           <IoTime color={statusColor} /> <span>{statusText}</span>
         </Text>
       </Flex>
-      <Link
-        as={NextLink}
-        href={`/payments/${payment.id}`}
-        variant="button"
+      <Button
+        onClick={() => push(`/payments/${payment.id}`)}
         w="fit-content"
+        isDisabled={!payment.isActive}
       >
-        View Details
-      </Link>
+        {payment.isActive ? "View Details" : "Payment Closed"}
+      </Button>
     </Flex>
   );
 };
