@@ -42,12 +42,16 @@ export default function Payments() {
             thickness="4px"
           />
         </Center>
-      ) : (
+      ) : filteredPayments.length > 0 ? (
         <SimpleGrid columns={[1, null, 3]} gap={8} mt={8}>
           {filteredPayments.map((payment) => (
             <PaymentSummary payment={payment} key={payment.id} />
           ))}
         </SimpleGrid>
+      ) : (
+        <Center mt={8} py={16}>
+          You currently have no payment to make.
+        </Center>
       )}
     </>
   );
