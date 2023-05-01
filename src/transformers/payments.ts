@@ -21,6 +21,12 @@ export function toPayment(data: any): Payment {
             title: data.preselected_fee_readable,
             amount: data.preselected_amount,
           },
+    prerequisites:
+      data.prerequisites?.map((pre: any) => ({
+        id: pre.prerequisite,
+        description: pre.description,
+        isPaid: pre.paid,
+      })) ?? [],
     transaction: data.transaction
       ? {
           id: data.transaction.transaction_id,

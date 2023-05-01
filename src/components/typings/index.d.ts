@@ -132,6 +132,11 @@ interface Payment {
     title: string;
     amount: number;
   };
+  prerequisites?: {
+    id: string;
+    description: string;
+    isPaid: boolean;
+  }[];
   transaction?: Transaction;
 }
 

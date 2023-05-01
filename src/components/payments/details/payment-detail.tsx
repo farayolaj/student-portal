@@ -5,6 +5,7 @@ import useRemitaInline from "@/components/common/remita-inline";
 import {
   Box,
   Button,
+  Center,
   Checkbox,
   CheckboxGroup,
   Flex,
@@ -65,6 +66,9 @@ export default function PaymentDetail({
     ? payment.amount +
       (isPreselectedSelected ? payment.preselected?.amount || 0 : 0)
     : 0;
+
+  const prerequisites =
+    payment?.prerequisites?.filter((pre) => !pre.isPaid) || [];
 
   useEffect(() => {
     if (payment?.transaction) {
@@ -136,6 +140,14 @@ export default function PaymentDetail({
 
   return (
     <Box>
+      {prerequisites.length > 0 && (
+        <Center bg="yellow" p={2} mb={8}>
+          <Text as="span" fontWeight="bold">
+            Requires {prerequisites.map((pre) => pre.description).join(" and ")}{" "}
+            to be paid.
+          </Text>
+        </Center>
+      )}
       <Flex justify="space-between" align="center">
         <Flex direction="column" fontSize="xl">
           {payment ? (
@@ -218,11 +230,15 @@ export default function PaymentDetail({
           <Flex direction="column">
             <Button
               onClick={initialisePayment}
-              isDisabled={!payment.isActive || initiateTransaction.isLoading}
+              isDisabled={
+                !payment.isActive ||
+                prerequisites.length === 0 ||
+                initiateTransaction.isLoading
+              }
             >
               {initiateTransaction.isLoading ? (
                 <Spinner color="white" size="xs" />
-              ) : payment.isActive ? (
+              ) : !payment.isActive ? (
                 "Pay Now"
               ) : (
                 "Payment Closed"
