@@ -86,6 +86,11 @@ const PaymentItem: FC<PaymentItemProps> = ({ payment }) => {
         payment.dueDate,
         new Date()
       )} days`;
+  const showPreselected =
+    (payment.transaction && payment.containsPreselected) || payment.preselected;
+  let amount = payment.amount;
+
+  if (showPreselected) amount += payment.preselected?.amount || 0;
 
   return (
     <Flex w="full" align="center" justify="space-between">
@@ -94,10 +99,11 @@ const PaymentItem: FC<PaymentItemProps> = ({ payment }) => {
           {Intl.NumberFormat("en-NG", {
             style: "currency",
             currency: "NGN",
-          }).format(payment.amount)}
+          }).format(amount)}
         </Text>
         <Text>
           {payment.title}
+          {showPreselected && " with " + payment.preselected?.title}
           {sessionRes.data && " | " + sessionRes.data.name}
         </Text>
         <Text

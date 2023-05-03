@@ -232,13 +232,13 @@ export default function PaymentDetail({
               onClick={initialisePayment}
               isDisabled={
                 !payment.isActive ||
-                prerequisites.length === 0 ||
+                prerequisites.length > 0 ||
                 initiateTransaction.isLoading
               }
             >
               {initiateTransaction.isLoading ? (
                 <Spinner color="white" size="xs" />
-              ) : !payment.isActive ? (
+              ) : payment.isActive ? (
                 "Pay Now"
               ) : (
                 "Payment Closed"

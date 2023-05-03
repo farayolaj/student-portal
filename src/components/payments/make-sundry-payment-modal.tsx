@@ -24,7 +24,12 @@ import { useState } from "react";
 import useRemitaInline from "../common/remita-inline";
 
 export default function MakeSundryPaymentModal() {
-  const paymentsRes = useAllPayments({ select: (payments) => payments.sundry });
+  const paymentsRes = useAllPayments({
+    select: (payments) =>
+      payments.sundry.sort((a, b) =>
+        a.title.localeCompare(b.title, "en-NG", { ignorePunctuation: true })
+      ),
+  });
   const sundryPayments = paymentsRes.data || [];
   const [selectedPaymentId, setSelectedPaymentId] = useState<
     string | undefined
@@ -146,13 +151,15 @@ export default function MakeSundryPaymentModal() {
                 <Button
                   type="submit"
                   onClick={initialisePayment}
-                  isDisabled={!selectedPaymentId}
+                  isDisabled={!selectedPaymentId || !selectedPayment?.isActive}
                   minW={24}
                 >
                   {initiateTransaction.isLoading ? (
                     <Spinner color="white" size="xs" />
-                  ) : (
+                  ) : selectedPayment?.isActive ? (
                     "Pay"
+                  ) : (
+                    "Payment Closed"
                   )}
                 </Button>
               </Flex>

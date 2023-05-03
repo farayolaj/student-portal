@@ -25,14 +25,11 @@ export default function PaymentSummary({ payment }: PaymentSummaryProps) {
     statusIcon = <IoTime color="orange" />;
     statusText = "Unpaid";
   }
-
+  const showPreselected =
+    (payment.transaction && payment.containsPreselected) || payment.preselected;
   let amount = payment.amount;
 
-  if (payment.transaction && payment.containsPreselected) {
-    amount += payment.preselected?.amount || 0;
-  } else if (payment.preselected) {
-    amount += payment.preselected.amount;
-  }
+  if (showPreselected) amount += payment.preselected?.amount || 0;
 
   return (
     <Card>
@@ -79,9 +76,13 @@ export default function PaymentSummary({ payment }: PaymentSummaryProps) {
             mx="auto"
             w="fit-content"
             mt="auto"
-            isDisabled={!payment.isActive}
+            isDisabled={payment.status === "unpaid" && !payment.isActive}
           >
-            {payment.isActive ? "View Details" : "Payment Closed"}
+            {payment.status === "paid"
+              ? "View Details"
+              : payment.isActive
+              ? "View Details"
+              : "Payment Closed"}
           </Button>
         </Flex>
       </CardBody>
