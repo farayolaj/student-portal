@@ -18,9 +18,15 @@ import { FC } from "react";
 import { useDashboardInfo } from "../../api/dashboard/use-dashboard-info";
 import * as routes from "../../constants/routes";
 import getAbstractImage from "../../lib/get-abstract-image";
+import { useRegistrationOpen } from "@/api/course/use-registration-open";
+import { useCurrentPeriod } from "@/api/user/use-current-period";
 
 const CoursesCard: FC = () => {
+  const { period } = useCurrentPeriod();
   const dashboardInfo = useDashboardInfo();
+  const { data: canAddCourses } = useRegistrationOpen({
+    variables: { semester: period.semester.id },
+  });
   const courses = dashboardInfo.data?.courses || [];
 
   let content;
@@ -37,9 +43,11 @@ const CoursesCard: FC = () => {
     content = (
       <Flex direction="column" align="center" justify="center" gap={8} py={8}>
         <Text>You have not registered for any course.</Text>
-        <Link as={NextLink} variant="button" href={routes.ADD_COURSES}>
-          Register Courses
-        </Link>
+        {canAddCourses && (
+          <Link as={NextLink} variant="button" href={routes.ADD_COURSES}>
+            Register Courses
+          </Link>
+        )}
       </Flex>
     );
   } else {
