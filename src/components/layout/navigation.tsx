@@ -15,6 +15,7 @@ import {
   IoShieldCheckmarkOutline,
 } from "react-icons/io5";
 import * as routes from "../../constants/routes";
+import { BiMessageRounded } from "react-icons/bi";
 
 type NavigationProps = {
   isOpen: boolean;
@@ -74,6 +75,13 @@ const Navigation: FC<NavigationProps> = ({ isOpen }) => {
         href={routes.DOCUMENTS}
         isOpen={isOpen}
         isActive={pathname.startsWith(routes.DOCUMENTS)}
+      />
+      <NavLink
+        title="Messages"
+        icon={BiMessageRounded}
+        href={routes.MESSAGES}
+        isOpen={isOpen}
+        isActive={pathname.startsWith(routes.MESSAGES)}
       />
       <NavLink
         title="Events"
