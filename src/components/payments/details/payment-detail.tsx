@@ -147,8 +147,8 @@ export default function PaymentDetail({
   return (
     <Box>
       {prerequisites.length > 0 && (
-        <Center bg="yellow" p={2} mb={8}>
-          <Text as="span" fontWeight="bold">
+        <Center bg="#ffe599" p={2} mb={8}>
+          <Text as="span" fontWeight="semibold">
             Requires{" "}
             {prerequisites
               .map((pre) => (

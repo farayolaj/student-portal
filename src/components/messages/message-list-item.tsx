@@ -1,11 +1,39 @@
 import { Box, Flex, Heading, Text } from "@chakra-ui/react";
+import formatDistanceToNow from "date-fns/formatDistanceToNow";
 
-export default function MessageListItem() {
+type MessageListItemProps = {
+  data: {
+    id: string;
+    from: string;
+    subject: string;
+    date: Date;
+    snippet: string;
+  };
+  isRead?: boolean;
+  isSelected?: boolean;
+  onSelect: (id: string) => void;
+};
+
+export default function MessageListItem({
+  data: { id, from, subject, date, snippet },
+  isRead,
+  isSelected,
+  onSelect,
+}: MessageListItemProps) {
   return (
-    <Box px={6} py={4} cursor="pointer" _hover={{ bg: "primary.100" }}>
+    <Box
+      w="full"
+      px={6}
+      py={4}
+      cursor="pointer"
+      _hover={{ bg: "primary.100" }}
+      tabIndex={0}
+      onClick={() => onSelect(id)}
+      bg={isSelected ? "primary.100" : undefined}
+    >
       <Flex gap={2} justify="space-between" align="center">
-        <Heading as="h3" size="sm" fontWeight="semibold">
-          Faculty of Environmental Science
+        <Heading as="h3" size="sm" fontWeight={isRead ? "normal" : "semibold"}>
+          {from.replace(/<.*>/, "")}
         </Heading>
         <Text
           as="span"
@@ -14,15 +42,14 @@ export default function MessageListItem() {
           minW="20%"
           color="gray.600"
         >
-          5 months ago
+          {formatDistanceToNow(new Date(date), { addSuffix: true })}
         </Text>
       </Flex>
-      <Text fontSize="sm" fontWeight="medium" mt={2}>
-        New Session Meet Up Requirements
+      <Text fontSize="sm" fontWeight={isRead ? "normal" : "medium"} mt={2}>
+        {subject}
       </Text>
-      <Text fontSize="sm" color="gray.600">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam urna nulla,
-        tempor non commodo a, tempor vitae sapientia...
+      <Text fontSize="sm" color="gray.600" noOfLines={2}>
+        {snippet}
       </Text>
     </Box>
   );

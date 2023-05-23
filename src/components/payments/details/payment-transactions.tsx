@@ -2,8 +2,6 @@ import { useVerifyTransaction } from "@/api/payment/use-verify-transaction";
 import {
   Box,
   Button,
-  Card,
-  CardBody,
   Divider,
   Flex,
   SimpleGrid,
@@ -36,12 +34,7 @@ export default function PaymentTransactionDetail({
       {isLoading || transaction ? (
         <Box>
           <SimpleGrid columns={[1, null, 3]} gap={4}>
-            <DetailItem
-              name="Transaction Id"
-              value={transaction?.id || ""}
-              isLoading={isLoading}
-            />
-            <DetailItem
+           <DetailItem
               name="Transaction Reference"
               value={transaction?.referenceNumber || ""}
               isLoading={isLoading}
@@ -86,7 +79,7 @@ export default function PaymentTransactionDetail({
               />
             )}
             <DetailItem
-              name="Programme"
+              name="Description"
               value={transaction?.description || ""}
               isLoading={isLoading}
               gridColumn="1 / -1"

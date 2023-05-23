@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import getApi from "../api/api";
 import { useRouter } from "next/router";
 import { ERROR_PAGE } from "@/constants/routes";
+import { GapiWrapper } from "@/components/common/gapi-auth";
 
 type CustomAppProps = AppProps & {
   Component: NextComponentType & { layoutProps: LayoutProps };
@@ -23,7 +24,10 @@ export default function App({ Component, pageProps }: CustomAppProps) {
 
   useEffect(() => {
     const initialBaseUrl = process.env.NEXT_PUBLIC_API_URL;
-    const hostname = encodeURIComponent(window.location.hostname).replace("starrising", "localhost");
+    const hostname = encodeURIComponent(window.location.hostname).replace(
+      "starrising",
+      "localhost"
+    );
     const url = `${initialBaseUrl}/baseUrl?domain=${hostname}`;
     getApi()
       .get(url)
@@ -44,7 +48,9 @@ export default function App({ Component, pageProps }: CustomAppProps) {
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <Layout {...layoutProps}>
-            <Component {...pageProps} />
+            <GapiWrapper>
+              <Component {...pageProps} />
+            </GapiWrapper>
           </Layout>
         </AuthProvider>
         <ReactQueryDevtools initialIsOpen />
