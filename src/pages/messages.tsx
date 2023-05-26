@@ -6,35 +6,10 @@ import { Box, Flex } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import AuthWall from "@/components/messages/auth-wall";
 import { useGapiAuth } from "@/components/common/gapi-auth";
-
-async function listMessages({ limit = 10 }: { limit?: number }) {
-  const response = await gapi.client.gmail.users.messages.list({
-    userId: "me",
-    maxResults: limit,
-  });
-
-  if (response.status !== 200) {
-    throw new Error("Error fetching messages");
-  }
-
-  return response.result.messages;
-}
-
-async function getMessage({ id }: { id: string }) {
-  const response = await gapi.client.gmail.users.messages.get({
-    userId: "me",
-    id,
-  });
-
-  if (response.status !== 200) {
-    throw new Error(`Error fetching message with id ${id}`);
-  }
-
-  return response.result;
-}
+import { getMessage, listMessages } from "@/gapi/messages";
 
 export default function MessageLayout() {
-  const [messages, setMessages] = useState<gapi.client.gmail.Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [selectedMessageId, setSelectedMessageId] = useState<string>();
   const { isAuthorised } = useGapiAuth();
 

@@ -2,7 +2,7 @@ import { Card, CardBody, StackDivider, VStack } from "@chakra-ui/react";
 import MessageListItem from "./message-list-item";
 
 type MessageListProps = {
-  messages: gapi.client.gmail.Message[];
+  messages: MinimalMessage[];
   selectedId?: string;
   onSelect: (id: string) => void;
 };
@@ -27,19 +27,7 @@ export default function MessageList({
           {messages.map((message) => (
             <MessageListItem
               key={message.id}
-              data={{
-                id: message.id || "",
-                date: new Date(parseInt(message.internalDate || "0")),
-                from:
-                  message.payload?.headers?.find(
-                    (header) => header.name === "From"
-                  )?.value || "Unknown Sender",
-                subject:
-                  message.payload?.headers?.find(
-                    (header) => header.name === "Subject"
-                  )?.value || "No Subject",
-                snippet: message.snippet || "",
-              }}
+              data={message}
               onSelect={onSelect}
               isSelected={message.id === selectedId}
             />

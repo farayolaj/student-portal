@@ -233,3 +233,31 @@ interface DocumentUpload {
   customTitle?: string;
   reason?: string;
 }
+
+interface MinimalMessage {
+  id: string;
+  from: string;
+  subject: string;
+  date: Date;
+  snippet: string;
+}
+
+interface Message extends MinimalMessage {
+  htmlContent: string;
+  plainContent: string;
+  attachments: MinimalAttachment[];
+}
+
+interface MinimalAttachment {
+  id: string;
+  size: number;
+  filename: string;
+  mimeType: string;
+}
+
+interface Attachment extends MinimalAttachment {
+  /**
+   * Base64 encoded attachment data.
+   */
+  data: string;
+}

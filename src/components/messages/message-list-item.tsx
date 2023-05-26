@@ -2,13 +2,7 @@ import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 
 type MessageListItemProps = {
-  data: {
-    id: string;
-    from: string;
-    subject: string;
-    date: Date;
-    snippet: string;
-  };
+  data: MinimalMessage;
   isRead?: boolean;
   isSelected?: boolean;
   onSelect: (id: string) => void;
