@@ -4,7 +4,11 @@ import { useEvents } from "@/api/event/use-events";
 import Events from "./events";
 
 export default function EventCalendar() {
-  const { data: events, isInitialLoading } = useEvents();
+  const { data: events, isInitialLoading } = useEvents({
+    retry: false,
+    structuralSharing: false,
+    retryOnMount: false,
+  });
 
   if (isInitialLoading)
     return (
