@@ -12,6 +12,7 @@ import {
   IoPersonOutline,
   IoCalendarOutline,
   IoPhonePortraitOutline,
+  IoShieldCheckmarkOutline,
 } from "react-icons/io5";
 import * as routes from "../../constants/routes";
 
@@ -73,6 +74,13 @@ const Navigation: FC<NavigationProps> = ({ isOpen }) => {
         href={routes.EVENTS}
         isOpen={isOpen}
         isActive={pathname.startsWith(routes.EVENTS)}
+      />
+      <NavLink
+        title="Verify Result"
+        icon={IoShieldCheckmarkOutline}
+        href={routes.VERIFY_RESULT}
+        isOpen={isOpen}
+        isActive={pathname.startsWith(routes.VERIFY_RESULT)}
       />
       <NavLink
         title="Profile"
