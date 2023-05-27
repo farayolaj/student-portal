@@ -8,7 +8,6 @@ export async function listMessages({ limit = 10 }: { limit?: number }) {
   const response = await gapi.client.gmail.users.messages.list({
     userId: "me",
     maxResults: limit,
-    q: "has:attachment",
   });
 
   if (response.status !== 200) {

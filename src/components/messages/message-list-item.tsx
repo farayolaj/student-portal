@@ -42,9 +42,12 @@ export default function MessageListItem({
       <Text fontSize="sm" fontWeight={isRead ? "normal" : "medium"} mt={2}>
         {subject}
       </Text>
-      <Text fontSize="sm" color="gray.600" noOfLines={2}>
-        {snippet}
-      </Text>
+      <Text
+        fontSize="sm"
+        color="gray.600"
+        noOfLines={2}
+        dangerouslySetInnerHTML={{ __html: snippet }}
+      ></Text>
     </Box>
   );
 }

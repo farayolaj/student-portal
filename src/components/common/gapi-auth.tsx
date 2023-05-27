@@ -68,7 +68,6 @@ export function GapiWrapper({ children }: { children: ReactNode }) {
       if (gapi.client.getToken() === null) {
         tokenClient.requestAccessToken({
           prompt: "consent",
-          hint: "farayolajoshua@gmail.com",
         });
       } else {
         tokenClient.requestAccessToken({ prompt: "" });
