@@ -31,6 +31,13 @@ export default function RequestVerificationCard() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef(null);
   const isDisabled = false;
+  const isSubmitDisabled = documents.reduce<boolean>((prev, curr) => {
+    if (curr.file === null) return true;
+
+    if (curr.title === "others" && !curr.customTitle) return true;
+
+    return false;
+  }, false);
   const isSuccessful = false;
 
   const addDocument = () => {
@@ -93,7 +100,11 @@ export default function RequestVerificationCard() {
                       Add Another Document
                     </Text>
                   </Button>
-                  <Button onClick={onOpen} isDisabled={isDisabled}>
+                  <Button
+                    onClick={onOpen}
+                    isDisabled={isDisabled || isSubmitDisabled}
+                    title={isSubmitDisabled ? "Fill all fields" : undefined}
+                  >
                     Submit Uploads
                   </Button>
                 </Flex>
