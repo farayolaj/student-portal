@@ -165,6 +165,7 @@ interface User {
 }
 
 interface AcademicProfile {
+  id: string;
   matricNumber: string;
   level: string;
   entryMode: string;

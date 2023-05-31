@@ -17,6 +17,7 @@ export const toUser = (user: any) =>
 
 export const toAcademicProfile = (profile: any) =>
   ({
+    id: profile.academicRecord.student_id,
     matricNumber: profile.academicRecord.matric_number,
     entryMode: profile.academicRecord.entry_mode,
     programme: profile.programmeDetails?.programme,
