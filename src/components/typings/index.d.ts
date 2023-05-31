@@ -209,3 +209,25 @@ interface CalendarEvent {
 interface EventDateMapping {
   [key: string]: CalendarEvent[];
 }
+
+interface ResultVerificationDocumentType {
+  id: string;
+  name: string;
+  description?: string;
+  customName?: string;
+}
+
+interface DocumentUploadValue {
+  id: string;
+  documentTypeId: string;
+  file: File | null;
+  customTitle?: string;
+}
+
+interface DocumentUpload {
+  id: string;
+  documentType?: string;
+  file: string;
+  customTitle?: string;
+  reason?: string;
+}

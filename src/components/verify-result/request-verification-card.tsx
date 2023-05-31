@@ -19,31 +19,82 @@ import {
   Text,
   Icon,
   UnorderedList,
+  Spinner,
+  useToast,
+  ListItem,
 } from "@chakra-ui/react";
-import { useState, useRef } from "react";
-import DocumentUpload, { DocumentUploadValue } from "./document-upload";
+import { useState, useRef, Fragment } from "react";
+import DocumentUpload from "./document-upload";
 import { IoCheckmarkCircle, IoCloseCircle, IoTime } from "react-icons/io5";
+import { useUploadDocument } from "@/api/verify-result/use-upload-document";
+import { useProfile } from "@/api/user/use-profile";
+import queryClient from "@/lib/query-client";
+import { useVerificationResult } from "@/api/verify-result/use-verification-result";
+import { useDocumentUploads } from "@/api/verify-result/use-document-uploads";
+import ReadonlyDocumentUpload from "./readonly-document-upload";
 
-export default function RequestVerificationCard() {
+type RequestVerificationCardProps = {
+  isDisabled?: boolean;
+};
+
+export default function RequestVerificationCard({
+  isDisabled,
+}: RequestVerificationCardProps) {
+  const profileRes = useProfile();
   const [documents, setDocuments] = useState<DocumentUploadValue[]>([
-    { id: crypto.randomUUID(), file: null, title: "wedding" },
+    { id: crypto.randomUUID(), file: null, documentTypeId: "" },
   ]);
+  const verificationResultRes = useVerificationResult();
+  const status = verificationResultRes.data;
+  const documentUploadsRes = useDocumentUploads();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
   const cancelRef = useRef(null);
-  const isDisabled = false;
   const isSubmitDisabled = documents.reduce<boolean>((prev, curr) => {
     if (curr.file === null) return true;
 
-    if (curr.title === "others" && !curr.customTitle) return true;
+    if (curr.documentTypeId === "others" && !curr.customTitle) return true;
 
     return false;
   }, false);
-  const isSuccessful = false;
+
+  const uploadDocument = useUploadDocument();
+
+  const onSubmit = () => {
+    setIsSubmitting(true);
+    Promise.all(
+      documents.map((doc) =>
+        uploadDocument.mutateAsync({
+          file: doc.file as File,
+          studentId: profileRes.data?.academicProfile.id as string,
+          documentTypeId:
+            doc.documentTypeId === "others" ? undefined : doc.documentTypeId,
+          customName: doc.customTitle,
+        })
+      )
+    )
+      .then(() => {
+        queryClient.invalidateQueries(["verification_result"]);
+        queryClient.invalidateQueries(["document-uploads"]);
+      })
+      .catch((err) => {
+        toast({
+          title: "An error occurred while uploading.",
+          description: err.message,
+          status: "error",
+          isClosable: true,
+        });
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+      });
+  };
 
   const addDocument = () => {
     setDocuments([
       ...documents,
-      { id: crypto.randomUUID(), file: null, title: "wedding" },
+      { id: crypto.randomUUID(), file: null, documentTypeId: "" },
     ]);
   };
 
@@ -62,33 +113,43 @@ export default function RequestVerificationCard() {
           </CardHeader>
           <CardBody>
             <VStack as="form" gap={4} w="full" align="flex-start" px={4}>
-              {documents.map((doc, idx) => (
-                <>
-                  <DocumentUpload
-                    key={idx}
-                    value={doc}
-                    onChange={(newValue) => {
-                      const newDocuments = [...documents];
-                      newDocuments[idx] = newValue;
-                      setDocuments(newDocuments);
-                    }}
-                    onRemove={() => {
-                      const newDocuments = [...documents];
-                      newDocuments.splice(idx, 1);
-                      setDocuments(newDocuments);
-                    }}
-                    showRemoveButton={documents.length > 1}
-                  />
-                  <StackDivider w="full" borderWidth={2} />
-                </>
-              ))}
-              {!isSuccessful && (
+              {status === "not_found"
+                ? documents.map((doc) => (
+                    <Fragment key={doc.id}>
+                      <DocumentUpload
+                        value={doc}
+                        onChange={(newValue) => {
+                          setDocuments((prev) =>
+                            prev.map((document) =>
+                              document.id === doc.id ? newValue : document
+                            )
+                          );
+                        }}
+                        onRemove={() => {
+                          setDocuments((prev) =>
+                            prev.filter((d) => d.id !== doc.id)
+                          );
+                        }}
+                        showRemoveButton={documents.length > 1}
+                        isDisabled={status !== "not_found"}
+                      />
+                      <StackDivider w="full" borderWidth={2} />
+                    </Fragment>
+                  ))
+                : documentUploadsRes.data?.map((doc) => (
+                    <Fragment key={doc.id}>
+                      <ReadonlyDocumentUpload value={doc} />
+                      <StackDivider w="full" borderWidth={2} />
+                    </Fragment>
+                  ))}
+              {status === "not_found" && (
                 <Flex justify="space-between" w="full">
                   <Button
                     display="inline-flex"
                     gap={2}
                     alignItems="center"
                     variant="outline"
+                    isDisabled={isSubmitting}
                   >
                     <AddIcon />
                     <Text
@@ -102,36 +163,61 @@ export default function RequestVerificationCard() {
                   </Button>
                   <Button
                     onClick={onOpen}
-                    isDisabled={isDisabled || isSubmitDisabled}
+                    isDisabled={isDisabled || isSubmitDisabled || isSubmitting}
                     title={isSubmitDisabled ? "Fill all fields" : undefined}
+                    minW={24}
                   >
-                    Submit Uploads
+                    {isSubmitting ? <Spinner /> : "Submit Uploads"}
                   </Button>
                 </Flex>
               )}
             </VStack>
-            <Box>
-              <Heading size="md" mt={12}>
-                Status
-              </Heading>
-              <Text mt={2} display="inline-flex" gap={4} alignItems="center">
-                <Icon as={IoTime} color="yellow" boxSize={6} />
-                Your request is currently being processed. Please check back.
-              </Text>
-              <Text mt={2} display="inline-flex" gap={4} alignItems="center">
-                <Icon as={IoCheckmarkCircle} color="green" boxSize={6} />
-                Your result has been successfully verified.
-              </Text>
-              <Text mt={2} display="inline-flex" gap={4} alignItems="center">
-                <Icon as={IoCloseCircle} color="red" boxSize={6} />
-                Your result could not be verified successfully for the following
-                reason(s):
-              </Text>
-              <UnorderedList ml={16}>
-                <li>Incorrect details</li>
-                <li>Incorrect documents</li>
-              </UnorderedList>
-            </Box>
+            {status !== "not_found" && (
+              <Box>
+                <Heading size="md" mt={12}>
+                  Status
+                </Heading>
+                {status === "pending" ? (
+                  <Text
+                    mt={2}
+                    display="inline-flex"
+                    gap={4}
+                    alignItems="center"
+                  >
+                    <Icon as={IoTime} color="yellow" boxSize={6} />
+                    Your request is currently being processed. Please check
+                    back.
+                  </Text>
+                ) : status === "verified" ? (
+                  <Text
+                    mt={2}
+                    display="inline-flex"
+                    gap={4}
+                    alignItems="center"
+                  >
+                    <Icon as={IoCheckmarkCircle} color="green" boxSize={6} />
+                    Your result has been successfully verified.
+                  </Text>
+                ) : (
+                  <>
+                    <Text
+                      mt={2}
+                      display="inline-flex"
+                      gap={4}
+                      alignItems="center"
+                    >
+                      <Icon as={IoCloseCircle} color="red" boxSize={6} />
+                      Your result could not be verified successfully.
+                    </Text>
+                    <UnorderedList ml={16}>
+                      {documentUploadsRes.data?.map((doc) => (
+                        <ListItem key={doc.id}>{doc.reason}</ListItem>
+                      ))}
+                    </UnorderedList>
+                  </>
+                )}
+              </Box>
+            )}
           </CardBody>
         </Card>
         {isDisabled && (
@@ -168,7 +254,7 @@ export default function RequestVerificationCard() {
               <Button
                 onClick={() => {
                   onClose();
-                  // onSendRequest();
+                  onSubmit();
                 }}
                 ml={3}
               >

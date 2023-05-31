@@ -7,10 +7,22 @@ import {
   Heading,
   CardBody,
   Button,
+  Spinner,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import { IoShieldCheckmark } from "react-icons/io5";
 
-export default function PayVerificationFeeCard() {
+type PayVerificationFeeCardProps = {
+  paymentId?: string;
+  isPaid?: boolean;
+};
+
+export default function PayVerificationFeeCard({
+  paymentId,
+  isPaid = true,
+}: PayVerificationFeeCardProps) {
+  const { push } = useRouter();
+
   return (
     <Card p={4}>
       <Flex gap={6}>
@@ -22,8 +34,21 @@ export default function PayVerificationFeeCard() {
             </Heading>
           </CardHeader>
           <CardBody>
-            <Button>Pay Verification Fee</Button>
-            {/* <Button isDisabled>Paid</Button> */}
+            <Button
+              isDisabled={isPaid}
+              onClick={() => push(`/payments/${paymentId}`)}
+              minW={24}
+            >
+              {paymentId ? (
+                isPaid ? (
+                  "Paid"
+                ) : (
+                  "Pay Verification Fee"
+                )
+              ) : (
+                <Spinner size="sm" />
+              )}
+            </Button>
           </CardBody>
         </Box>
       </Flex>
