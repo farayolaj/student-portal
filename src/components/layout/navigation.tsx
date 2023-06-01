@@ -33,6 +33,13 @@ const Navigation: FC<NavigationProps> = ({ isOpen }) => {
         isActive={pathname === routes.HOME}
       />
       <NavLink
+        title="Verify Result"
+        icon={IoShieldCheckmarkOutline}
+        href={routes.VERIFY_RESULT}
+        isOpen={isOpen}
+        isActive={pathname.startsWith(routes.VERIFY_RESULT)}
+      />
+      <NavLink
         title="Courses"
         icon={IoBookOutline}
         href={routes.REGISTERED_COURSES}
@@ -74,13 +81,6 @@ const Navigation: FC<NavigationProps> = ({ isOpen }) => {
         href={routes.EVENTS}
         isOpen={isOpen}
         isActive={pathname.startsWith(routes.EVENTS)}
-      />
-      <NavLink
-        title="Verify Result"
-        icon={IoShieldCheckmarkOutline}
-        href={routes.VERIFY_RESULT}
-        isOpen={isOpen}
-        isActive={pathname.startsWith(routes.VERIFY_RESULT)}
       />
       <NavLink
         title="Profile"
