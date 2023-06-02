@@ -1,3 +1,4 @@
+import { useAllPayments } from "@/api/payment/use-all-payments";
 import { useFetchReceipt } from "@/api/payment/use-fetch-receipt";
 import { useInitiateTransaction } from "@/api/payment/use-initiate-transaction";
 import { useSession } from "@/api/user/use-session";
@@ -10,6 +11,7 @@ import {
   CheckboxGroup,
   Flex,
   Heading,
+  Link,
   SimpleGrid,
   SkeletonText,
   Spinner,
@@ -18,6 +20,7 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { IoCheckmarkCircle, IoTime } from "react-icons/io5";
+import NextLink from "next/link";
 
 type PaymentDetailProps = {
   payment?: Payment;
@@ -29,6 +32,9 @@ export default function PaymentDetail({
   onPaymentSuccess,
 }: PaymentDetailProps) {
   const sessionRes = useSession(payment?.sessionId || "");
+  const allPayments = useAllPayments({
+    select: (data) => [...data.main, ...data.sundry],
+  });
   const descriptionArr = [
     payment?.level ? `${payment.level} Level` : undefined,
     payment?.programme,
@@ -143,7 +149,25 @@ export default function PaymentDetail({
       {prerequisites.length > 0 && (
         <Center bg="yellow" p={2} mb={8}>
           <Text as="span" fontWeight="bold">
-            Requires {prerequisites.map((pre) => pre.description).join(" and ")}{" "}
+            Requires{" "}
+            {prerequisites
+              .map((pre) => (
+                <Link
+                  key={pre.id}
+                  as={NextLink}
+                  href={`/payments/${
+                    allPayments.data?.find((payment) => payment.code === pre.id)
+                      ?.id || ""
+                  }`}
+                >
+                  {pre.description}
+                </Link>
+              ))
+              .reduce((prev, curr, idx) => {
+                if (idx !== 0) prev.push(" and ");
+                prev.push(curr);
+                return prev;
+              }, [] as (JSX.Element | string)[])}{" "}
             to be paid.
           </Text>
         </Center>
