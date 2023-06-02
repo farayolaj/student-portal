@@ -26,12 +26,12 @@ export default function PaymentTransactionDetail({
 
   return (
     <Box mt={8}>
-      <Flex justify="space-evenly" align="center" mb={8}>
-        <Divider w="35%" borderColor="gray.500" />
-        <Text as="h2" fontSize="lg" fontWeight="bold">
+      <Flex justify="space-evenly" gap={2} align="center" mb={8}>
+        <Divider maxW="35%" borderColor="gray.500" />
+        <Text as="h2" fontSize="lg" fontWeight="bold" textAlign="center">
           Transaction Details
         </Text>
-        <Divider w="35%" borderColor="gray.500" />
+        <Divider maxW="35%" borderColor="gray.500" />
       </Flex>
       {isLoading || transaction ? (
         <Box>

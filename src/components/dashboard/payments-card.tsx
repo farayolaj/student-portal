@@ -93,8 +93,14 @@ const PaymentItem: FC<PaymentItemProps> = ({ payment }) => {
   if (showPreselected) amount += payment.preselected?.amount || 0;
 
   return (
-    <Flex w="full" align="center" justify="space-between">
-      <Flex direction="column" w="max-content">
+    <Flex
+      w="full"
+      direction={["column", null, "row"]}
+      align={["flex-end", null, "center"]}
+      justify="space-between"
+      rowGap={4}
+    >
+      <Flex direction="column" w="full">
         <Text as="span" fontSize="2xl">
           {Intl.NumberFormat("en-NG", {
             style: "currency",

@@ -25,7 +25,7 @@ export default function PayVerificationFeeCard({
 
   return (
     <Card p={4}>
-      <Flex gap={6}>
+      <Flex gap={6} direction={["column", null, "row"]} align="center">
         <Icon as={IoShieldCheckmark} boxSize={24} color="primary.500" />
         <Box>
           <CardHeader>

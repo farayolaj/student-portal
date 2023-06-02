@@ -167,16 +167,21 @@ export default function Login() {
               bg: "white",
             }}
           >
-            <Image
-              src={greenery}
-              alt=""
-              fill
-              style={{ objectFit: "cover", transform: `scaleX(${imgScaleX})` }}
-              priority
-            />
+            <Box display={["none", null, "block"]}>
+              <Image
+                src={greenery}
+                alt=""
+                fill
+                style={{
+                  objectFit: "cover",
+                  transform: `scaleX(${imgScaleX})`,
+                }}
+                priority
+              />
+            </Box>
             <Box
               w={[null, null, "50%"]}
-              pos="absolute"
+              pos={[null, null, "absolute"]}
               p="2rem"
               bg="primary.500"
               bottom={[null, null, "-1.5rem"]}

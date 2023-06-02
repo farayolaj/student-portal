@@ -65,7 +65,7 @@ export default function ForgotPassword() {
           </Box>
         </Flex>
         <Flex justify="center">
-          <Card w="40%" py={6} px={12}>
+          <Card w={["80%", null, null, "40%"]} py={6} px={[4, null, null, 12]}>
             <CardHeader>
               <Heading textAlign="center" size="md">
                 Reset Password

@@ -21,7 +21,7 @@ export default function InitiateResultVerificationCard() {
 
   return (
     <Card p={4} mt={8}>
-      <Flex gap={6}>
+      <Flex gap={6} align="center">
         <Icon as={IoShieldCheckmark} boxSize={24} color="primary.500" />
         <Box>
           <CardHeader>

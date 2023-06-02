@@ -143,7 +143,12 @@ export default function RequestVerificationCard({
                     </Fragment>
                   ))}
               {status === "not_found" && (
-                <Flex justify="space-between" w="full">
+                <Flex
+                  direction={["column", null, "row"]}
+                  justify="space-between"
+                  gap={4}
+                  w="full"
+                >
                   <Button
                     display="inline-flex"
                     gap={2}

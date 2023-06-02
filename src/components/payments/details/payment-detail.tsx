@@ -172,7 +172,12 @@ export default function PaymentDetail({
           </Text>
         </Center>
       )}
-      <Flex justify="space-between" align="center">
+      <Flex
+        direction={["column", null, "row"]}
+        justify="space-between"
+        align={[null, null, "center"]}
+        rowGap={8}
+      >
         <Flex direction="column" fontSize="xl">
           {payment ? (
             <Text as="span" fontWeight="semibold">
