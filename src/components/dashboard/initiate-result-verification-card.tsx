@@ -1,3 +1,4 @@
+import { useVerifyResultVerificationTransaction } from "@/api/verify-result/use-verify-result-verification-transaction";
 import { VERIFY_RESULT } from "@/constants/routes";
 import {
   Box,
@@ -14,6 +15,9 @@ import { IoShieldCheckmark } from "react-icons/io5";
 
 export default function InitiateResultVerificationCard() {
   const router = useRouter();
+  const verificationTransactionRes = useVerifyResultVerificationTransaction();
+
+  if (verificationTransactionRes.data?.isPaid) return null;
 
   return (
     <Card p={4} mt={8}>
