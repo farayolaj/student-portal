@@ -116,6 +116,7 @@ interface Transaction {
 
 interface Payment {
   id: string;
+  code?: string;
   title: string;
   amount: number;
   dueDate: Date;

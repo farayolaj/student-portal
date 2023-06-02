@@ -7,9 +7,13 @@ export const useAllPayments = createQuery("all-payments", async () => {
 
   if (!response.data.status) throw new Error(response.data.message);
 
+  const main: Payment[] =
+    response.data.payload?.main_fees?.map(toPayment) || [];
+  const sundry: Payment[] =
+    response.data.payload?.sundry_fees?.map(toPayment) || [];
+
   return {
-    main: (response.data.payload?.main_fees?.map(toPayment) || []) as Payment[],
-    sundry: (response.data.payload?.sundry_fees?.map(toPayment) ||
-      []) as Payment[],
+    main,
+    sundry: sundry.filter((payment) => payment.code !== "25"),
   };
 });

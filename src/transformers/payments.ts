@@ -3,6 +3,7 @@ import parse from "date-fns/parse";
 export function toPayment(data: any): Payment {
   return {
     id: data.id || data.payment_id,
+    code: data.payment_code,
     amount: data.total,
     isActive: data.is_active === "1",
     status: data.paid ? "paid" : "unpaid",
