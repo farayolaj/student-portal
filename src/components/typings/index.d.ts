@@ -256,8 +256,5 @@ interface MinimalAttachment {
 }
 
 interface Attachment extends MinimalAttachment {
-  /**
-   * Base64 encoded attachment data.
-   */
-  data: string;
+  data: Buffer | null;
 }

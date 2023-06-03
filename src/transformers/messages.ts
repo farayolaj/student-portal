@@ -75,6 +75,6 @@ export function toAttachment(
     size: data.size || 0,
     filename: minimal.filename,
     mimeType: minimal.mimeType,
-    data: data.data || "",
+    data: data.data ? Buffer.from(data.data, "base64") : null,
   };
 }
