@@ -38,13 +38,23 @@ export default function AttachmentListItem({
       display="flex"
       w="full"
       gap={2}
-      p={2}
+      justifyContent="space-between"
+      p={4}
       onClick={onClick}
       isDisabled={isDownloading}
     >
       <Icon as={BsPaperclip} boxSize={6} />
-      <VStack w="full" align="flex-start" spacing={0}>
-        <Text as="span" fontSize="xs" fontWeight="semibold">
+      <VStack w="90%" align="flex-start" spacing={0}>
+        <Text
+          as="span"
+          fontSize="xs"
+          fontWeight="semibold"
+          textAlign="left"
+          textOverflow="ellipsis"
+          overflow="hidden"
+          whiteSpace="nowrap"
+          w="full"
+        >
           {data.filename}
         </Text>
         <Text as="span" fontSize="xs" fontWeight="normal">

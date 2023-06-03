@@ -31,7 +31,13 @@ export default function MessageView({
     );
 
   return data ? (
-    <Flex direction="column" pos="relative" h="100%" bg="white">
+    <Flex
+      direction="column"
+      pos="relative"
+      h="100%"
+      bg="white"
+      overflowX="hidden"
+    >
       <Box
         display={[null, null, "none"]}
         borderBottom="1px solid var(--chakra-colors-primary)"
