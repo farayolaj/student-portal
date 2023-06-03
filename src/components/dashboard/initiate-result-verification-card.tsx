@@ -1,3 +1,4 @@
+import { useProfile } from "@/api/user/use-profile";
 import { useVerifyResultVerificationTransaction } from "@/api/verify-result/use-verify-result-verification-transaction";
 import { VERIFY_RESULT } from "@/constants/routes";
 import {
@@ -15,9 +16,10 @@ import { IoShieldCheckmark } from "react-icons/io5";
 
 export default function InitiateResultVerificationCard() {
   const router = useRouter();
-  const verificationTransactionRes = useVerifyResultVerificationTransaction();
+  const isVerifiedRes = useProfile({ select: (data) => data.user.isVerified });
 
-  if (verificationTransactionRes.data?.isPaid) return null;
+  if (isVerifiedRes.data == undefined) return null;
+  if (isVerifiedRes.data) return null;
 
   return (
     <Card p={4} mt={8}>

@@ -13,6 +13,7 @@ export const toUser = (user: any) =>
     alternativeEmail: user.alternative_email,
     currentSessionId: user.current_session,
     currentSemester: parseInt(user.current_semester),
+    isVerified: user.is_verified === "1",
   } as User);
 
 export const toAcademicProfile = (profile: any) =>

@@ -163,6 +163,7 @@ interface User {
   alternativeEmail?: string;
   currentSessionId: string;
   currentSemester: number;
+  isVerified: boolean;
 }
 
 interface AcademicProfile {
