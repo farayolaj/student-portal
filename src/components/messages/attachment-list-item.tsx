@@ -1,4 +1,4 @@
-import { getAttachment } from "@/gapi/messages";
+import { useAttachment } from "@/api/gmail/use-attachment";
 import formatBytes from "@/utils/format-bytes";
 import { Button, Icon, VStack, Text } from "@chakra-ui/react";
 import { useState, useCallback } from "react";
@@ -14,23 +14,22 @@ export default function AttachmentListItem({
   data,
 }: AttachmentListItemProps) {
   const [isDownloading, setIsDownloading] = useState(false);
-
-  const onClick = useCallback(() => {
-    setIsDownloading(true);
-    getAttachment(data, messageId)
-      .then((res) => {
-        if (res.data) {
-          const url = window.URL.createObjectURL(
-            new Blob([res.data], { type: res.mimeType })
-          );
-          const link = document.createElement("a");
-          link.href = url;
-          link.setAttribute("download", res.filename);
-          link.click();
-        }
-      })
-      .finally(() => setIsDownloading(false));
-  }, [data, messageId]);
+  useAttachment({
+    variables: { attachment: data, messageId },
+    enabled: isDownloading,
+    onSettled: (payload) => {
+      if (payload && payload.data) {
+        const url = window.URL.createObjectURL(
+          new Blob([payload.data], { type: payload.mimeType })
+        );
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", payload.filename);
+        link.click();
+      }
+      setIsDownloading(false);
+    },
+  });
 
   return (
     <Button
@@ -40,7 +39,7 @@ export default function AttachmentListItem({
       gap={2}
       justifyContent="space-between"
       p={4}
-      onClick={onClick}
+      onClick={() => setIsDownloading(true)}
       isDisabled={isDownloading}
     >
       <Icon as={BsPaperclip} boxSize={6} />

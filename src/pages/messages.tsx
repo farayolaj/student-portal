@@ -3,26 +3,21 @@ import Seo from "@/components/common/seo";
 import MessageList from "@/components/messages/message-list";
 import MessageView from "@/components/messages/message-view";
 import { Box, Flex, useBreakpointValue } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import AuthWall from "@/components/messages/auth-wall";
-import { useGapiAuth } from "@/components/common/gapi-auth";
-import { getMessage, listMessages } from "@/gapi/messages";
+import { useState } from "react";
+import { useAllMessages } from "@/api/gmail/use-all-messages";
 
 export default function MessageLayout() {
-  const [messages, setMessages] = useState<Message[]>([]);
   const [selectedMessageId, setSelectedMessageId] = useState<string>();
-  const { isAuthorised } = useGapiAuth();
   const isMobile = useBreakpointValue([true, null, false]);
 
-  useEffect(() => {
-    if (isAuthorised) {
-      listMessages({ limit: 10 }).then((messages) => {
-        Promise.all(
-          messages?.map((message) => getMessage({ id: message.id || "" })) || []
-        ).then((messages) => setMessages(messages));
-      });
-    }
-  }, [isAuthorised]);
+  const allMessagesRes = useAllMessages({
+    select: (data) => {
+      return {
+        ...data,
+        pages: data.pages.map((page) => page.messages.map((m) => m.id)),
+      };
+    },
+  });
 
   const showMessageView = !isMobile || selectedMessageId;
 
@@ -42,9 +37,17 @@ export default function MessageLayout() {
         {(!isMobile || !showMessageView) && (
           <Box w={isMobile && !showMessageView ? "full" : "45%"} h="full">
             <MessageList
-              messages={messages || []}
+              messageIds={
+                allMessagesRes.data?.pages.reduce(
+                  (prev, curr) => [...prev, ...curr],
+                  []
+                ) || []
+              }
               onSelect={setSelectedMessageId}
               selectedId={selectedMessageId}
+              hasMore={allMessagesRes.hasNextPage}
+              onLoadMore={allMessagesRes.fetchNextPage}
+              isLoading={allMessagesRes.isFetchingNextPage}
             />
           </Box>
         )}
@@ -55,16 +58,11 @@ export default function MessageLayout() {
             overflowY="auto"
           >
             <MessageView
-              data={messages.find((v) => v.id === selectedMessageId)}
+              messageId={selectedMessageId}
               onBack={() => setSelectedMessageId(undefined)}
             />
           </Box>
         )}
-        <AuthWall
-          onAuth={() => {
-            console.log("Authorised");
-          }}
-        />
       </Flex>
     </>
   );

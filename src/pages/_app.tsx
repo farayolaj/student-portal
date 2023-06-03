@@ -12,7 +12,6 @@ import { useEffect, useState } from "react";
 import getApi from "../api/api";
 import { useRouter } from "next/router";
 import { ERROR_PAGE } from "@/constants/routes";
-import { GapiWrapper } from "@/components/common/gapi-auth";
 
 type CustomAppProps = AppProps & {
   Component: NextComponentType & { layoutProps: LayoutProps };
@@ -48,9 +47,7 @@ export default function App({ Component, pageProps }: CustomAppProps) {
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <Layout {...layoutProps}>
-            <GapiWrapper>
-              <Component {...pageProps} />
-            </GapiWrapper>
+            <Component {...pageProps} />
           </Layout>
         </AuthProvider>
         <ReactQueryDevtools initialIsOpen />

@@ -11,26 +11,27 @@ import {
 } from "@chakra-ui/react";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import AttachmentListView from "./attachment-list-view";
+import { useMessage } from "@/api/gmail/use-message";
 
 type MessageViewProps = {
-  data?: Message;
-  isLoading?: boolean;
+  messageId?: string;
   onBack?: () => void;
 };
 
-export default function MessageView({
-  data,
-  isLoading,
-  onBack,
-}: MessageViewProps) {
-  if (isLoading)
+export default function MessageView({ messageId, onBack }: MessageViewProps) {
+  const { data, isLoading } = useMessage({
+    variables: { messageId: messageId || "" },
+    enabled: !!messageId,
+  });
+
+  if (messageId && isLoading)
     return (
       <Center h="100%">
         <Spinner size="xl" color="primary.500" />
       </Center>
     );
 
-  return data ? (
+  return messageId && data ? (
     <Flex
       direction="column"
       pos="relative"
