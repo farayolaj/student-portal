@@ -236,13 +236,13 @@ interface DocumentUpload {
 
 interface MinimalMessage {
   id: string;
+}
+
+interface Message extends MinimalMessage {
   from: string;
   subject: string;
   date: Date;
   snippet: string;
-}
-
-interface Message extends MinimalMessage {
   htmlContent: string;
   plainContent: string;
   attachments: MinimalAttachment[];

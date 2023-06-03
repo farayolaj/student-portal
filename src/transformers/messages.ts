@@ -3,14 +3,6 @@ export function toMinimalMessage(
 ): MinimalMessage {
   return {
     id: data.id || "",
-    from:
-      data?.payload?.headers?.find((header) => header.name === "From")?.value ||
-      "Unknown Sender",
-    subject:
-      data?.payload?.headers?.find((header) => header.name === "Subject")
-        ?.value || "No Subject",
-    date: new Date(parseInt(data?.internalDate || "0")),
-    snippet: data.snippet || "",
   };
 }
 
