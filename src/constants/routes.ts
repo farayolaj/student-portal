@@ -11,4 +11,4 @@ export const ERROR_PAGE = "/error";
 export const PROFILE = "/profile";
 export const EVENTS = "/events";
 export const VERIFY_RESULT = "/verify-result";
-export const MESSAGES = "/messages";
+export const MY_MAILS = "/my-mails";

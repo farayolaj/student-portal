@@ -34,6 +34,13 @@ const Navigation: FC<NavigationProps> = ({ isOpen }) => {
         isActive={pathname === routes.HOME}
       />
       <NavLink
+        title="My Mails"
+        icon={BiMessageRounded}
+        href={routes.MY_MAILS}
+        isOpen={isOpen}
+        isActive={pathname.startsWith(routes.MY_MAILS)}
+      />
+      <NavLink
         title="Verify Result"
         icon={IoShieldCheckmarkOutline}
         href={routes.VERIFY_RESULT}
@@ -75,13 +82,6 @@ const Navigation: FC<NavigationProps> = ({ isOpen }) => {
         href={routes.DOCUMENTS}
         isOpen={isOpen}
         isActive={pathname.startsWith(routes.DOCUMENTS)}
-      />
-      <NavLink
-        title="Messages"
-        icon={BiMessageRounded}
-        href={routes.MESSAGES}
-        isOpen={isOpen}
-        isActive={pathname.startsWith(routes.MESSAGES)}
       />
       <NavLink
         title="Events"

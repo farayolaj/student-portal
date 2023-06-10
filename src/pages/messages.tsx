@@ -23,8 +23,8 @@ export default function MessageLayout() {
 
   return (
     <>
-      <Seo title="Messages" />
-      <PageTitle showBackButton>Messages</PageTitle>
+      <Seo title="My Mails" />
+      <PageTitle showBackButton>My Mails</PageTitle>
       <Flex
         w="full"
         mt={-10}
