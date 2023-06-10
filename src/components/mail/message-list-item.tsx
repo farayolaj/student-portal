@@ -28,7 +28,13 @@ export default function MessageListItem({
       onClick={() => onSelect(messageId)}
       bg={isSelected ? "primary.100" : undefined}
     >
-      <Flex gap={2} justify="space-between" align="center">
+      <Flex
+        // direction={["column", null, null, null, null, "row"]}
+        columnGap={2}
+        justify="space-between"
+        wrap="wrap"
+        align="center"
+      >
         <SkeletonText isLoaded={Boolean(data)} noOfLines={1}>
           <Heading
             as="h3"
@@ -57,7 +63,7 @@ export default function MessageListItem({
           {data?.subject || "Loading..."}
         </Text>
       </SkeletonText>
-      <SkeletonText isLoaded={Boolean(data)} noOfLines={1}>
+      <SkeletonText mt={data ? 0 : 2} isLoaded={Boolean(data)} noOfLines={1}>
         <Text
           fontSize="sm"
           color="gray.600"

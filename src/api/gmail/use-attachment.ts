@@ -1,6 +1,6 @@
 import { createQuery } from "react-query-kit";
 import getApi from "../api";
-import { toAttachment } from "@/transformers/messages";
+import { toAttachment } from "@/transformers/mails";
 
 export const useAttachment = createQuery<
   Attachment,

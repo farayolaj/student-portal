@@ -1,7 +1,7 @@
 import PageTitle from "@/components/common/page-title";
 import Seo from "@/components/common/seo";
-import MessageList from "@/components/messages/message-list";
-import MessageView from "@/components/messages/message-view";
+import MessageList from "@/components/mail/message-list";
+import MessageView from "@/components/mail/message-view";
 import { Box, Flex, useBreakpointValue } from "@chakra-ui/react";
 import { useState } from "react";
 import { useAllMessages } from "@/api/gmail/use-all-messages";

@@ -1,6 +1,6 @@
 import { createQuery } from "react-query-kit";
 import getApi from "../api";
-import { toMessage } from "@/transformers/messages";
+import { toMessage } from "@/transformers/mails";
 
 export const useMessage = createQuery<Message, { messageId: string }>({
   primaryKey: "gmail-message",

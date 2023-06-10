@@ -1,6 +1,6 @@
 import { createInfiniteQuery } from "react-query-kit";
 import getApi from "../api";
-import { toMinimalMessage } from "@/transformers/messages";
+import { toMinimalMessage } from "@/transformers/mails";
 
 export const useAllMessages = createInfiniteQuery<{
   nextPageToken: string;
