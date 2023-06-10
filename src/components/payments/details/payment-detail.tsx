@@ -1,4 +1,4 @@
-import { useAllPayments } from "@/api/payment/use-all-payments";
+import { useMainPayments } from "@/api/payment/use-main-payments";
 import { useFetchReceipt } from "@/api/payment/use-fetch-receipt";
 import { useInitiateTransaction } from "@/api/payment/use-initiate-transaction";
 import { useSession } from "@/api/user/use-session";
@@ -32,9 +32,7 @@ export default function PaymentDetail({
   onPaymentSuccess,
 }: PaymentDetailProps) {
   const sessionRes = useSession(payment?.sessionId || "");
-  const allPayments = useAllPayments({
-    select: (data) => [...data.main, ...data.sundry],
-  });
+  const mainPayments = useMainPayments();
   const descriptionArr = [
     payment?.level ? `${payment.level} Level` : undefined,
     payment?.programme,
@@ -156,8 +154,9 @@ export default function PaymentDetail({
                   key={pre.id}
                   as={NextLink}
                   href={`/payments/${
-                    allPayments.data?.find((payment) => payment.code === pre.id)
-                      ?.id || ""
+                    mainPayments.data?.find(
+                      (payment) => payment.code === pre.id
+                    )?.id || ""
                   }`}
                 >
                   {pre.description}

@@ -1,4 +1,4 @@
-import { useAllPayments } from "@/api/payment/use-all-payments";
+import { useMainPayments } from "@/api/payment/use-main-payments";
 import { useSession } from "@/api/user/use-session";
 import {
   Button,
@@ -22,9 +22,9 @@ import * as routes from "../../constants/routes";
 import { useRouter } from "next/router";
 
 const PaymentsCard: FC = () => {
-  const outstandingPaymentsRes = useAllPayments({
+  const outstandingPaymentsRes = useMainPayments({
     select: (payments) => {
-      return payments.main.filter((payment) => payment.status === "unpaid");
+      return payments.filter((payment) => payment.status === "unpaid");
     },
   });
 

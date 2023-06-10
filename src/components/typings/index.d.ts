@@ -133,7 +133,7 @@ interface Payment {
     title: string;
     amount: number;
   };
-  prerequisites?: {
+  prerequisites: {
     id: string;
     description: string;
     isPaid: boolean;

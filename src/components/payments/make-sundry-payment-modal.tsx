@@ -1,4 +1,4 @@
-import { useAllPayments } from "@/api/payment/use-all-payments";
+import { useSundryPayments } from "@/api/payment/use-sundry-payments";
 import { useInitiateTransaction } from "@/api/payment/use-initiate-transaction";
 import {
   useDisclosure,
@@ -19,17 +19,13 @@ import {
   InputLeftElement,
   useToast,
   Spinner,
+  FormHelperText,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import useRemitaInline from "../common/remita-inline";
 
 export default function MakeSundryPaymentModal() {
-  const paymentsRes = useAllPayments({
-    select: (payments) =>
-      payments.sundry.sort((a, b) =>
-        a.title.localeCompare(b.title, "en-NG", { ignorePunctuation: true })
-      ),
-  });
+  const paymentsRes = useSundryPayments();
   const sundryPayments = paymentsRes.data || [];
   const [selectedPaymentId, setSelectedPaymentId] = useState<
     string | undefined
@@ -37,6 +33,8 @@ export default function MakeSundryPaymentModal() {
   const selectedPayment = sundryPayments.find(
     (payment) => payment.id === selectedPaymentId
   );
+  const selectedPaymentPrerequisites =
+    selectedPayment?.prerequisites?.filter((pre) => !pre.isPaid) ?? [];
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
@@ -143,6 +141,14 @@ export default function MakeSundryPaymentModal() {
                     value={selectedPayment?.amount || ""}
                   />
                 </InputGroup>
+                {selectedPaymentPrerequisites.length > 0 && (
+                  <FormHelperText>
+                    Prerequisites:{" "}
+                    {selectedPaymentPrerequisites
+                      ?.map((pre) => pre.description)
+                      ?.join(", ")}
+                  </FormHelperText>
+                )}
               </FormControl>
               <Flex justify="center" gap={8} w="100%">
                 <Button colorScheme="red" onClick={onClose}>
@@ -151,7 +157,11 @@ export default function MakeSundryPaymentModal() {
                 <Button
                   type="submit"
                   onClick={initialisePayment}
-                  isDisabled={!selectedPaymentId || !selectedPayment?.isActive}
+                  isDisabled={
+                    !selectedPaymentId ||
+                    !selectedPayment?.isActive ||
+                    selectedPaymentPrerequisites.length > 0
+                  }
                   minW={24}
                 >
                   {initiateTransaction.isLoading ? (
