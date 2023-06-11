@@ -84,6 +84,7 @@ export default function ChangePasswordForm() {
             type="password"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
+            autoComplete="new-password"
           />
         </FormControl>
         <FormControl isInvalid={newPassword !== newPasswordAgain} isRequired>
@@ -92,6 +93,7 @@ export default function ChangePasswordForm() {
             type="password"
             value={newPasswordAgain}
             onChange={(e) => setNewPasswordAgain(e.target.value)}
+            autoComplete="new-password"
           />
           <FormErrorMessage>Ensure new passwords are the same</FormErrorMessage>
         </FormControl>
