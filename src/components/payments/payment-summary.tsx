@@ -2,6 +2,8 @@ import { Button, Card, CardBody, Flex, Text } from "@chakra-ui/react";
 import { IoCheckmarkCircle, IoTime } from "react-icons/io5";
 import { useAllSessions } from "@/api/user/use-all-sessions";
 import { useRouter } from "next/router";
+import { useVerifyTransaction } from "@/api/payment/use-verify-transaction";
+import queryClient from "@/lib/query-client";
 
 type PaymentSummaryProps = {
   payment: Payment;
@@ -14,6 +16,13 @@ export default function PaymentSummary({ payment }: PaymentSummaryProps) {
       sessions.find((session) => session.id === payment.sessionId),
   });
   const descriptionArr = [session?.name, payment.semester];
+  useVerifyTransaction({
+    variables: { rrr: payment.transaction?.rrr || "" },
+    enabled: payment.status === "unpaid" && Boolean(payment.transaction),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["main-payments"]);
+    },
+  });
   let description = descriptionArr.filter(Boolean).join(" | ");
   let statusIcon: JSX.Element;
   let statusText: string;
