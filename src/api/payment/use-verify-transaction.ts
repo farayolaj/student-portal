@@ -1,8 +1,9 @@
-import { createMutation } from "react-query-kit";
+import { createQuery } from "react-query-kit";
 import getApi from "../api";
 
-export const useVerifyTransaction = createMutation<boolean, { rrr: string }>(
-  async ({ rrr }) => {
+export const useVerifyTransaction = createQuery<boolean, { rrr: string }>(
+  "verify-transaction",
+  async ({ queryKey: [_, { rrr }] }) => {
     const response = await getApi().get("/verify_transaction", {
       params: { rrr_code: rrr },
     });

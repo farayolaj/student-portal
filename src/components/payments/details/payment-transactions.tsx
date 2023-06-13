@@ -1,12 +1,5 @@
 import { useVerifyTransaction } from "@/api/payment/use-verify-transaction";
-import {
-  Box,
-  Button,
-  Divider,
-  Flex,
-  SimpleGrid,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Button, Divider, Flex, SimpleGrid, Text } from "@chakra-ui/react";
 import DetailItem from "./detail-item";
 
 type PaymentTransactionsProps = {
@@ -20,7 +13,11 @@ export default function PaymentTransactionDetail({
   onRequery,
   isLoading,
 }: PaymentTransactionsProps) {
-  const verifyTransaction = useVerifyTransaction();
+  const verifyTransaction = useVerifyTransaction({
+    variables: { rrr: transaction?.rrr ?? "" },
+    onSuccess: onRequery,
+    enabled: Boolean(transaction),
+  });
 
   return (
     <Box mt={8}>
@@ -34,7 +31,7 @@ export default function PaymentTransactionDetail({
       {isLoading || transaction ? (
         <Box>
           <SimpleGrid columns={[1, null, 3]} gap={4}>
-           <DetailItem
+            <DetailItem
               name="Transaction Reference"
               value={transaction?.referenceNumber || ""}
               isLoading={isLoading}
@@ -92,10 +89,7 @@ export default function PaymentTransactionDetail({
                 isDisabled={verifyTransaction.isLoading}
                 justifySelf="center"
                 onClick={() => {
-                  verifyTransaction.mutate(
-                    { rrr: transaction.rrr },
-                    { onSuccess: onRequery }
-                  );
+                  verifyTransaction.refetch();
                 }}
               >
                 Re-query Transaction
