@@ -11,6 +11,7 @@ export function toPayment(data: any): Payment {
     dueDate: parse(data.date_due || data.due_date, "MMM. dd, yyyy", new Date()),
     level: data.level ? data.level + "00" : undefined,
     sessionId: data.session,
+    paymentType: data.payment_category,
     containsPreselected: data.is_preselected_fee
       ? data.is_preselected_fee !== null
       : false,

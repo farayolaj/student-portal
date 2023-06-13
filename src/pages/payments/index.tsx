@@ -11,12 +11,7 @@ export default function Payments() {
   const [statusFilter, setStatusFilter] = useState("all");
   const sundryPaymentsRes = useSundryPayments();
   const mainPaymentRes = useMainPayments();
-  const payments = [
-    ...(mainPaymentRes.data ?? []),
-    ...(sundryPaymentsRes.data?.filter(
-      (payment) => payment.status === "paid"
-    ) ?? []),
-  ];
+  const payments = mainPaymentRes.data ?? [];
   const sortedPayments = payments.sort((a, b) => {
     if (a.status === b.status) return 0;
     if (a.status === "unpaid") return -1;

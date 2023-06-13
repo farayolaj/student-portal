@@ -128,6 +128,7 @@ interface Payment {
   sessionId?: string;
   semester?: string;
   containsPreselected: boolean;
+  paymentType?: "sundry" | "main";
   preselected?: {
     id: string;
     title: string;
