@@ -47,7 +47,7 @@ export default function PaymentDetail({
     isClosable: true,
   });
   const receipt = useFetchReceipt({
-    trxId: payment?.transaction?.id || "",
+    rrr: payment?.transaction?.rrr || "",
     onError: (error) => {
       toast({
         status: "error",
