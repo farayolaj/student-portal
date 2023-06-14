@@ -261,7 +261,8 @@ export default function PaymentDetail({
               isDisabled={
                 !payment.isActive ||
                 prerequisites.length > 0 ||
-                initiateTransaction.isLoading
+                initiateTransaction.isLoading ||
+                receipt.isLoading
               }
             >
               {initiateTransaction.isLoading ? (
