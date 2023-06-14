@@ -1,14 +1,16 @@
 import { useFetchDocument } from "../document/use-fetch-document";
 
 type UseFetchReceiptOpts = {
-  trxId: string;
+  rrr: string;
   onError?: (error: Error) => void;
 };
 
-export function useFetchReceipt({ trxId, onError }: UseFetchReceiptOpts) {
-  const url = `/mainreceipt?transaction=${encodeURIComponent(trxId)}`;
+export function useFetchReceipt({ rrr, onError }: UseFetchReceiptOpts) {
+  const url = `/mainreceipt?rrr_code=${encodeURIComponent(rrr)}`;
   return useFetchDocument({
     url,
+    fileNameField: "receipt_name",
+    fileField: "document",
     onError: (error) => {
       if (onError)
         onError(

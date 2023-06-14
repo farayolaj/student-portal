@@ -48,6 +48,8 @@ type DocumentItemProps = {
 function DocumentItem({ document }: DocumentItemProps) {
   const toast = useToast();
   const { intiateFetch, isLoading } = useFetchDocument({
+    fileField: "",
+    fileNameField: "",
     url: document.url,
     onError: (error) => {
       toast({
