@@ -251,7 +251,7 @@ export default function PaymentDetail({
             {receipt.isLoading ? (
               <Spinner color="white" size="xs" />
             ) : (
-              "Print Receipt"
+              "Print"
             )}
           </Button>
         ) : (
