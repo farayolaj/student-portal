@@ -12,35 +12,46 @@ import { useEffect, useState } from "react";
 import getApi from "../api/api";
 import { useRouter } from "next/router";
 import { ERROR_PAGE } from "@/constants/routes";
+import useLocalStorage from "@/hooks/use-local-storage";
+import axios from "axios";
+import { X_APP_KEY } from "@/constants/config";
 
 type CustomAppProps = AppProps & {
   Component: NextComponentType & { layoutProps: LayoutProps };
 };
 
+async function getBaseApiUrl() {
+  const initialBaseUrl = process.env.NEXT_PUBLIC_API_URL;
+  const hostname = encodeURIComponent(window.location.hostname).replace(
+    "starrising",
+    "localhost"
+  );
+  const url = `${initialBaseUrl}/baseUrl?domain=${hostname}`;
+  const headers: Record<string, string> = {
+    "X-APP-KEY": X_APP_KEY,
+  };
+
+  if (process.env.NODE_ENV === "development")
+    headers["ngrok-skip-browser-warning"] = ",";
+
+  try {
+    const res = await axios.get(url, { headers });
+    return res.data.payload as string;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export default function App({ Component, pageProps }: CustomAppProps) {
-  const router = useRouter();
-  const [hasApiBaseUrl, setHasApiBaseUrl] = useState(false);
+  const { push } = useRouter();
 
   useEffect(() => {
-    const initialBaseUrl = process.env.NEXT_PUBLIC_API_URL;
-    const hostname = encodeURIComponent(window.location.hostname).replace(
-      "starrising",
-      "localhost"
-    );
-    const url = `${initialBaseUrl}/baseUrl?domain=${hostname}`;
-    getApi()
-      .get(url)
-      .then((res) => {
-        localStorage.setItem("apiBaseUrl", res.data.payload);
-        setHasApiBaseUrl(true);
-      })
-      .catch((_error) => router.push(ERROR_PAGE));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    getBaseApiUrl()
+      .then((url) => localStorage.setItem("apiBaseUrl", url))
+      .catch((_error) => push(ERROR_PAGE));
+  }, [push]);
 
   const layoutProps = Component.layoutProps || {};
-
-  if (!hasApiBaseUrl) return null;
 
   return (
     <ChakraProvider theme={theme}>

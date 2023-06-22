@@ -87,7 +87,9 @@ export default function Login() {
         onError: (err) => {
           const error = err as Error;
           toast({
-            title: "Invalid matric. number or email address",
+            title: error.message.toLowerCase().includes("network")
+              ? "Matric. number or email address could not be validated"
+              : "Invalid matric. number or email address",
             description: error?.message,
             status: "error",
             isClosable: true,
