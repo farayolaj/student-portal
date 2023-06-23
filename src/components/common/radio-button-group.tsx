@@ -13,6 +13,7 @@ type RadioButtonGroupProps = {
   labels: string[];
   options?: ReactNode[];
   values: (string | number)[];
+  isEachDisabled?: boolean[];
 } & Omit<RadioGroupProps, "children">;
 
 const RadioButtonGroup: FC<RadioButtonGroupProps> = (props) => {
@@ -42,7 +43,11 @@ const RadioButtonGroup: FC<RadioButtonGroupProps> = (props) => {
       {props.values.map((value, idx) => {
         const radio = getRadioProps({ value });
         return (
-          <RadioButton key={value} {...radio}>
+          <RadioButton
+            key={value}
+            {...radio}
+            isDisabled={props.isEachDisabled?.at(idx)}
+          >
             {props.options ? props.options[idx] : props.labels[idx]}
           </RadioButton>
         );
@@ -54,10 +59,10 @@ const RadioButtonGroup: FC<RadioButtonGroupProps> = (props) => {
 export default RadioButtonGroup;
 
 const RadioButton: FC<RadioProps> = (props) => {
-  const { getInputProps, getCheckboxProps, getLabelProps } = useRadio(props);
+  const { getInputProps, getRadioProps, getLabelProps } = useRadio(props);
 
   const input = getInputProps();
-  const checkbox = getCheckboxProps();
+  const radio = getRadioProps();
 
   return (
     <Box
@@ -82,7 +87,7 @@ const RadioButton: FC<RadioProps> = (props) => {
         alignItems="center"
         justifyContent="center"
         textAlign="center"
-        {...checkbox}
+        {...radio}
         cursor="pointer"
         _checked={{
           bg: "primary.500",
@@ -96,6 +101,10 @@ const RadioButton: FC<RadioProps> = (props) => {
           _checked: {
             bg: "primary.500",
           },
+        }}
+        _disabled={{
+          bg: "gray",
+          color: "white",
         }}
         px={4}
         py={2}
