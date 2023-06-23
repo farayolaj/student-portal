@@ -1,6 +1,7 @@
 import { Flex, Spacer, Text } from "@chakra-ui/react";
 import { IoList, IoGrid } from "react-icons/io5";
 import RadioButtonGroup from "../../common/radio-button-group";
+import { useRegistrationOpen } from "@/api/course/use-registration-open";
 
 type SelectCourseListControlProps = {
   session: string;
@@ -17,6 +18,13 @@ export default function SelectCourseListControl({
   view,
   onViewChange,
 }: SelectCourseListControlProps) {
+  const canRegisterFirstSemester = useRegistrationOpen({
+    variables: { semester: 1 },
+  });
+  const canRegisterSecondSemester = useRegistrationOpen({
+    variables: { semester: 2 },
+  });
+
   return (
     <>
       <Flex
@@ -43,6 +51,10 @@ export default function SelectCourseListControl({
           labels={["1st Semester", "2nd Semester"]}
           value={Number(semester).toString()}
           onChange={(s) => onSemesterChange(parseInt(s))}
+          isEachDisabled={[
+            !canRegisterFirstSemester.data || true,
+            !canRegisterSecondSemester.data || true,
+          ]}
         />
       </Flex>
     </>

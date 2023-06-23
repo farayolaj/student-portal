@@ -27,7 +27,8 @@ import SelectCourseView from "../../components/courses/select/select-course-view
 import { REGISTERED_COURSES } from "../../constants/routes";
 
 export default function AddCoursesPage(): JSX.Element {
-  const [semester, setSemester] = useState(1);
+  const { period } = useCurrentPeriod();
+  const [semester, setSemester] = useState(period.semester.id);
   const [view, setView] = useState("list");
   const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
   const [extraCourses, setExtraCourses] = useState<Course[]>([]);
@@ -39,7 +40,6 @@ export default function AddCoursesPage(): JSX.Element {
     (c) => c.semester === semester
   )?.minUnits;
 
-  const { period } = useCurrentPeriod();
   const registeredCourses = useRegisteredCourses({
     variables: {
       session: period?.session?.id as string,

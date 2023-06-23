@@ -59,6 +59,7 @@ const Courses: FC = () => {
   const canDeleteCourses =
     sessionId === currentSessionId &&
     semester === currentSemester &&
+    canRegister.data &&
     !registeredCourses.error;
 
   const toast = useToast();
