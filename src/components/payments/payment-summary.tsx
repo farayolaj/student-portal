@@ -4,6 +4,7 @@ import { useAllSessions } from "@/api/user/use-all-sessions";
 import { useRouter } from "next/router";
 import { useVerifyTransaction } from "@/api/payment/use-verify-transaction";
 import queryClient from "@/lib/query-client";
+import buildPaymentDetailUrl from "@/lib/payments/build-payment-detail-url";
 
 type PaymentSummaryProps = {
   payment: Payment;
@@ -81,7 +82,7 @@ export default function PaymentSummary({ payment }: PaymentSummaryProps) {
               `Due ${payment.dueDate?.toLocaleDateString()}`}
           </Text>
           <Button
-            onClick={() => push(`/payments/${payment.id}`)}
+            onClick={() => push(buildPaymentDetailUrl(payment.id, payment.transactionRef))}
             mx="auto"
             w="fit-content"
             mt="auto"

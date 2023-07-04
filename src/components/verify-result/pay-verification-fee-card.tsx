@@ -1,3 +1,4 @@
+import buildPaymentDetailUrl from "@/lib/payments/build-payment-detail-url";
 import {
   Box,
   Card,
@@ -36,7 +37,7 @@ export default function PayVerificationFeeCard({
           <CardBody>
             <Button
               isDisabled={isPaid}
-              onClick={() => push(`/payments/${paymentId}`)}
+              onClick={() => push(buildPaymentDetailUrl(paymentId || ''))}
               minW={24}
             >
               {paymentId ? (

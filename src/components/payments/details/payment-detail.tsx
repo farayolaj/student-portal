@@ -21,6 +21,7 @@ import {
 import { useEffect, useState } from "react";
 import { IoCheckmarkCircle, IoTime } from "react-icons/io5";
 import NextLink from "next/link";
+import buildPaymentDetailUrl from "@/lib/payments/build-payment-detail-url";
 
 type PaymentDetailProps = {
   payment?: Payment;
@@ -153,11 +154,10 @@ export default function PaymentDetail({
                 <Link
                   key={pre.id}
                   as={NextLink}
-                  href={`/payments/${
-                    mainPayments.data?.find(
-                      (payment) => payment.code === pre.id
-                    )?.id || ""
-                  }`}
+                  href={buildPaymentDetailUrl(
+                    payment.id || "",
+                    payment.transactionRef
+                  )}
                 >
                   {pre.description}
                 </Link>

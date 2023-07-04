@@ -20,6 +20,7 @@ import { FC } from "react";
 import { IoTime } from "react-icons/io5";
 import * as routes from "../../constants/routes";
 import { useRouter } from "next/router";
+import buildPaymentDetailUrl from "@/lib/payments/build-payment-detail-url";
 
 const PaymentsCard: FC = () => {
   const outstandingPaymentsRes = useMainPayments({
@@ -124,7 +125,9 @@ const PaymentItem: FC<PaymentItemProps> = ({ payment }) => {
         </Text>
       </Flex>
       <Button
-        onClick={() => push(`/payments/${payment.id}`)}
+        onClick={() =>
+          push(buildPaymentDetailUrl(payment.id, payment.transactionRef))
+        }
         w="fit-content"
         isDisabled={!payment.isActive}
       >
