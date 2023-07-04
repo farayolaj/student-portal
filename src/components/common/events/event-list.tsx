@@ -1,3 +1,4 @@
+import isValidUrl from "@/lib/is-valid-url";
 import { Flex, Badge, Text, StackDivider, VStack } from "@chakra-ui/react";
 import format from "date-fns/format";
 import { CSSProperties } from "react";
@@ -46,9 +47,11 @@ function EventListItem({
   bg,
   padding,
 }: EventListItemProps) {
+  const isLocationUrl = isValidUrl(event.location || "");
+
   const eventLocation = [event.location, event.centre]
     .filter(Boolean)
-    .join(", ");
+    .join(isLocationUrl ? " - " : ", ");
 
   const style = {
     base: {

@@ -10,7 +10,9 @@ export const useEvents = createQuery(
     if (!response.data.status) throw new Error(response.data.message);
 
     return toEventDateMapping(
-      (response.data.payload?.map(toCalendarEvent) as CalendarEvent[]) || []
+      (response.data.payload
+        ?.filter((ev: any) => ev.events || ev.event_extra)
+        ?.map(toCalendarEvent) as CalendarEvent[]) || []
     );
   },
   {

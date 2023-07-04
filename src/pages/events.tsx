@@ -5,6 +5,8 @@ import Seo from "@/components/common/seo";
 import { DATE_ONLY_FORMAT } from "@/constants/date";
 import { Flex, Spinner } from "@chakra-ui/react";
 import compareAsc from "date-fns/compareAsc";
+import isFuture from "date-fns/isFuture";
+import isToday from "date-fns/isToday";
 import parse from "date-fns/parse";
 
 export default function Events() {
@@ -14,6 +16,7 @@ export default function Events() {
       ([date, events]) =>
         [parse(date, DATE_ONLY_FORMAT, new Date()), events] as const
     )
+    .filter(([date]) => isToday(date) || isFuture(date))
     .sort(([dateA], [dateB]) => compareAsc(dateA, dateB))
     .flatMap(([_date, events]) => events);
 
