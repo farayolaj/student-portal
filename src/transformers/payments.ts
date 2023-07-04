@@ -12,6 +12,7 @@ export function toPayment(data: any): Payment {
     level: data.level ? data.level + "00" : undefined,
     sessionId: data.session,
     paymentType: data.payment_category,
+    transactionRef: data.transaction_ref,
     containsPreselected: data.is_preselected_fee
       ? data.is_preselected_fee !== null
       : false,
@@ -19,10 +20,10 @@ export function toPayment(data: any): Payment {
       data.preselected_amount === 0
         ? undefined
         : {
-            id: data.preselected,
-            title: data.preselected_fee_readable,
-            amount: data.preselected_amount,
-          },
+          id: data.preselected,
+          title: data.preselected_fee_readable,
+          amount: data.preselected_amount,
+        },
     prerequisites:
       data.prerequisites?.map((pre: any) => ({
         id: pre.prerequisite,
@@ -31,24 +32,24 @@ export function toPayment(data: any): Payment {
       })) ?? [],
     transaction: data.transaction
       ? {
-          id: data.transaction.transaction_id,
-          amount: data.total,
-          dateInitiated: parse(
-            data.transaction.date_performed,
-            "MMM. dd, yyyy",
-            new Date()
-          ),
-          description: data.description,
-          referenceNumber: data.transaction.order_id,
-          rrr: data.transaction.rrr,
-          status: data.paid ? "success" : "pending",
-          datePayed: parse(
-            data.transaction.date_completed,
-            "MMM. dd, yyyy",
-            new Date()
-          ),
-          publicKey: data.transaction.public_key,
-        }
+        id: data.transaction.transaction_id,
+        amount: data.total,
+        dateInitiated: parse(
+          data.transaction.date_performed,
+          "MMM. dd, yyyy",
+          new Date()
+        ),
+        description: data.description,
+        referenceNumber: data.transaction.order_id,
+        rrr: data.transaction.rrr,
+        status: data.paid ? "success" : "pending",
+        datePayed: parse(
+          data.transaction.date_completed,
+          "MMM. dd, yyyy",
+          new Date()
+        ),
+        publicKey: data.transaction.public_key,
+      }
       : undefined,
   };
 }
