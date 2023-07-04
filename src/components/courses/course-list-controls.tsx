@@ -2,12 +2,14 @@ import { Flex, FormControl, FormLabel, Select } from "@chakra-ui/react";
 import { FC } from "react";
 import { useAllSessions } from "../../api/user/use-all-sessions";
 import RadioButtonGroup from "../common/radio-button-group";
+import { useRegistrationOpen } from "@/api/course/use-registration-open";
 
 type CourseListControlsProps = {
   sessionId: string;
   onSessionIdChange: (session: string) => void;
   semester: number;
   onSemesterChange: (filter: number) => void;
+  inDeleteView?: boolean;
 };
 
 const CourseListControls: FC<CourseListControlsProps> = ({
@@ -15,8 +17,15 @@ const CourseListControls: FC<CourseListControlsProps> = ({
   onSessionIdChange,
   semester,
   onSemesterChange,
+  inDeleteView,
 }) => {
   const allSessions = useAllSessions();
+  const canRegisterFirstSemester = useRegistrationOpen({
+    variables: { semester: 1 },
+  });
+  const canRegisterSecondSemester = useRegistrationOpen({
+    variables: { semester: 2 },
+  });
 
   return (
     <Flex
@@ -53,6 +62,14 @@ const CourseListControls: FC<CourseListControlsProps> = ({
           labels={["1st Semester", "2nd Semester"]}
           value={Number(semester).toString()}
           onChange={(e) => onSemesterChange(parseInt(e))}
+          isEachDisabled={
+            inDeleteView
+              ? [
+                  !canRegisterFirstSemester.data ?? true,
+                  !canRegisterSecondSemester.data ?? true,
+                ]
+              : undefined
+          }
         />
       </FormControl>
     </Flex>

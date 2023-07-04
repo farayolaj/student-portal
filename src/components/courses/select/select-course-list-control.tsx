@@ -52,8 +52,8 @@ export default function SelectCourseListControl({
           value={Number(semester).toString()}
           onChange={(s) => onSemesterChange(parseInt(s))}
           isEachDisabled={[
-            !canRegisterFirstSemester.data || true,
-            !canRegisterSecondSemester.data || true,
+            !canRegisterFirstSemester.data ?? true,
+            !canRegisterSecondSemester.data ?? true,
           ]}
         />
       </Flex>

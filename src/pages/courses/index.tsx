@@ -30,7 +30,15 @@ const Courses: FC = () => {
   const [sessionId, setSessionId] = useState(currentSessionId);
   const [semester, setSemester] = useState(currentSemester);
   const [inDeleteCourseView, setInDeleteCourseView] = useState(false);
-  const canRegister = useRegistrationOpen({ variables: { semester } });
+  const canRegisterCurrentSemester = useRegistrationOpen({
+    variables: { semester },
+  });
+  const canRegisterFirstSemester = useRegistrationOpen({
+    variables: { semester: 1 },
+  });
+  const canRegisterSecondSemester = useRegistrationOpen({
+    variables: { semester: 2 },
+  });
   const [view, setView] = useState("list");
   const registeredCourses = useRegisteredCourses({
     variables: { session: sessionId, semester: semester },
@@ -54,12 +62,11 @@ const Courses: FC = () => {
     sessionId === currentSessionId &&
     semester === currentSemester &&
     !inDeleteCourseView &&
-    canRegister.data &&
+    canRegisterCurrentSemester.data &&
     !registeredCourses.error;
   const canDeleteCourses =
     sessionId === currentSessionId &&
-    semester === currentSemester &&
-    canRegister.data &&
+    canRegisterCurrentSemester.data &&
     !registeredCourses.error;
 
   const toast = useToast();
@@ -102,6 +109,7 @@ const Courses: FC = () => {
         onSessionIdChange={setSessionId}
         semester={semester}
         onSemesterChange={setSemester}
+        inDeleteView={inDeleteCourseView}
       />
       <CourseOverview
         maxUnits={courseStats.data?.maxUnits || 0}
