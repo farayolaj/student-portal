@@ -25,9 +25,8 @@ import MobileNavBar from "./mobile-nav-bar";
 export const Header: FC = () => {
   const auth = useAuth();
   const user = auth.user;
-  const fullName = `${user?.firstName} ${user?.otherNames || ""} ${
-    user?.lastName
-  }`.replace("undefined", "");
+  const fullName = `${user?.firstName} ${user?.otherNames || ""} ${user?.lastName
+    }`.replace("undefined", "");
 
   return (
     <HStack
@@ -46,14 +45,24 @@ export const Header: FC = () => {
       <Flex gap={4} align="center">
         <MobileNavBar />
         <Image height={48} src={logo} alt="Logo" />
-        <Text
-          display={["none", null, "initial"]}
-          as="span"
-          fontSize="lg"
-          fontWeight="semibold"
-        >
-          University of Ibadan
-        </Text>
+        <Flex direction="column">
+          <Text
+            display={["none", null, "initial"]}
+            as="span"
+            fontSize="lg"
+            fontWeight="bold"
+          >
+            Distance Learning Centre
+          </Text>
+          <Text
+            display={["none", null, "initial"]}
+            as="span"
+            fontSize="sm"
+            fontWeight="semibold"
+          >
+            University of Ibadan
+          </Text>
+        </Flex>
       </Flex>
       <Spacer h="min-content" />
       <Flex gap={8} align="center">

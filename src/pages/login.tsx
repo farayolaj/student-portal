@@ -142,9 +142,24 @@ export default function Login() {
         w="full"
       >
         <Image height={48} src={uiLogo} alt="University of Ibadan Logo" />
-        <Text as="span" fontSize="lg" fontWeight="semibold">
-          University of Ibadan
-        </Text>
+        <Flex direction="column">
+          <Text
+            display={["none", null, "initial"]}
+            as="span"
+            fontSize="lg"
+            fontWeight="bold"
+          >
+            Distance Learning Centre
+          </Text>
+          <Text
+            display={["none", null, "initial"]}
+            as="span"
+            fontSize="sm"
+            fontWeight="semibold"
+          >
+            University of Ibadan
+          </Text>
+        </Flex>
         <Spacer />
         <Link href="https://dlcportal.ui.edu.ng/i-help">i-Help</Link>
         <Spacer display={["none", null, "initial"]} />
