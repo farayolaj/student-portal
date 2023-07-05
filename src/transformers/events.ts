@@ -2,34 +2,33 @@ import { DATE_ONLY_FORMAT } from "@/constants/date";
 import parse from "date-fns/parse";
 import format from "date-fns/format";
 
-export function toCalendarEvent(event: any) {
-  const [startTime, endTime] =
-    (
-      event.event_extra?.start_time?.split(" - ")[1] || event.events?.start_time
-    )?.split("-") || [];
+export function toEvents(event: any): CalendarEvent {
   return {
-    id: `${event.main_course_id}-${event.events?.main_event_id}-${event.event_extra?.id}`,
-    code: event.course_code,
-    name: event.course_title,
-    startTime,
-    endTime,
-    date: event.events?.event_date
-      ? parse(event.events?.event_date, "yyyy-MM-dd", new Date())
-      : parse(
-          event.event_extra?.start_time,
-          "yyyy-MM-dd - h:mm:ss a",
-          new Date()
-        ),
-    batch: event.event_extra?.batch_type,
-    category: event.events?.event_category,
-    centre: event.event_extra?.centre || event.exam_center,
-    location: event.event_extra?.location || event.events?.location,
-  } as CalendarEvent;
+    id: `${event.course.id}-${event.details.date}-${event.details.batch}`,
+    course: {
+      id: event.course.id,
+      title: event.course.title,
+      code: event.course.code,
+      status: event.course.status,
+      semester: parseInt(event.course.semester),
+      units: parseInt(event.course.units),
+    },
+    details: {
+      centre: event.details.exam_centre,
+      location: event.details.location,
+      time: event.details.event_time,
+      category: event.details.category,
+      sessionId: event.details.sessionId,
+      batch: event.details.batch,
+      description: event.details.description,
+      date: parse(event.details.date, "yyyy-MM-dd", new Date()),
+    },
+  };
 }
 
 export function toEventDateMapping(events: CalendarEvent[]) {
   const eventMapping = events?.reduce((acc, event) => {
-    const date = format(event.date, DATE_ONLY_FORMAT);
+    const date = format(event.details.date, DATE_ONLY_FORMAT);
     const dateList = acc.get(date);
     if (dateList) {
       dateList.push(event);
@@ -41,11 +40,11 @@ export function toEventDateMapping(events: CalendarEvent[]) {
 
   for (let dateString of eventMapping.keys()) {
     eventMapping.get(dateString)?.sort((a, b) => {
-      if (!a.startTime) return -1;
-      if (!b.startTime) return 1;
-      return a.startTime == b.startTime
+      if (!a.details.time) return -1;
+      if (!b.details.time) return 1;
+      return a.details.time == b.details.time
         ? 0
-        : a.startTime > b.startTime
+        : a.details.time > b.details.time
         ? 1
         : -1;
     });

@@ -192,19 +192,25 @@ interface Session {
 
 interface CalendarEvent {
   id: string;
-  /** Course code for course related events. */
-  code?: string;
-  name: string;
-  startTime?: string;
-  endTime?: string;
-  date: Date;
-  location?: string;
-  centre?: string;
-  /**
-   * For events that apply to students in batches.
-   */
-  batch?: string;
-  category?: string;
+  course: {
+    id: Course["id"];
+    title: Course["title"];
+    code: Course["code"];
+    status: Course["status"];
+    semester: Course["semester"];
+    units: Course["units"];
+  };
+  details: {
+    centre: string;
+    location: string;
+    time: string;
+    /** Can be a url too */
+    category?: string;
+    sessionId?: string;
+    batch?: string;
+    description?: string;
+    date: Date;
+  };
 }
 
 /**

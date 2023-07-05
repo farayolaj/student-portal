@@ -1,4 +1,4 @@
-import { toCalendarEvent, toEventDateMapping } from "@/transformers/events";
+import { toEventDateMapping, toEvents } from "@/transformers/events";
 import { createQuery } from "react-query-kit";
 import getApi from "../api";
 
@@ -10,9 +10,7 @@ export const useEvents = createQuery(
     if (!response.data.status) throw new Error(response.data.message);
 
     return toEventDateMapping(
-      (response.data.payload
-        ?.filter((ev: any) => ev.events || ev.event_extra)
-        ?.map(toCalendarEvent) as CalendarEvent[]) || []
+      (response.data.payload?.map(toEvents) as CalendarEvent[]) || []
     );
   },
   {

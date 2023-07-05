@@ -1,5 +1,12 @@
 import isValidUrl from "@/lib/is-valid-url";
-import { Flex, Badge, Text, StackDivider, VStack } from "@chakra-ui/react";
+import {
+  Flex,
+  Badge,
+  Text,
+  StackDivider,
+  VStack,
+  Link,
+} from "@chakra-ui/react";
 import format from "date-fns/format";
 import { CSSProperties } from "react";
 
@@ -47,11 +54,18 @@ function EventListItem({
   bg,
   padding,
 }: EventListItemProps) {
-  const isLocationUrl = isValidUrl(event.location || "");
+  const isLocationUrl = isValidUrl(event.details.location);
 
-  const eventLocation = [event.location, event.centre]
-    .filter(Boolean)
-    .join(isLocationUrl ? " - " : ", ");
+  const eventLocation = isLocationUrl ? (
+    <>
+      <Link href={event.details.location} target="_blank">
+        {event.details.location}
+      </Link>{" "}
+      - {event.details.centre}
+    </>
+  ) : (
+    [event.details.location, event.details.centre].join(", ")
+  );
 
   const style = {
     base: {
@@ -77,7 +91,7 @@ function EventListItem({
         color="white"
       >
         <Text as="span" {...style[size].day}>
-          {format(event.date, "dd")}
+          {format(event.details.date, "dd")}
         </Text>
         <Text
           as="span"
@@ -85,7 +99,7 @@ function EventListItem({
           mt="-1.5"
           textTransform="uppercase"
         >
-          {format(event.date, "MMM")}
+          {format(event.details.date, "MMM")}
         </Text>
       </Flex>
       <Flex
@@ -96,15 +110,14 @@ function EventListItem({
         w="full"
       >
         <Text as="span">
-          {event.code && `${event.code}:`} {event.name}
+          {event.course.code && `${event.course.code}:`} {event.course.title}
         </Text>
         <Badge w="fit-content" colorScheme="primary">
-          {event.startTime}{" "}
-          {event.startTime && event.endTime ? `- ${event.endTime}` : ""}
+          {event.details.time}
         </Badge>
         <Text as="span" fontSize="xs" fontWeight="bold">
           <>
-            {eventLocation} {event.batch && `(${event.batch})`}
+            {eventLocation} {event.details.batch && `(${event.details.batch})`}
           </>
         </Text>
       </Flex>
