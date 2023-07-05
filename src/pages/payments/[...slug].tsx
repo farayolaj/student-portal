@@ -9,9 +9,11 @@ import { useEffect } from "react";
 
 export default function PaymentDetails() {
   const router = useRouter();
-  const id = router.query.id as string;
+  const [id, transactionRef] = router.query.slug as string[];
   const toast = useToast();
-  const paymentRes = usePaymentDetail({ variables: { id } });
+  const paymentRes = usePaymentDetail({
+    variables: { id, transactionRef: transactionRef },
+  });
 
   useEffect(() => {
     if (paymentRes.error) {
@@ -42,7 +44,7 @@ export default function PaymentDetails() {
             onRequery={(_) => {
               paymentRes.refetch();
             }}
-            isLoading={paymentRes.isLoading}
+            isLoading={paymentRes.isInitialLoading}
           />
         </CardBody>
       </Card>

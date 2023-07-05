@@ -91,8 +91,8 @@ export default function PaymentSummary({ payment }: PaymentSummaryProps) {
             {payment.status === "paid"
               ? "View Details"
               : payment.isActive
-              ? "View Details"
-              : "Payment Closed"}
+                ? "View Details"
+                : "Payment Closed"}
           </Button>
         </Flex>
       </CardBody>

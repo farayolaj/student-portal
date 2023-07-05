@@ -54,7 +54,10 @@ const PaymentsCard: FC = () => {
           outstandingPaymentsRes.data.length > 0 ? (
           <VStack divider={<StackDivider />} gap={6}>
             {outstandingPaymentsRes.data.map((payment) => (
-              <PaymentItem key={payment.id} payment={payment} />
+              <PaymentItem
+                key={`${payment.id}-${payment.transactionRef}`}
+                payment={payment}
+              />
             ))}
           </VStack>
         ) : (

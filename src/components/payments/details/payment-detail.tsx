@@ -113,7 +113,8 @@ export default function PaymentDetail({
         preselectedId: isPreselectedSelected
           ? payment?.preselected?.id
           : undefined,
-        paymentType: "main",
+        paymentType: payment?.paymentType || "main",
+        transactionRef: payment?.transactionRef,
       },
       {
         onError: (error) => {
@@ -150,16 +151,22 @@ export default function PaymentDetail({
           <Text as="span" fontWeight="semibold">
             Requires{" "}
             {prerequisites
-              .map((pre) => (
+              .map((pre) => ({
+                ...mainPayments.data?.find(
+                  (payment) => payment.code === pre.id
+                ),
+                description: pre.description,
+              }))
+              .map((payment) => (
                 <Link
-                  key={pre.id}
+                  key={`${payment.id}-${payment.transactionRef}`}
                   as={NextLink}
                   href={buildPaymentDetailUrl(
                     payment.id || "",
                     payment.transactionRef
                   )}
                 >
-                  {pre.description}
+                  {payment.description}
                 </Link>
               ))
               .reduce((prev, curr, idx) => {
@@ -248,11 +255,7 @@ export default function PaymentDetail({
             isDisabled={receipt.isLoading}
             minW="7.8rem"
           >
-            {receipt.isLoading ? (
-              <Spinner color="white" size="xs" />
-            ) : (
-              "Print"
-            )}
+            {receipt.isLoading ? <Spinner color="white" size="xs" /> : "Print"}
           </Button>
         ) : (
           <Flex direction="column">

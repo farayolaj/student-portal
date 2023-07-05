@@ -67,7 +67,8 @@ export default function MakeSundryPaymentModal() {
     initiateTransaction.mutate(
       {
         id: selectedPayment?.id || "",
-        paymentType: "sundry",
+        paymentType: selectedPayment?.paymentType || "sundry",
+        transactionRef: undefined,
       },
       {
         onError: (error) => {
@@ -125,7 +126,10 @@ export default function MakeSundryPaymentModal() {
                   }}
                 >
                   {sundryPayments.map((payment) => (
-                    <option key={payment.id} value={payment.id}>
+                    <option
+                      key={`${payment.id}-${payment.transactionRef}`}
+                      value={payment.id}
+                    >
                       {payment.title}
                     </option>
                   ))}

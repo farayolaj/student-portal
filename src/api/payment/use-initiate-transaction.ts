@@ -7,16 +7,19 @@ export const useInitiateTransaction = createMutation(
     id,
     preselectedId,
     paymentType,
+    transactionRef,
   }: {
     id: string;
     preselectedId?: string;
     paymentType: "main" | "sundry";
+    transactionRef?: string;
   }) => {
     const response = await getApi().get("/initiate_fee_details", {
       params: {
         pid: id,
         payment_type: paymentType,
         preselected: preselectedId,
+        tid: transactionRef,
       },
     });
 
