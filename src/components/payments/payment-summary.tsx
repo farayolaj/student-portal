@@ -19,7 +19,7 @@ export default function PaymentSummary({ payment }: PaymentSummaryProps) {
   const descriptionArr = [session?.name, payment.semester];
   useVerifyTransaction({
     variables: { rrr: payment.transaction?.rrr || "" },
-    enabled: payment.status === "unpaid" && Boolean(payment.transaction),
+    enabled: payment.status === "unpaid",
     onSuccess: () => {
       queryClient.invalidateQueries(["main-payments"]);
     },
@@ -82,7 +82,9 @@ export default function PaymentSummary({ payment }: PaymentSummaryProps) {
               `Due ${payment.dueDate?.toLocaleDateString()}`}
           </Text>
           <Button
-            onClick={() => push(buildPaymentDetailUrl(payment.id, payment.transactionRef))}
+            onClick={() =>
+              push(buildPaymentDetailUrl(payment.id, payment.transactionRef))
+            }
             mx="auto"
             w="fit-content"
             mt="auto"
@@ -91,8 +93,8 @@ export default function PaymentSummary({ payment }: PaymentSummaryProps) {
             {payment.status === "paid"
               ? "View Details"
               : payment.isActive
-                ? "View Details"
-                : "Payment Closed"}
+              ? "View Details"
+              : "Payment Closed"}
           </Button>
         </Flex>
       </CardBody>

@@ -40,6 +40,7 @@ export default function PaymentDetails() {
             onPaymentSuccess={() => paymentRes.refetch()}
           />
           <PaymentTransactionDetail
+            hasPaid={paymentRes.data?.status === "paid"}
             transaction={paymentRes.data?.transaction}
             onRequery={(_) => {
               paymentRes.refetch();

@@ -3,12 +3,14 @@ import { Box, Button, Divider, Flex, SimpleGrid, Text } from "@chakra-ui/react";
 import DetailItem from "./detail-item";
 
 type PaymentTransactionsProps = {
+  hasPaid: boolean;
   transaction?: Transaction;
   onRequery: (status: boolean) => void;
   isLoading?: boolean;
 };
 
 export default function PaymentTransactionDetail({
+  hasPaid,
   transaction,
   onRequery,
   isLoading,
@@ -16,7 +18,7 @@ export default function PaymentTransactionDetail({
   const verifyTransaction = useVerifyTransaction({
     variables: { rrr: transaction?.rrr ?? "" },
     onSuccess: onRequery,
-    enabled: Boolean(transaction),
+    enabled: !hasPaid,
   });
 
   return (
