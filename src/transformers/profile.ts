@@ -1,12 +1,23 @@
 import parse from "date-fns/parse";
 
+const IMAGE_SERVER = "https://dlcoffice.ui.edu.ng";
+
+function studentImagePathUrl(name: string) {
+  if (!name) return null;
+
+  const pathName = name.includes("assets")
+    ? `${IMAGE_SERVER}/${name}`
+    : `${IMAGE_SERVER}/assets/images/student/passports/${name}`;
+  return pathName;
+}
+
 export const toUser = (user: any) =>
   ({
     email: user.user_login,
     firstName: user.firstname,
     otherNames: user.othernames,
     lastName: user.lastname,
-    profileImage: user.passport,
+    profileImage: studentImagePathUrl(user.passport),
     dob: parse(user.DoB, "dd/MM/yyyy", new Date()),
     gender: user.gender,
     phone: user.phone,
