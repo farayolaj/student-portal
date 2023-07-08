@@ -184,7 +184,7 @@ export default function Login() {
               bg: "white",
             }}
           >
-            <Box display={["none", null, "block"]}>
+            <Box display={["none", null, "block"]} pos="relative" h="full">
               <Image
                 src={greenery}
                 alt=""
