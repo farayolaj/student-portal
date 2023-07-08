@@ -1,5 +1,4 @@
 import { useMainPayments } from "@/api/payment/use-main-payments";
-import { useSundryPayments } from "@/api/payment/use-sundry-payments";
 import { Center, SimpleGrid, Spinner } from "@chakra-ui/react";
 import { useState } from "react";
 import PageTitle from "../../components/common/page-title";
@@ -9,7 +8,6 @@ import PaymentSummary from "../../components/payments/payment-summary";
 
 export default function Payments() {
   const [statusFilter, setStatusFilter] = useState("all");
-  const sundryPaymentsRes = useSundryPayments();
   const mainPaymentRes = useMainPayments();
   const payments = mainPaymentRes.data ?? [];
   const sortedPayments = payments.sort((a, b) => {

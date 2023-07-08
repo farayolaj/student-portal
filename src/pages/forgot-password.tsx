@@ -74,7 +74,10 @@ export default function ForgotPassword() {
             <CardBody>
               {isResetRequestSent ? (
                 <Flex direction="column" align="center" gap={8}>
-                  <Text>Your password has been reset. Check your email.</Text>
+                  <Text>
+                    Your password has been reset to default. Kindly login with
+                    your default password.
+                  </Text>
                   <Link as={NextLink} href={routes.LOGIN}>
                     &larr; Go back to Login
                   </Link>
