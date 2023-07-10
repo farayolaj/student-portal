@@ -190,8 +190,8 @@ export default function RequestVerificationCard({
                     alignItems="center"
                   >
                     <Icon as={IoTime} color="yellow" boxSize={6} />
-                    Your request is currently being processed. Please check
-                    back.
+                    Your uploaded O&apos; Level Result is currently being
+                    reviewed. Kindly check back.
                   </Text>
                 ) : status === "verified" ? (
                   <Text
