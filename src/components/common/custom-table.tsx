@@ -17,7 +17,7 @@ export default function CustomTable<T>(props: CustomTableProps<T>) {
   return (
     <Card w="full" overflowX="auto">
       <CardBody>
-        <Table className="w-full ">
+        <Table w="full">
           <Thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <Tr key={headerGroup.id}>

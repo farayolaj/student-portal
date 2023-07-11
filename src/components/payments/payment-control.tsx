@@ -1,7 +1,9 @@
-import { Button, Flex, Icon } from "@chakra-ui/react";
+import { Button, Flex, Icon, Link } from "@chakra-ui/react";
+import NextLink from "next/link";
 import { IoPrintOutline } from "react-icons/io5";
 import RadioButtonGroup from "../common/radio-button-group";
 import MakeSundryPaymentModal from "./make-sundry-payment-modal";
+import { TRANSACTIONS } from "@/constants/routes";
 
 type PaymentControlProps = {
   statusFilter: string;
@@ -23,6 +25,9 @@ export default function PaymentControl({
         <Button display="inline-flex" gap={2} isDisabled>
           <Icon as={IoPrintOutline} boxSize={6} /> Print Ledger
         </Button>
+        <Link as={NextLink} href={TRANSACTIONS} variant="button">
+          Transactions
+        </Link>
       </Flex>
       <RadioButtonGroup
         labels={["All", "Unpaid", "Paid"]}

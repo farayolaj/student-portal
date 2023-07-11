@@ -112,6 +112,7 @@ interface Transaction {
   status: "failed" | "pending" | "success";
   datePayed?: Date;
   publicKey?: string;
+  sessionId?: string;
 }
 
 interface Payment {
