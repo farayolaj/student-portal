@@ -45,7 +45,7 @@ export default function RequestVerificationCard({
     { id: crypto.randomUUID(), file: null, documentTypeId: "" },
   ]);
   const verificationResultRes = useVerificationResult();
-  const status = verificationResultRes.data;
+  const result = verificationResultRes.data;
   const documentUploadsRes = useDocumentUploads();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -106,14 +106,14 @@ export default function RequestVerificationCard({
           mt={8}
           filter="auto"
           brightness={isDisabled ? "40%" : undefined}
-          blur={isDisabled ? "2px" : undefined}
+          blur={isDisabled ? "4px" : undefined}
         >
           <CardHeader>
             <Heading size="md">Upload Documents</Heading>
           </CardHeader>
           <CardBody>
             <VStack as="form" gap={4} w="full" align="flex-start" px={4}>
-              {status === "not_found"
+              {result?.status === "not-verified"
                 ? documents.map((doc) => (
                     <Fragment key={doc.id}>
                       <DocumentUpload
@@ -131,7 +131,7 @@ export default function RequestVerificationCard({
                           );
                         }}
                         showRemoveButton={documents.length > 1}
-                        isDisabled={status !== "not_found"}
+                        isDisabled={result.status !== "not-verified"}
                       />
                       <StackDivider w="full" borderWidth={2} />
                     </Fragment>
@@ -142,7 +142,7 @@ export default function RequestVerificationCard({
                       <StackDivider w="full" borderWidth={2} />
                     </Fragment>
                   ))}
-              {status === "not_found" && (
+              {result?.status === "not-verified" && (
                 <Flex
                   direction={["column", null, "row"]}
                   justify="space-between"
@@ -177,12 +177,12 @@ export default function RequestVerificationCard({
                 </Flex>
               )}
             </VStack>
-            {status !== "not_found" && (
+            {result?.status !== "not-verified" && (
               <Box>
                 <Heading size="md" mt={12}>
                   Status
                 </Heading>
-                {status === "pending" ? (
+                {result?.status === "pending" ? (
                   <Text
                     mt={2}
                     display="inline-flex"
@@ -193,7 +193,7 @@ export default function RequestVerificationCard({
                     Your uploaded O&apos; Level Result is currently being
                     reviewed. Kindly check back.
                   </Text>
-                ) : status === "verified" ? (
+                ) : result?.status === "verified" ? (
                   <Text
                     mt={2}
                     display="inline-flex"
@@ -221,6 +221,18 @@ export default function RequestVerificationCard({
                     </UnorderedList>
                   </>
                 )}
+                <>
+                  <Heading size="sm" mt={4}>
+                    Comments
+                  </Heading>
+                  <UnorderedList ml={4}>
+                    {result?.remarks?.map((remark) => (
+                      <ListItem key={remark.dateCreated.getTime()}>
+                        {remark.comment}
+                      </ListItem>
+                    ))}
+                  </UnorderedList>
+                </>
               </Box>
             )}
           </CardBody>

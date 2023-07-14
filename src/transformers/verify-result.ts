@@ -16,3 +16,18 @@ export function toDocumentUpload(data: any) {
     reason: data.reason,
   } as DocumentUpload;
 }
+
+export function toResultVerificationResult(data: any) {
+  return {
+    status:
+      data.verification_status === "Pending"
+        ? "pending"
+        : data.verification_status === "Verified"
+        ? "verified"
+        : "not-verified",
+    remarks: (data.remarks || []).map((remark: any) => ({
+      comment: remark.comment,
+      dateCreated: new Date(Date.parse(remark.date_created)),
+    })),
+  } as ResultVerificationResult;
+}

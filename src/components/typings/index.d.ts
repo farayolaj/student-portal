@@ -229,6 +229,14 @@ interface ResultVerificationDocumentType {
   customName?: string;
 }
 
+interface ResultVerificationResult {
+  status: "verified" | "not-verified" | "pending";
+  remarks: {
+    comment: string;
+    dateCreated: Date;
+  }[];
+}
+
 interface DocumentUploadValue {
   id: string;
   documentTypeId: string;
