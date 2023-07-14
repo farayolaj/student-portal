@@ -116,16 +116,18 @@ const PaymentItem: FC<PaymentItemProps> = ({ payment }) => {
           {showPreselected && " with " + payment.preselected?.title}
           {sessionRes.data && " | " + sessionRes.data.name}
         </Text>
-        <Text
-          mt={4}
-          fontSize="sm"
-          display="inline-flex"
-          gap={2}
-          w="fit-content"
-          alignItems="center"
-        >
-          <IoTime color={statusColor} /> <span>{statusText}</span>
-        </Text>
+        {Boolean(payment.dueDate.getTime()) && (
+          <Text
+            mt={4}
+            fontSize="sm"
+            display="inline-flex"
+            gap={2}
+            w="fit-content"
+            alignItems="center"
+          >
+            <IoTime color={statusColor} /> <span>{statusText}</span>
+          </Text>
+        )}
       </Flex>
       <Button
         onClick={() =>

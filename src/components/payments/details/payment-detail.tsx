@@ -277,7 +277,7 @@ export default function PaymentDetail({
               )}
             </Button>
             <Text as="span" fontSize="sm" fontWeight="semibold" mt={8}>
-              {payment.dueDate &&
+              {Boolean(payment.dueDate.getTime()) &&
                 `Due ${payment.dueDate?.toLocaleDateString()}`}
             </Text>
           </Flex>

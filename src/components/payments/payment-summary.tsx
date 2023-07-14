@@ -77,7 +77,7 @@ export default function PaymentSummary({ payment }: PaymentSummaryProps) {
             mb={4}
             minH={6}
           >
-            {payment.dueDate &&
+            {Boolean(payment.dueDate.getTime()) &&
               payment.status !== "paid" &&
               `Due ${payment.dueDate?.toLocaleDateString()}`}
           </Text>
