@@ -115,6 +115,7 @@ export default function PaymentDetail({
           : undefined,
         paymentType: payment?.paymentType || "main",
         transactionRef: payment?.transactionRef,
+        transactionType: payment?.transactionType,
       },
       {
         onError: (error) => {
@@ -161,10 +162,11 @@ export default function PaymentDetail({
                 <Link
                   key={`${payment.id}-${payment.transactionRef}`}
                   as={NextLink}
-                  href={buildPaymentDetailUrl(
-                    payment.id || "",
-                    payment.transactionRef
-                  )}
+                  href={buildPaymentDetailUrl({
+                    id: payment.id || "",
+                    trxRef: payment.transactionRef,
+                    trxType: payment.transactionType,
+                  })}
                 >
                   {payment.description}
                 </Link>

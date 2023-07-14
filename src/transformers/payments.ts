@@ -1,5 +1,10 @@
 import parse from "date-fns/parse";
 
+const transactionTypes: Record<string, Payment["transactionType"]> = {
+  trans_normal: "normal",
+  trans_custom: "custom",
+};
+
 export function toPayment(data: any): Payment {
   return {
     id: data.payment_id,
@@ -12,6 +17,8 @@ export function toPayment(data: any): Payment {
     level: data.level ? data.level + "00" : undefined,
     sessionId: data.session,
     paymentType: data.payment_category,
+    transactionType:
+      data.payment_transaction && transactionTypes[data.payment_transaction],
     transactionRef: data.transaction_ref,
     containsPreselected: data.is_preselected_fee
       ? data.is_preselected_fee !== null

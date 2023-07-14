@@ -83,7 +83,13 @@ export default function PaymentSummary({ payment }: PaymentSummaryProps) {
           </Text>
           <Button
             onClick={() =>
-              push(buildPaymentDetailUrl(payment.id, payment.transactionRef))
+              push(
+                buildPaymentDetailUrl({
+                  id: payment.id,
+                  trxRef: payment.transactionRef,
+                  trxType: payment.transactionType,
+                })
+              )
             }
             mx="auto"
             w="fit-content"

@@ -131,7 +131,13 @@ const PaymentItem: FC<PaymentItemProps> = ({ payment }) => {
       </Flex>
       <Button
         onClick={() =>
-          push(buildPaymentDetailUrl(payment.id, payment.transactionRef))
+          push(
+            buildPaymentDetailUrl({
+              id: payment.id,
+              trxRef: payment.transactionRef,
+              trxType: payment.transactionType,
+            })
+          )
         }
         w="fit-content"
         isDisabled={!payment.isActive}

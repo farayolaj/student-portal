@@ -130,6 +130,7 @@ interface Payment {
   semester?: string;
   containsPreselected: boolean;
   paymentType: "sundry" | "main";
+  transactionType?: "normal" | "custom";
   transactionRef?: string;
   preselected?: {
     id: string;

@@ -4,21 +4,33 @@ import getApi from "../api";
 
 export const usePaymentDetail = createQuery<
   Payment,
-  { id: string; transactionRef?: string }
->("payment-detail", async ({ queryKey: [_, { id, transactionRef }] }) => {
-  const response = await getApi().get("/fee_details", {
-    params: {
-      pid: id,
-      tid: transactionRef,
-    },
-  });
+  {
+    id: string;
+    transactionRef?: string;
+    transactionType?: Payment["transactionType"];
+  }
+>(
+  "payment-detail",
+  async ({ queryKey: [_, { id, transactionRef, transactionType }] }) => {
+    const paths = {
+      normal: "/fee_details",
+      custom: "/custom_fee_details",
+    };
 
-  if (!response.data.status && !response.data.payload)
-    throw new Error(response.data.message);
+    const response = await getApi().get(paths[transactionType || "normal"], {
+      params: {
+        pid: id,
+        tid: transactionRef,
+      },
+    });
 
-  const data = response.data.payload;
-  return toPayment({
-    ...data.payment_details,
-    transaction: data.split_payment,
-  });
-});
+    if (!response.data.status && !response.data.payload)
+      throw new Error(response.data.message);
+
+    const data = response.data.payload;
+    return toPayment({
+      ...data.payment_details,
+      transaction: data.split_payment,
+    });
+  }
+);

@@ -37,7 +37,9 @@ export default function PayVerificationFeeCard({
           <CardBody>
             <Button
               isDisabled={isPaid}
-              onClick={() => push(buildPaymentDetailUrl(paymentId || ''))}
+              onClick={() =>
+                push(buildPaymentDetailUrl({ id: paymentId || "" }))
+              }
               minW={24}
             >
               {paymentId ? (
