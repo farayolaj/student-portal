@@ -239,6 +239,7 @@ interface ResultVerificationResult {
 
 interface DocumentUploadValue {
   id: string;
+  existingId?: string;
   documentTypeId: string;
   file: File | null;
   customTitle?: string;
@@ -247,6 +248,7 @@ interface DocumentUploadValue {
 interface DocumentUpload {
   id: string;
   documentType?: string;
+  documentTypeId?: string;
   file: string;
   customTitle?: string;
   reason?: string;

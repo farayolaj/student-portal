@@ -11,6 +11,7 @@ export function toDocumentUpload(data: any) {
   return {
     id: data.id,
     documentType: data.document_name || "Others",
+    documentTypeId: data.verification_documents_requirement_id,
     file: data.document_path.split("/").pop(),
     customTitle: data.other,
     reason: data.reason,

@@ -46,7 +46,24 @@ export default function RequestVerificationCard({
   ]);
   const verificationResultRes = useVerificationResult();
   const result = verificationResultRes.data;
-  const documentUploadsRes = useDocumentUploads();
+  const documentUploadsRes = useDocumentUploads({
+    onSuccess(data) {
+      if (
+        data.length > 0 &&
+        documents.length === 1 &&
+        documents[0].file === null
+      )
+        setDocuments(
+          data.map((doc) => ({
+            id: doc.id,
+            existingId: doc.id,
+            file: null,
+            documentTypeId: doc.documentTypeId ?? "others",
+            customTitle: doc.customTitle,
+          }))
+        );
+    },
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
@@ -64,15 +81,17 @@ export default function RequestVerificationCard({
   const onSubmit = () => {
     setIsSubmitting(true);
     Promise.all(
-      documents.map((doc) =>
-        uploadDocument.mutateAsync({
-          file: doc.file as File,
-          studentId: profileRes.data?.academicProfile.id as string,
-          documentTypeId:
-            doc.documentTypeId === "others" ? undefined : doc.documentTypeId,
-          customName: doc.customTitle,
-        })
-      )
+      documents
+        .filter((doc) => Boolean(doc.file))
+        .map((doc) =>
+          uploadDocument.mutateAsync({
+            existingId: doc.existingId,
+            file: doc.file as File,
+            documentTypeId:
+              doc.documentTypeId === "others" ? undefined : doc.documentTypeId,
+            customName: doc.customTitle,
+          })
+        )
     )
       .then(() => {
         queryClient.invalidateQueries(["verification_result"]);
@@ -214,11 +233,6 @@ export default function RequestVerificationCard({
                       <Icon as={IoCloseCircle} color="red" boxSize={6} />
                       Your result could not be verified successfully.
                     </Text>
-                    <UnorderedList ml={16}>
-                      {documentUploadsRes.data?.map((doc) => (
-                        <ListItem key={doc.id}>{doc.reason}</ListItem>
-                      ))}
-                    </UnorderedList>
                   </>
                 )}
                 <>
@@ -228,6 +242,7 @@ export default function RequestVerificationCard({
                   <UnorderedList ml={4}>
                     {result?.remarks?.map((remark) => (
                       <ListItem key={remark.dateCreated.getTime()}>
+                        {remark.dateCreated.toLocaleString("en-NG")} -{" "}
                         {remark.comment}
                       </ListItem>
                     ))}
