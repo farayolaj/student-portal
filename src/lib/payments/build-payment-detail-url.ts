@@ -10,5 +10,5 @@ export default function buildPaymentDetailUrl({
   const trxRefParam = trxRef ? `${trxRef}` : "";
   const trxTypeParam = trxType ? `${trxType}` : "";
 
-  return `/payments/${id}/${trxRefParam}/${trxTypeParam}`;
+  return `/payments/${id}-${trxRefParam}-${trxTypeParam}`;
 }

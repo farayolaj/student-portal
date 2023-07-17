@@ -9,7 +9,10 @@ import { useEffect } from "react";
 
 export default function PaymentDetails() {
   const router = useRouter();
-  const [id, transactionRef, transactionType] = router.query.slug as string[];
+  const slug = (router.query.slug as string).split("-");
+  const id = slug[0];
+  const transactionRef = slug[1] || undefined;
+  const transactionType = slug[2] || undefined;
   const toast = useToast();
   const paymentRes = usePaymentDetail({
     variables: {
