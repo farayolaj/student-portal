@@ -16,7 +16,7 @@ import {
   BsFillFileEarmarkWordFill,
 } from "react-icons/bs";
 import { IoDownloadOutline } from "react-icons/io5";
-import { useFetchDocument } from "@/api/document/use-fetch-document";
+import { useDownloadDocument } from "@/api/document/use-download-document";
 
 type DocumentGridProps = {
   documents: PortalDocument[];
@@ -47,9 +47,7 @@ type DocumentItemProps = {
 
 function DocumentItem({ document }: DocumentItemProps) {
   const toast = useToast();
-  const { intiateFetch, isLoading } = useFetchDocument({
-    fileField: "",
-    fileNameField: "",
+  const { intiateFetch, isLoading } = useDownloadDocument({
     url: document.url,
     onError: (error) => {
       toast({
