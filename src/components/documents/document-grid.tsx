@@ -105,7 +105,15 @@ function DocumentItem({ document }: DocumentItemProps) {
             w="fit-content"
             mx="auto"
             onClick={() => intiateFetch()}
-            isDisabled={isLoading}
+            isDisabled={
+              (document.prerequisite && !document.prerequisite.hasPaid) ||
+              isLoading
+            }
+            title={
+              document.prerequisite && !document.prerequisite.hasPaid
+                ? `Prerequisite fee: ${document.prerequisite.name} must be paid.`
+                : ""
+            }
           >
             {isLoading ? (
               <Spinner size="xs" color="white" />

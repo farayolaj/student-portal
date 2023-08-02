@@ -150,6 +150,10 @@ interface PortalDocument {
   title: string;
   url: string;
   fileType: string;
+  prerequisite?: {
+    name: string;
+    hasPaid: boolean;
+  };
   programme?: string;
   session?: string;
   semester?: string;
