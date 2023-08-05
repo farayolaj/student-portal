@@ -55,6 +55,14 @@ const Courses: FC = () => {
       session: sessionId,
       semester: semester,
     },
+    onError: (err) => {
+      toast({
+        title: "Error fetching course statistics",
+        description: (err as Error).message,
+        status: "error",
+        isClosable: true,
+      });
+    },
   });
 
   const courses = registeredCourses.data || [];

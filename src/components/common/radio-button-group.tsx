@@ -17,7 +17,9 @@ type RadioButtonGroupProps = {
 } & Omit<RadioGroupProps, "children">;
 
 const RadioButtonGroup: FC<RadioButtonGroupProps> = (props) => {
-  const { getRootProps, getRadioProps, htmlProps } = useRadioGroup(props);
+  const { labels, options, values, isEachDisabled, ...radioGroupProps } = props;
+  const { getRootProps, getRadioProps, htmlProps } =
+    useRadioGroup(radioGroupProps);
 
   const group = getRootProps();
 
@@ -40,15 +42,15 @@ const RadioButtonGroup: FC<RadioButtonGroupProps> = (props) => {
       {...htmlProps}
       {...group}
     >
-      {props.values.map((value, idx) => {
+      {values.map((value, idx) => {
         const radio = getRadioProps({ value });
         return (
           <RadioButton
             key={value}
             {...radio}
-            isDisabled={props.isEachDisabled?.at(idx)}
+            isDisabled={isEachDisabled?.at(idx)}
           >
-            {props.options ? props.options[idx] : props.labels[idx]}
+            {options ? options[idx] : labels[idx]}
           </RadioButton>
         );
       })}

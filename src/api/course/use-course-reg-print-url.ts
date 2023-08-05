@@ -20,7 +20,6 @@ export function useCourseRegPrintUrl(sessionId: string, semester: number) {
           new Blob([response.data], { type: "application/pdf" })
         );
         setIsLoading(false);
-        console.log(url);
         setUrl(url);
       })
       .catch((error) => {

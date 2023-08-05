@@ -13,7 +13,9 @@ export const useCourseStatistics = createQuery<
   const response = await getApi().get(route);
 
   if (!response.data.status)
-    throw new Error("Could not fetch course statistics");
+    throw new Error(
+      response.data.message || "Could not fetch course statistics"
+    );
 
   return toCourseStatistics(response.data.payload);
 });
