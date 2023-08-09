@@ -27,10 +27,10 @@ export function toPayment(data: any): Payment {
       parseInt(data.preselected_amount) === 0
         ? undefined
         : {
-            id: data.preselected,
-            title: data.preselected_fee_readable,
-            amount: parseInt(data.preselected_amount),
-          },
+          id: data.preselected,
+          title: data.preselected_fee_readable,
+          amount: parseInt(data.preselected_amount),
+        },
     prerequisites:
       data.prerequisites?.map((pre: any) => ({
         id: pre.prerequisite,
@@ -39,24 +39,24 @@ export function toPayment(data: any): Payment {
       })) ?? [],
     transaction: data.transaction
       ? {
-          id: data.transaction.transaction_id,
-          amount: data.total,
-          dateInitiated: parse(
-            data.transaction.date_performed,
-            "MMM. dd, yyyy",
-            new Date()
-          ),
-          description: data.description,
-          referenceNumber: data.transaction.order_id,
-          rrr: data.transaction.rrr,
-          status: data.paid ? "success" : "pending",
-          datePayed: parse(
-            data.transaction.date_completed,
-            "MMM. dd, yyyy",
-            new Date()
-          ),
-          publicKey: data.transaction.public_key,
-        }
+        id: data.transaction.transaction_id,
+        amount: data.total,
+        dateInitiated: parse(
+          data.transaction.date_performed,
+          "MMM. dd, yyyy",
+          new Date()
+        ),
+        description: data.description,
+        referenceNumber: data.transaction.order_id,
+        rrr: data.transaction.rrr,
+        status: data.paid ? "success" : "pending",
+        datePayed: parse(
+          data.transaction.date_completed,
+          "MMM. dd, yyyy",
+          new Date()
+        ),
+        publicKey: data.transaction.public_key,
+      }
       : undefined,
   };
 }
@@ -75,5 +75,6 @@ export function toTransaction(data: any): Transaction {
         : "pending",
     datePayed: new Date(Date.parse(data.date_completed)),
     sessionId: data.session,
+    programmeName: data.programme_name,
   };
 }

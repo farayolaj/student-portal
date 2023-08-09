@@ -24,6 +24,13 @@ const columns = [
       </Text>
     ),
   }),
+  columnHelper.accessor("programmeName", {
+    header: () => (
+      <Text as="span" whiteSpace="nowrap">
+        Programme
+      </Text>
+    )
+  }),
   columnHelper.accessor("amount", {
     header: () => (
       <Text as="span" whiteSpace="nowrap">
@@ -48,10 +55,10 @@ const columns = [
         status === "success"
           ? "green"
           : status === "failed"
-          ? "red"
-          : status === "pending"
-          ? "yellow"
-          : "gray";
+            ? "red"
+            : status === "pending"
+              ? "yellow"
+              : "gray";
       return (
         <Badge colorScheme={colorScheme} variant="outline">
           {status}

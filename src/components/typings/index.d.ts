@@ -113,6 +113,7 @@ interface Transaction {
   datePayed?: Date;
   publicKey?: string;
   sessionId?: string;
+  programmeName?: string;
 }
 
 interface Payment {
