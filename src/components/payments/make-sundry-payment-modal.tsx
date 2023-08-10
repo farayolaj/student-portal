@@ -170,10 +170,8 @@ export default function MakeSundryPaymentModal() {
                 >
                   {initiateTransaction.isLoading ? (
                     <Spinner color="white" size="xs" />
-                  ) : selectedPayment?.isActive ? (
-                    "Pay"
                   ) : (
-                    "Payment Closed"
+                    "Pay"
                   )}
                 </Button>
               </Flex>
