@@ -1,3 +1,7 @@
+import {
+  VerificationTransaction,
+  isVerificationTransactionError,
+} from "@/api/verify-result/use-verify-result-verification-transaction";
 import buildPaymentDetailUrl from "@/lib/payments/build-payment-detail-url";
 import {
   Box,
@@ -9,18 +13,17 @@ import {
   CardBody,
   Button,
   Spinner,
+  Text,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { IoShieldCheckmark } from "react-icons/io5";
 
 type PayVerificationFeeCardProps = {
-  paymentId?: string;
-  isPaid?: boolean;
+  data: VerificationTransaction;
 };
 
 export default function PayVerificationFeeCard({
-  paymentId,
-  isPaid = true,
+  data,
 }: PayVerificationFeeCardProps) {
   const { push } = useRouter();
 
@@ -35,23 +38,27 @@ export default function PayVerificationFeeCard({
             </Heading>
           </CardHeader>
           <CardBody>
-            <Button
-              isDisabled={isPaid}
-              onClick={() =>
-                push(buildPaymentDetailUrl({ id: paymentId || "" }))
-              }
-              minW={24}
-            >
-              {paymentId ? (
-                isPaid ? (
-                  "Paid"
+            {!isVerificationTransactionError(data) ? (
+              <Button
+                isDisabled={data.isPaid}
+                onClick={() =>
+                  push(buildPaymentDetailUrl({ id: data.paymentId || "" }))
+                }
+                minW={24}
+              >
+                {data.paymentId ? (
+                  data.isPaid ? (
+                    "Paid"
+                  ) : (
+                    "Pay Verification Fee"
+                  )
                 ) : (
-                  "Pay Verification Fee"
-                )
-              ) : (
-                <Spinner size="sm" />
-              )}
-            </Button>
+                  <Spinner size="sm" />
+                )}
+              </Button>
+            ) : (
+              <Text as="span">{data.error}</Text>
+            )}
           </CardBody>
         </Box>
       </Flex>

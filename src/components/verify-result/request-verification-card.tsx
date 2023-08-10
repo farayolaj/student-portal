@@ -27,7 +27,6 @@ import { useState, useRef, Fragment } from "react";
 import DocumentUpload from "./document-upload";
 import { IoCheckmarkCircle, IoCloseCircle, IoTime } from "react-icons/io5";
 import { useUploadDocument } from "@/api/verify-result/use-upload-document";
-import { useProfile } from "@/api/user/use-profile";
 import queryClient from "@/lib/query-client";
 import { useVerificationResult } from "@/api/verify-result/use-verification-result";
 import { useDocumentUploads } from "@/api/verify-result/use-document-uploads";
@@ -40,7 +39,6 @@ type RequestVerificationCardProps = {
 export default function RequestVerificationCard({
   isDisabled,
 }: RequestVerificationCardProps) {
-  const profileRes = useProfile();
   const [documents, setDocuments] = useState<DocumentUploadValue[]>([
     { id: crypto.randomUUID(), file: null, documentTypeId: "" },
   ]);
@@ -222,32 +220,22 @@ export default function RequestVerificationCard({
                     <Icon as={IoCheckmarkCircle} color="green" boxSize={6} />
                     Your result has been successfully verified.
                   </Text>
-                ) : (
-                  <>
-                    <Text
-                      mt={2}
-                      display="inline-flex"
-                      gap={4}
-                      alignItems="center"
-                    >
-                      <Icon as={IoCloseCircle} color="red" boxSize={6} />
-                      Your result could not be verified successfully.
-                    </Text>
-                  </>
-                )}
-                <>
-                  <Heading size="sm" mt={4}>
-                    Comments
-                  </Heading>
-                  <UnorderedList ml={4}>
-                    {result?.remarks?.map((remark) => (
-                      <ListItem key={remark.dateCreated.getTime()}>
-                        {remark.dateCreated.toLocaleString("en-NG")} -{" "}
-                        {remark.comment}
-                      </ListItem>
-                    ))}
-                  </UnorderedList>
-                </>
+                ) : null}
+              </Box>
+            )}
+            {result?.remarks && result.remarks.length > 0 && (
+              <Box>
+                <Heading size="sm" mt={4}>
+                  Comments
+                </Heading>
+                <UnorderedList ml={4}>
+                  {result?.remarks?.map((remark) => (
+                    <ListItem key={remark.dateCreated.getTime()}>
+                      {remark.dateCreated.toLocaleString("en-NG")} -{" "}
+                      {remark.comment}
+                    </ListItem>
+                  ))}
+                </UnorderedList>
               </Box>
             )}
           </CardBody>

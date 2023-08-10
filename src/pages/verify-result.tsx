@@ -1,4 +1,7 @@
-import { useVerifyResultVerificationTransaction } from "@/api/verify-result/use-verify-result-verification-transaction";
+import {
+  isVerificationTransactionError,
+  useVerifyResultVerificationTransaction,
+} from "@/api/verify-result/use-verify-result-verification-transaction";
 import PageTitle from "@/components/common/page-title";
 import Seo from "@/components/common/seo";
 import PayVerificationFeeCard from "@/components/verify-result/pay-verification-fee-card";
@@ -12,13 +15,15 @@ export default function Profile() {
     <>
       <Seo title="Result Verification" />
       <PageTitle showBackButton>Result Verification</PageTitle>
-      <PayVerificationFeeCard
-        paymentId={resultVerificationTransaction.data?.paymentId}
-        isPaid={resultVerificationTransaction.data?.isPaid}
-      />
-      <RequestVerificationCard
-        isDisabled={!resultVerificationTransaction.data?.isPaid}
-      />
+      {resultVerificationTransaction.data && (
+        <PayVerificationFeeCard data={resultVerificationTransaction.data} />
+      )}
+      {resultVerificationTransaction.data &&
+        !isVerificationTransactionError(resultVerificationTransaction.data) && (
+          <RequestVerificationCard
+            isDisabled={!resultVerificationTransaction.data?.isPaid}
+          />
+        )}
     </>
   );
 }
