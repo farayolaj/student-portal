@@ -20,11 +20,11 @@ export function toPayment(data: any): Payment {
     transactionType:
       data.payment_transaction && transactionTypes[data.payment_transaction],
     transactionRef: data.transaction_ref,
-    containsPreselected: data.is_preselected_fee
-      ? data.is_preselected_fee !== null
+    containsPreselected: data.preselected
+      ? data.preselected !== 0
       : false,
     preselected:
-      parseInt(data.preselected_amount) === 0
+      parseInt(data.preselected_amount || 0) === 0
         ? undefined
         : {
           id: data.preselected,
