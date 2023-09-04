@@ -7,7 +7,13 @@ import ResultOverview from "../../components/results/result-overview";
 import ResultSummary from "../../components/results/result-summary";
 
 export default function Results() {
-  const { data: allResults = [] } = useAllResults();
+  const { data: allResults = [] } = useAllResults({
+    select: (data) =>
+      data.filter(
+        (item) =>
+          !item.session.id.includes("20") && !item.session.id.includes("22")
+      ),
+  });
   const totalUnitsRegistered = allResults.reduce((acc, session) => {
     return (
       acc +
