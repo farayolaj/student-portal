@@ -56,6 +56,13 @@ const Navigation: FC<NavigationProps> = ({ isOpen }) => {
         isExternal
       />
       <NavLink
+        title="Results"
+        icon={IoDocumentTextOutline}
+        href={routes.RESULTS}
+        isOpen={isOpen}
+        isActive={pathname.startsWith(routes.RESULTS)}
+      />
+      <NavLink
         title="Payments"
         icon={IoReceiptOutline}
         href={routes.PAYMENTS}
