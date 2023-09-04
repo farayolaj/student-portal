@@ -4,23 +4,12 @@ import Seo from "../../components/common/seo";
 import Table from "../../components/common/custom-table";
 import ResultDetailOverview from "../../components/results/details/result-detail-overview";
 import { createColumnHelper } from "@tanstack/react-table";
-import {
-  Box,
-  Button,
-  chakra,
-  Flex,
-  Icon,
-  Link,
-  SkeletonText,
-  Spinner,
-} from "@chakra-ui/react";
+import { Box, chakra, Flex, SkeletonText } from "@chakra-ui/react";
 import { useState } from "react";
 import RadioButtonGroup from "../../components/common/radio-button-group";
 import ResultBarChart from "../../components/results/result-bar-chart";
 import { useSingleResultSession } from "@/api/result/use-single-result-session";
 import { useResult } from "@/api/result/use-result";
-import { useResultPrintUrl } from "@/api/result/use-result-print-url";
-import { IoPrintOutline } from "react-icons/io5";
 
 const columnHelper = createColumnHelper<CourseResult>();
 
@@ -65,8 +54,6 @@ export default function ResultDetailPage() {
     },
     enabled: !!resultSession,
   });
-  // const printUrl = useResultPrintUrl(sessionId);
-  const printUrl = useResultPrintUrl(sessionId);
 
   let allResults: CourseResult[];
   let unitsRegistered: number;
@@ -107,23 +94,7 @@ export default function ResultDetailPage() {
           <SkeletonText />
         )}
       </PageTitle>
-      <Flex justify="space-between" mb={8} wrap="wrap" gap={4}>
-        <Button
-          display="inline-flex"
-          gap={4}
-          onClick={() => {
-            window.open(printUrl.url as string);
-          }}
-          isDisabled={printUrl.isLoading || !!printUrl.error}
-          title={printUrl.error?.message}
-        >
-          {printUrl.isLoading ? (
-            <Spinner size="xs" color="white" />
-          ) : (
-            <Icon as={IoPrintOutline} boxSize={6} />
-          )}
-          Print Result
-        </Button>
+      <Flex justify="flex-end" mb={8} wrap="wrap" gap={4}>
         <RadioButtonGroup
           labels={["All", "1st Semester", "2nd Semester"]}
           values={["0", "1", "2"]}
