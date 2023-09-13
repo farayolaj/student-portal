@@ -33,12 +33,6 @@ const Courses: FC = () => {
   const canRegisterCurrentSemester = useRegistrationOpen({
     variables: { semester },
   });
-  const canRegisterFirstSemester = useRegistrationOpen({
-    variables: { semester: 1 },
-  });
-  const canRegisterSecondSemester = useRegistrationOpen({
-    variables: { semester: 2 },
-  });
   const [view, setView] = useState("list");
   const registeredCourses = useRegisteredCourses({
     variables: { session: sessionId, semester: semester },
