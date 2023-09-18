@@ -8,6 +8,7 @@ export function useCourseRegPrintUrl(sessionId: string, semester: number) {
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
+    setIsLoading(true);
     const response = getApi()
       .get(
         `/courseregistrationprint?session=${encodeURIComponent(
