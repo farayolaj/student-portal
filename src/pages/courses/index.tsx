@@ -1,11 +1,9 @@
+import { useCourseRegPrintUrl } from "@/api/course/use-course-reg-print-url";
+import { useDeletionOpen } from "@/api/course/use-deletion-open";
+import { useCurrentPeriod } from "@/api/user/use-current-period";
 import { Button, Flex, Icon, Link, Spinner, useToast } from "@chakra-ui/react";
-import { FC, useState } from "react";
 import NextLink from "next/link";
-import PageTitle from "../../components/common/page-title";
-import Seo from "../../components/common/seo";
-import CourseListControls from "../../components/courses/course-list-controls";
-import CourseOverview from "../../components/courses/course-overview";
-import RadioButtonGroup from "../../components/common/radio-button-group";
+import { FC, useState } from "react";
 import {
   IoAdd,
   IoGrid,
@@ -13,15 +11,18 @@ import {
   IoPrintOutline,
   IoTrashOutline,
 } from "react-icons/io5";
-import CourseView from "../../components/courses/course-view";
-import * as routes from "../../constants/routes";
-import DeleteCourseView from "../../components/courses/delete/delete-course-view";
 import { useCourseStatistics } from "../../api/course/use-course-statistics";
+import { useDeleteCourses } from "../../api/course/use-delete-courses";
 import { useRegisteredCourses } from "../../api/course/use-registered-courses";
 import { useRegistrationOpen } from "../../api/course/use-registration-open";
-import { useDeleteCourses } from "../../api/course/use-delete-courses";
-import { useCourseRegPrintUrl } from "@/api/course/use-course-reg-print-url";
-import { useCurrentPeriod } from "@/api/user/use-current-period";
+import PageTitle from "../../components/common/page-title";
+import RadioButtonGroup from "../../components/common/radio-button-group";
+import Seo from "../../components/common/seo";
+import CourseListControls from "../../components/courses/course-list-controls";
+import CourseOverview from "../../components/courses/course-overview";
+import CourseView from "../../components/courses/course-view";
+import DeleteCourseView from "../../components/courses/delete/delete-course-view";
+import * as routes from "../../constants/routes";
 
 const Courses: FC = () => {
   const { period } = useCurrentPeriod();
@@ -31,6 +32,9 @@ const Courses: FC = () => {
   const [semester, setSemester] = useState(currentSemester);
   const [inDeleteCourseView, setInDeleteCourseView] = useState(false);
   const canRegisterCurrentSemester = useRegistrationOpen({
+    variables: { semester },
+  });
+  const canDeleteCurrentSemester = useDeletionOpen({
     variables: { semester },
   });
   const [view, setView] = useState("list");
@@ -69,7 +73,8 @@ const Courses: FC = () => {
   const canDeleteCourses =
     sessionId === currentSessionId &&
     canRegisterCurrentSemester.data &&
-    !registeredCourses.error;
+    !registeredCourses.error &&
+    canDeleteCurrentSemester.data;
 
   const toast = useToast();
   const deleteCourses = useDeleteCourses();

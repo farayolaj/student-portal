@@ -1,8 +1,8 @@
+import { useDeletionOpen } from "@/api/course/use-deletion-open";
 import { Flex, FormControl, FormLabel, Select } from "@chakra-ui/react";
 import { FC } from "react";
 import { useAllSessions } from "../../api/user/use-all-sessions";
 import RadioButtonGroup from "../common/radio-button-group";
-import { useRegistrationOpen } from "@/api/course/use-registration-open";
 
 type CourseListControlsProps = {
   sessionId: string;
@@ -20,10 +20,10 @@ const CourseListControls: FC<CourseListControlsProps> = ({
   inDeleteView,
 }) => {
   const allSessions = useAllSessions();
-  const canRegisterFirstSemester = useRegistrationOpen({
+  const canDeleteInFirstSemester = useDeletionOpen({
     variables: { semester: 1 },
   });
-  const canRegisterSecondSemester = useRegistrationOpen({
+  const canDeleteInSecondSemester = useDeletionOpen({
     variables: { semester: 2 },
   });
 
@@ -65,8 +65,8 @@ const CourseListControls: FC<CourseListControlsProps> = ({
           isEachDisabled={
             inDeleteView
               ? [
-                  !canRegisterFirstSemester.data ?? true,
-                  !canRegisterSecondSemester.data ?? true,
+                  !canDeleteInFirstSemester.data ?? true,
+                  !canDeleteInSecondSemester.data ?? true,
                 ]
               : undefined
           }
