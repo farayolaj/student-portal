@@ -43,7 +43,7 @@ const CourseMaterialDownload: FC<CourseMaterialDownloadProps> = ({
       <IconButton
         aria-label="Download course material"
         role="presentation"
-        icon={<IoDownloadOutline />}
+        icon={<IoDownloadOutline size="1.5rem" />}
         size="sm"
         p={1}
       />
