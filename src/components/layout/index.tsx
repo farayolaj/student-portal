@@ -1,25 +1,6 @@
-import {
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogOverlay,
-  Box,
-  Button,
-  Flex,
-  Text,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import {
-  FC,
-  PropsWithChildren,
-  ReactNode,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { FC, PropsWithChildren, ReactNode, useEffect, useState } from "react";
 import { LOGIN } from "../../constants/routes";
 import useAuth from "../../hooks/use-auth";
 import { Header } from "./header";
@@ -70,9 +51,6 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
     }
   }, [isAuthenticated, authToken, router]);
 
-  const { isOpen, onClose, onOpen } = useDisclosure({ defaultIsOpen: true });
-  const cancelRef = useRef();
-
   let child: ReactNode;
 
   if (isAuthenticated && !user) child = null;
@@ -80,52 +58,8 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
   else
     child = (
       <Flex pos="relative" direction="column">
+        {/* <PortalAlert /> */}
         <Header />
-        <AlertDialog
-          isOpen={isOpen}
-          leastDestructiveRef={cancelRef as any}
-          onClose={onClose}
-          isCentered
-          closeOnOverlayClick={false}
-        >
-          <AlertDialogOverlay>
-            <AlertDialogContent>
-              <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                Important Notice
-              </AlertDialogHeader>
-
-              <AlertDialogBody sx={{ "& > p": { mt: 2 } }}>
-                <p>
-                  Payment of School Fees and Course Registration has effectively
-                  closed{" "}
-                  <Text as="span" fontWeight="semibold">
-                    15th Sept., 2023
-                  </Text>{" "}
-                  for graduating students, and{" "}
-                  <Text as="span" fontWeight="semibold">
-                    17th Sept., 2023
-                  </Text>{" "}
-                  for returning students.
-                </p>
-                <p>
-                  To pay for transactions in a smooth way, use Remita Inline on
-                  the portal. Do not copy RRR to pay outside the portal remita
-                  inline platform. If you are not prepared to pay, do not
-                  initiate transaction: any initiated transaction must be
-                  completed the same day for seamless user experience.
-                </p>
-
-                <p>Thank you.</p>
-              </AlertDialogBody>
-
-              <AlertDialogFooter>
-                <Button mx="auto" ref={cancelRef as any} onClick={onClose}>
-                  Okay
-                </Button>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialogOverlay>
-        </AlertDialog>
         <Flex>
           <Sidebar />
           <Box
