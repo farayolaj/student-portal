@@ -1,3 +1,4 @@
+import { useDownloadDocument } from "../document/use-download-document";
 import { useFetchDocument } from "../document/use-fetch-document";
 
 type UseFetchReceiptOpts = {
@@ -7,10 +8,9 @@ type UseFetchReceiptOpts = {
 
 export function useFetchReceipt({ rrr, onError }: UseFetchReceiptOpts) {
   const url = `/mainreceipt?rrr_code=${encodeURIComponent(rrr)}`;
-  return useFetchDocument({
+
+  return useDownloadDocument({
     url,
-    fileNameField: "receipt_name",
-    fileField: "document",
     onError: (error) => {
       if (onError)
         onError(

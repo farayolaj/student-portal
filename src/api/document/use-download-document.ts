@@ -13,11 +13,20 @@ export function useDownloadDocument({ url, onError }: useDownloadDocumentOpts) {
     try {
       setIsLoading(true);
       const response = await getApi().get(url, { responseType: "blob" });
+      const fileName =
+        response.headers["content-disposition"]
+          .split("filename=")[1]
+          .replace(/"/g, "") || "receipt.pdf";
       const blobUrl = URL.createObjectURL(
         new Blob([response.data], { type: "application/pdf" })
       );
+      const anchorElement = document.createElement("a");
+      anchorElement.href = blobUrl;
+      anchorElement.download = fileName;
       setIsLoading(false);
-      window.open(blobUrl, "_blank");
+
+      anchorElement.click();
+      URL.revokeObjectURL(blobUrl);
     } catch (error) {
       setIsLoading(false);
       if (onError)
