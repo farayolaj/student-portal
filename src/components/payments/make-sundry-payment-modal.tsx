@@ -1,30 +1,32 @@
-import { useSundryPayments } from "@/api/payment/use-sundry-payments";
 import { useInitiateTransaction } from "@/api/payment/use-initiate-transaction";
+import { useSundryPayments } from "@/api/payment/use-sundry-payments";
 import {
-  useDisclosure,
   Button,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  FormControl,
-  FormLabel,
-  Select,
-  Input,
-  VStack,
   Flex,
+  FormControl,
+  FormHelperText,
+  FormLabel,
+  Input,
   InputGroup,
   InputLeftElement,
-  useToast,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  Select,
   Spinner,
-  FormHelperText,
+  VStack,
+  useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import useRemitaInline from "../common/remita-inline";
 
 export default function MakeSundryPaymentModal() {
+  const { query, push } = useRouter();
   const paymentsRes = useSundryPayments();
   const sundryPayments = paymentsRes.data || [];
   const [selectedPaymentId, setSelectedPaymentId] = useState<
@@ -36,8 +38,20 @@ export default function MakeSundryPaymentModal() {
   const selectedPaymentPrerequisites =
     selectedPayment?.prerequisites?.filter((pre) => !pre.isPaid) ?? [];
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure({
+    onClose: () => {
+      const { sundry, ...queryRest } = query;
+      return push({ query: queryRest });
+    },
+  });
   const toast = useToast();
+
+  useEffect(() => {
+    if (query.sundry == 'open') {
+      setSelectedPaymentId(query.sundry as string);
+      onOpen();
+    }
+  }, [query.sundry, onOpen]);
 
   const initiateTransaction = useInitiateTransaction();
   const { initPayment } = useRemitaInline({
