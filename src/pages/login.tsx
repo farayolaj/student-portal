@@ -1,9 +1,6 @@
 import {
   Box,
   Button,
-  Card,
-  CardBody,
-  CardHeader,
   chakra,
   Flex,
   FormControl,
@@ -15,20 +12,47 @@ import {
   InputGroup,
   InputRightElement,
   Link,
+  Spacer,
   Spinner,
   Text,
   useToast,
 } from "@chakra-ui/react";
 import Image from "next/image";
 import NextLink from "next/link";
-import Seo from "../components/common/seo";
-import uiLogo from "../images/ui-logo.png";
-import * as routes from "../constants/routes";
-import useAuth from "../hooks/use-auth";
-import { FormEvent, useState } from "react";
 import { useRouter } from "next/router";
+import { FormEvent, useEffect, useState } from "react";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { useValidateUsername } from "../api/auth/use-validate-username";
+import Seo from "../components/common/seo";
+import * as routes from "../constants/routes";
+import useAuth from "../hooks/use-auth";
+
+import uiLogo from "../images/ui-logo.png";
+
+const textContent = [
+  {
+    title: "Student Portal",
+    content: [
+      "Student Portal is your personal website containing all the " +
+        "information and menu you need as a student. Login to access your " +
+        "academic schedule, fees, courses, documents and more.",
+    ],
+  },
+  {
+    title: "Sign In",
+    content: [
+      "New students: Sign in with your application number or email address as username.",
+      "Registered students: Use matric number or @dlc email. The default password is your surname.",
+    ],
+  },
+  {
+    title: "Student Support",
+    content: [
+      "If you have any questions or are experiencing technical difficulties please contact us at " +
+        "student support or use the life chat during office hours.",
+    ],
+  },
+];
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -41,6 +65,17 @@ export default function Login() {
   const toast = useToast();
   const validateUsername = useValidateUsername();
 
+  const [imgScaleX, setImgScaleX] = useState(1);
+  const [selectedText, setSelectedText] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setImgScaleX((prev) => -prev);
+      setSelectedText((prev) => (prev + 1) % textContent.length);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, []);
+
   const onValidateUsername = () => {
     validateUsername.mutate(
       { username },
@@ -51,7 +86,9 @@ export default function Login() {
         onError: (err) => {
           const error = err as Error;
           toast({
-            title: "Username Verification Failed",
+            title: error.message.toLowerCase().includes("network")
+              ? "Matric. number or email address could not be validated"
+              : "Invalid matric. number or email address",
             description: error?.message,
             status: "error",
             isClosable: true,
@@ -90,131 +127,200 @@ export default function Login() {
   return (
     <>
       <Seo title="Login" />
-      <Box minH="100vh" bg="gray.200">
-        <Flex align="center" py={8} direction="column" gap={2}>
-          <Image src={uiLogo} alt="University of Ibadan Logo" width={64} />
-          <Box>
-            <Text
-              as="span"
-              display="block"
-              size="md"
-              textAlign="center"
-              textTransform="uppercase"
-              fontWeight="bold"
+      <Flex
+        position="sticky"
+        align="center"
+        gap={4}
+        top="0px"
+        zIndex={999}
+        as="header"
+        bg="white"
+        py={2}
+        px={8}
+        h="4rem"
+        w="full"
+      >
+        <Image height={48} src={uiLogo} alt="University of Ibadan Logo" />
+        <Flex direction="column">
+          <Text
+            display={["none", null, "initial"]}
+            as="span"
+            fontSize="lg"
+            fontWeight="bold"
+          >
+            Distance Learning Centre
+          </Text>
+          <Text
+            display={["none", null, "initial"]}
+            as="span"
+            fontSize="sm"
+            fontWeight="semibold"
+          >
+            University of Ibadan
+          </Text>
+        </Flex>
+        <Spacer />
+        <Link href="https://dlcportal.ui.edu.ng/i-help">i-Help</Link>
+        <Spacer display={["none", null, "initial"]} />
+      </Flex>
+      <Flex wrap={["wrap", null, "nowrap"]} minH="calc(100vh - 4rem)">
+        <Box
+          bg="primary.500"
+          w={["full", null, "66.6%"]}
+          p={[null, null, "5rem"]}
+        >
+          <Box
+            pos="relative"
+            h="full"
+            _before={{
+              content: "''",
+              display: ["none", null, "block"],
+              pos: "absolute",
+              w: "100%",
+              h: "100%",
+              top: "1.5rem",
+              left: "1.5rem",
+              bg: "white",
+            }}
+          >
+            <Box display={["none", null, "block"]} pos="relative" h="full">
+              <chakra.iframe
+                onMouseOver={(ev) => ev.stopPropagation()}
+                pos="absolute"
+                top={0}
+                left={0}
+                width="100%"
+                height="100%"
+                border={0}
+                src="https://www.youtube-nocookie.com/embed/4SZFMz4xB38?si=sgZ6UFbhMOPb2LLU&amp;controls=0&autoplay=1&playsinline=1&showinfo=0&autohide=1&disablekb=1&loop=1&modestbranding=1"
+                title="YouTube video player"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              ></chakra.iframe>
+              {/* <Image
+                src={greenery}
+                alt=""
+                fill
+                style={{
+                  objectFit: "cover",
+                  transform: `scaleX(${imgScaleX})`,
+                }}
+                priority
+              /> */}
+            </Box>
+            <Box
+              w={[null, null, "50%"]}
+              pos={[null, null, "absolute"]}
+              p="2rem"
+              bg="primary.500"
+              bottom={[null, null, "-1.5rem"]}
+              color="white"
             >
-              Distance Learning Centre
-            </Text>
-            <Text
-              as="span"
-              display="block"
-              textAlign="center"
-              textTransform="uppercase"
-              fontWeight="semibold"
-              fontSize="sm"
+              <Heading as="h2" size="lg">
+                {textContent[selectedText].title}
+              </Heading>
+              <Text mt={2}>
+                {textContent[selectedText].content.map((content) => (
+                  <span key={content}>
+                    {content} <br />
+                  </span>
+                ))}
+              </Text>
+            </Box>
+          </Box>
+        </Box>
+        <Flex align="center" w={["full", null, "33.4%"]} bg="primary.50">
+          <Box w="full">
+            <Heading textAlign="center" size="md" mt={8}>
+              Log In
+            </Heading>
+            <chakra.form
+              mt={16}
+              display="flex"
+              flexDir="column"
+              gap={6}
+              onSubmit={onSubmit}
+              w="80%"
+              mx="auto"
             >
-              University of Ibadan
-            </Text>
+              <FormControl isReadOnly={usernameVerified} isRequired>
+                <FormLabel fontSize="sm" fontWeight="bold">
+                  Matric. Number/Email Address
+                </FormLabel>
+                <Input
+                  bg="white"
+                  name="username"
+                  placeholder="Enter matric. number or email address"
+                  size="sm"
+                  onChange={(e) => setUsername(e.target.value)}
+                  autoComplete="username"
+                  hidden={usernameVerified}
+                />
+                {usernameVerified && (
+                  <Text fontSize="sm" py={1} px={3}>
+                    {username}
+                  </Text>
+                )}
+              </FormControl>
+              {usernameVerified && (
+                <FormControl isRequired>
+                  <FormLabel fontSize="sm" fontWeight="bold">
+                    Password
+                  </FormLabel>
+                  <InputGroup size="sm">
+                    <Input
+                      bg="white"
+                      name="password"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Default password is your last name in lowercase"
+                      onChange={(e) => setPassword(e.target.value)}
+                      autoComplete="current-password"
+                    />
+                    <InputRightElement>
+                      <IconButton
+                        variant="unstyled"
+                        aria-label="Toggle password visibility"
+                        boxSize={6}
+                        onClick={togglePasswordVisibility}
+                        icon={
+                          showPassword ? <IoEyeOutline /> : <IoEyeOffOutline />
+                        }
+                      />
+                    </InputRightElement>
+                  </InputGroup>
+                  <FormHelperText>
+                    <Link as={NextLink} href={routes.FORGOT_PASSWORD}>
+                      Forgot password?
+                    </Link>
+                  </FormHelperText>
+                </FormControl>
+              )}
+              <Box mt={16} mb={8}>
+                {usernameVerified ? (
+                  <Button w="full" type="submit" isDisabled={auth.isLoggingIn}>
+                    {auth.isLoggingIn ? (
+                      <Spinner color="white" size="xs" />
+                    ) : (
+                      "Log In"
+                    )}
+                  </Button>
+                ) : (
+                  <Button
+                    w="full"
+                    isDisabled={validateUsername.isLoading}
+                    type="submit"
+                  >
+                    {validateUsername.isLoading ? (
+                      <Spinner color="white" size="xs" />
+                    ) : (
+                      "Next"
+                    )}
+                  </Button>
+                )}
+              </Box>
+            </chakra.form>
           </Box>
         </Flex>
-        <Flex mt={8} justify="center">
-          <Card
-            w={["full", null, "40%"]}
-            py={6}
-            px={12}
-            overflow="hidden"
-            mb={8}
-          >
-            <CardHeader>
-              <Heading textAlign="center" size="md">
-                Log In to Student Portal
-              </Heading>
-            </CardHeader>
-            <CardBody>
-              <Flex direction="column" gap={6}>
-                <chakra.form
-                  mt={[16, null, 8]}
-                  display="flex"
-                  flexDir="column"
-                  gap={6}
-                  onSubmit={onSubmit}
-                >
-                  <FormControl isReadOnly={usernameVerified}>
-                    <FormLabel fontSize="sm" fontWeight="bold">
-                      Matric. Number/Email Address
-                    </FormLabel>
-                    <Input
-                      name="username"
-                      placeholder="Enter matric. number or email address"
-                      size="sm"
-                      onChange={(e) => setUsername(e.target.value)}
-                      autoComplete="username"
-                    />
-                  </FormControl>
-                  {usernameVerified && (
-                    <FormControl>
-                      <FormLabel fontSize="sm" fontWeight="bold">
-                        Password
-                      </FormLabel>
-                      <InputGroup size="sm">
-                        <Input
-                          name="password"
-                          type={showPassword ? "text" : "password"}
-                          placeholder="Default password is your last name in lowercase"
-                          onChange={(e) => setPassword(e.target.value)}
-                          autoComplete="current-password"
-                        />
-                        <InputRightElement>
-                          <IconButton
-                            variant="unstyled"
-                            aria-label="Toggle password visibility"
-                            boxSize={6}
-                            onClick={togglePasswordVisibility}
-                            icon={
-                              showPassword ? (
-                                <IoEyeOutline />
-                              ) : (
-                                <IoEyeOffOutline />
-                              )
-                            }
-                          />
-                        </InputRightElement>
-                      </InputGroup>
-                      <FormHelperText>
-                        <Link as={NextLink} href={routes.FORGOT_PASSWORD}>
-                          Forgot password?
-                        </Link>
-                      </FormHelperText>
-                    </FormControl>
-                  )}
-                  <Box mt={16} mb={8}>
-                    {usernameVerified ? (
-                      <Button
-                        w="full"
-                        type="submit"
-                        isDisabled={auth.isLoggingIn}
-                      >
-                        {auth.isLoggingIn ? <Spinner size="sm" /> : "Log In"}
-                      </Button>
-                    ) : (
-                      <Button
-                        w="full"
-                        isDisabled={validateUsername.isLoading}
-                        type="submit"
-                      >
-                        {validateUsername.isLoading ? (
-                          <Spinner size="sm" />
-                        ) : (
-                          "Next"
-                        )}
-                      </Button>
-                    )}
-                  </Box>
-                </chakra.form>
-              </Flex>
-            </CardBody>
-          </Card>
-        </Flex>
-      </Box>
+      </Flex>
     </>
   );
 }
