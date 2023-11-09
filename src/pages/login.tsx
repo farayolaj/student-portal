@@ -20,39 +20,15 @@ import {
 import Image from "next/image";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 import { useValidateUsername } from "../api/auth/use-validate-username";
 import Seo from "../components/common/seo";
 import * as routes from "../constants/routes";
 import useAuth from "../hooks/use-auth";
 
+import LoginCarousel from "@/components/login/carousel";
 import uiLogo from "../images/ui-logo.png";
-
-const textContent = [
-  {
-    title: "Student Portal",
-    content: [
-      "Student Portal is your personal website containing all the " +
-        "information and menu you need as a student. Login to access your " +
-        "academic schedule, fees, courses, documents and more.",
-    ],
-  },
-  {
-    title: "Sign In",
-    content: [
-      "New students: Sign in with your application number or email address as username.",
-      "Registered students: Use matric number or @dlc email. The default password is your surname.",
-    ],
-  },
-  {
-    title: "Student Support",
-    content: [
-      "If you have any questions or are experiencing technical difficulties please contact us at " +
-        "student support or use the life chat during office hours.",
-    ],
-  },
-];
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -64,17 +40,6 @@ export default function Login() {
   const router = useRouter();
   const toast = useToast();
   const validateUsername = useValidateUsername();
-
-  const [imgScaleX, setImgScaleX] = useState(1);
-  const [selectedText, setSelectedText] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setImgScaleX((prev) => -prev);
-      setSelectedText((prev) => (prev + 1) % textContent.length);
-    }, 6000);
-    return () => clearInterval(interval);
-  }, []);
 
   const onValidateUsername = () => {
     validateUsername.mutate(
@@ -163,72 +128,14 @@ export default function Login() {
         <Link href="https://dlcportal.ui.edu.ng/i-help">i-Help</Link>
         <Spacer display={["none", null, "initial"]} />
       </Flex>
-      <Flex wrap={["wrap", null, "nowrap"]} minH="calc(100vh - 4rem)">
-        <Box
-          bg="primary.500"
-          w={["full", null, "66.6%"]}
-          p={[null, null, "5rem"]}
+      <Box display={[null, null, "flex"]} minH="calc(100vh - 4rem)">
+        <LoginCarousel />
+        <Flex
+          align="center"
+          w={["full", null, "33.4%"]}
+          bg="primary.50"
+          mt={["4rem", "0px"]}
         >
-          <Box
-            pos="relative"
-            h="full"
-            _before={{
-              content: "''",
-              display: ["none", null, "block"],
-              pos: "absolute",
-              w: "100%",
-              h: "100%",
-              top: "1.5rem",
-              left: "1.5rem",
-              bg: "white",
-            }}
-          >
-            <Box display={["none", null, "block"]} pos="relative" h="full">
-              <chakra.iframe
-                onMouseOver={(ev) => ev.stopPropagation()}
-                pos="absolute"
-                top={0}
-                left={0}
-                width="100%"
-                height="100%"
-                border={0}
-                src="https://www.youtube-nocookie.com/embed/4SZFMz4xB38?si=sgZ6UFbhMOPb2LLU&amp;controls=0&autoplay=1&playsinline=1&showinfo=0&autohide=1&disablekb=1&loop=1&modestbranding=1"
-                title="YouTube video player"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              ></chakra.iframe>
-              {/* <Image
-                src={greenery}
-                alt=""
-                fill
-                style={{
-                  objectFit: "cover",
-                  transform: `scaleX(${imgScaleX})`,
-                }}
-                priority
-              /> */}
-            </Box>
-            <Box
-              w={[null, null, "50%"]}
-              pos={[null, null, "absolute"]}
-              p="2rem"
-              bg="primary.500"
-              bottom={[null, null, "-1.5rem"]}
-              color="white"
-            >
-              <Heading as="h2" size="lg">
-                {textContent[selectedText].title}
-              </Heading>
-              <Text mt={2}>
-                {textContent[selectedText].content.map((content) => (
-                  <span key={content}>
-                    {content} <br />
-                  </span>
-                ))}
-              </Text>
-            </Box>
-          </Box>
-        </Box>
-        <Flex align="center" w={["full", null, "33.4%"]} bg="primary.50">
           <Box w="full">
             <Heading textAlign="center" size="md" mt={8}>
               Log In
@@ -320,7 +227,7 @@ export default function Login() {
             </chakra.form>
           </Box>
         </Flex>
-      </Flex>
+      </Box>
     </>
   );
 }
