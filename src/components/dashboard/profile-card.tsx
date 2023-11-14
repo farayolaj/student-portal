@@ -54,8 +54,9 @@ const ProfileCard: FC = () => {
               name={fullName}
               src={dashboardInfo.data?.user.profileImage}
               getInitials={(name) => {
-                const names = name.split(" ");
-                return `${names[0].at(0)}${names.at(-1)?.at(0)}`.toUpperCase();
+                const names = name.split(" ").filter(name => Boolean(name));
+                const initials = `${names[0].at(0)}${names.at(-1)?.at(0)}`.toUpperCase();
+                return initials;
               }}
             />
             <SimpleGrid

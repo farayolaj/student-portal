@@ -25,8 +25,9 @@ import MobileNavBar from "./mobile-nav-bar";
 export const Header: FC = () => {
   const auth = useAuth();
   const user = auth.user;
-  const fullName = `${user?.firstName} ${user?.otherNames || ""} ${user?.lastName
-    }`.replace("undefined", "");
+  const fullName = `${user?.firstName} ${user?.otherNames || ""} ${
+    user?.lastName
+  }`.replace("undefined", "");
 
   return (
     <HStack
@@ -81,10 +82,13 @@ export const Header: FC = () => {
                   size="sm"
                   src={user?.profileImage}
                   getInitials={(name) => {
-                    const names = name.split(" ");
-                    return `${names[0].at(0)}${names
+                    const names = name
+                      .split(" ")
+                      .filter((name) => Boolean(name));
+                    const initials = `${names[0].at(0)}${names
                       .at(-1)
                       ?.at(0)}`.toUpperCase();
+                    return initials;
                   }}
                 />
               </SkeletonCircle>
