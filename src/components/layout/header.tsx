@@ -21,10 +21,12 @@ import useAuth from "../../hooks/use-auth";
 import logo from "../../images/ui-logo.png";
 import MobileCalendar from "./mobile-calendar";
 import MobileNavBar from "./mobile-nav-bar";
+import { useProfile } from "@/api/user/use-profile";
 
 export const Header: FC = () => {
   const auth = useAuth();
-  const user = auth.user;
+  const profile = useProfile();
+  const user = profile.data?.user;
   const fullName = `${user?.firstName} ${user?.otherNames || ""} ${
     user?.lastName
   }`.replace("undefined", "");

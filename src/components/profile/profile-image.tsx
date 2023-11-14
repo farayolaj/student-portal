@@ -1,17 +1,75 @@
-import useAuth from "@/hooks/use-auth";
-import { Flex, Avatar, Box, Input, Button } from "@chakra-ui/react";
+import { useProfile } from "@/api/user/use-profile";
+import { useUpdateProfileImage } from "@/api/user/use-update-profile-picture";
+import { Avatar, Box, Button, Flex, Input, useToast } from "@chakra-ui/react";
+import { useQueryClient } from "@tanstack/react-query";
+import { use } from "react";
 
 export default function ProfileImage() {
-  const auth = useAuth();
+  const profile = useProfile();
+  const toast = useToast();
+  const queryClient = useQueryClient();
+  const updateProfile = useUpdateProfileImage({
+    onSuccess: () => {
+      toast({
+        title: "Success",
+        description: "Profile image updated successfully",
+        status: "success",
+        isClosable: true,
+      });
+      queryClient.invalidateQueries(["profile"]);
+    },
+    onError: (err) => {
+      const error = err as Error;
+      toast({
+        title: "Error",
+        description: error.message,
+        status: "error",
+        isClosable: true,
+      });
+    },
+  });
+
+  const onImageUpload = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    const file = ev.target.files?.[0];
+
+    if (!file) {
+      toast({
+        title: "Error",
+        description: "No file was selected",
+        status: "error",
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (file.size > 1024 * 100) {
+      toast({
+        title: "Error",
+        description: "File size is too large. Ensure it is less than 100kb.",
+        status: "error",
+        isClosable: true,
+      });
+      return;
+    }
+
+    updateProfile.mutate({
+      file,
+    });
+  };
 
   return (
     <Flex justify="center" align="center">
       <Box w="fit-content" h="fit-content" pos="relative">
         <Box h="15rem" w="15rem" pos="relative">
-          <Avatar rounded="md" size="full" src={auth.user?.profileImage} />
+          <Avatar
+            rounded="md"
+            size="full"
+            src={profile.data?.user?.profileImage}
+          />
         </Box>
-        {!auth.user?.profileImage && (
+        {!profile.data?.user?.profileImage && (
           <Flex
+            as="label"
             w="full"
             h="full"
             pos="absolute"
@@ -22,8 +80,16 @@ export default function ProfileImage() {
             backdropFilter="auto"
             backdropBlur="sm"
           >
-            <Input type="file" srOnly />
-            <Button size="sm">Upload Image</Button>
+            <Button as="label" size="sm" isDisabled={updateProfile.isLoading}>
+              <Input
+                type="file"
+                accept="image/*"
+                srOnly
+                onChange={onImageUpload}
+                isDisabled={updateProfile.isLoading}
+              />
+              Upload Image
+            </Button>
           </Flex>
         )}
       </Box>
