@@ -2,12 +2,13 @@ import { useProfile } from "@/api/user/use-profile";
 import { useUpdateProfileImage } from "@/api/user/use-update-profile-picture";
 import { Avatar, Box, Button, Flex, Input, useToast } from "@chakra-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
-import { use } from "react";
+import { useEffect, useState } from "react";
 
 export default function ProfileImage() {
   const profile = useProfile();
   const toast = useToast();
   const queryClient = useQueryClient();
+  const [uploadedImg, setUploadedImg] = useState<string | undefined>(undefined);
   const updateProfile = useUpdateProfileImage({
     onSuccess: () => {
       toast({
@@ -19,6 +20,11 @@ export default function ProfileImage() {
       queryClient.invalidateQueries(["profile"]);
     },
     onError: (err) => {
+      if (uploadedImg) {
+        URL.revokeObjectURL(uploadedImg);
+        setUploadedImg(undefined);
+      }
+
       const error = err as Error;
       toast({
         title: "Error",
@@ -28,6 +34,12 @@ export default function ProfileImage() {
       });
     },
   });
+
+  useEffect(() => {
+    return () => {
+      if (uploadedImg) URL.revokeObjectURL(uploadedImg);
+    }
+  }, [uploadedImg])
 
   const onImageUpload = (ev: React.ChangeEvent<HTMLInputElement>) => {
     const file = ev.target.files?.[0];
@@ -52,6 +64,9 @@ export default function ProfileImage() {
       return;
     }
 
+    const imageUrl = URL.createObjectURL(file);
+    setUploadedImg(imageUrl);
+
     updateProfile.mutate({
       file,
     });
@@ -64,10 +79,10 @@ export default function ProfileImage() {
           <Avatar
             rounded="md"
             size="full"
-            src={profile.data?.user?.profileImage}
+            src={profile.data?.user?.profileImage || uploadedImg}
           />
         </Box>
-        {!profile.data?.user?.profileImage && (
+        {!profile.data?.user?.profileImage && !uploadedImg && (
           <Flex
             as="label"
             w="full"
