@@ -166,7 +166,8 @@ export default function PaymentDetail({
                 </Link>
               ))
               .reduce((prev, curr, idx) => {
-                if (idx === prerequisites.length - 1) prev.push(" and ");
+                if (idx !== 0 && idx === prerequisites.length - 1)
+                  prev.push(" and ");
                 else if (idx !== 0) prev.push(", ");
                 prev.push(curr);
                 return prev;
