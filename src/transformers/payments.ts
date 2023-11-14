@@ -20,43 +20,44 @@ export function toPayment(data: any): Payment {
     transactionType:
       data.payment_transaction && transactionTypes[data.payment_transaction],
     transactionRef: data.transaction_ref,
-    containsPreselected: data.preselected
-      ? data.preselected !== 0
-      : false,
+    containsPreselected: data.preselected ? data.preselected !== 0 : false,
     preselected:
       parseInt(data.preselected_amount || 0) === 0
         ? undefined
         : {
-          id: data.preselected,
-          title: data.preselected_fee_readable,
-          amount: parseInt(data.preselected_amount),
-        },
+            id: data.preselected,
+            title: data.preselected_fee_readable,
+            amount: parseInt(data.preselected_amount),
+          },
     prerequisites:
       data.prerequisites?.map((pre: any) => ({
         id: pre.prerequisite,
         description: pre.description,
+        transactionType:
+          pre.payment_transaction && transactionTypes[pre.payment_transaction],
+        transactionRef: pre.transaction_ref,
         isPaid: pre.paid,
       })) ?? [],
     transaction: data.transaction
       ? {
-        id: data.transaction.transaction_id,
-        amount: data.total,
-        dateInitiated: parse(
-          data.transaction.date_performed,
-          "MMM. dd, yyyy",
-          new Date()
-        ),
-        description: data.description,
-        referenceNumber: data.transaction.order_id,
-        rrr: data.transaction.rrr,
-        status: data.paid ? "success" : "pending",
-        datePayed: parse(
-          data.transaction.date_completed,
-          "MMM. dd, yyyy",
-          new Date()
-        ),
-        publicKey: data.transaction.public_key,
-      }
+          id: data.transaction.transaction_id,
+          amount: data.total,
+          dateInitiated: parse(
+            data.transaction.date_performed,
+            "MMM. dd, yyyy",
+            new Date()
+          ),
+          description: data.description,
+          referenceNumber: data.transaction.order_id,
+          rrr: data.transaction.rrr,
+          status: data.paid ? "success" : "pending",
+          datePayed: parse(
+            data.transaction.date_completed,
+            "MMM. dd, yyyy",
+            new Date()
+          ),
+          publicKey: data.transaction.public_key,
+        }
       : undefined,
   };
 }

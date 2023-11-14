@@ -142,6 +142,8 @@ interface Payment {
     id: string;
     description: string;
     isPaid: boolean;
+    transactionType?: "normal" | "custom";
+    transactionRef?: string;
   }[];
   transaction?: Transaction;
 }

@@ -1,8 +1,9 @@
-import { useMainPayments } from "@/api/payment/use-main-payments";
 import { useFetchReceipt } from "@/api/payment/use-fetch-receipt";
 import { useInitiateTransaction } from "@/api/payment/use-initiate-transaction";
+import { useMainPayments } from "@/api/payment/use-main-payments";
 import { useSession } from "@/api/user/use-session";
 import useRemitaInline from "@/components/common/remita-inline";
+import buildPaymentDetailUrl from "@/lib/payments/build-payment-detail-url";
 import {
   Box,
   Button,
@@ -18,10 +19,9 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
+import NextLink from "next/link";
 import { useEffect, useState } from "react";
 import { IoCheckmarkCircle, IoTime } from "react-icons/io5";
-import NextLink from "next/link";
-import buildPaymentDetailUrl from "@/lib/payments/build-payment-detail-url";
 
 type PaymentDetailProps = {
   payment?: Payment;
@@ -149,15 +149,9 @@ export default function PaymentDetail({
     <Box>
       {prerequisites.length > 0 && (
         <Center bg="#ffe599" p={2} mb={8}>
-          <Text as="span" fontWeight="semibold">
+          <Text as="span" fontWeight="semibold" textAlign="center">
             Requires{" "}
             {prerequisites
-              .map((pre) => ({
-                ...mainPayments.data?.find(
-                  (payment) => payment.code === pre.id
-                ),
-                description: pre.description,
-              }))
               .map((payment) => (
                 <Link
                   key={`${payment.id}-${payment.transactionRef}`}
@@ -172,7 +166,8 @@ export default function PaymentDetail({
                 </Link>
               ))
               .reduce((prev, curr, idx) => {
-                if (idx !== 0) prev.push(" and ");
+                if (idx === prerequisites.length - 1) prev.push(" and ");
+                else if (idx !== 0) prev.push(", ");
                 prev.push(curr);
                 return prev;
               }, [] as (JSX.Element | string)[])}{" "}
