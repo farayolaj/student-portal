@@ -1,20 +1,18 @@
+import { X_APP_KEY } from "@/constants/config";
+import { ERROR_PAGE } from "@/constants/routes";
 import { ChakraProvider } from "@chakra-ui/react";
-import type { AppProps } from "next/app";
-import theme from "../theme";
-import "../components/common/calendar.css";
-import Layout, { LayoutProps } from "../components/layout";
-import { NextComponentType } from "next";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import queryClient from "../lib/query-client";
-import { AuthProvider } from "../hooks/use-auth";
-import { useEffect, useState } from "react";
-import getApi from "../api/api";
-import { useRouter } from "next/router";
-import { ERROR_PAGE } from "@/constants/routes";
-import useLocalStorage from "@/hooks/use-local-storage";
 import axios from "axios";
-import { X_APP_KEY } from "@/constants/config";
+import { NextComponentType } from "next";
+import type { AppProps } from "next/app";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import "../components/common/calendar.css";
+import Layout, { LayoutProps } from "../components/layout";
+import { AuthProvider } from "../hooks/use-auth";
+import queryClient from "../lib/query-client";
+import theme from "../theme";
 
 type CustomAppProps = AppProps & {
   Component: NextComponentType & { layoutProps: LayoutProps };
@@ -57,6 +55,7 @@ export default function App({ Component, pageProps }: CustomAppProps) {
     <ChakraProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
+          
           <Layout {...layoutProps}>
             <Component {...pageProps} />
           </Layout>

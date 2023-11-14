@@ -6,6 +6,7 @@ import useAuth from "../../hooks/use-auth";
 import { Header } from "./header";
 import SchoolBoardSidebar from "./schoolboard-sidebar";
 import { Sidebar } from "./sidebar";
+import PortalAlert from "../common/portal-alert";
 
 export type LayoutProps = {
   show?: boolean;
@@ -58,7 +59,7 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
   else
     child = (
       <Flex pos="relative" direction="column">
-        {/* <PortalAlert /> */}
+        <PortalAlert />
         <Header />
         <Flex>
           <Sidebar />
