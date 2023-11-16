@@ -1,6 +1,14 @@
 import { useProfile } from "@/api/user/use-profile";
 import { useUpdateProfileImage } from "@/api/user/use-update-profile-picture";
-import { Avatar, Box, Button, Flex, Input, useToast } from "@chakra-ui/react";
+import {
+  Avatar,
+  Box,
+  Button,
+  Flex,
+  Input,
+  Spinner,
+  useToast,
+} from "@chakra-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
@@ -38,8 +46,8 @@ export default function ProfileImage() {
   useEffect(() => {
     return () => {
       if (uploadedImg) URL.revokeObjectURL(uploadedImg);
-    }
-  }, [uploadedImg])
+    };
+  }, [uploadedImg]);
 
   const onImageUpload = (ev: React.ChangeEvent<HTMLInputElement>) => {
     const file = ev.target.files?.[0];
@@ -82,6 +90,21 @@ export default function ProfileImage() {
             src={profile.data?.user?.profileImage || uploadedImg}
           />
         </Box>
+        {updateProfile.isLoading && (
+          <Flex
+            w="full"
+            h="full"
+            pos="absolute"
+            top={0}
+            left={0}
+            justify="center"
+            align="center"
+            backdropFilter="auto"
+            backdropBlur="sm"
+          >
+            <Spinner size={"xl"} thickness="5px" color="primary.500" />
+          </Flex>
+        )}
         {!profile.data?.user?.profileImage && !uploadedImg && (
           <Flex
             as="label"
