@@ -75,6 +75,13 @@ export default function ProfileImage() {
     const imageUrl = URL.createObjectURL(file);
     setUploadedImg(imageUrl);
 
+    toast({
+      title: "Uploading...",
+      description: "Profile image upload in progress.",
+      status: "info",
+      isClosable: true,
+    });
+
     updateProfile.mutate({
       file,
     });
