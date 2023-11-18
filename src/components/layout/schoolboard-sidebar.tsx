@@ -98,8 +98,8 @@ const DisplayPanel: FC = () => {
   return (
     <VStack
       align="flex-start"
-      divider={<StackDivider borderColor="#2B7B51" />}
-      spacing={"50px"}
+      divider={<StackDivider borderColor="#878785" />}
+      spacing={"28px"}
     >
       {sundryPaymentsQuery.data?.map((sundry) => (
         <Flex key={sundry.id} direction={"column"} w="full" gap={1}>
@@ -144,7 +144,7 @@ const DisplayPanel: FC = () => {
 
 const sidebarContent = {
   [PAYMENTS as string]: {
-    title: "Display Panel",
+    title: "School Board",
     component: <DisplayPanel />,
   },
   DEFAULT: {
