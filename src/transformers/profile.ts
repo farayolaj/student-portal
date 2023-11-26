@@ -2,8 +2,13 @@ import parse from "date-fns/parse";
 
 const IMAGE_SERVER = "https://dlcoffice.ui.edu.ng";
 
+/**
+ * This function should be redundant cose the server should be sending the full image url. Consider removing it.
+ */
 function studentImagePathUrl(name: string) {
   if (!name) return null;
+
+  if (name.includes("http")) return name;
 
   const pathName = name.includes("assets")
     ? `${IMAGE_SERVER}/${name}`
