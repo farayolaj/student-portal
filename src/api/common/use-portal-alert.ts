@@ -9,8 +9,8 @@ export const usePortalAlert = createQuery<{ header: string; body: string }>(
     if (!response.data.status) throw new Error(response.data.message);
 
     return {
-      header: response.data.notice_header,
-      body: response.data.notice_body,
+      header: response.data.payload.notice_header,
+      body: response.data.payload.notice_body,
     };
   }
 );
