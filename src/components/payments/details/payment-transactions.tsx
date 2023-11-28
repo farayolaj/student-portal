@@ -1,5 +1,5 @@
 import { useVerifyTransaction } from "@/api/payment/use-verify-transaction";
-import { Box, Button, Divider, Flex, SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, Button, Divider, Flex, SimpleGrid, Text, useToast } from "@chakra-ui/react";
 import DetailItem from "./detail-item";
 
 type PaymentTransactionsProps = {
@@ -20,6 +20,7 @@ export default function PaymentTransactionDetail({
     onSuccess: onRequery,
     enabled: !hasPaid,
   });
+  const toast = useToast();
 
   return (
     <Box mt={8}>
@@ -48,7 +49,7 @@ export default function PaymentTransactionDetail({
               value={
                 transaction
                   ? transaction.status[0].toUpperCase() +
-                    transaction.status.slice(1)
+                  transaction.status.slice(1)
                   : ""
               }
               isLoading={isLoading}
@@ -59,8 +60,8 @@ export default function PaymentTransactionDetail({
                 Number.isNaN(transaction?.dateInitiated?.valueOf())
                   ? "-"
                   : transaction?.dateInitiated?.toLocaleDateString("en-NG", {
-                      dateStyle: "long",
-                    }) || ""
+                    dateStyle: "long",
+                  }) || ""
               }
               isLoading={isLoading}
             />
@@ -71,8 +72,8 @@ export default function PaymentTransactionDetail({
                   Number.isNaN(transaction?.datePayed?.valueOf())
                     ? "-"
                     : transaction?.datePayed?.toLocaleDateString("en-NG", {
-                        dateStyle: "long",
-                      }) || ""
+                      dateStyle: "long",
+                    }) || ""
                 }
                 isLoading={isLoading}
               />
@@ -91,7 +92,25 @@ export default function PaymentTransactionDetail({
                 isDisabled={verifyTransaction.isLoading}
                 justifySelf="center"
                 onClick={() => {
-                  verifyTransaction.refetch();
+                  verifyTransaction.refetch().then(res => {
+                    if (res.data) {
+                      toast({
+                        title: "Payment is successful",
+                        status: "success",
+                        duration: 3000,
+                        id: `payment-requery-response-${transaction.rrr}`,
+                        isClosable: true,
+                      })
+                    } else {
+                      toast({
+                        title: "Payment is still pending",
+                        status: "info",
+                        duration: 3000,
+                        id: `payment-requery-response-${transaction.rrr}`,
+                        isClosable: true,
+                      })
+                    }
+                  });
                 }}
               >
                 Re-query Transaction
@@ -103,8 +122,9 @@ export default function PaymentTransactionDetail({
         <Flex justify="center" align="center" p={8}>
           You have not made any transaction yet.
         </Flex>
-      )}
-    </Box>
+      )
+      }
+    </Box >
   );
 }
 
