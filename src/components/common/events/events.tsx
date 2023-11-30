@@ -12,7 +12,7 @@ export default function Events({ eventMap }: EventsProps) {
   const formattedTodaysDate = format(new Date(), DATE_ONLY_FORMAT);
 
   return (
-    <Tabs mt={8} variant="solid-rounded" colorScheme="primary">
+    <Tabs mt={8} variant="solid-rounded" colorScheme="primary" defaultIndex={1}>
       <TabList w="full" justifyContent="space-around">
         <Tab fontSize="sm">Today&apos;s Events</Tab>
         <Tab fontSize="sm">Upcoming Events</Tab>
