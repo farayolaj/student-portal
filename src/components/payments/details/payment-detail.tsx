@@ -150,7 +150,7 @@ export default function PaymentDetail({
       {prerequisites.length > 0 && (
         <Center bg="#ffe599" p={2} mb={8}>
           <Text as="span" fontWeight="semibold" textAlign="center">
-            Requires{" "}
+          Requires payment of{" "}
             {prerequisites
               .map((payment) => (
                 <Link
@@ -162,7 +162,7 @@ export default function PaymentDetail({
                     trxType: payment.transactionType,
                   })}
                 >
-                  {payment.description}
+                  {payment.description} {". Click here to pay."}
                 </Link>
               ))
               .reduce((prev, curr, idx) => {
@@ -172,7 +172,6 @@ export default function PaymentDetail({
                 prev.push(curr);
                 return prev;
               }, [] as (JSX.Element | string)[])}{" "}
-            to be paid.
           </Text>
         </Center>
       )}

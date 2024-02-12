@@ -17,7 +17,7 @@ import { FC } from "react";
 import EventCalendar from "../common/events/event-calendar";
 import useRemitaInline from "../common/remita-inline";
 
-const mostSubscribedSundryCodes = ["24", "58", "13", "28"];
+const mostSubscribedSundryCodes = ["6", "58", "13", "28"];
 
 const DisplayPanel: FC = () => {
   const sundryPaymentsQuery = useSundryPayments({

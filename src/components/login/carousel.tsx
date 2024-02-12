@@ -16,6 +16,21 @@ import directorImage from "../../images/director_opening_speech.jpg";
 const slides = [
   {
     graphic: (
+      <chakra.iframe
+        pos="absolute"
+        top={0}
+        left={0}
+        width="100%"
+        height="100%"
+        border={0}
+        src="https://www.youtube-nocookie.com/embed/4SZFMz4xB38?si=sgZ6UFbhMOPb2LLU&amp;controls=0&playsinline=1&showinfo=0&autohide=1&disablekb=1&loop=1&rel=0"
+        title="YouTube video player"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      ></chakra.iframe>
+    ),
+  },
+  {
+    graphic: (
       <Image
         src={directorImage}
         alt=""
@@ -31,21 +46,6 @@ const slides = [
     content: [
       "Prof E. B. Omobowale, Professor of Medicine and Literature & Director UIDLC, welcomes all new and returning students in UI-ODeL mode to a new academic session.",
     ],
-  },
-  {
-    graphic: (
-      <chakra.iframe
-        pos="absolute"
-        top={0}
-        left={0}
-        width="100%"
-        height="100%"
-        border={0}
-        src="https://www.youtube-nocookie.com/embed/4SZFMz4xB38?si=sgZ6UFbhMOPb2LLU&amp;controls=0&playsinline=1&showinfo=0&autohide=1&disablekb=1&loop=1&rel=0"
-        title="YouTube video player"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      ></chakra.iframe>
-    ),
   },
 ];
 

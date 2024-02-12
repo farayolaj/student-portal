@@ -19,9 +19,7 @@ export default function ProfileDetails() {
   const currentPeriod = useCurrentPeriod();
   const user = profileRes?.data?.user;
   const academicProfile = profileRes?.data?.academicProfile;
-  const fullName = `${user?.firstName} ${user?.otherNames || ""} ${
-    user?.lastName
-  }`.replace("undefined", "");
+  const fullName = `${user?.lastName.toUpperCase()}, ${user?.firstName} ${user?.otherNames || ""}`.replace("undefined", "");
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
