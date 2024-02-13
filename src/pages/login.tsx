@@ -7,6 +7,7 @@ import {
   FormHelperText,
   FormLabel,
   Heading,
+  HStack,
   IconButton,
   Input,
   InputGroup,
@@ -21,7 +22,7 @@ import Image from "next/image";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
-import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
+import { IoEyeOffOutline, IoEyeOutline, IoArrowBack } from "react-icons/io5";
 import { useValidateUsername } from "../api/auth/use-validate-username";
 import Seo from "../components/common/seo";
 import * as routes from "../constants/routes";
@@ -195,9 +196,20 @@ export default function Login() {
                     </InputRightElement>
                   </InputGroup>
                   <FormHelperText>
-                    <Link as={NextLink} href={routes.FORGOT_PASSWORD}>
-                      Forgot password?
-                    </Link>
+                    <HStack justifyContent={"space-between"}>
+                      <Link as={NextLink} href={routes.FORGOT_PASSWORD}>
+                        Forgot password?
+                      </Link>
+
+                      <Text
+                        display={"flex"}
+                        cursor={"pointer"}
+                        onClick={() => setUsernameVerified(false)}
+                      >
+                        <IoArrowBack />
+                        Go Back
+                      </Text>
+                    </HStack>
                   </FormHelperText>
                 </FormControl>
               )}

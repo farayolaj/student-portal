@@ -1,12 +1,14 @@
 import { useMainPayments } from "@/api/payment/use-main-payments";
-import { Center, SimpleGrid, Spinner } from "@chakra-ui/react";
+import { Box, Center, Divider, SimpleGrid, Spinner } from "@chakra-ui/react";
 import { useState } from "react";
 import PageTitle from "../../components/common/page-title";
 import Seo from "../../components/common/seo";
 import PaymentControl from "../../components/payments/payment-control";
 import PaymentSummary from "../../components/payments/payment-summary";
+import useAuth from "../../hooks/use-auth";
 
 export default function Payments() {
+  const { user } = useAuth();
   const [statusFilter, setStatusFilter] = useState("all");
   const mainPaymentRes = useMainPayments();
   const payments = mainPaymentRes.data ?? [];
@@ -18,6 +20,14 @@ export default function Payments() {
   const filteredPayments = sortedPayments.filter((payment) => {
     if (statusFilter === "all") return true;
     return statusFilter === payment.status;
+  });
+
+  const currentPayments = filteredPayments.filter((payment) => {
+    return payment.sessionId === user?.currentSessionId;
+  });
+
+  const stalePayments = filteredPayments.filter((payment) => {
+    return payment.sessionId !== user?.currentSessionId;
   });
 
   return (
@@ -38,14 +48,33 @@ export default function Payments() {
           />
         </Center>
       ) : filteredPayments.length > 0 ? (
-        <SimpleGrid columns={[1, null, 3]} gap={8} mt={8}>
-          {filteredPayments.map((payment) => (
-            <PaymentSummary
-              payment={payment}
-              key={`${payment.id}-${payment.transactionRef}`}
-            />
-          ))}
-        </SimpleGrid>
+        <>
+          <SimpleGrid columns={[1, null, 3]} gap={8} mt={8} mb={8}>
+            {currentPayments.map((payment) => (
+              <PaymentSummary
+                payment={payment}
+                key={`${payment.id}-${payment.transactionRef}`}
+              />
+            ))}
+          </SimpleGrid>
+
+          {/* chakra divider(hr) could not display, to be looked into */}
+          <Box
+            display={currentPayments.length === 0 || stalePayments.length === 0 ? "none" : "block"}
+            w={"100%"}
+            height={".05rem"}
+            background={"green"}
+          ></Box>
+
+          <SimpleGrid columns={[1, null, 3]} gap={8} mt={8}>
+            {stalePayments.map((payment) => (
+              <PaymentSummary
+                payment={payment}
+                key={`${payment.id}-${payment.transactionRef}`}
+              />
+            ))}
+          </SimpleGrid>
+        </>
       ) : (
         <Center mt={8} py={16}>
           You currently have no payment to make.
