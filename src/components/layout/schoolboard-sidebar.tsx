@@ -17,7 +17,7 @@ import { FC } from "react";
 import EventCalendar from "../common/events/event-calendar";
 import useRemitaInline from "../common/remita-inline";
 
-const mostSubscribedSundryCodes = ["6", "58", "13", "28"];
+const mostSubscribedSundryCodes = ["75", "6"];
 
 const DisplayPanel: FC = () => {
   const sundryPaymentsQuery = useSundryPayments({
@@ -100,6 +100,7 @@ const DisplayPanel: FC = () => {
       align="flex-start"
       divider={<StackDivider borderColor="#878785" />}
       spacing={"28px"}
+      pb={"2rem"}
     >
       {sundryPaymentsQuery.data?.map((sundry) => (
         <Flex key={sundry.id} direction={"column"} w="full" gap={1}>
@@ -149,7 +150,12 @@ const sidebarContent = {
   },
   DEFAULT: {
     title: "School Board",
-    component: <EventCalendar />,
+    component: (
+      <>
+        {" "}
+        <DisplayPanel /> <EventCalendar />{" "}
+      </>
+    ),
   },
 };
 
