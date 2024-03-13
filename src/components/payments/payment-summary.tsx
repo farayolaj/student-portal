@@ -1,10 +1,10 @@
-import { Button, Card, CardBody, Flex, Text } from "@chakra-ui/react";
-import { IoCheckmarkCircle, IoTime } from "react-icons/io5";
-import { useAllSessions } from "@/api/user/use-all-sessions";
-import { useRouter } from "next/router";
 import { useVerifyTransaction } from "@/api/payment/use-verify-transaction";
-import queryClient from "@/lib/query-client";
+import { useAllSessions } from "@/api/user/use-all-sessions";
 import buildPaymentDetailUrl from "@/lib/payments/build-payment-detail-url";
+import queryClient from "@/lib/query-client";
+import { Button, Card, CardBody, Flex, Text } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import { IoCheckmarkCircle, IoTime } from "react-icons/io5";
 
 type PaymentSummaryProps = {
   payment: Payment;
@@ -29,8 +29,13 @@ export default function PaymentSummary({ payment }: PaymentSummaryProps) {
   let statusText: string;
 
   if (payment.status === "paid") {
-    statusIcon = <IoCheckmarkCircle color="green" />;
-    statusText = "Paid";
+    if (payment.paymentOption === "part") {
+      statusIcon = <IoCheckmarkCircle color="blue" />;
+      statusText = "Partially Paid";
+    } else {
+      statusIcon = <IoCheckmarkCircle color="green" />;
+      statusText = "Paid";
+    }
   } else {
     statusIcon = <IoTime color="orange" />;
     statusText = "Unpaid";
