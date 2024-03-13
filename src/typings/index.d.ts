@@ -131,6 +131,8 @@ interface Payment {
   semester?: string;
   containsPreselected: boolean;
   paymentType: "sundry" | "main";
+  rawPaymentOption: string | null;
+  paymentOption: "full" | "part" | "balance" | null;
   transactionType?: "normal" | "custom";
   transactionRef?: string;
   preselected?: {
