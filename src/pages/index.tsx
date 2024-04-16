@@ -4,6 +4,7 @@ import Seo from "../components/common/seo";
 import CoursesCard from "../components/dashboard/courses-card";
 import PaymentsCard from "../components/dashboard/payments-card";
 import ProfileCard from "../components/dashboard/profile-card";
+import PraticumFormCard from "@/components/dashboard/practicum-form-card";
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
       <PageTitle>Dashboard</PageTitle>
       <ProfileCard />
       <InitiateResultVerificationCard />
+      <PraticumFormCard />
       <CoursesCard />
       <PaymentsCard />
     </>

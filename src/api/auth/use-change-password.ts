@@ -12,7 +12,7 @@ export const useChangePassword = createMutation(
       current_password: currentPassword,
       user_pass: newPassword,
     };
-
+ 
     const response = await getApi().post("/password", data);
 
     if (!response.data.status) throw new Error(response.data.message);
