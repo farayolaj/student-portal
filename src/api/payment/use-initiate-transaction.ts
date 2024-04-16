@@ -1,18 +1,20 @@
+import { toPayment } from "@/transformers/payments";
 import { createMutation } from "react-query-kit";
 import getApi from "../api";
-import { toPayment } from "@/transformers/payments";
 
 export const useInitiateTransaction = createMutation(
   async ({
     id,
     preselectedId,
     paymentType,
+    rawPaymentOption,
     transactionRef,
     transactionType,
   }: {
     id: string;
     preselectedId?: string;
     paymentType: "main" | "sundry";
+    rawPaymentOption?: Payment["rawPaymentOption"];
     transactionRef?: string;
     transactionType?: Payment["transactionType"];
   }) => {
@@ -27,6 +29,7 @@ export const useInitiateTransaction = createMutation(
         payment_type: paymentType,
         preselected: preselectedId,
         tid: transactionRef,
+        payment_option: rawPaymentOption || undefined,
       },
     });
 

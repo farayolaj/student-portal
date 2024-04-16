@@ -59,8 +59,13 @@ export default function PaymentDetail({
   });
 
   if (payment?.status === "paid") {
-    statusIcon = <IoCheckmarkCircle color="green" />;
-    statusText = "Paid";
+    if (payment.paymentOption === "part") {
+      statusIcon = <IoCheckmarkCircle color="blue" />;
+      statusText = "Partially Paid";
+    } else {
+      statusIcon = <IoCheckmarkCircle color="green" />;
+      statusText = "Paid";
+    }
   } else {
     statusIcon = <IoTime color="orange" />;
     statusText = "Unpaid";
@@ -114,6 +119,7 @@ export default function PaymentDetail({
           ? payment?.preselected?.id
           : undefined,
         paymentType: payment?.paymentType || "main",
+        rawPaymentOption: payment?.rawPaymentOption,
         transactionRef: payment?.transactionRef,
         transactionType: payment?.transactionType,
       },
@@ -150,7 +156,7 @@ export default function PaymentDetail({
       {prerequisites.length > 0 && (
         <Center bg="#ffe599" p={2} mb={8}>
           <Text as="span" fontWeight="semibold" textAlign="center">
-          Requires payment of{" "}
+            Requires payment of{" "}
             {prerequisites
               .map((payment) => (
                 <Link
@@ -162,7 +168,7 @@ export default function PaymentDetail({
                     trxType: payment.transactionType,
                   })}
                 >
-                  {payment.description} {". Click here to pay."}
+                  {payment.description} {"(click here to pay)"}
                 </Link>
               ))
               .reduce((prev, curr, idx) => {

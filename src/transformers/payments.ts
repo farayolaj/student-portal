@@ -5,6 +5,15 @@ const transactionTypes: Record<string, Payment["transactionType"]> = {
   trans_custom: "custom",
 };
 
+const paymentOptions: Record<string, Payment["paymentOption"]> = {
+  full_first_sem: "full",
+  part_first_sem_a: "part",
+  part_first_sem_b: "balance",
+  full_second_sem: "full",
+  part_second_sem_a: "part",
+  part_second_sem_b: "balance",
+};
+
 export function toPayment(data: any): Payment {
   return {
     id: data.payment_id,
@@ -17,6 +26,10 @@ export function toPayment(data: any): Payment {
     level: data.level ? data.level + "00" : undefined,
     sessionId: data.session,
     paymentType: data.payment_category,
+    rawPaymentOption: data.payment_type_option || null,
+    paymentOption: data.payment_type_option
+      ? paymentOptions[data.payment_type_option]
+      : null,
     transactionType:
       data.payment_transaction && transactionTypes[data.payment_transaction],
     transactionRef: data.transaction_ref,
