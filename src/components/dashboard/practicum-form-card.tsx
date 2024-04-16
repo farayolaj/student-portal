@@ -44,6 +44,7 @@ const PraticumFormCard = () => {
   const { mutate: submitForm } = usePracticumRequestForm();
 
   const { data: eligibility } = usePracticumEligibility();
+  console.log(eligibility);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -95,7 +96,7 @@ const PraticumFormCard = () => {
     >
       <CardHeader>
         <Heading as="h2" fontSize="md">
-          Practicum Form(Kindly fill the form below)
+          {`${eligibility?.payload.course_code}`} Practicum Form
         </Heading>
       </CardHeader>
       <CardBody>
