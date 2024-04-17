@@ -118,29 +118,10 @@ const PraticumFormCard = () => {
             />
           </FormControl>
           <FormControl isRequired w={"47%"}>
-            <FormLabel>Proposed School State</FormLabel>
-            <Input
-              type="text"
-              name="schoolState"
-              value={formState.schoolState}
-              onChange={handleInputChange}
-            />
-          </FormControl>
-
-          <FormControl isRequired w={"47%"}>
             <FormLabel>Proposed School Contact Address</FormLabel>
             <Textarea
               name="schoolContact"
               value={formState.schoolContact}
-              onChange={handleInputChange}
-            />
-          </FormControl>
-
-          <FormControl isRequired w={"47%"}>
-            <FormLabel>Proposed School Location Description</FormLabel>
-            <Textarea
-              name="schoolLocationDesc"
-              value={formState.schoolLocationDesc}
               onChange={handleInputChange}
             />
           </FormControl>
@@ -166,7 +147,26 @@ const PraticumFormCard = () => {
           </FormControl>
 
           <FormControl isRequired w={"47%"}>
-            <FormLabel> Telephone Number</FormLabel>
+            <FormLabel>Proposed School State</FormLabel>
+            <Input
+              type="text"
+              name="schoolState"
+              value={formState.schoolState}
+              onChange={handleInputChange}
+            />
+          </FormControl>
+
+          <FormControl isRequired w={"47%"}>
+            <FormLabel>Proposed School Location Description</FormLabel>
+            <Textarea
+              name="schoolLocationDesc"
+              value={formState.schoolLocationDesc}
+              onChange={handleInputChange}
+            />
+          </FormControl>
+
+          <FormControl isRequired w={"47%"}>
+            <FormLabel>Student Active Telephone Number</FormLabel>
             <Input
               type="number"
               name="schoolPhone"
