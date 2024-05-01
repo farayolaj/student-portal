@@ -122,7 +122,7 @@ const PraticumFormCard = () => {
             </Box>
             <Box>
               <HStack>
-                <Text fontSize="md" fontWeight="600">Approved Supervisor:</Text>
+                <Text fontSize="md" fontWeight="600">Supervisor:</Text>
                 <span>{practicumForm?.approved_supervisor}</span> 
               </HStack>
             </Box>
@@ -131,9 +131,9 @@ const PraticumFormCard = () => {
               practicumForm?.print_url && practicumForm?.print_url.length > 0 && (
                 <Box>
                   <Text>
-                    Kindly click the link to download your document. { }
+                    Click the link here. { }
                     <Badge colorScheme="green" p="2" borderRadius="md">
-                      <Link href="#" onClick={() => intiateFetch()}> Click here</Link>
+                      <Link href="#" onClick={() => intiateFetch()}> Practicum Letter</Link>
                     </Badge>
                   </Text>
                 </Box>
