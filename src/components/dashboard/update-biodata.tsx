@@ -64,7 +64,7 @@ const UpdateBioData = () => {
   const toast = useToast();
 
   const handleCheckboxChange = (newValues: string[]) => {
-    newValues = newValues.filter(value => !!value);
+    newValues = newValues.filter((value) => !!value);
 
     const newDisabilities: string[] = [];
     if (newValues.includes("None")) {
@@ -135,7 +135,8 @@ const UpdateBioData = () => {
     >
       <CardHeader>
         <Heading as="h1" fontSize="md">
-          Instruction: Kindly update your biodata.
+          Instruction: We kindly ask that you personally update your biodata to
+          ensure all information is correct and up-to-date. Thank you.
         </Heading>
       </CardHeader>
       <CardBody>
@@ -143,14 +144,18 @@ const UpdateBioData = () => {
           <Heading fontSize={"1rem"} pb={"1rem"}>
             Disabilities
           </Heading>
-          <CheckboxGroup colorScheme="green" value={formState.disabilities} onChange={handleCheckboxChange}>
+          <CheckboxGroup
+            colorScheme="green"
+            value={formState.disabilities}
+            onChange={handleCheckboxChange}
+          >
             <Stack
               direction={["column", "row"]}
               flexWrap={"wrap"}
               gap={"1.5rem"}
             >
               {disabilityData.map((item, index) => (
-                <Checkbox key={index} value={item} ml={"0rem !important"}>
+                <Checkbox borderColor={'black'} key={index} value={item} ml={"0rem !important"}>
                   {item}
                 </Checkbox>
               ))}
@@ -161,6 +166,7 @@ const UpdateBioData = () => {
                 <Input
                   focusBorderColor={"green"}
                   type="text"
+                  borderColor={"black"}
                   onChange={(e) =>
                     setFormState((prevState) => ({
                       ...prevState,
@@ -191,6 +197,7 @@ const UpdateBioData = () => {
                 value={formState.next_of_kin}
                 onChange={handleInputChange}
                 isRequired
+                borderColor={"black"}
               />
             </FormControl>
             <FormControl w={"47%"}>
@@ -203,6 +210,7 @@ const UpdateBioData = () => {
                 value={formState.next_of_kin_phone}
                 onChange={handleInputChange}
                 isRequired
+                borderColor={"black"}
               />
             </FormControl>
             <FormControl w={"47%"} ml={"0rem !important"}>
@@ -214,60 +222,55 @@ const UpdateBioData = () => {
                 value={formState.next_of_kin_addr}
                 onChange={handleInputChange}
                 isRequired
+                borderColor={"black"}
               />
             </FormControl>
           </HStack>
-          
-          {
-            profile && profile?.user.gender.length === 0 && (
-              <>
-                <Heading fontSize={"1rem"} pb={"1rem"} pt={"2rem"}>
-                Gender
-              </Heading><RadioGroup colorScheme="green" value={formState.gender} onChange={(newGender) => setFormState((prevState) => ({
-                ...prevState,
-                gender: newGender
-              }))}>
-                  <Stack
-                    flexWrap={"wrap"}
-                    gap={"1.5rem"}
-                    direction={["column", "row"]}
-                  >
-                    <Radio
-                      ml={"0rem !important"}
-                      name="gender"
-                      value={"Male"}
-                    >
-                      Male
-                    </Radio>
-                    <Radio
-                      ml={"0rem !important"}
-                      value={"Female"}
-                      name="gender"
-                    >
-                      Female
-                    </Radio>
-                  </Stack>
-                </RadioGroup>
-              </>
-            )
-          }
-          
-          {
-            profile && isNaN(profile.user.dob_new.valueOf()) && (
-                <FormControl w={"45%"} mt={"2rem"}>
-                  <FormLabel fontWeight={700} w={"max-content"}>
-                    Date of Birth
-                  </FormLabel>
-                  <Input
-                    type="date"
-                    name="dob"
-                    value={formState.dob}
-                    onChange={handleInputChange}
-                  />
-                </FormControl>
-            )
-          }
 
+          {profile && profile?.user.gender.length === 0 && (
+            <>
+              <Heading fontSize={"1rem"} pb={"1rem"} pt={"2rem"}>
+                Gender
+              </Heading>
+              <RadioGroup
+                colorScheme="green"
+                value={formState.gender}
+                onChange={(newGender) =>
+                  setFormState((prevState) => ({
+                    ...prevState,
+                    gender: newGender,
+                  }))
+                }
+              >
+                <Stack
+                  flexWrap={"wrap"}
+                  gap={"1.5rem"}
+                  direction={["column", "row"]}
+                >
+                  <Radio ml={"0rem !important"} name="gender" value={"Male"}>
+                    Male
+                  </Radio>
+                  <Radio ml={"0rem !important"} value={"Female"} name="gender">
+                    Female
+                  </Radio>
+                </Stack>
+              </RadioGroup>
+            </>
+          )}
+
+          {profile && isNaN(profile.user.dob_new.valueOf()) && (
+            <FormControl w={"45%"} mt={"2rem"}>
+              <FormLabel fontWeight={700} w={"max-content"}>
+                Date of Birth
+              </FormLabel>
+              <Input
+                type="date"
+                name="dob"
+                value={formState.dob}
+                onChange={handleInputChange}
+              />
+            </FormControl>
+          )}
 
           <Button mt={"2rem"} type="submit" alignSelf={"flex-end"}>
             Submit Form
