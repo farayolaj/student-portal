@@ -5,6 +5,7 @@ import CoursesCard from "../components/dashboard/courses-card";
 import PaymentsCard from "../components/dashboard/payments-card";
 import ProfileCard from "../components/dashboard/profile-card";
 import PraticumFormCard from "@/components/dashboard/practicum-form-card";
+import UpdateBioData from "@/components/dashboard/update-biodata";
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
       <PageTitle>Dashboard</PageTitle>
       <ProfileCard />
       <InitiateResultVerificationCard />
+      <UpdateBioData />
       <PraticumFormCard />
       <CoursesCard />
       <PaymentsCard />
