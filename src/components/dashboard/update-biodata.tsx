@@ -32,7 +32,7 @@ const disabilityData = [
   "Physical disability",
   "Speech or language impairment",
   "Vision impairment",
-  "Not applicable (NA)",
+  "Not Applicable (NA)",
 ];
 
 type FormState = {
@@ -42,6 +42,7 @@ type FormState = {
   gender: string;
   dob: string;
   disabilities: string[];
+  otherDisabilities: string;
 };
 
 const initialFormState: FormState = {
@@ -51,80 +52,76 @@ const initialFormState: FormState = {
   gender: "",
   dob: "",
   disabilities: [],
+  otherDisabilities: "",
 };
 
 const UpdateBioData = () => {
-  const [selectedDisabilities, setSelectedDisabilities] = useState<string[]>(
-    []
-  );
-
   const [formState, setFormState] = useState<FormState>(initialFormState);
-  const [otherDis, setOtherDis] = useState<any>();
 
   const { mutate: submitForm } = useBiodataUpdate();
   const toast = useToast();
-  const router = useRouter();
 
-  const handleCheckboxChange = (item: string, e: any) => {
-    if (item === "Not applicable (NA)") {
-      setSelectedDisabilities(["Not applicable (NA)"]);
+  const handleCheckboxChange = (newValues: string[]) => {
+    newValues = newValues.filter(value => !!value);
+
+    const newDisabilities: string[] = [];
+    if (newValues.includes("Not Applicable (NA)")) {
+      newDisabilities.push("Not Applicable (NA)");
     } else {
-      setSelectedDisabilities((prevSelected) => {
-        if (prevSelected.includes("Not applicable (NA)")) {
-          return [item];
-        } else {
-          if (prevSelected.includes(item)) {
-            return prevSelected.filter((selectedItem) => selectedItem !== item);
-          } else {
-            return [...prevSelected, item];
-          }
-        }
-      });
+      newDisabilities.push(...newValues);
     }
+
+    console.log(newValues);
 
     setFormState((prevState) => ({
       ...prevState,
-      disabilities: selectedDisabilities,
+      disabilities: newDisabilities,
     }));
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    submitForm(formState, {
-      onSuccess: () => {
-        toast({
-          title: "BioData Update Form Submitted",
-          description: "Your biodata form has been submitted",
-          status: "success",
-          isClosable: true,
-        });
-        setFormState(initialFormState);
-        // router.reload();
+    submitForm(
+      {
+        ...formState,
+        disabilities: formState.otherDisabilities
+          ? [...formState.disabilities, formState.otherDisabilities]
+          : formState.disabilities,
       },
-      onError: (err) => {
-        const error = err as Error;
-        toast({
-          title: "Error Submitting biodata Form",
-          description: error.message,
-          status: "error",
-          isClosable: true,
-        });
-      },
-    });
+      {
+        onSuccess: () => {
+          toast({
+            title: "BioData Update Form Submitted",
+            description: "Your biodata form has been submitted",
+            status: "success",
+            isClosable: true,
+          });
+        },
+        onError: (err) => {
+          const error = err as Error;
+          console.error(error);
+          toast({
+            title: "Error Submitting biodata Form",
+            description: error.message,
+            status: "error",
+            isClosable: true,
+          });
+        },
+      }
+    );
   };
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
+
     setFormState((prevState) => ({
       ...prevState,
       [name]: value,
-      disabilities: selectedDisabilities,
     }));
   };
-
 
   return (
     <Card
@@ -136,7 +133,7 @@ const UpdateBioData = () => {
     >
       <CardHeader>
         <Heading as="h1" fontSize="md">
-          Student Biodata Update
+          Biodata Update
         </Heading>
       </CardHeader>
       <CardBody>
@@ -144,19 +141,14 @@ const UpdateBioData = () => {
           <Heading fontSize={"1rem"} pb={"1rem"}>
             Disabilities
           </Heading>
-          <CheckboxGroup colorScheme="green">
+          <CheckboxGroup colorScheme="green" value={formState.disabilities} onChange={handleCheckboxChange}>
             <Stack
               direction={["column", "row"]}
               flexWrap={"wrap"}
               gap={"1.5rem"}
             >
               {disabilityData.map((item, index) => (
-                <Checkbox
-                  key={index}
-                  value={item}
-                  ml={"0rem !important"}
-                  onChange={(e) => handleCheckboxChange(item, e)}
-                >
+                <Checkbox key={index} value={item} ml={"0rem !important"}>
                   {item}
                 </Checkbox>
               ))}
@@ -167,7 +159,12 @@ const UpdateBioData = () => {
                 <Input
                   focusBorderColor={"green"}
                   type="text"
-                  onChange={(e) => setOtherDis(e.target.value)}
+                  onChange={(e) =>
+                    setFormState((prevState) => ({
+                      ...prevState,
+                      otherDisabilities: e.target.value,
+                    }))
+                  }
                 />
               </FormControl>
             </Stack>
@@ -223,14 +220,16 @@ const UpdateBioData = () => {
             Gender
           </Heading>
 
-          <RadioGroup colorScheme="green">
+          <RadioGroup colorScheme="green" value={formState.gender} onChange={(newGender) => setFormState((prevState) => ({
+            ...prevState,
+            gender: newGender
+          }))}>
             <Stack
               flexWrap={"wrap"}
               gap={"1.5rem"}
               direction={["column", "row"]}
             >
               <Radio
-                onChange={handleInputChange}
                 ml={"0rem !important"}
                 name="gender"
                 value={"Male"}
@@ -239,7 +238,6 @@ const UpdateBioData = () => {
               </Radio>
               <Radio
                 ml={"0rem !important"}
-                onChange={handleInputChange}
                 value={"Female"}
                 name="gender"
               >
