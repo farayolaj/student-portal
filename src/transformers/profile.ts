@@ -24,6 +24,7 @@ export const toUser = (user: any) =>
     lastName: user.lastname,
     profileImage: studentImagePathUrl(user.passport),
     dob: parse(user.DoB, "dd/MM/yyyy", new Date()),
+    dob_new: parse(user.DoB, "yyyy-mm-dd", new Date()),
     gender: user.gender,
     phone: user.phone,
     alternativeEmail: user.alternative_email,

@@ -172,6 +172,7 @@ interface User {
   profileImage?: string;
   gender: string;
   dob: Date;
+  dob_new: Date;
   phone: string;
   alternativeEmail?: string;
   currentSessionId: string;

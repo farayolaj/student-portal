@@ -1,4 +1,5 @@
 import { useBiodataUpdate } from "@/api/dashboard/use-biodata-update";
+import { useProfile } from "@/api/user/use-profile";
 import {
   Card,
   CardHeader,
@@ -32,7 +33,7 @@ const disabilityData = [
   "Physical disability",
   "Speech or language impairment",
   "Vision impairment",
-  "Not Applicable (NA)",
+  "None",
 ];
 
 type FormState = {
@@ -57,6 +58,7 @@ const initialFormState: FormState = {
 
 const UpdateBioData = () => {
   const [formState, setFormState] = useState<FormState>(initialFormState);
+  const { data: profile } = useProfile();
 
   const { mutate: submitForm } = useBiodataUpdate();
   const toast = useToast();
@@ -65,8 +67,8 @@ const UpdateBioData = () => {
     newValues = newValues.filter(value => !!value);
 
     const newDisabilities: string[] = [];
-    if (newValues.includes("Not Applicable (NA)")) {
-      newDisabilities.push("Not Applicable (NA)");
+    if (newValues.includes("None")) {
+      newDisabilities.push("None");
     } else {
       newDisabilities.push(...newValues);
     }
@@ -133,7 +135,7 @@ const UpdateBioData = () => {
     >
       <CardHeader>
         <Heading as="h1" fontSize="md">
-          Biodata Update
+          Instruction: Kindly update your biodata.
         </Heading>
       </CardHeader>
       <CardBody>
@@ -154,7 +156,7 @@ const UpdateBioData = () => {
               ))}
               <FormControl w={"25rem"} display={"flex"} alignItems={"center"}>
                 <FormLabel fontWeight={400} w={"max-content"}>
-                  Others
+                  Other
                 </FormLabel>
                 <Input
                   focusBorderColor={"green"}
@@ -215,48 +217,57 @@ const UpdateBioData = () => {
               />
             </FormControl>
           </HStack>
+          
+          {
+            profile && profile?.user.gender.length === 0 && (
+              <>
+                <Heading fontSize={"1rem"} pb={"1rem"} pt={"2rem"}>
+                Gender
+              </Heading><RadioGroup colorScheme="green" value={formState.gender} onChange={(newGender) => setFormState((prevState) => ({
+                ...prevState,
+                gender: newGender
+              }))}>
+                  <Stack
+                    flexWrap={"wrap"}
+                    gap={"1.5rem"}
+                    direction={["column", "row"]}
+                  >
+                    <Radio
+                      ml={"0rem !important"}
+                      name="gender"
+                      value={"Male"}
+                    >
+                      Male
+                    </Radio>
+                    <Radio
+                      ml={"0rem !important"}
+                      value={"Female"}
+                      name="gender"
+                    >
+                      Female
+                    </Radio>
+                  </Stack>
+                </RadioGroup>
+              </>
+            )
+          }
+          
+          {
+            profile && isNaN(profile.user.dob_new.valueOf()) && (
+                <FormControl w={"45%"} mt={"2rem"}>
+                  <FormLabel fontWeight={700} w={"max-content"}>
+                    Date of Birth
+                  </FormLabel>
+                  <Input
+                    type="date"
+                    name="dob"
+                    value={formState.dob}
+                    onChange={handleInputChange}
+                  />
+                </FormControl>
+            )
+          }
 
-          <Heading fontSize={"1rem"} pb={"1rem"} pt={"2rem"}>
-            Gender
-          </Heading>
-
-          <RadioGroup colorScheme="green" value={formState.gender} onChange={(newGender) => setFormState((prevState) => ({
-            ...prevState,
-            gender: newGender
-          }))}>
-            <Stack
-              flexWrap={"wrap"}
-              gap={"1.5rem"}
-              direction={["column", "row"]}
-            >
-              <Radio
-                ml={"0rem !important"}
-                name="gender"
-                value={"Male"}
-              >
-                Male
-              </Radio>
-              <Radio
-                ml={"0rem !important"}
-                value={"Female"}
-                name="gender"
-              >
-                Female
-              </Radio>
-            </Stack>
-          </RadioGroup>
-
-          <FormControl w={"45%"} mt={"2rem"}>
-            <FormLabel fontWeight={700} w={"max-content"}>
-              Date of Birth
-            </FormLabel>
-            <Input
-              type="date"
-              name="dob"
-              value={formState.dob}
-              onChange={handleInputChange}
-            />
-          </FormControl>
 
           <Button mt={"2rem"} type="submit" alignSelf={"flex-end"}>
             Submit Form
