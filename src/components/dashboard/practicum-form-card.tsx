@@ -131,7 +131,7 @@ const PraticumFormCard = () => {
               practicumForm?.print_url && practicumForm?.print_url.length > 0 && (
                 <Box>
                   <Text>
-                    Click the link here. { }
+                    Click the link to download your document { }
                     <Badge colorScheme="green" p="2" borderRadius="md">
                       <Link href="#" onClick={() => intiateFetch()}> Practicum Letter</Link>
                     </Badge>
