@@ -27,7 +27,6 @@ export const useBiodataUpdate = createMutation(
       dob: dob,
       disabilities: disabilities,
     };
-    console.log(data);
 
     const response = await getApi().post("/student_update_form", data);
 

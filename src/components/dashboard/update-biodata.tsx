@@ -58,7 +58,15 @@ const initialFormState: FormState = {
 
 const UpdateBioData = () => {
   const [formState, setFormState] = useState<FormState>(initialFormState);
-  const { data: profile } = useProfile();
+  const { data: profile } = useProfile({
+    onSuccess(data) {
+      setFormState((prevState) => ({
+        ...prevState,
+        gender: data.user.gender,
+      }))        
+    },
+  });
+
 
   const { mutate: submitForm } = useBiodataUpdate();
   const toast = useToast();
@@ -73,7 +81,6 @@ const UpdateBioData = () => {
       newDisabilities.push(...newValues);
     }
 
-    console.log(newValues);
 
     setFormState((prevState) => ({
       ...prevState,
@@ -102,7 +109,6 @@ const UpdateBioData = () => {
         },
         onError: (err) => {
           const error = err as Error;
-          console.error(error);
           toast({
             title: "Error Submitting biodata Form",
             description: error.message,
