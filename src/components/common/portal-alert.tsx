@@ -24,6 +24,7 @@ export default function PortalAlert() {
       onClose={onClose}
       isCentered
       closeOnOverlayClick={false}
+      scrollBehavior="inside"
     >
       <AlertDialogOverlay>
         <AlertDialogContent>
