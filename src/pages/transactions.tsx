@@ -1,88 +1,101 @@
+import { Badge, Flex, Select, Text, Button } from "@chakra-ui/react";
+import { useAllTransactions } from "@/api/payment/use-all-transactions";
 import { createColumnHelper } from "@tanstack/react-table";
+import { useAllSessions } from "@/api/user/use-all-sessions";
+import { useState } from "react";
 import PageTitle from "../components/common/page-title";
 import Seo from "../components/common/seo";
 import CustomTable from "@/components/common/custom-table";
-import { Badge, Flex, Select, Text } from "@chakra-ui/react";
-import { useAllTransactions } from "@/api/payment/use-all-transactions";
-import { useState } from "react";
-import { useAllSessions } from "@/api/user/use-all-sessions";
+import RequeryButton from "@/components/payments/requery-button";
 
 const columnHelper = createColumnHelper<Transaction>();
 
-const columns = [
-  columnHelper.accessor("referenceNumber", {
-    header: () => (
-      <Text as="span" whiteSpace="nowrap">
-        Transaction Ref.
-      </Text>
-    ),
-  }),
-  columnHelper.accessor("description", {
-    header: () => (
-      <Text as="span" whiteSpace="nowrap">
-        Payment
-      </Text>
-    ),
-  }),
-  columnHelper.accessor("programmeName", {
-    header: () => (
-      <Text as="span" whiteSpace="nowrap">
-        Programme
-      </Text>
-    )
-  }),
-  columnHelper.accessor("amount", {
-    header: () => (
-      <Text as="span" whiteSpace="nowrap">
-        Amount
-      </Text>
-    ),
-    cell: (props) =>
-      new Intl.NumberFormat("en-NG", {
-        style: "currency",
-        currency: "NGN",
-      }).format(props.getValue()),
-  }),
-  columnHelper.accessor("status", {
-    header: (props) => (
-      <Text as="span" whiteSpace="nowrap">
-        Status
-      </Text>
-    ),
-    cell: (props) => {
-      const status = props.getValue();
-      const colorScheme =
-        status === "success"
-          ? "green"
-          : status === "failed"
+export default function Transactions() {
+  const columns = [
+    columnHelper.accessor("referenceNumber", {
+      header: () => (
+        <Text as="span" whiteSpace="nowrap">
+          Transaction Ref.
+        </Text>
+      ),
+    }),
+    columnHelper.accessor("description", {
+      header: () => (
+        <Text as="span" whiteSpace="nowrap">
+          Payment
+        </Text>
+      ),
+    }),
+    columnHelper.accessor("programmeName", {
+      header: () => (
+        <Text as="span" whiteSpace="nowrap">
+          Programme
+        </Text>
+      ),
+    }),
+    columnHelper.accessor("amount", {
+      header: () => (
+        <Text as="span" whiteSpace="nowrap">
+          Amount
+        </Text>
+      ),
+      cell: (props) =>
+        new Intl.NumberFormat("en-NG", {
+          style: "currency",
+          currency: "NGN",
+        }).format(props.getValue()),
+    }),
+    columnHelper.accessor("status", {
+      header: (props) => (
+        <Text as="span" whiteSpace="nowrap">
+          Status
+        </Text>
+      ),
+      cell: (props) => {
+        const status = props.getValue();
+        const colorScheme =
+          status === "success"
+            ? "green"
+            : status === "failed"
             ? "red"
             : status === "pending"
-              ? "yellow"
-              : "gray";
-      return (
-        <Badge colorScheme={colorScheme} variant="outline">
-          {status}
-        </Badge>
-      );
-    },
-  }),
-  columnHelper.accessor("dateInitiated", {
-    header: () => (
-      <Text as="span" whiteSpace="nowrap">
-        Date Initiated
-      </Text>
-    ),
-    cell: (props) => (
-      <Text as="span" whiteSpace="nowrap">
-        {props.getValue()?.toLocaleDateString("en-NG", {
-          dateStyle: "medium",
-        })}
-      </Text>
-    ),
-  }),
-];
+            ? "yellow"
+            : "gray";
+        return (
+          <Badge colorScheme={colorScheme} variant="outline">
+            {status}
+          </Badge>
+        );
+      },
+    }),
+    columnHelper.accessor("dateInitiated", {
+      header: () => (
+        <Text as="span" whiteSpace="nowrap">
+          Date Initiated
+        </Text>
+      ),
+      cell: (props) => (
+        <Text as="span" whiteSpace="nowrap">
+          {props.getValue()?.toLocaleDateString("en-NG", {
+            dateStyle: "medium",
+          })}
+        </Text>
+      ),
+    }),
+    columnHelper.accessor("id", {
+      header: "Action",
+      cell: (props) => {
+        const transaction = props.row.original;
+        return transaction.status === "pending" ? (
+          <RequeryButton
+            transaction={transaction}
+            onSuccess={allTransationsRes.refetch}
+          />
+        ) : null;
+      },
+    }),
+  ];
 
-export default function Transactions() {
   const allTransationsRes = useAllTransactions();
   const allSessions = useAllSessions();
   const [session, setSession] = useState("all");
