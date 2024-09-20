@@ -82,7 +82,7 @@ export function toTransaction(data: any): Transaction {
     dateInitiated: new Date(Date.parse(data.date_performed)),
     description: data.payment_description,
     referenceNumber: data.transaction_ref,
-    rrr: data.rrr || "",
+    rrr: data.rrr_code || "",
     status:
       data.payment_status == "00" || data.payment_status == "01"
         ? "success"
