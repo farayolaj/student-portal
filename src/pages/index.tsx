@@ -14,7 +14,7 @@ export default function Home() {
       <PageTitle>Dashboard</PageTitle>
       <ProfileCard />
       <InitiateResultVerificationCard />
-      <UpdateBioData />
+      {/* <UpdateBioData /> */}
       <PraticumFormCard />
       <CoursesCard />
       <PaymentsCard />
