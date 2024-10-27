@@ -178,6 +178,7 @@ interface User {
   currentSessionId: string;
   currentSemester: number;
   isVerified: boolean;
+  isFresher: boolean;
 }
 
 interface AcademicProfile {

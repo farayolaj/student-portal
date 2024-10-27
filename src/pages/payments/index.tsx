@@ -1,11 +1,30 @@
 import { useMainPayments } from "@/api/payment/use-main-payments";
-import { Box, Center, Divider, SimpleGrid, Spinner } from "@chakra-ui/react";
+import { Box, Card, CardBody, Center, Divider, Heading, Link, SimpleGrid, Spinner, Text } from "@chakra-ui/react";
 import { useState } from "react";
+import NextLink from "next/link";
 import PageTitle from "../../components/common/page-title";
 import Seo from "../../components/common/seo";
 import PaymentControl from "../../components/payments/payment-control";
 import PaymentSummary from "../../components/payments/payment-summary";
 import useAuth from "../../hooks/use-auth";
+import { VERIFY_RESULT } from "@/constants/routes";
+
+const ScreeningInfo = () => {
+  return (
+    <>
+      <Box>
+        <Card>
+          <CardBody>
+            <Heading fontSize="medium" fontWeight="semibold">
+            Please start your screening/verification process. You can use the link for your online verification.&nbsp;
+            <Link as={NextLink} href={VERIFY_RESULT}>Click here</Link>
+            </Heading>
+          </CardBody>
+        </Card>
+      </Box>
+    </>
+  );
+}
 
 export default function Payments() {
   const { user } = useAuth();
@@ -49,6 +68,12 @@ export default function Payments() {
         </Center>
       ) : filteredPayments.length > 0 ? (
         <>
+          <SimpleGrid mt={8}>
+            {user?.isFresher && !user?.isVerified && (
+              <ScreeningInfo />
+            )}
+            </SimpleGrid>
+            
           <SimpleGrid columns={[1, null, 3]} gap={8} mt={8} mb={8}>
             {currentPayments.map((payment) => (
               <PaymentSummary
@@ -73,9 +98,15 @@ export default function Payments() {
                 key={`${payment.id}-${payment.transactionRef}`}
               />
             ))}
-          </SimpleGrid>
+            </SimpleGrid>
         </>
-      ) : (
+      ) :
+        user?.isFresher && !user?.isVerified ? (
+          <Center mt={8} py={16}>
+            <ScreeningInfo />
+          </Center>
+        ) :
+        (
         <Center mt={8} py={16}>
           You currently have no payment to make.
         </Center>
