@@ -27,7 +27,7 @@ export default function PortalAlert() {
       scrollBehavior="inside"
     >
       <AlertDialogOverlay>
-        <AlertDialogContent maxW={"50%"}>
+        <AlertDialogContent maxW={[null, null, "50%"]}>
           <AlertDialogHeader fontSize="lg" fontWeight="bold">
             {portalAlert.data?.header || "Portal Alert"}
           </AlertDialogHeader>

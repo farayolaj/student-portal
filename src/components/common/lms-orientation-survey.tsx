@@ -64,7 +64,7 @@ export default function LMSOrientationSurvey({
       scrollBehavior="inside"
     >
       <AlertDialogOverlay>
-        <AlertDialogContent overflow={"clip"} maxW={"50%"}>
+        <AlertDialogContent overflow={"clip"} maxW={[null, null, "50%"]}>
           <AlertDialogHeader
             fontSize="lg"
             fontWeight="bold"
