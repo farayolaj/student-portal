@@ -47,6 +47,7 @@ export const toUser = (user: any) =>
     isVerified: user.is_verified === "1",
     isFresher: isFresher(user.academicRecord?.entry_mode, user.programmeDetails?.level),
     orientationAttendance: user.orientation_attendance,
+    orientationAttendanceDate: user.orientation_attendance_date,
   }) as User;
 
 export const toAcademicProfile = (profile: any) =>

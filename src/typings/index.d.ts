@@ -180,6 +180,7 @@ interface User {
   isVerified: boolean;
   isFresher: boolean;
   orientationAttendance: AttendanceOptions | null;
+  orientationAttendanceDate: string;
 }
 
 interface AcademicProfile {

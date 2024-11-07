@@ -1,4 +1,5 @@
 import { useLMSSurveyMutation } from "@/api/common/use-lms-survey-mutation";
+import transparentAbstractImage from "@/images/transparent_abstract.png";
 import {
   AlertDialog,
   AlertDialogBody,
@@ -8,16 +9,11 @@ import {
   AlertDialogOverlay,
   Box,
   Button,
+  chakra,
   ListItem,
   Radio,
   RadioGroup,
-  Table,
-  Tbody,
-  Td,
   Text,
-  Th,
-  Thead,
-  Tr,
   UnorderedList,
   useDisclosure,
   useToast,
@@ -27,14 +23,15 @@ import { useRef, useState } from "react";
 
 export default function LMSOrientationSurvey({
   defaultIsOpen,
+  dateString,
 }: {
   defaultIsOpen?: boolean;
+  dateString: string;
 }) {
   const { isOpen, onClose } = useDisclosure({ defaultIsOpen });
   const cancelRef = useRef();
-  const [attendanceOption, setAttendanceOption] = useState<
-    AttendanceOptions
-  >("on-site");
+  const [attendanceOption, setAttendanceOption] =
+    useState<AttendanceOptions>("on-site");
 
   const toast = useToast();
 
@@ -72,8 +69,12 @@ export default function LMSOrientationSurvey({
             fontSize="lg"
             fontWeight="bold"
             textAlign={"center"}
-            bg={"purple"}
+            bgColor={"purple"}
             color={"white"}
+            bgImage={`url(${transparentAbstractImage.src})`}
+            bgSize={"cover"}
+            bgBlendMode={"screen"}
+            bgPos={"center"}
           >
             <Text as="h1">Welcome to FreshStart 2024: LMS Orientation</Text>
             <Text as="span" fontSize={"small"} fontStyle={"italic"}>
@@ -97,11 +98,11 @@ export default function LMSOrientationSurvey({
               <VStack align="start" spacing={2}>
                 <Radio value="on-site" borderColor="black">
                   <strong>On-site:</strong> PIFA Hall, DLC, Ibadan (Bring Your
-                  Own Device: Mobile device & earpiece)
+                  Own Device: Mobile device & earpiece) - {dateString}
                 </Radio>
                 <Radio value="online" borderColor="black">
                   <strong>Online:</strong> Watch Live Webinar Link -&gt;,
-                  11:00am & 4pm on your faculty day
+                  11:00am & 4pm on {dateString}
                 </Radio>
                 <Radio value="self-paced" borderColor="black">
                   <strong>Not attending live session?</strong> Register for
@@ -114,47 +115,28 @@ export default function LMSOrientationSurvey({
               option now so that we can make adequate preparation. On-site
               registration closes 15th Nov., 2024.
             </Text>
-            <Text mt={4}>Don&apos;t miss this opportunity to:</Text>
-            <UnorderedList>
-              <ListItem>
-                Explore UIDLC Mobile Class LMS features: access, navigation
-                course blocks and tools.
-              </ListItem>
-              <ListItem>Interact with Departmental Coordinators.</ListItem>
-              <ListItem>
-                Explore course catalogs / registration courses.
-              </ListItem>
-              <ListItem>Meet our support team.</ListItem>
-              <ListItem>Connect with peers.</ListItem>
-              <ListItem>Get a head start on your learning journey!</ListItem>
-            </UnorderedList>
+            <chakra.details mt={2}>
+              <chakra.summary fontWeight={"bold"}>
+                What are the opportunities?
+              </chakra.summary>
+              <UnorderedList mt={2}>
+                <ListItem>
+                  Explore UIDLC Mobile Class LMS features: access, navigation
+                  course blocks and tools.
+                </ListItem>
+                <ListItem>Interact with Departmental Coordinators.</ListItem>
+                <ListItem>
+                  Explore course catalogs / registration courses.
+                </ListItem>
+                <ListItem>Meet our support team.</ListItem>
+                <ListItem>Connect with peers.</ListItem>
+                <ListItem>Get a head start on your learning journey!</ListItem>
+              </UnorderedList>
+            </chakra.details>
             <Text mt={4}>Secure your spot now!</Text>
             <Box bg="purple" color="white" p={4} mt={4} borderRadius="md">
               <Text>Ensure you choose your attendance option above.</Text>
             </Box>
-            <Text mt={4}>For those attending on site (BYOD):</Text>
-            <Table variant="simple" mt={2}>
-              <Thead>
-                <Tr>
-                  <Th>Faculty</Th>
-                  <Th>Date</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                <Tr>
-                  <Td>Faculty of Social Science</Td>
-                  <Td>Mon 18 Nov., 2024</Td>
-                </Tr>
-                <Tr>
-                  <Td>Faculty of Arts and Science</Td>
-                  <Td>Tues 19 Nov., 2024</Td>
-                </Tr>
-                <Tr>
-                  <Td>Faculty of Clinical Science & Education</Td>
-                  <Td>Wed 20 Nov., 2024</Td>
-                </Tr>
-              </Tbody>
-            </Table>
           </AlertDialogBody>
 
           <AlertDialogFooter>
