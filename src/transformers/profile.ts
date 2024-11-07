@@ -45,8 +45,9 @@ export const toUser = (user: any) =>
     currentSessionId: user.current_session,
     currentSemester: parseInt(user.current_semester),
     isVerified: user.is_verified === "1",
-    isFresher: isFresher(user.academicRecord?.entry_mode, user.programmeDetails?.level)
-  } as User);
+    isFresher: isFresher(user.academicRecord?.entry_mode, user.programmeDetails?.level),
+    orientationAttendance: user.orientation_attendance,
+  }) as User;
 
 export const toAcademicProfile = (profile: any) =>
   ({
@@ -58,10 +59,10 @@ export const toAcademicProfile = (profile: any) =>
     faculty: profile.programmeDetails?.faculty,
     level: profile.programmeDetails?.level,
     examCenter: profile.academicRecord.exam_center,
-  } as AcademicProfile);
+  }) as AcademicProfile;
 
 export const toProfile = (profile: any) =>
   ({
     user: toUser(profile),
     academicProfile: toAcademicProfile(profile),
-  } as Profile);
+  }) as Profile;

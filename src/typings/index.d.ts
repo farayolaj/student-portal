@@ -179,6 +179,7 @@ interface User {
   currentSemester: number;
   isVerified: boolean;
   isFresher: boolean;
+  orientationAttendance: AttendanceOptions | null;
 }
 
 interface AcademicProfile {
@@ -289,3 +290,5 @@ interface MinimalAttachment {
 interface Attachment extends MinimalAttachment {
   data: Buffer | null;
 }
+
+type AttendanceOptions = "on-site" | "online" | "self-paced";

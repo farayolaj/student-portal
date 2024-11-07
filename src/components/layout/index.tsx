@@ -3,10 +3,11 @@ import { useRouter } from "next/router";
 import { FC, PropsWithChildren, ReactNode, useEffect, useState } from "react";
 import { LOGIN } from "../../constants/routes";
 import useAuth from "../../hooks/use-auth";
+import LMSOrientationSurvey from "../common/lms-orientation-survey";
+import PortalAlert from "../common/portal-alert";
 import { Header } from "./header";
 import SchoolBoardSidebar from "./schoolboard-sidebar";
 import { Sidebar } from "./sidebar";
-import PortalAlert from "../common/portal-alert";
 
 export type LayoutProps = {
   show?: boolean;
@@ -60,6 +61,7 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
     child = (
       <Flex pos="relative" direction="column">
         <PortalAlert />
+        <LMSOrientationSurvey defaultIsOpen={!user?.orientationAttendance} />
         <Header />
         <Flex>
           <Sidebar />
