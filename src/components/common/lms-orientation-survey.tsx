@@ -96,15 +96,19 @@ export default function LMSOrientationSurvey({
               mt={2}
             >
               <VStack align="start" spacing={2}>
-                <Radio value="on-site" borderColor="black">
+                <Radio value="on-site" borderColor="black" colorScheme="purple">
                   <strong>On-site:</strong> PIFA Hall, DLC, Ibadan (Bring Your
                   Own Device: Mobile device & earpiece) - {dateString}
                 </Radio>
-                <Radio value="online" borderColor="black">
+                <Radio value="online" borderColor="black" colorScheme="purple">
                   <strong>Online:</strong> Watch Live Webinar Link -&gt;,
                   11:00am & 4pm on {dateString}
                 </Radio>
-                <Radio value="self-paced" borderColor="black">
+                <Radio
+                  value="self-paced"
+                  borderColor="black"
+                  colorScheme="purple"
+                >
                   <strong>Not attending live session?</strong> Register for
                   self-paced access and learn at your convenience.
                 </Radio>
@@ -121,10 +125,9 @@ export default function LMSOrientationSurvey({
               </chakra.summary>
               <UnorderedList mt={2}>
                 <ListItem>
-                  Explore UIDLC Mobile Class LMS features: access, navigation
-                  course blocks and tools.
+                  Explore Mobile Class LMS features: access, navigation course
+                  blocks and tools.
                 </ListItem>
-                <ListItem>Interact with Departmental Coordinators.</ListItem>
                 <ListItem>
                   Explore course catalogs / registration courses.
                 </ListItem>
@@ -134,9 +137,9 @@ export default function LMSOrientationSurvey({
               </UnorderedList>
             </chakra.details>
             <Text mt={4}>Secure your spot now!</Text>
-            <Box bg="purple" color="white" p={4} mt={4} borderRadius="md">
-              <Text>Ensure you choose your attendance option above.</Text>
-            </Box>
+            <Text color="purple.900">
+              Ensure you choose your attendance option above.
+            </Text>
           </AlertDialogBody>
 
           <AlertDialogFooter>
