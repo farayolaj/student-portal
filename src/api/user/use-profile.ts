@@ -9,7 +9,7 @@ export async function getProfile() {
     throw new Error("Could not fetch user profile", {
       cause: new Error(response.data.message),
     });
-
+  
   return toProfile(response.data.payload);
 }
 

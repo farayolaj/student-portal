@@ -45,7 +45,7 @@ export const toUser = (user: any) =>
     currentSessionId: user.current_session,
     currentSemester: parseInt(user.current_semester),
     isVerified: user.is_verified === "1",
-    isFresher: isFresher(user.academicRecord.entry_mode, user.programmeDetails?.level)
+    isFresher: isFresher(user.academicRecord?.entry_mode, user.programmeDetails?.level)
   } as User);
 
 export const toAcademicProfile = (profile: any) =>
