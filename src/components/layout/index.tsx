@@ -61,10 +61,7 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
     child = (
       <Flex pos="relative" direction="column">
         <PortalAlert />
-        <LMSOrientationSurvey
-          defaultIsOpen={user?.isFresher && !user?.orientationAttendance}
-          dateString={user?.orientationAttendanceDate || ""}
-        />
+        <LMSOrientationSurvey />
         <Header />
         <Flex>
           <Sidebar />

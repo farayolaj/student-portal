@@ -1,4 +1,5 @@
 import { useLMSSurveyMutation } from "@/api/common/use-lms-survey-mutation";
+import { useProfile } from "@/api/user/use-profile";
 import transparentAbstractImage from "@/images/transparent_abstract.png";
 import {
   AlertDialog,
@@ -21,13 +22,12 @@ import {
 } from "@chakra-ui/react";
 import { useRef, useState } from "react";
 
-export default function LMSOrientationSurvey({
-  defaultIsOpen,
-  dateString,
-}: {
-  defaultIsOpen?: boolean;
-  dateString: string;
-}) {
+export default function LMSOrientationSurvey() {
+  const profile = useProfile();
+  const defaultIsOpen =
+    profile.data?.user?.isFresher && !profile.data?.user?.orientationAttendance;
+  const dateString = profile.data?.user?.orientationAttendanceDate || "";
+
   const { isOpen, onClose } = useDisclosure({ defaultIsOpen });
   const cancelRef = useRef();
   const [attendanceOption, setAttendanceOption] =
