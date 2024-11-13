@@ -28,7 +28,8 @@ export default function LMSOrientationSurvey() {
     profile.data?.user?.isFresher && !profile.data?.user?.orientationAttendance;
   const dateString = profile.data?.user?.orientationAttendanceDate || "";
 
-  const { isOpen, onClose } = useDisclosure({ defaultIsOpen });
+  const { isOpen, onClose } = useDisclosure({ isOpen: defaultIsOpen });
+
   const cancelRef = useRef();
   const [attendanceOption, setAttendanceOption] =
     useState<AttendanceOptions>("on-site");
