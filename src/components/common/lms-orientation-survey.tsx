@@ -2,48 +2,65 @@ import { useLMSSurveyMutation } from "@/api/common/use-lms-survey-mutation";
 import { useProfile } from "@/api/user/use-profile";
 import transparentAbstractImage from "@/images/transparent_abstract.png";
 import {
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogOverlay,
   Box,
   Button,
+  Card,
+  CardBody,
+  CardHeader,
   chakra,
   ListItem,
   Radio,
   RadioGroup,
   Text,
   UnorderedList,
-  useDisclosure,
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import { useRef, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import isBefore from "date-fns/isBefore";
+import parse from "date-fns/parse";
+import { useState } from "react";
 
-export default function LMSOrientationSurvey() {
-  const profile = useProfile();
-  const defaultIsOpen =
-    profile.data?.user?.isFresher && !profile.data?.user?.orientationAttendance;
-  const dateString = profile.data?.user?.orientationAttendanceDate || "";
+export default function LMSOrientationSurvey({
+  isFresher,
+  orientationAttendance,
+  orientationAttendanceDate,
+}: {
+  isFresher: boolean;
+  orientationAttendance: AttendanceOptions | null;
+  orientationAttendanceDate: string;
+}) {
+  const dateString = orientationAttendanceDate || "";
+  const parsedDate = parse(dateString, "EEE dd MMM., yyyy", new Date());
+  /**
+   * Survey status:
+   * - not-applicable: User is not a fresher
+   * - passed: Orientation occurred already
+   * - pending: User is a fresher and has not filled survey
+   * - filled: User is a fresher and has filled survey
+   */
+  const surveyStatus = !isFresher
+    ? "not-applicable"
+    : isBefore(parsedDate, new Date())
+      ? "passed"
+      : !!orientationAttendance
+        ? "filled"
+        : "pending";
 
-  const { isOpen, onClose } = useDisclosure({ isOpen: defaultIsOpen });
-
-  const cancelRef = useRef();
   const [attendanceOption, setAttendanceOption] =
     useState<AttendanceOptions>("on-site");
 
   const toast = useToast();
 
+  const queryClient = useQueryClient();
   const lmsSurveyMutation = useLMSSurveyMutation({
     onSuccess(data, variables, context) {
+      queryClient.refetchQueries(useProfile.getKey());
       toast({
         title: "Survey submitted successfully",
         description: "Thank you for your response.",
         status: "success",
       });
-      onClose();
     },
     onError(error, variables, context) {
       const err = error as Error;
@@ -56,34 +73,27 @@ export default function LMSOrientationSurvey() {
   });
 
   return (
-    <AlertDialog
-      isOpen={isOpen}
-      leastDestructiveRef={cancelRef as any}
-      onClose={() => {}}
-      isCentered
-      closeOnOverlayClick={false}
-      scrollBehavior="inside"
-    >
-      <AlertDialogOverlay>
-        <AlertDialogContent overflow={"clip"} maxW={[null, null, "50%"]}>
-          <AlertDialogHeader
-            fontSize="lg"
-            fontWeight="bold"
-            textAlign={"center"}
-            bgColor={"purple"}
-            color={"white"}
-            bgImage={`url(${transparentAbstractImage.src})`}
-            bgSize={"cover"}
-            bgBlendMode={"screen"}
-            bgPos={"center"}
-          >
-            <Text as="h1">Welcome to FreshStart 2024: LMS Orientation</Text>
-            <Text as="span" fontSize={"small"} fontStyle={"italic"}>
-              Empower Your Learning Journey Ahead
-            </Text>
-          </AlertDialogHeader>
+    <Card overflow={"hidden"}>
+      <CardHeader
+        fontSize="lg"
+        fontWeight="bold"
+        textAlign={"center"}
+        bgColor={"purple"}
+        color={"white"}
+        bgImage={`url(${transparentAbstractImage.src})`}
+        bgSize={"cover"}
+        bgBlendMode={"screen"}
+        bgPos={"center"}
+      >
+        <Text as="h1">Welcome to FreshStart 2024: LMS Orientation</Text>
+        <Text as="span" fontSize={"small"} fontStyle={"italic"}>
+          Empower Your Learning Journey Ahead
+        </Text>
+      </CardHeader>
 
-          <AlertDialogBody sx={{ "& > p": { mt: 2 } }}>
+      <CardBody sx={{ "& > p": { mt: 2 } }}>
+        {surveyStatus === "pending" && (
+          <>
             <Text>
               Join us to discover the ins and outs of the DLC Mobile Class
               Learning Management System (LMS).
@@ -141,12 +151,43 @@ export default function LMSOrientationSurvey() {
             <Text color="purple.900">
               Ensure you choose your attendance option above.
             </Text>
-          </AlertDialogBody>
+          </>
+        )}
+        {surveyStatus === "filled" && (
+          <>
+            <Text>
+              You have chosen your preferred attendance option. Here are your
+              chosen details:
+            </Text>
+            <Box bg="purple" color="white" p={4} mt={4} borderRadius="md">
+              <Text mt={2}>
+                {attendanceOption === "on-site" && (
+                  <>
+                    <strong>On-site:</strong> PIFA Hall, DLC, Ibadan (Bring Your
+                    Own Device: Mobile device & earpiece) - {dateString}
+                  </>
+                )}
+                {attendanceOption === "online" && (
+                  <>
+                    <strong>Online:</strong> Watch Live Webinar Link -&gt;,
+                    11:00am & 4pm on {dateString}
+                  </>
+                )}
+                {attendanceOption === "self-paced" && (
+                  <>
+                    <strong>Self-paced:</strong> You have registered for
+                    self-paced access and can learn at your convenience.
+                  </>
+                )}
+              </Text>
+            </Box>
+          </>
+        )}
 
-          <AlertDialogFooter>
+        <Box>
+          {surveyStatus === "pending" && (
             <Button
               mx="auto"
-              ref={cancelRef as any}
               onClick={() => {
                 lmsSurveyMutation.mutate({ attendance: attendanceOption });
               }}
@@ -157,9 +198,9 @@ export default function LMSOrientationSurvey() {
             >
               Submit
             </Button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialogOverlay>
-    </AlertDialog>
+          )}
+        </Box>
+      </CardBody>
+    </Card>
   );
 }
