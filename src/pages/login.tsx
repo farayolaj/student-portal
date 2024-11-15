@@ -38,6 +38,7 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
   const auth = useAuth();
+  console.log(auth.user);
   const router = useRouter();
   const toast = useToast();
   const validateUsername = useValidateUsername();
@@ -69,6 +70,9 @@ export default function Login() {
       { username, password },
       {
         onSuccess: () => {
+          if (auth.user?.isFresher && !auth.user?.has_upload_verification_doc) {
+            router.push(routes.VERIFY_RESULT);
+          }
           router.push(routes.HOME);
         },
         onError: (err) => {
@@ -118,9 +122,9 @@ export default function Login() {
           </Text>
           <Text
             display={["none", null, "initial"]}
-            as="span"
-            fontSize="sm"
             fontWeight="semibold"
+            fontSize="sm"
+            as="span"
           >
             University of Ibadan
           </Text>

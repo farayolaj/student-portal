@@ -181,6 +181,7 @@ interface User {
   isFresher: boolean;
   orientationAttendance: AttendanceOptions | null;
   orientationAttendanceDate: string;
+  has_upload_verification_doc?: boolean;
 }
 
 interface AcademicProfile {

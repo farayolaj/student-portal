@@ -21,6 +21,8 @@ export async function login({ username, password }: LoginCredential) {
       ...response.data.payload.profile,
       current_session: response.data.payload.current_session,
       current_semester: response.data.payload.current_semester,
+      has_upload_verification_doc:
+        response.data.payload.has_upload_verification_doc,
     }),
   };
 }

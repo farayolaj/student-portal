@@ -28,7 +28,7 @@ export default function PayVerificationFeeCard({
   const { push } = useRouter();
 
   return (
-    <Card p={4}>
+    <Card p={4} mt="1rem">
       <Flex gap={6} direction={["column", null, "row"]} align="center">
         <Icon as={IoShieldCheckmark} boxSize={24} color="primary.500" />
         <Box>
