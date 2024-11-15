@@ -19,10 +19,10 @@ export default function Profile() {
     <>
       <Seo title="Result Verification" />
       <PageTitle showBackButton>Result Verification</PageTitle>
-
-      {profile?.data?.user.has_upload_verification_doc !== false && (
-        <Alert status="warning" pb="1rem">
-          You need to upload your document for verification, NOW.
+      
+      {profile?.data?.user.has_upload_verification_doc === false && (
+        <Alert status="warning" mb="1rem" fontSize={18}>
+          You need to upload your document for verification,<b>NOW.</b>
         </Alert>
       )}
       {resultVerificationTransaction.data && (

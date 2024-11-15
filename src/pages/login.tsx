@@ -38,7 +38,6 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
   const auth = useAuth();
-  console.log(auth.user);
   const router = useRouter();
   const toast = useToast();
   const validateUsername = useValidateUsername();

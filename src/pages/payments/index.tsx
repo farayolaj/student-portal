@@ -8,6 +8,7 @@ import PaymentControl from "../../components/payments/payment-control";
 import PaymentSummary from "../../components/payments/payment-summary";
 import useAuth from "../../hooks/use-auth";
 import { VERIFY_RESULT } from "@/constants/routes";
+import { useProfile } from "@/api/user/use-profile";
 
 const ScreeningInfo = () => {
   return (
@@ -28,6 +29,7 @@ const ScreeningInfo = () => {
 
 export default function Payments() {
   const { user } = useAuth();
+  const profile = useProfile();
   const [statusFilter, setStatusFilter] = useState("all");
   const mainPaymentRes = useMainPayments();
   const payments = mainPaymentRes.data ?? [];
@@ -69,7 +71,7 @@ export default function Payments() {
       ) : filteredPayments.length > 0 ? (
         <>
           <SimpleGrid mt={8}>
-            {user?.isFresher && !user?.isVerified && (
+            {profile?.data?.user.isFresher && !profile?.data?.user?.isVerified && (
               <ScreeningInfo />
             )}
             </SimpleGrid>
@@ -101,7 +103,7 @@ export default function Payments() {
             </SimpleGrid>
         </>
       ) :
-        user?.isFresher && !user?.isVerified ? (
+        profile?.data?.user.isFresher && !profile?.data?.user?.isVerified ? (
           <Center mt={8} py={16}>
             <ScreeningInfo />
           </Center>
