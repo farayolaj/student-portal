@@ -127,8 +127,7 @@ export default function LMSOrientationSurvey({
             </RadioGroup>
             <Text mt={4}>
               Access is based on attendance option, indicate your attendance
-              option now so that we can make adequate preparation. On-site
-              registration closes 15th Nov., 2024.
+              option now so that we can make adequate preparation.
             </Text>
             <chakra.details mt={2}>
               <chakra.summary fontWeight={"bold"}>
