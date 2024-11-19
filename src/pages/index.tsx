@@ -24,6 +24,7 @@ export default function Home() {
             orientationAttendanceDate={
               profile.data.user.orientationAttendanceDate
             }
+            orientationSeatNo={profile.data.user.orientationSeatNo}
           />
         </Box>
       )}

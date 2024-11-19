@@ -21,10 +21,12 @@ function isFresher(name: string, level: string) {
   const olevelPutme = "O' Level Putme";
   const directEntry = "Direct Entry";
   const fastTrack = "Fast Track";
-  if ((name == directEntry && level == '2') ||
-    (name == olevel && level == '1') ||
-    (name == olevelPutme && level == '1') ||
-    (name == fastTrack && level == '2')) {
+  if (
+    (name == directEntry && level == "2") ||
+    (name == olevel && level == "1") ||
+    (name == olevelPutme && level == "1") ||
+    (name == fastTrack && level == "2")
+  ) {
     return true;
   }
   return false;
@@ -45,9 +47,13 @@ export const toUser = (user: any) =>
     currentSessionId: user.current_session,
     currentSemester: parseInt(user.current_semester),
     isVerified: user.is_verified === "1",
-    isFresher: isFresher(user.academicRecord?.entry_mode, user.programmeDetails?.level),
+    isFresher: isFresher(
+      user.academicRecord?.entry_mode,
+      user.programmeDetails?.level
+    ),
     orientationAttendance: user.orientation_attendance,
     orientationAttendanceDate: user.orientation_attendance_date,
+    orientationSeatNo: user.orientation_seat_no || undefined,
   }) as User;
 
 export const toAcademicProfile = (profile: any) =>

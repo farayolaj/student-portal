@@ -181,6 +181,7 @@ interface User {
   isFresher: boolean;
   orientationAttendance: AttendanceOptions | null;
   orientationAttendanceDate: string;
+  orientationSeatNo?: string;
 }
 
 interface AcademicProfile {
