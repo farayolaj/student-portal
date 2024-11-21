@@ -182,6 +182,7 @@ interface User {
   orientationAttendance: AttendanceOptions | null;
   orientationAttendanceDate: string;
   has_upload_verification_doc?: boolean;
+  orientationSeatNo?: string;
 }
 
 interface AcademicProfile {

@@ -25,10 +25,12 @@ export default function LMSOrientationSurvey({
   isFresher,
   orientationAttendance,
   orientationAttendanceDate,
+  orientationSeatNo,
 }: {
   isFresher: boolean;
   orientationAttendance: AttendanceOptions | null;
   orientationAttendanceDate: string;
+  orientationSeatNo?: string;
 }) {
   const dateString = orientationAttendanceDate || "";
   const parsedDate = parse(dateString, "EEE dd MMM., yyyy", new Date());
@@ -71,6 +73,9 @@ export default function LMSOrientationSurvey({
       });
     },
   });
+
+  if (surveyStatus === "not-applicable" || surveyStatus === "passed")
+    return null;
 
   return (
     <Card overflow={"hidden"}>
@@ -127,8 +132,7 @@ export default function LMSOrientationSurvey({
             </RadioGroup>
             <Text mt={4}>
               Access is based on attendance option, indicate your attendance
-              option now so that we can make adequate preparation. On-site
-              registration closes 15th Nov., 2024.
+              option now so that we can make adequate preparation.
             </Text>
             <chakra.details mt={2}>
               <chakra.summary fontWeight={"bold"}>
@@ -165,6 +169,8 @@ export default function LMSOrientationSurvey({
                   <>
                     <strong>On-site:</strong> PIFA Hall, DLC, Ibadan (Bring Your
                     Own Device: Mobile device & earpiece) - {dateString}
+                    <br />
+                    <strong>Seat Number:</strong> {orientationSeatNo}
                   </>
                 )}
                 {attendanceOption === "online" && (
