@@ -48,11 +48,8 @@ export const toUser = (user: any) =>
     currentSemester: parseInt(user.current_semester),
     isVerified: user.is_verified === "1",
     isFresher: isFresher(
-      
       user.academicRecord?.entry_mode,
-     
       user.programmeDetails?.level
-    
     ),
     orientationAttendance: user.orientation_attendance,
     orientationAttendanceDate: user.orientation_attendance_date,
@@ -68,7 +65,7 @@ export const toAcademicProfile = (profile: any) =>
     programme: profile.programmeDetails?.programme,
     department: profile.programmeDetails?.department,
     faculty: profile.programmeDetails?.faculty,
-    level: profile.programmeDetails?.level,
+    level: profile.academicRecord?.current_level,
     examCenter: profile.academicRecord.exam_center,
   } as AcademicProfile);
 
