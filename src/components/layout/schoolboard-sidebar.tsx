@@ -9,6 +9,7 @@ import {
   Flex,
   StackDivider,
   Text,
+  Tooltip,
   VStack,
   useToast,
 } from "@chakra-ui/react";
@@ -16,6 +17,7 @@ import { useRouter } from "next/router";
 import { FC } from "react";
 import EventCalendar from "../common/events/event-calendar";
 import useRemitaInline from "../common/remita-inline";
+import { useProfile } from "../../api/user/use-profile";
 
 const mostSubscribedSundryCodes = ["75", "57"];
 
@@ -35,6 +37,7 @@ const DisplayPanel: FC = () => {
 
   const toast = useToast();
   const router = useRouter();
+  const profile = useProfile();
 
   const initiateTransaction = useInitiateTransaction();
   const { initPayment } = useRemitaInline({
@@ -95,6 +98,9 @@ const DisplayPanel: FC = () => {
     );
   };
 
+  const unVerifiedFresher =
+    profile?.data?.user.isFresher && !profile?.data?.user?.isVerified;
+
   return (
     <VStack
       align="flex-start"
@@ -103,33 +109,48 @@ const DisplayPanel: FC = () => {
       pb={"2rem"}
     >
       {sundryPaymentsQuery.data?.map((sundry) => (
-        <Flex key={sundry.id} direction={"column"} w="full" gap={1}>
-          <Text as="p">{sundry.title}</Text>
-          <Flex justify={"space-between"} align={"center"}>
-            <Text as="span">
-              {new Intl.NumberFormat("en-NG", {
-                style: "currency",
-                currency: "NGN",
-              }).format(sundry.amount)}
-            </Text>
-            <Button
-              variant={"outline"}
-              sx={{
-                color: "#2B7B51",
-                borderColor: "#2B7B51",
-                borderWidth: "3px",
-                _hover: { bg: "#2B7B51", color: "white" },
-              }}
-              w="fit-content"
-              size="md"
-              alignSelf={"flex-end"}
-              onClick={() => initialisePayment(sundry)}
-              isDisabled={initiateTransaction.isLoading}
-            >
-              Pay
-            </Button>
+        <Tooltip
+          label="Credentials verification required"
+          isDisabled={!unVerifiedFresher}
+          placement={"top"}
+          key={sundry.id}
+          bg="red"
+          hasArrow
+        >
+          <Flex
+            opacity={unVerifiedFresher ? "0.4" : "none"}
+            direction={"column"}
+            cursor="pointer"
+            gap={1}
+            w="full"
+          >
+            <Text as="p">{sundry.title}</Text>
+            <Flex justify={"space-between"} align={"center"}>
+              <Text as="span">
+                {new Intl.NumberFormat("en-NG", {
+                  style: "currency",
+                  currency: "NGN",
+                }).format(sundry.amount)}
+              </Text>
+              <Button
+                variant={"outline"}
+                sx={{
+                  color: "#2B7B51",
+                  borderColor: "#2B7B51",
+                  borderWidth: "3px",
+                  _hover: { bg: "#2B7B51", color: "white" },
+                }}
+                w="fit-content"
+                size="md"
+                alignSelf={"flex-end"}
+                onClick={() => initialisePayment(sundry)}
+                isDisabled={initiateTransaction.isLoading || unVerifiedFresher}
+              >
+                Pay
+              </Button>
+            </Flex>
           </Flex>
-        </Flex>
+        </Tooltip>
       ))}
       <Button
         alignSelf={"center"}

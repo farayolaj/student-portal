@@ -19,6 +19,7 @@ export function toPayment(data: any): Payment {
     id: data.payment_id,
     code: data.payment_code,
     amount: parseInt(data.total),
+    isSchoolFee: data.payment_code2 === "1" || data.payment_code2 === "2",
     isActive: data.is_active === "1",
     status: data.paid ? "paid" : "unpaid",
     title: data.description,

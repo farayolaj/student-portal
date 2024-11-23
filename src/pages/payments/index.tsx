@@ -1,5 +1,16 @@
 import { useMainPayments } from "@/api/payment/use-main-payments";
-import { Box, Card, CardBody, Center, Divider, Heading, Link, SimpleGrid, Spinner, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Card,
+  CardBody,
+  Center,
+  Divider,
+  Heading,
+  Link,
+  SimpleGrid,
+  Spinner,
+  Text,
+} from "@chakra-ui/react";
 import { useState } from "react";
 import NextLink from "next/link";
 import PageTitle from "../../components/common/page-title";
@@ -17,15 +28,18 @@ const ScreeningInfo = () => {
         <Card>
           <CardBody>
             <Heading fontSize="medium" fontWeight="semibold">
-            Please start your screening/verification process. You can use the link for your online verification.&nbsp;
-            <Link as={NextLink} href={VERIFY_RESULT}>Click here</Link>
+              Please start your screening/verification process.
+              <Link px=".2rem" as={NextLink} href={VERIFY_RESULT}>
+                Click here
+              </Link>
+              for online verification
             </Heading>
           </CardBody>
         </Card>
       </Box>
     </>
   );
-}
+};
 
 export default function Payments() {
   const { user } = useAuth();
@@ -71,44 +85,67 @@ export default function Payments() {
       ) : filteredPayments.length > 0 ? (
         <>
           <SimpleGrid mt={8}>
-            {profile?.data?.user.isFresher && !profile?.data?.user?.isVerified && (
-              <ScreeningInfo />
-            )}
-            </SimpleGrid>
-            
+            {profile?.data?.user.isFresher &&
+              !profile?.data?.user?.isVerified && <ScreeningInfo />}
+          </SimpleGrid>
+
           <SimpleGrid columns={[1, null, 3]} gap={8} mt={8} mb={8}>
-            {currentPayments.map((payment) => (
-              <PaymentSummary
-                payment={payment}
-                key={`${payment.id}-${payment.transactionRef}`}
-              />
-            ))}
+            {currentPayments.map((payment) =>
+              profile?.data?.user.isFresher &&
+              !profile?.data?.user?.isVerified &&
+              payment?.isSchoolFee ? (
+                <PaymentSummary
+                  payment={payment}
+                  isFresherSchoolFee={true}
+                  key={`${payment.id}-${payment.transactionRef}`}
+                />
+              ) : (
+                <PaymentSummary
+                  payment={payment}
+                  isFresherSchoolFee={false}
+                  key={`${payment.id}-${payment.transactionRef}`}
+                />
+              )
+            )}
           </SimpleGrid>
 
           {/* chakra divider(hr) could not display, to be looked into */}
           <Box
-            display={currentPayments.length === 0 || stalePayments.length === 0 ? "none" : "block"}
+            display={
+              currentPayments.length === 0 || stalePayments.length === 0
+                ? "none"
+                : "block"
+            }
             w={"100%"}
             height={".05rem"}
             background={"green"}
           ></Box>
 
           <SimpleGrid columns={[1, null, 3]} gap={8} mt={8}>
-            {stalePayments.map((payment) => (
-              <PaymentSummary
-                payment={payment}
-                key={`${payment.id}-${payment.transactionRef}`}
-              />
-            ))}
-            </SimpleGrid>
+            {stalePayments.map((payment) =>
+              profile?.data?.user.isFresher &&
+              !profile?.data?.user?.isVerified &&
+              payment?.isSchoolFee ? (
+                <PaymentSummary
+                  payment={payment}
+                  isFresherSchoolFee={true}
+                  key={`${payment.id}-${payment.transactionRef}`}
+                />
+              ) : (
+                <PaymentSummary
+                  payment={payment}
+                  isFresherSchoolFee={false}
+                  key={`${payment.id}-${payment.transactionRef}`}
+                />
+              )
+            )}
+          </SimpleGrid>
         </>
-      ) :
-        profile?.data?.user.isFresher && !profile?.data?.user?.isVerified ? (
-          <Center mt={8} py={16}>
-            <ScreeningInfo />
-          </Center>
-        ) :
-        (
+      ) : profile?.data?.user.isFresher && !profile?.data?.user?.isVerified ? (
+        <Center mt={8} py={16}>
+          <ScreeningInfo />
+        </Center>
+      ) : (
         <Center mt={8} py={16}>
           You currently have no payment to make.
         </Center>

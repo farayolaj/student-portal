@@ -148,6 +148,7 @@ interface Payment {
     transactionRef?: string;
   }[];
   transaction?: Transaction;
+  isSchoolFee: boolean;
 }
 
 interface PortalDocument {

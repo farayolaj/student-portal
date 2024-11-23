@@ -12,6 +12,7 @@ import {
   Spinner,
   StackDivider,
   Text,
+  Tooltip,
   VStack,
 } from "@chakra-ui/react";
 import { differenceInCalendarDays } from "date-fns";
@@ -21,6 +22,7 @@ import { IoTime } from "react-icons/io5";
 import * as routes from "../../constants/routes";
 import { useRouter } from "next/router";
 import buildPaymentDetailUrl from "@/lib/payments/build-payment-detail-url";
+import { useProfile } from "../../api/user/use-profile";
 
 const PaymentsCard: FC = () => {
   const outstandingPaymentsRes = useMainPayments({
@@ -28,6 +30,8 @@ const PaymentsCard: FC = () => {
       return payments.filter((payment) => payment.status === "unpaid");
     },
   });
+
+  const profile = useProfile();
 
   return (
     <Card mt={8}>
@@ -53,12 +57,23 @@ const PaymentsCard: FC = () => {
         ) : outstandingPaymentsRes.data &&
           outstandingPaymentsRes.data.length > 0 ? (
           <VStack divider={<StackDivider />} gap={6}>
-            {outstandingPaymentsRes.data.map((payment) => (
-              <PaymentItem
-                key={`${payment.id}-${payment.transactionRef}`}
-                payment={payment}
-              />
-            ))}
+            {outstandingPaymentsRes.data.map((payment) =>
+              profile?.data?.user.isFresher &&
+              !profile?.data?.user?.isVerified &&
+              payment?.isSchoolFee ? (
+                <PaymentItem
+                  key={`${payment.id}-${payment.transactionRef}`}
+                  payment={payment}
+                  isSchoolFee={true}
+                />
+              ) : (
+                <PaymentItem
+                  key={`${payment.id}-${payment.transactionRef}`}
+                  payment={payment}
+                  isSchoolFee={false}
+                />
+              )
+            )}
           </VStack>
         ) : (
           <Center py={10}>
@@ -74,9 +89,10 @@ export default PaymentsCard;
 
 type PaymentItemProps = {
   payment: Payment;
+  isSchoolFee: boolean;
 };
 
-const PaymentItem: FC<PaymentItemProps> = ({ payment }) => {
+const PaymentItem: FC<PaymentItemProps> = ({ payment, isSchoolFee }) => {
   const { push } = useRouter();
   const sessionRes = useSession(payment?.sessionId || "");
 
@@ -97,53 +113,63 @@ const PaymentItem: FC<PaymentItemProps> = ({ payment }) => {
   if (showPreselected) amount += payment.preselected?.amount || 0;
 
   return (
-    <Flex
-      w="full"
-      direction={["column", null, "row"]}
-      align={["flex-end", null, "center"]}
-      justify="space-between"
-      rowGap={4}
+    <Tooltip
+      isDisabled={!isSchoolFee}
+      label="Credentials verification required"
+      placement={"top"}
+      bg="red"
+      hasArrow
     >
-      <Flex direction="column" w="full">
-        <Text as="span" fontSize="2xl">
-          {Intl.NumberFormat("en-NG", {
-            style: "currency",
-            currency: "NGN",
-          }).format(amount)}
-        </Text>
-        <Text>
-          {payment.title}
-          {showPreselected && " with " + payment.preselected?.title}
-          {sessionRes.data && " | " + sessionRes.data.name}
-        </Text>
-        {Boolean(payment.dueDate.getTime()) && (
-          <Text
-            mt={4}
-            fontSize="sm"
-            display="inline-flex"
-            gap={2}
-            w="fit-content"
-            alignItems="center"
-          >
-            <IoTime color={statusColor} /> <span>{statusText}</span>
-          </Text>
-        )}
-      </Flex>
-      <Button
-        onClick={() =>
-          push(
-            buildPaymentDetailUrl({
-              id: payment.id,
-              trxRef: payment.transactionRef,
-              trxType: payment.transactionType,
-            })
-          )
-        }
-        w="fit-content"
-        isDisabled={!payment.isActive}
+      <Flex
+        w="full"
+        direction={["column", null, "row"]}
+        align={["flex-end", null, "center"]}
+        justify="space-between"
+        rowGap={4}
+        cursor="pointer"
+        opacity={isSchoolFee ? "0.4" : "none"}
       >
-        {payment.isActive ? "View Details" : "Payment Closed"}
-      </Button>
-    </Flex>
+        <Flex direction="column" w="full">
+          <Text as="span" fontSize="2xl">
+            {Intl.NumberFormat("en-NG", {
+              style: "currency",
+              currency: "NGN",
+            }).format(amount)}
+          </Text>
+          <Text>
+            {payment.title}
+            {showPreselected && " with " + payment.preselected?.title}
+            {sessionRes.data && " | " + sessionRes.data.name}
+          </Text>
+          {Boolean(payment.dueDate.getTime()) && (
+            <Text
+              mt={4}
+              fontSize="sm"
+              display="inline-flex"
+              gap={2}
+              w="fit-content"
+              alignItems="center"
+            >
+              <IoTime color={statusColor} /> <span>{statusText}</span>
+            </Text>
+          )}
+        </Flex>
+        <Button
+          onClick={() =>
+            push(
+              buildPaymentDetailUrl({
+                id: payment.id,
+                trxRef: payment.transactionRef,
+                trxType: payment.transactionType,
+              })
+            )
+          }
+          w="fit-content"
+          isDisabled={!payment.isActive}
+        >
+          {payment.isActive ? "View Details" : "Payment Closed"}
+        </Button>
+      </Flex>
+    </Tooltip>
   );
 };

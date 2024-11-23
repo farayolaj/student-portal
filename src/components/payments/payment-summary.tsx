@@ -2,15 +2,19 @@ import { useVerifyTransaction } from "@/api/payment/use-verify-transaction";
 import { useAllSessions } from "@/api/user/use-all-sessions";
 import buildPaymentDetailUrl from "@/lib/payments/build-payment-detail-url";
 import queryClient from "@/lib/query-client";
-import { Button, Card, CardBody, Flex, Text } from "@chakra-ui/react";
+import { Button, Card, CardBody, Flex, Text, Tooltip } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { IoCheckmarkCircle, IoTime } from "react-icons/io5";
 
 type PaymentSummaryProps = {
   payment: Payment;
+  isFresherSchoolFee: boolean;
 };
 
-export default function PaymentSummary({ payment }: PaymentSummaryProps) {
+export default function PaymentSummary({
+  payment,
+  isFresherSchoolFee,
+}: PaymentSummaryProps) {
   const { push } = useRouter();
   const { data: session } = useAllSessions({
     select: (sessions) =>
@@ -47,68 +51,80 @@ export default function PaymentSummary({ payment }: PaymentSummaryProps) {
   if (showPreselected) amount += payment.preselected?.amount || 0;
 
   return (
-    <Card>
-      <CardBody minH={40} pt="1.5rem" px="1.875rem" pb="2rem">
-        <Flex direction="column" h="full">
-          <Text as="span" fontWeight="semibold">
-            {payment.title}
-          </Text>
-          <Text
-            as="span"
-            fontSize="xl"
-            fontWeight="bold"
-            mt={2}
-            color="gray.700"
-          >
-            {new Intl.NumberFormat("en-NG", {
-              style: "currency",
-              currency: "NGN",
-            }).format(amount)}
-          </Text>
-          <Text as="span" mt={2} minH={6} fontSize="sm" color="gray.600">
-            {description}
-          </Text>
-          <Flex gap={2} align="center">
-            {statusIcon}
-            <Text as="span" fontSize="sm">
-              {statusText}
+    <Tooltip
+      isDisabled={!isFresherSchoolFee}
+      label="Credentials verification required"
+      placement={"top"}
+      bg="red"
+      hasArrow
+    >
+      <Card cursor="pointer" opacity={isFresherSchoolFee ? "0.4" : "none"}>
+        <CardBody minH={40} pt="1.5rem" px="1.875rem" pb="2rem">
+          <Flex direction="column" h="full">
+            <Text as="span" fontWeight="semibold">
+              {payment.title}
             </Text>
+            <Text
+              as="span"
+              fontSize="xl"
+              fontWeight="bold"
+              mt={2}
+              color="gray.700"
+            >
+              {new Intl.NumberFormat("en-NG", {
+                style: "currency",
+                currency: "NGN",
+              }).format(amount)}
+            </Text>
+            <Text as="span" mt={2} minH={6} fontSize="sm" color="gray.600">
+              {description}
+            </Text>
+            <Flex gap={2} align="center">
+              {statusIcon}
+              <Text as="span" fontSize="sm">
+                {statusText}
+              </Text>
+            </Flex>
+            <Text
+              as="span"
+              fontSize="sm"
+              fontWeight="semibold"
+              mt={2}
+              mb={4}
+              minH={6}
+            >
+              {Boolean(payment.dueDate.getTime()) &&
+                payment.status !== "paid" &&
+                `Due ${payment.dueDate?.toLocaleDateString()}`}
+            </Text>
+
+            <Button
+              onClick={() =>
+                push(
+                  buildPaymentDetailUrl({
+                    id: payment.id,
+                    trxRef: payment.transactionRef,
+                    trxType: payment.transactionType,
+                  })
+                )
+              }
+              mx="auto"
+              w="fit-content"
+              mt="auto"
+              isDisabled={
+                (payment.status === "unpaid" && !payment.isActive) ||
+                isFresherSchoolFee
+              }
+            >
+              {payment.status === "paid"
+                ? "View Details"
+                : payment.isActive
+                ? "View Details"
+                : "Payment Closed"}
+            </Button>
           </Flex>
-          <Text
-            as="span"
-            fontSize="sm"
-            fontWeight="semibold"
-            mt={2}
-            mb={4}
-            minH={6}
-          >
-            {Boolean(payment.dueDate.getTime()) &&
-              payment.status !== "paid" &&
-              `Due ${payment.dueDate?.toLocaleDateString()}`}
-          </Text>
-          <Button
-            onClick={() =>
-              push(
-                buildPaymentDetailUrl({
-                  id: payment.id,
-                  trxRef: payment.transactionRef,
-                  trxType: payment.transactionType,
-                })
-              )
-            }
-            mx="auto"
-            w="fit-content"
-            mt="auto"
-            isDisabled={payment.status === "unpaid" && !payment.isActive}
-          >
-            {payment.status === "paid"
-              ? "View Details"
-              : payment.isActive
-              ? "View Details"
-              : "Payment Closed"}
-          </Button>
-        </Flex>
-      </CardBody>
-    </Card>
+        </CardBody>
+      </Card>
+    </Tooltip>
   );
 }
