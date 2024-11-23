@@ -23,6 +23,7 @@ import * as routes from "../../constants/routes";
 import { useRouter } from "next/router";
 import buildPaymentDetailUrl from "@/lib/payments/build-payment-detail-url";
 import { useProfile } from "../../api/user/use-profile";
+import ScreeningInfo from "../payments/screening-info";
 
 const PaymentsCard: FC = () => {
   const outstandingPaymentsRes = useMainPayments({
@@ -34,7 +35,10 @@ const PaymentsCard: FC = () => {
   const profile = useProfile();
 
   return (
-    <Card mt={8}>
+    <>
+      {profile?.data?.user.isFresher &&
+              !profile?.data?.user?.isVerified && <ScreeningInfo />}
+    <Card mt={6}>
       <CardHeader
         display="flex"
         justifyContent="space-between"
@@ -56,7 +60,7 @@ const PaymentsCard: FC = () => {
           </Center>
         ) : outstandingPaymentsRes.data &&
           outstandingPaymentsRes.data.length > 0 ? (
-          <VStack divider={<StackDivider />} gap={6}>
+              <VStack divider={<StackDivider />} gap={6}>
             {outstandingPaymentsRes.data.map((payment) =>
               profile?.data?.user.isFresher &&
               !profile?.data?.user?.isVerified &&
@@ -82,6 +86,7 @@ const PaymentsCard: FC = () => {
         )}
       </CardBody>
     </Card>
+    </>
   );
 };
 

@@ -67,7 +67,7 @@ const CoursesCard: FC = () => {
   }
 
   return (
-    <Card mt={8}>
+    <Card mt={8} mb={4}>
       <CardHeader display="flex" justifyContent="space-between">
         <Heading as="h2" fontSize="md">
           Courses

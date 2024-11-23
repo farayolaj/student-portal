@@ -1,45 +1,18 @@
 import { useMainPayments } from "@/api/payment/use-main-payments";
 import {
   Box,
-  Card,
-  CardBody,
   Center,
-  Divider,
-  Heading,
-  Link,
   SimpleGrid,
   Spinner,
-  Text,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import NextLink from "next/link";
 import PageTitle from "../../components/common/page-title";
 import Seo from "../../components/common/seo";
 import PaymentControl from "../../components/payments/payment-control";
 import PaymentSummary from "../../components/payments/payment-summary";
 import useAuth from "../../hooks/use-auth";
-import { VERIFY_RESULT } from "@/constants/routes";
 import { useProfile } from "@/api/user/use-profile";
-
-const ScreeningInfo = () => {
-  return (
-    <>
-      <Box>
-        <Card>
-          <CardBody>
-            <Heading fontSize="medium" fontWeight="semibold">
-              Please start your screening/verification process.
-              <Link px=".2rem" as={NextLink} href={VERIFY_RESULT}>
-                Click here
-              </Link>
-              for online verification
-            </Heading>
-          </CardBody>
-        </Card>
-      </Box>
-    </>
-  );
-};
+import ScreeningInfo from "@/components/payments/screening-info";
 
 export default function Payments() {
   const { user } = useAuth();
