@@ -14,7 +14,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { FC } from "react";
+import { FC, useState } from "react";
 import EventCalendar from "../common/events/event-calendar";
 import useRemitaInline from "../common/remita-inline";
 import { useProfile } from "../../api/user/use-profile";
@@ -34,6 +34,7 @@ const DisplayPanel: FC = () => {
           return aIndex - bIndex;
         }),
   });
+  const [toolTipOpen, setTooltipOpen] = useState(false);
 
   const toast = useToast();
   const router = useRouter();
@@ -116,8 +117,12 @@ const DisplayPanel: FC = () => {
           key={sundry.id}
           bg="red"
           hasArrow
+          isOpen={toolTipOpen}
         >
           <Flex
+            onClick={() => unVerifiedFresher && setTooltipOpen((prev) => !prev)}
+            onMouseEnter={() => unVerifiedFresher && setTooltipOpen(true)}
+            onMouseLeave={() => unVerifiedFresher && setTooltipOpen(false)}
             opacity={unVerifiedFresher ? "0.4" : "none"}
             direction={"column"}
             cursor="pointer"
@@ -187,13 +192,10 @@ const SchoolBoardSidebar: FC = () => {
 
   return (
     <VStack
-      display={["none", null, "flex"]}
-      as="aside"
-      w="25%"
+      display="flex"
+      w={{ base: "100%", lg: "25%" }}
       p={4}
       gap={8}
-      position="sticky"
-      top="0rem"
       alignSelf="flex-start"
     >
       <Card w="full">

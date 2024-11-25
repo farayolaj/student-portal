@@ -83,7 +83,12 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
               },
             }}
           >
-            <Flex pos="relative" minH="full">
+            <Box
+              display={"flex"}
+              flexDirection={{ base: "column-reverse", lg: "row" }}
+              pos="relative"
+              minH="full"
+            >
               <Box
                 alignSelf="flex-start"
                 as="main"
@@ -97,7 +102,7 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
                 {children}
               </Box>
               <SchoolBoardSidebar />
-            </Flex>
+            </Box>
           </Box>
         </Flex>
       </Flex>

@@ -11,7 +11,7 @@ import { VERIFY_RESULT } from "@/constants/routes";
 const ScreeningInfo = () => {
   return (
     <>
-      <Box>
+      <Box w='full'>
         <Card>
           <CardBody>
             <Heading fontSize="medium" fontWeight="semibold">

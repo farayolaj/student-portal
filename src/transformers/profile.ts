@@ -47,6 +47,7 @@ export const toUser = (user: any) =>
     currentSessionId: user.current_session,
     currentSemester: parseInt(user.current_semester),
     isVerified: user.is_verified === "1",
+    hasPaidOlevelVerification : user.has_paid_olevel_verification,
     isFresher: isFresher(
       user.academicRecord?.entry_mode,
       user.programmeDetails?.level

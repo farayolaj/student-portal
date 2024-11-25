@@ -17,7 +17,7 @@ import {
 } from "@chakra-ui/react";
 import { differenceInCalendarDays } from "date-fns";
 import NextLink from "next/link";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { IoTime } from "react-icons/io5";
 import * as routes from "../../constants/routes";
 import { useRouter } from "next/router";
@@ -36,56 +36,54 @@ const PaymentsCard: FC = () => {
 
   return (
     <>
-      {profile?.data?.user.isFresher &&
-              !profile?.data?.user?.isVerified && <ScreeningInfo />}
-    <Card mt={6}>
-      <CardHeader
-        display="flex"
-        justifyContent="space-between"
-        flexWrap={["wrap", null, "initial"]}
-      >
-        <Heading as="h2" fontSize="md">
-          Outstanding Payment
-        </Heading>
-        <Text as="span" w={["full", null, "initial"]} textAlign="right">
-          <Link as={NextLink} href={routes.PAYMENTS}>
-            Check all payments &rarr;
-          </Link>
-        </Text>
-      </CardHeader>
-      <CardBody>
-        {outstandingPaymentsRes.isLoading ? (
-          <Center py={10}>
-            <Spinner size="lg" color="primary" />
-          </Center>
-        ) : outstandingPaymentsRes.data &&
-          outstandingPaymentsRes.data.length > 0 ? (
-              <VStack divider={<StackDivider />} gap={6}>
-            {outstandingPaymentsRes.data.map((payment) =>
-              profile?.data?.user.isFresher &&
-              !profile?.data?.user?.isVerified &&
-              payment?.isSchoolFee ? (
-                <PaymentItem
-                  key={`${payment.id}-${payment.transactionRef}`}
-                  payment={payment}
-                  isSchoolFee={true}
-                />
-              ) : (
-                <PaymentItem
-                  key={`${payment.id}-${payment.transactionRef}`}
-                  payment={payment}
-                  isSchoolFee={false}
-                />
-              )
-            )}
-          </VStack>
-        ) : (
-          <Center py={10}>
-            <Text>You have no outstanding payments</Text>
-          </Center>
-        )}
-      </CardBody>
-    </Card>
+      <Card mt={6}>
+        <CardHeader
+          display="flex"
+          justifyContent="space-between"
+          flexWrap={["wrap", null, "initial"]}
+        >
+          <Heading as="h2" fontSize="md">
+            Outstanding Payment
+          </Heading>
+          <Text as="span" w={["full", null, "initial"]} textAlign="right">
+            <Link as={NextLink} href={routes.PAYMENTS}>
+              Check all payments &rarr;
+            </Link>
+          </Text>
+        </CardHeader>
+        <CardBody>
+          {outstandingPaymentsRes.isLoading ? (
+            <Center py={10}>
+              <Spinner size="lg" color="primary" />
+            </Center>
+          ) : outstandingPaymentsRes.data &&
+            outstandingPaymentsRes.data.length > 0 ? (
+            <VStack divider={<StackDivider />} gap={6}>
+              {outstandingPaymentsRes.data.map((payment) =>
+                profile?.data?.user.isFresher &&
+                !profile?.data?.user?.isVerified &&
+                payment?.isSchoolFee ? (
+                  <PaymentItem
+                    key={`${payment.id}-${payment.transactionRef}`}
+                    payment={payment}
+                    isSchoolFee={true}
+                  />
+                ) : (
+                  <PaymentItem
+                    key={`${payment.id}-${payment.transactionRef}`}
+                    payment={payment}
+                    isSchoolFee={false}
+                  />
+                )
+              )}
+            </VStack>
+          ) : (
+            <Center py={10}>
+              <Text>You have no outstanding payments</Text>
+            </Center>
+          )}
+        </CardBody>
+      </Card>
     </>
   );
 };
@@ -98,8 +96,10 @@ type PaymentItemProps = {
 };
 
 const PaymentItem: FC<PaymentItemProps> = ({ payment, isSchoolFee }) => {
+  const [tlTipOpen, setTltipOpen] = useState(false);
   const { push } = useRouter();
   const sessionRes = useSession(payment?.sessionId || "");
+  const profile = useProfile();
 
   if (!payment) return null;
 
@@ -118,63 +118,72 @@ const PaymentItem: FC<PaymentItemProps> = ({ payment, isSchoolFee }) => {
   if (showPreselected) amount += payment.preselected?.amount || 0;
 
   return (
-    <Tooltip
-      isDisabled={!isSchoolFee}
-      label="Credentials verification required"
-      placement={"top"}
-      bg="red"
-      hasArrow
-    >
-      <Flex
-        w="full"
-        direction={["column", null, "row"]}
-        align={["flex-end", null, "center"]}
-        justify="space-between"
-        rowGap={4}
-        cursor="pointer"
-        opacity={isSchoolFee ? "0.4" : "none"}
+    <>
+      {isSchoolFee &&
+        profile?.data?.user.isFresher &&
+        !profile?.data?.user?.isVerified && <ScreeningInfo />}
+      <Tooltip
+        isDisabled={!isSchoolFee}
+        label="Credentials verification required"
+        placement={"top"}
+        bg="red"
+        hasArrow
+        isOpen={tlTipOpen}
       >
-        <Flex direction="column" w="full">
-          <Text as="span" fontSize="2xl">
-            {Intl.NumberFormat("en-NG", {
-              style: "currency",
-              currency: "NGN",
-            }).format(amount)}
-          </Text>
-          <Text>
-            {payment.title}
-            {showPreselected && " with " + payment.preselected?.title}
-            {sessionRes.data && " | " + sessionRes.data.name}
-          </Text>
-          {Boolean(payment.dueDate.getTime()) && (
-            <Text
-              mt={4}
-              fontSize="sm"
-              display="inline-flex"
-              gap={2}
-              w="fit-content"
-              alignItems="center"
-            >
-              <IoTime color={statusColor} /> <span>{statusText}</span>
-            </Text>
-          )}
-        </Flex>
-        <Button
-          onClick={() =>
-            push(
-              buildPaymentDetailUrl({
-                id: payment.id,
-                trxRef: payment.transactionRef,
-                trxType: payment.transactionType,
-              })
-            )
-          }
-          w="fit-content"
-          isDisabled={!payment.isActive}
+        <Flex
+          onClick={() => isSchoolFee && setTltipOpen(prev => !prev)}
+          onMouseEnter={() => isSchoolFee && setTltipOpen(true)}
+          onMouseLeave={() => isSchoolFee && setTltipOpen(false)}
+          w="full"
+          direction={["column", null, "row"]}
+          align={["flex-end", null, "center"]}
+          justify="space-between"
+          rowGap={4}
+          cursor="pointer"
+          opacity={isSchoolFee ? "0.4" : "none"}
         >
-          {payment.isActive ? "View Details" : "Payment Closed"}
-        </Button>
-      </Flex>
-    </Tooltip>
+          <Flex direction="column" w="full">
+            <Text as="span" fontSize="2xl">
+              {Intl.NumberFormat("en-NG", {
+                style: "currency",
+                currency: "NGN",
+              }).format(amount)}
+            </Text>
+            <Text>
+              {payment.title}
+              {showPreselected && " with " + payment.preselected?.title}
+              {sessionRes.data && " | " + sessionRes.data.name}
+            </Text>
+            {Boolean(payment.dueDate.getTime()) && (
+              <Text
+                mt={4}
+                fontSize="sm"
+                display="inline-flex"
+                gap={2}
+                w="fit-content"
+                alignItems="center"
+              >
+                <IoTime color={statusColor} /> <span>{statusText}</span>
+              </Text>
+            )}
+          </Flex>
+          <Button
+            onClick={() =>
+              push(
+                buildPaymentDetailUrl({
+                  id: payment.id,
+                  trxRef: payment.transactionRef,
+                  trxType: payment.transactionType,
+                })
+              )
+            }
+            w="fit-content"
+            isDisabled={!payment.isActive}
+          >
+            {payment.isActive ? "View Details" : "Payment Closed"}
+          </Button>
+        </Flex>
+      </Tooltip>
+    </>
   );
 };

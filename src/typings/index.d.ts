@@ -184,6 +184,7 @@ interface User {
   orientationAttendanceDate: string;
   has_upload_verification_doc?: boolean;
   orientationSeatNo?: string;
+  hasPaidOlevelVerification?: boolean;
 }
 
 interface AcademicProfile {
