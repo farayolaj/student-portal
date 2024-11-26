@@ -42,7 +42,6 @@ export default function Login() {
   const toast = useToast();
   const validateUsername = useValidateUsername();
 
-  console.log(auth.user);
   const onValidateUsername = () => {
     validateUsername.mutate(
       { username },

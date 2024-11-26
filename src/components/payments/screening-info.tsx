@@ -10,9 +10,9 @@ const ScreeningInfo = () => {
 
   return (
     <>
-      <Box w={{base:"100%",md:"75%"}}>
+      <Box w={{ base: "100%", md: "75%" }} m={3}>
         <Card>
-          <CardBody>
+          <CardBody textAlign='center'>
             {hasPaidOlevelRes?.data === false ? (
               <Heading fontSize="medium" fontWeight="semibold">
                 Please start your screening/verification process.
