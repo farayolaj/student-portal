@@ -7,6 +7,8 @@ import PortalAlert from "../common/portal-alert";
 import { Header } from "./header";
 import SchoolBoardSidebar from "./schoolboard-sidebar";
 import { Sidebar } from "./sidebar";
+import ScreeningInfo from "../payments/screening-info";
+import { useProfile } from "../../api/user/use-profile";
 
 export type LayoutProps = {
   show?: boolean;
@@ -53,6 +55,7 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
   }, [isAuthenticated, authToken, router]);
 
   let child: ReactNode;
+  const profile = useProfile();
 
   if (isAuthenticated && !user) child = null;
   else if (!show) child = children;
@@ -83,9 +86,11 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
               },
             }}
           >
+            {profile?.data?.user.isFresher &&
+              !profile?.data?.user?.isVerified && <ScreeningInfo />}
             <Box
               display={"flex"}
-              flexDirection={{ base: "column-reverse", lg: "row" }}
+              flexDirection={{ base: "column", lg: "row" }}
               pos="relative"
               minH="full"
             >
@@ -93,11 +98,11 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
                 alignSelf="flex-start"
                 as="main"
                 w="100%"
-                pos="sticky"
+                // pos="sticky"
                 top="0rem"
                 p={6}
                 pr={[null, null, 4]}
-                pb={16}
+                pb={6}
               >
                 {children}
               </Box>
