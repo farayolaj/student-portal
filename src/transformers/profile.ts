@@ -23,7 +23,7 @@ function isFresher(name: string, level: string) {
   const fastTrack = "Fast Track";
   if (
     (name == directEntry && level == "2") ||
-    (name == olevel && level == "1") ||
+    (name === olevel && level === "1") ||
     (name == olevelPutme && level == "1") ||
     (name == fastTrack && level == "2")
   ) {

@@ -119,9 +119,6 @@ const PaymentItem: FC<PaymentItemProps> = ({ payment, isSchoolFee }) => {
 
   return (
     <>
-      {isSchoolFee &&
-        profile?.data?.user.isFresher &&
-        !profile?.data?.user?.isVerified && <ScreeningInfo />}
       <Tooltip
         isDisabled={!isSchoolFee}
         label="Credentials verification required"

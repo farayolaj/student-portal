@@ -57,11 +57,6 @@ export default function Payments() {
         </Center>
       ) : filteredPayments.length > 0 ? (
         <>
-          <SimpleGrid mt={8}>
-            {profile?.data?.user.isFresher &&
-              !profile?.data?.user?.isVerified && <ScreeningInfo />}
-          </SimpleGrid>
-
           <SimpleGrid columns={[1, null, 3]} gap={8} mt={8} mb={8}>
             {currentPayments.map((payment) =>
               profile?.data?.user.isFresher &&
