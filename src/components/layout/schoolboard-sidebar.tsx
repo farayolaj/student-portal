@@ -117,12 +117,9 @@ const DisplayPanel: FC = () => {
           key={sundry.id}
           bg="red"
           hasArrow
-          isOpen={toolTipOpen}
+          isOpen={true}
         >
           <Flex
-            onClick={() => unVerifiedFresher && setTooltipOpen((prev) => !prev)}
-            onMouseEnter={() => unVerifiedFresher && setTooltipOpen(true)}
-            onMouseLeave={() => unVerifiedFresher && setTooltipOpen(false)}
             opacity={unVerifiedFresher ? "0.4" : "none"}
             direction={"column"}
             cursor="pointer"
@@ -192,8 +189,8 @@ const SchoolBoardSidebar: FC = () => {
 
   return (
     <VStack
-      display="flex"
       w={{ base: "100%", lg: "25%" }}
+      display="flex"
       p={4}
       gap={8}
       alignSelf="flex-start"

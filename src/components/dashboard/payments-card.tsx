@@ -125,12 +125,9 @@ const PaymentItem: FC<PaymentItemProps> = ({ payment, isSchoolFee }) => {
         placement={"top"}
         bg="red"
         hasArrow
-        isOpen={tlTipOpen}
+        isOpen={true}
       >
         <Flex
-          onClick={() => isSchoolFee && setTltipOpen(prev => !prev)}
-          onMouseEnter={() => isSchoolFee && setTltipOpen(true)}
-          onMouseLeave={() => isSchoolFee && setTltipOpen(false)}
           w="full"
           direction={["column", null, "row"]}
           align={["flex-end", null, "center"]}

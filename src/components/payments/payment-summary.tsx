@@ -4,7 +4,6 @@ import buildPaymentDetailUrl from "@/lib/payments/build-payment-detail-url";
 import queryClient from "@/lib/query-client";
 import { Button, Card, CardBody, Flex, Text, Tooltip } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { useState } from "react";
 import { IoCheckmarkCircle, IoTime } from "react-icons/io5";
 
 type PaymentSummaryProps = {
@@ -16,7 +15,6 @@ export default function PaymentSummary({
   payment,
   isFresherSchoolFee,
 }: PaymentSummaryProps) {
-  const [toolTipOpen, setTooltipOpen] = useState(false);
 
   const { push } = useRouter();
   const { data: session } = useAllSessions({
@@ -60,13 +58,10 @@ export default function PaymentSummary({
       placement={"top"}
       bg="red"
       hasArrow
-      isOpen={toolTipOpen}
+      isOpen={true}
     >
       <Card
         cursor="pointer"
-        onClick={() => isFresherSchoolFee && setTooltipOpen((prev) => !prev)}
-        onMouseEnter={() => isFresherSchoolFee && setTooltipOpen(true)}
-        onMouseLeave={() => isFresherSchoolFee && setTooltipOpen(false)}
         opacity={isFresherSchoolFee ? "0.4" : "none"}
       >
         <CardBody minH={40} pt="1.5rem" px="1.875rem" pb="2rem">
