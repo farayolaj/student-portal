@@ -117,7 +117,7 @@ const DisplayPanel: FC = () => {
           key={sundry.id}
           bg="red"
           hasArrow
-          isOpen={true}
+          isOpen={unVerifiedFresher}
         >
           <Flex
             opacity={unVerifiedFresher ? "0.4" : "none"}

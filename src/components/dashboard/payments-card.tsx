@@ -96,11 +96,11 @@ type PaymentItemProps = {
 };
 
 const PaymentItem: FC<PaymentItemProps> = ({ payment, isSchoolFee }) => {
-  const [tlTipOpen, setTltipOpen] = useState(false);
   const { push } = useRouter();
   const sessionRes = useSession(payment?.sessionId || "");
   const profile = useProfile();
 
+  console.log(isSchoolFee)
   if (!payment) return null;
 
   const isDue = payment.dueDate.getTime() < Date.now();
@@ -125,7 +125,7 @@ const PaymentItem: FC<PaymentItemProps> = ({ payment, isSchoolFee }) => {
         placement={"top"}
         bg="red"
         hasArrow
-        isOpen={true}
+        isOpen={isSchoolFee}
       >
         <Flex
           w="full"

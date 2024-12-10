@@ -15,7 +15,6 @@ export default function PaymentSummary({
   payment,
   isFresherSchoolFee,
 }: PaymentSummaryProps) {
-
   const { push } = useRouter();
   const { data: session } = useAllSessions({
     select: (sessions) =>
@@ -53,17 +52,14 @@ export default function PaymentSummary({
 
   return (
     <Tooltip
-      isDisabled={!isFresherSchoolFee}
       label="Credentials verification required"
+      isDisabled={!isFresherSchoolFee}
+      isOpen={isFresherSchoolFee}
       placement={"top"}
       bg="red"
       hasArrow
-      isOpen={true}
     >
-      <Card
-        cursor="pointer"
-        opacity={isFresherSchoolFee ? "0.4" : "none"}
-      >
+      <Card cursor="pointer" opacity={isFresherSchoolFee ? "0.4" : "none"}>
         <CardBody minH={40} pt="1.5rem" px="1.875rem" pb="2rem">
           <Flex direction="column" h="full">
             <Text as="span" fontWeight="semibold">
