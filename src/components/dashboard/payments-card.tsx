@@ -100,7 +100,6 @@ const PaymentItem: FC<PaymentItemProps> = ({ payment, isSchoolFee }) => {
   const sessionRes = useSession(payment?.sessionId || "");
   const profile = useProfile();
 
-  console.log(isSchoolFee)
   if (!payment) return null;
 
   const isDue = payment.dueDate.getTime() < Date.now();
@@ -172,7 +171,7 @@ const PaymentItem: FC<PaymentItemProps> = ({ payment, isSchoolFee }) => {
               )
             }
             w="fit-content"
-            isDisabled={!payment.isActive}
+            isDisabled={!payment.isActive || isSchoolFee}
           >
             {payment.isActive ? "View Details" : "Payment Closed"}
           </Button>
