@@ -91,5 +91,7 @@ export function toTransaction(data: any): Transaction {
     datePayed: new Date(Date.parse(data.date_completed)),
     sessionId: data.session,
     programmeName: data.programme_name,
+    isPartPayment: data.is_part_payment,
+    encodedId: data.encoded_real_payment_id
   };
 }

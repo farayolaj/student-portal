@@ -114,6 +114,8 @@ interface Transaction {
   publicKey?: string;
   sessionId?: string;
   programmeName?: string;
+  isPartPayment?: boolean;
+  encodedId?: string;
 }
 
 interface Payment {

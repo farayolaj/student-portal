@@ -18,6 +18,7 @@ import { FC, useState } from "react";
 import EventCalendar from "../common/events/event-calendar";
 import useRemitaInline from "../common/remita-inline";
 import { useProfile } from "../../api/user/use-profile";
+import { useAllTransactions } from "@/api/payment/use-all-transactions";
 
 const mostSubscribedSundryCodes = ["75", "57"];
 
@@ -34,7 +35,14 @@ const DisplayPanel: FC = () => {
           return aIndex - bIndex;
         }),
   });
-  const [toolTipOpen, setTooltipOpen] = useState(false);
+
+  const AllTransactionQuery = useAllTransactions();
+  const paidPartPayment = AllTransactionQuery?.data?.filter(
+    (item) => item.isPartPayment && item.status === "success"
+  );
+  const partPaymentIds = AllTransactionQuery?.data?.filter(
+    (item) => item.isPartPayment
+  ).map(idx => idx.encodedId);
 
   const toast = useToast();
   const router = useRouter();
@@ -109,51 +117,104 @@ const DisplayPanel: FC = () => {
       spacing={"28px"}
       pb={"2rem"}
     >
-      {sundryPaymentsQuery.data?.map((sundry) => (
-        <Tooltip
-          label="Credentials verification required"
-          isDisabled={!unVerifiedFresher}
-          placement={"top"}
-          key={sundry.id}
-          bg="red"
-          hasArrow
-          isOpen={unVerifiedFresher}
-        >
-          <Flex
-            opacity={unVerifiedFresher ? "0.4" : "none"}
-            direction={"column"}
-            cursor="pointer"
-            gap={1}
-            w="full"
-          >
-            <Text as="p">{sundry.title}</Text>
-            <Flex justify={"space-between"} align={"center"}>
-              <Text as="span">
-                {new Intl.NumberFormat("en-NG", {
-                  style: "currency",
-                  currency: "NGN",
-                }).format(sundry.amount)}
-              </Text>
-              <Button
-                variant={"outline"}
-                sx={{
-                  color: "#2B7B51",
-                  borderColor: "#2B7B51",
-                  borderWidth: "3px",
-                  _hover: { bg: "#2B7B51", color: "white" },
-                }}
-                w="fit-content"
-                size="md"
-                alignSelf={"flex-end"}
-                onClick={() => initialisePayment(sundry)}
-                isDisabled={initiateTransaction.isLoading || unVerifiedFresher}
+      {paidPartPayment
+        ? sundryPaymentsQuery.data?.map(
+            (sundry) =>
+              !partPaymentIds?.includes(sundry.id) && (
+                <Tooltip
+                  label="Credentials verification required"
+                  isDisabled={!unVerifiedFresher}
+                  placement={"top"}
+                  key={sundry.id}
+                  bg="red"
+                  hasArrow
+                  isOpen={unVerifiedFresher}
+                >
+                  <Flex
+                    opacity={unVerifiedFresher ? "0.4" : "none"}
+                    direction={"column"}
+                    cursor="pointer"
+                    gap={1}
+                    w="full"
+                  >
+                    <Text as="p">{sundry.title}</Text>
+                    <Flex justify={"space-between"} align={"center"}>
+                      <Text as="span">
+                        {new Intl.NumberFormat("en-NG", {
+                          style: "currency",
+                          currency: "NGN",
+                        }).format(sundry.amount)}
+                      </Text>
+                      <Button
+                        variant={"outline"}
+                        sx={{
+                          color: "#2B7B51",
+                          borderColor: "#2B7B51",
+                          borderWidth: "3px",
+                          _hover: { bg: "#2B7B51", color: "white" },
+                        }}
+                        w="fit-content"
+                        size="md"
+                        alignSelf={"flex-end"}
+                        onClick={() => initialisePayment(sundry)}
+                        isDisabled={
+                          initiateTransaction.isLoading || unVerifiedFresher
+                        }
+                      >
+                        Pay
+                      </Button>
+                    </Flex>
+                  </Flex>
+                </Tooltip>
+              )
+          )
+        : sundryPaymentsQuery.data?.map((sundry) => (
+            <Tooltip
+              label="Credentials verification required"
+              isDisabled={!unVerifiedFresher}
+              placement={"top"}
+              key={sundry.id}
+              bg="red"
+              hasArrow
+              isOpen={unVerifiedFresher}
+            >
+              <Flex
+                opacity={unVerifiedFresher ? "0.4" : "none"}
+                direction={"column"}
+                cursor="pointer"
+                gap={1}
+                w="full"
               >
-                Pay
-              </Button>
-            </Flex>
-          </Flex>
-        </Tooltip>
-      ))}
+                <Text as="p">{sundry.title}</Text>
+                <Flex justify={"space-between"} align={"center"}>
+                  <Text as="span">
+                    {new Intl.NumberFormat("en-NG", {
+                      style: "currency",
+                      currency: "NGN",
+                    }).format(sundry.amount)}
+                  </Text>
+                  <Button
+                    variant={"outline"}
+                    sx={{
+                      color: "#2B7B51",
+                      borderColor: "#2B7B51",
+                      borderWidth: "3px",
+                      _hover: { bg: "#2B7B51", color: "white" },
+                    }}
+                    w="fit-content"
+                    size="md"
+                    alignSelf={"flex-end"}
+                    onClick={() => initialisePayment(sundry)}
+                    isDisabled={
+                      initiateTransaction.isLoading || unVerifiedFresher
+                    }
+                  >
+                    Pay
+                  </Button>
+                </Flex>
+              </Flex>
+            </Tooltip>
+          ))}
       <Button
         alignSelf={"center"}
         onClick={() => {

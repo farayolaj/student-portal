@@ -154,7 +154,7 @@ export default function PaymentDetail({
   return (
     <Box>
       {prerequisites.length > 0 && (
-        <Center bg="#ffe599" p={2} mb={8}>
+        <Center bg="lightgrey" p={2} mb={8}>
           <Text as="span" fontWeight="semibold" textAlign="center">
             Requires payment of{" "}
             {prerequisites
@@ -167,6 +167,7 @@ export default function PaymentDetail({
                     trxRef: payment.transactionRef,
                     trxType: payment.transactionType,
                   })}
+                  color={"#0000EE"}
                 >
                   {payment.description} {"(click here to pay)"}
                 </Link>
