@@ -44,6 +44,9 @@ const DisplayPanel: FC = () => {
     (item) => item.isPartPayment
   ).map(idx => idx.encodedId);
 
+  console.log(paidPartPayment);
+  console.log(partPaymentIds);
+
   const toast = useToast();
   const router = useRouter();
   const profile = useProfile();
@@ -117,7 +120,7 @@ const DisplayPanel: FC = () => {
       spacing={"28px"}
       pb={"2rem"}
     >
-      {paidPartPayment
+      {paidPartPayment && paidPartPayment.length > 0
         ? sundryPaymentsQuery.data?.map(
             (sundry) =>
               !partPaymentIds?.includes(sundry.id) && (
