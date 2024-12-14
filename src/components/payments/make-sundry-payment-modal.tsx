@@ -15,12 +15,17 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  Select,
   Spinner,
   VStack,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
+import {
+  AutoComplete,
+  AutoCompleteInput,
+  AutoCompleteItem,
+  AutoCompleteList,
+} from "@choc-ui/chakra-autocomplete";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import useRemitaInline from "../common/remita-inline";
@@ -47,7 +52,7 @@ export default function MakeSundryPaymentModal() {
   const toast = useToast();
 
   useEffect(() => {
-    if (query.sundry == 'open') {
+    if (query.sundry == "open") {
       setSelectedPaymentId(query.sundry as string);
       onOpen();
     }
@@ -132,22 +137,31 @@ export default function MakeSundryPaymentModal() {
             >
               <FormControl isRequired>
                 <FormLabel>Title</FormLabel>
-                <Select
-                  placeholder="Select a fee..."
+                <AutoComplete
+                  openOnFocus
                   value={selectedPaymentId}
-                  onInput={(ev) => {
-                    setSelectedPaymentId(ev.currentTarget.value);
+                  onChange={(value) => {
+                    setSelectedPaymentId(value);
                   }}
                 >
-                  {sundryPayments.map((payment) => (
-                    <option
-                      key={`${payment.id}-${payment.transactionRef}`}
-                      value={payment.id}
-                    >
-                      {payment.title}
-                    </option>
-                  ))}
-                </Select>
+                  <AutoCompleteInput
+                    as={Input}
+                    variant="primary"
+                    placeholder="Select a fee..."
+                  />
+                  <AutoCompleteList>
+                    {sundryPayments.map((payment, cid) => (
+                      <AutoCompleteItem
+                        key={`${payment.id}-${payment.transactionRef}`}
+                        value={payment.id}
+                        label={payment.title}
+                        textTransform="capitalize"
+                      >
+                        {payment.title}
+                      </AutoCompleteItem>
+                    ))}
+                  </AutoCompleteList>
+                </AutoComplete>
               </FormControl>
               <FormControl isDisabled isRequired>
                 <FormLabel _disabled={{ opacity: 1 }}>Amount</FormLabel>
