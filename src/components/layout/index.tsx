@@ -1,14 +1,15 @@
 import { Box, Flex } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { FC, PropsWithChildren, ReactNode, useEffect, useState } from "react";
+import { useProfile } from "../../api/user/use-profile";
 import { LOGIN } from "../../constants/routes";
 import useAuth from "../../hooks/use-auth";
+import FreeAccessRegistration from "../common/free-access-reg";
 import PortalAlert from "../common/portal-alert";
+import ScreeningInfo from "../payments/screening-info";
 import { Header } from "./header";
 import SchoolBoardSidebar from "./schoolboard-sidebar";
 import { Sidebar } from "./sidebar";
-import ScreeningInfo from "../payments/screening-info";
-import { useProfile } from "../../api/user/use-profile";
 
 export type LayoutProps = {
   show?: boolean;
@@ -63,6 +64,7 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
     child = (
       <Flex pos="relative" direction="column">
         <PortalAlert />
+        <FreeAccessRegistration />
         <Header />
         <Flex>
           <Sidebar />
