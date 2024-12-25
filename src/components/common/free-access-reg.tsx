@@ -35,7 +35,9 @@ function isGloPhoneNumber(phoneNumber: string) {
 
 export default function FreeAccessRegistration() {
   const profile = useProfile();
-  const { isOpen, onClose } = useDisclosure({ defaultIsOpen: profile.data?.user.telcoNumber === null });
+  const { isOpen, onClose } = useDisclosure({
+    defaultIsOpen: profile.data?.user.telcoNumber === null,
+  });
   const cancelRef = useRef();
   const [phoneNumber, setPhoneNumber] = useState("");
 
@@ -100,6 +102,9 @@ export default function FreeAccessRegistration() {
               </ListItem>
               <ListItem>
                 Your phone number will be submitted for processing with Telco.
+              </ListItem>
+              <ListItem>
+                You will be notified when your free data becomes active.
               </ListItem>
             </OrderedList>
 
