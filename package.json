@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "gen:theme-typings": "chakra-cli tokens src/theme/index.ts",
-    "postinstall": "yarn gen:theme-typings"
+    "postinstall": "pnpm gen:theme-typings"
   },
   "dependencies": {
     "@chakra-ui/anatomy": "^2.3.4",
