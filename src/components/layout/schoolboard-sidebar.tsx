@@ -44,9 +44,6 @@ const DisplayPanel: FC = () => {
     (item) => item.isPartPayment
   ).map(idx => idx.encodedId);
 
-  console.log(paidPartPayment);
-  console.log(partPaymentIds);
-
   const toast = useToast();
   const router = useRouter();
   const profile = useProfile();
