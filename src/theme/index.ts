@@ -2,7 +2,6 @@ import { extendTheme } from "@chakra-ui/react";
 import { buttonTheme } from "./components/Button";
 import { cardTheme } from "./components/Card";
 import { linkTheme } from "./components/Link";
-import { avenirNextLTPro } from "./fonts";
 
 const components = {
   Button: buttonTheme,
@@ -31,11 +30,6 @@ const semanticTokens = {
   },
 };
 
-const fonts = {
-  heading: avenirNextLTPro.style.fontFamily,
-  body: avenirNextLTPro.style.fontFamily,
-};
-
-const theme = extendTheme({ components, colors, fonts, semanticTokens });
+const theme = extendTheme({ components, colors, semanticTokens });
 
 export default theme;

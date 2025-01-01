@@ -116,6 +116,7 @@ interface Transaction {
   programmeName?: string;
   isPartPayment?: boolean;
   encodedId?: string;
+  isCurrentSchoolFee?: boolean 
 }
 
 interface Payment {
@@ -187,6 +188,7 @@ interface User {
   has_upload_verification_doc?: boolean;
   orientationSeatNo?: string;
   hasPaidOlevelVerification?: boolean;
+  telcoNumber: string | null;
 }
 
 interface AcademicProfile {
