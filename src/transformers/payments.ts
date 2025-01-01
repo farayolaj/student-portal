@@ -92,6 +92,7 @@ export function toTransaction(data: any): Transaction {
     sessionId: data.session,
     programmeName: data.programme_name,
     isPartPayment: data.is_part_payment,
-    encodedId: data.encoded_real_payment_id
+    encodedId: data.encoded_real_payment_id,
+    isCurrentSchoolFee: data.is_current_sch_fee,
   };
 }

@@ -116,6 +116,7 @@ interface Transaction {
   programmeName?: string;
   isPartPayment?: boolean;
   encodedId?: string;
+  isCurrentSchoolFee?: boolean 
 }
 
 interface Payment {
