@@ -188,6 +188,7 @@ interface User {
   has_upload_verification_doc?: boolean;
   orientationSeatNo?: string;
   hasPaidOlevelVerification?: boolean;
+  telcoNumber: string | null;
 }
 
 interface AcademicProfile {

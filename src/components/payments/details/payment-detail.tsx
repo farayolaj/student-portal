@@ -168,6 +168,8 @@ export default function PaymentDetail({
                     trxType: payment.transactionType,
                   })}
                   color={"#0000EE"}
+                  textDecorationStyle="solid"
+                  textDecorationLine="underline"
                 >
                   {payment.description} {"(click here to pay)"}
                 </Link>

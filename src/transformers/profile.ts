@@ -47,7 +47,7 @@ export const toUser = (user: any) =>
     currentSessionId: user.current_session,
     currentSemester: parseInt(user.current_semester),
     isVerified: user.is_verified === "1",
-    hasPaidOlevelVerification : user.has_paid_olevel_verification,
+    hasPaidOlevelVerification: user.has_paid_olevel_verification,
     isFresher: isFresher(
       user.academicRecord?.entry_mode,
       user.programmeDetails?.level
@@ -56,7 +56,8 @@ export const toUser = (user: any) =>
     orientationAttendanceDate: user.orientation_attendance_date,
     has_upload_verification_doc: user.has_upload_verification_doc,
     orientationSeatNo: user.orientation_seat_no || undefined,
-  } as User);
+    telcoNumber: user.telco_number,
+  }) as User;
 
 export const toAcademicProfile = (profile: any) =>
   ({
@@ -68,10 +69,10 @@ export const toAcademicProfile = (profile: any) =>
     faculty: profile.programmeDetails?.faculty,
     level: profile.academicRecord?.current_level,
     examCenter: profile.academicRecord.exam_center,
-  } as AcademicProfile);
+  }) as AcademicProfile;
 
 export const toProfile = (profile: any) =>
   ({
     user: toUser(profile),
     academicProfile: toAcademicProfile(profile),
-  } as Profile);
+  }) as Profile;
