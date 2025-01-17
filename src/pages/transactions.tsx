@@ -1,4 +1,4 @@
-import { Badge, Flex, Select, Text, Button } from "@chakra-ui/react";
+import { Badge, Flex, Select, Text, Button, useToast, Spinner } from "@chakra-ui/react";
 import { useAllTransactions } from "@/api/payment/use-all-transactions";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useAllSessions } from "@/api/user/use-all-sessions";
@@ -7,10 +7,21 @@ import PageTitle from "../components/common/page-title";
 import Seo from "../components/common/seo";
 import CustomTable from "@/components/common/custom-table";
 import RequeryButton from "@/components/payments/requery-button";
+import { useInitiatePrint } from "@/api/payment/use-initiate-print";
 
 const columnHelper = createColumnHelper<Transaction>();
 
 export default function Transactions() {
+  const { initiatePrint, isLoading } = useInitiatePrint();
+  const handleReceiptPrint = async (rrr: string) => {
+    try {
+      await initiatePrint({ rrr });
+    } catch (error) {
+      // error is already handled using toast
+      console.error('Failed to print receipt:', error);
+    }
+  } 
+
   const columns = [
     columnHelper.accessor("referenceNumber", {
       header: () => (
@@ -91,7 +102,15 @@ export default function Transactions() {
             transaction={transaction}
             onSuccess={allTransationsRes.refetch}
           />
-        ) : null;
+        ) : (
+            <Button
+              onClick={() => handleReceiptPrint(transaction.rrr)}
+              isDisabled={isLoading}
+              minW="7.8rem"
+            >
+            {isLoading ? <Spinner color="white" size="xs" /> : "Print"}
+          </Button>
+        );
       },
     }),
   ];
