@@ -17,7 +17,7 @@ const RequeryButton = ({ transaction, onSuccess }: PaymentTransactionsProps) => 
   return (
     <Button
       size="sm"
-      colorScheme="green"
+      colorScheme="yellow"
       isDisabled={verifyTransaction.isLoading}
       onClick={() => {
         verifyTransaction.refetch().then((res) => {

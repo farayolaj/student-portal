@@ -11,8 +11,9 @@ import { useInitiatePrint } from "@/api/payment/use-initiate-print";
 
 const columnHelper = createColumnHelper<Transaction>();
 
-export default function Transactions() {
+function PrintButton({ rrr }: { rrr: string }) {
   const { initiatePrint, isLoading } = useInitiatePrint();
+
   const handleReceiptPrint = async (rrr: string) => {
     try {
       await initiatePrint({ rrr });
@@ -22,6 +23,18 @@ export default function Transactions() {
     }
   } 
 
+  return (
+    <Button
+      onClick={() => handleReceiptPrint(rrr)}
+      isDisabled={isLoading}
+      minW="7.8rem"
+    >
+      {isLoading ? <Spinner color="white" size="xs" /> : "Print"}
+    </Button>
+  );
+}
+
+export default function Transactions() {
   const columns = [
     columnHelper.accessor("referenceNumber", {
       header: () => (
@@ -103,13 +116,7 @@ export default function Transactions() {
             onSuccess={allTransationsRes.refetch}
           />
         ) : (
-            <Button
-              onClick={() => handleReceiptPrint(transaction.rrr)}
-              isDisabled={isLoading}
-              minW="7.8rem"
-            >
-            {isLoading ? <Spinner color="white" size="xs" /> : "Print"}
-          </Button>
+          <PrintButton rrr={transaction.rrr} />
         );
       },
     }),
