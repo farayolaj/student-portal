@@ -147,7 +147,7 @@ export default function MakeSundryPaymentModal() {
                   <AutoCompleteInput
                     as={Input}
                     variant="primary"
-                    placeholder="Select a fee..."
+                    placeholder="Select a Fee: Search or select a fee"
                   />
                   <AutoCompleteList>
                     {sundryPayments.map((payment, cid) => (
