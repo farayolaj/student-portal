@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 import getApi from "../api";
+import { AxiosError } from "axios";
 
 export type useDownloadDocumentOpts = {
   url: string;
@@ -12,7 +13,12 @@ export function useDownloadDocument({ url, onError }: useDownloadDocumentOpts) {
   const intiateFetch = useCallback(async () => {
     try {
       setIsLoading(true);
-      const response = await getApi().get(url, { responseType: "blob" });
+      const response = await getApi().get(url, {
+        responseType: "blob",
+        validateStatus(status) {
+          return status < 400;
+        },
+      });
       const fileName =
         response.headers["content-disposition"]
           .split("filename=")[1]
@@ -29,7 +35,9 @@ export function useDownloadDocument({ url, onError }: useDownloadDocumentOpts) {
       URL.revokeObjectURL(blobUrl);
     } catch (error) {
       setIsLoading(false);
-      if (onError)
+      if (error instanceof AxiosError && error.status == 403 && onError) {
+        onError(new Error(error.response?.statusText));
+      } else if (onError)
         onError(
           new Error("Error fetching document", {
             cause: error,

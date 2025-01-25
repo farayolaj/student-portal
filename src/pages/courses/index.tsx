@@ -1,7 +1,7 @@
 import { useCourseRegPrintUrl } from "@/api/course/use-course-reg-print-url";
 import { useDeletionOpen } from "@/api/course/use-deletion-open";
 import { useCurrentPeriod } from "@/api/user/use-current-period";
-import { Button, Flex, Icon, Link, Spinner, useToast } from "@chakra-ui/react";
+import { Button, Flex, Icon, Link, Spinner, Tooltip, useToast } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { FC, useState } from "react";
 import {
@@ -152,23 +152,25 @@ const Courses: FC = () => {
             </Button>
           )}
           {!inDeleteCourseView && (
-            <Button
-              mx="auto"
-              display="inline-flex"
-              gap={4}
-              isDisabled={printUrl.isLoading || !!printUrl.error}
-              onClick={() => {
-                window.open(printUrl.url as string);
-              }}
-              title={printUrl.error?.message}
-            >
-              {printUrl.isLoading ? (
-                <Spinner size="xs" color="white" />
-              ) : (
-                <Icon as={IoPrintOutline} boxSize={6} />
-              )}
-              Print Course Registration
-            </Button>
+            <Tooltip label={printUrl.error?.message ?? ''}>
+              <Button
+                mx="auto"
+                display="inline-flex"
+                gap={4}
+                isDisabled={printUrl.isLoading || !!printUrl.error}
+                onClick={() => {
+                  window.open(printUrl.url as string);
+                }}
+                title={printUrl.error?.message}
+              >
+                {printUrl.isLoading ? (
+                  <Spinner size="xs" color="white" />
+                ) : (
+                  <Icon as={IoPrintOutline} boxSize={6} />
+                )}
+                Print Course Registration
+              </Button>
+            </Tooltip>
           )}
         </Flex>
         <RadioButtonGroup

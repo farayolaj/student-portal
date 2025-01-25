@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import getApi from "../api";
+import { AxiosError } from "axios";
 
 export function useCourseRegPrintUrl(sessionId: string, semester: number) {
   const semesterString = semester == 1 ? "first" : "second";
@@ -14,7 +15,12 @@ export function useCourseRegPrintUrl(sessionId: string, semester: number) {
         `/courseregistrationprint?session=${encodeURIComponent(
           sessionId.split(".")[0]
         )}&semester=${semesterString}`,
-        { responseType: "blob" }
+        {
+          responseType: "blob",
+          validateStatus(status) {
+            return status < 400;
+          },
+        }
       )
       .then((response) => {
         const url = URL.createObjectURL(
@@ -25,11 +31,15 @@ export function useCourseRegPrintUrl(sessionId: string, semester: number) {
       })
       .catch((error) => {
         setIsLoading(false);
-        setError(
-          new Error("Error generating course registration print", {
-            cause: error,
-          })
-        );
+        if (error instanceof AxiosError && error.status == 403) {
+          setError(new Error(error.response?.statusText));
+        } else {
+          setError(
+            new Error("Error generating course registration print", {
+              cause: error,
+            })
+          );
+        }
       });
   }, [semesterString, sessionId]);
 

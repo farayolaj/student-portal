@@ -51,8 +51,8 @@ function DocumentItem({ document }: DocumentItemProps) {
     url: document.url,
     onError: (error) => {
       toast({
-        title: error.message,
-        description: `${document.title} could not be downloaded. Please try again later.`,
+        title: `${document.title} could not be downloaded.`,
+        description: error.message,
         status: "error",
         isClosable: true,
       });
