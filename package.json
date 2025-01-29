@@ -36,6 +36,7 @@
     "eslint-config-next": "15.0.2",
     "framer-motion": "^10.0.1",
     "next": "15.0.2",
+    "oidc-react": "^3.4.1",
     "react": "18.3.1",
     "react-calendar": "^4.0.0",
     "react-chartjs-2": "^5.2.0",
@@ -57,6 +58,10 @@
     "overrides": {
       "@types/react": "18.3.12",
       "@types/react-dom": "18.3.1"
-    }
+    },
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp"
+    ]
   }
 }
