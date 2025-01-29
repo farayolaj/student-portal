@@ -44,14 +44,6 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
       location={
         typeof window === "undefined" ? ({} as Location) : window.location
       }
-      onSignInError={(error) =>
-        toast({
-          title: error.name,
-          description: error.message,
-          status: "error",
-          isClosable: true,
-        })
-      }
     >
       {children}
     </OidcAuthProvider>
