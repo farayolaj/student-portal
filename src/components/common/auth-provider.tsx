@@ -1,0 +1,59 @@
+import {
+  AUTH_CLIENT_ID,
+  AUTH_CLIENT_SECRET,
+  AUTH_RESOURCE,
+  AUTH_SCOPE,
+  AUTH_SERVER_URL,
+  HOST_URL,
+} from "@/constants/config";
+import { HOME, LOGIN } from "@/constants/routes";
+import useLocalStorage from "@/hooks/use-local-storage";
+import { useToast } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import { AuthProvider as OidcAuthProvider } from "oidc-react";
+import { ReactNode } from "react";
+
+export default function AuthProvider({ children }: { children: ReactNode }) {
+  const { push } = useRouter();
+  const toast = useToast();
+  const [_, setAuthToken] = useLocalStorage<string | null>("token", null);
+
+  return (
+    <OidcAuthProvider
+      authority={AUTH_SERVER_URL}
+      clientId={AUTH_CLIENT_ID}
+      clientSecret={AUTH_CLIENT_SECRET}
+      autoSignIn={false}
+      onSignIn={(user) => {
+        if (!user) return;
+
+        setAuthToken(user.access_token);
+        push(HOME);
+      }}
+      onSignOut={() => {
+        setAuthToken(null);
+        push(LOGIN);
+      }}
+      redirectUri={`${HOST_URL}${LOGIN}`}
+      responseType="code"
+      loadUserInfo={false}
+      scope={AUTH_SCOPE}
+      extraQueryParams={{
+        resource: AUTH_RESOURCE,
+      }}
+      location={
+        typeof window === "undefined" ? ({} as Location) : window.location
+      }
+      onSignInError={(error) =>
+        toast({
+          title: error.name,
+          description: error.message,
+          status: "error",
+          isClosable: true,
+        })
+      }
+    >
+      {children}
+    </OidcAuthProvider>
+  );
+}

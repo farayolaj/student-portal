@@ -1,3 +1,4 @@
+import AuthProvider from "@/components/common/auth-provider";
 import { X_APP_KEY } from "@/constants/config";
 import { ERROR_PAGE } from "@/constants/routes";
 import { avenirNextLTPro } from "@/theme/fonts";
@@ -11,7 +12,6 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import "../components/common/calendar.css";
 import Layout, { LayoutProps } from "../components/layout";
-import { AuthProvider } from "../hooks/use-auth";
 import queryClient from "../lib/query-client";
 import theme from "../theme";
 
@@ -54,16 +54,16 @@ export default function App({ Component, pageProps }: CustomAppProps) {
 
   return (
     <ChakraProvider theme={theme}>
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
+      <AuthProvider>
+        <QueryClientProvider client={queryClient}>
           <div className={avenirNextLTPro.className}>
             <Layout {...layoutProps}>
               <Component {...pageProps} />
             </Layout>
           </div>
-        </AuthProvider>
-        <ReactQueryDevtools initialIsOpen />
-      </QueryClientProvider>
+          <ReactQueryDevtools initialIsOpen />
+        </QueryClientProvider>
+      </AuthProvider>
     </ChakraProvider>
   );
 }
