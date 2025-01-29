@@ -36,6 +36,5 @@ export default function Error() {
 }
 
 Error.layoutProps = {
-  show: false,
   isAuthenticated: false,
 };

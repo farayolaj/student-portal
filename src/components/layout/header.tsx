@@ -1,3 +1,4 @@
+import { useProfile } from "@/api/user/use-profile";
 import { PROFILE } from "@/constants/routes";
 import {
   Avatar,
@@ -15,19 +16,22 @@ import {
 } from "@chakra-ui/react";
 import Image from "next/image";
 import NextLink from "next/link";
+import { useAuth } from "oidc-react";
 import { FC } from "react";
 import { MdArrowDropDown } from "react-icons/md";
-import useAuth from "../../hooks/use-auth";
 import logo from "../../images/ui-logo.png";
 import MobileCalendar from "./mobile-calendar";
 import MobileNavBar from "./mobile-nav-bar";
-import { useProfile } from "@/api/user/use-profile";
 
 export const Header: FC = () => {
   const auth = useAuth();
   const profile = useProfile();
   const user = profile.data?.user;
-  const fullName = `${user?.lastName.toUpperCase()}, ${user?.firstName} ${user?.otherNames || ""}`.replace("undefined", "");
+  const fullName =
+    `${user?.lastName.toUpperCase()}, ${user?.firstName} ${user?.otherNames || ""}`.replace(
+      "undefined",
+      ""
+    );
 
   return (
     <HStack
@@ -71,12 +75,12 @@ export const Header: FC = () => {
         <Menu>
           <MenuButton>
             <HStack>
-              {auth.isLoggingIn ? (
+              {auth.isLoading ? (
                 <SkeletonText />
               ) : (
                 <Text display={["none", null, "initial"]}>{fullName}</Text>
               )}
-              <SkeletonCircle isLoaded={!auth.isLoggingIn}>
+              <SkeletonCircle isLoaded={!auth.isLoading}>
                 <Avatar
                   name={fullName}
                   size="sm"
@@ -102,7 +106,7 @@ export const Header: FC = () => {
             <MenuItem as={NextLink} href={PROFILE}>
               Profile
             </MenuItem>
-            <MenuItem onClick={auth.logout}>Log Out</MenuItem>
+            <MenuItem onClick={auth.signOut}>Log Out</MenuItem>
           </MenuList>
         </Menu>
       </Flex>

@@ -1,21 +1,14 @@
 import { useMainPayments } from "@/api/payment/use-main-payments";
-import {
-  Box,
-  Center,
-  SimpleGrid,
-  Spinner,
-} from "@chakra-ui/react";
+import { useProfile } from "@/api/user/use-profile";
+import ScreeningInfo from "@/components/payments/screening-info";
+import { Box, Center, SimpleGrid, Spinner } from "@chakra-ui/react";
 import { useState } from "react";
 import PageTitle from "../../components/common/page-title";
 import Seo from "../../components/common/seo";
 import PaymentControl from "../../components/payments/payment-control";
 import PaymentSummary from "../../components/payments/payment-summary";
-import useAuth from "../../hooks/use-auth";
-import { useProfile } from "@/api/user/use-profile";
-import ScreeningInfo from "@/components/payments/screening-info";
 
 export default function Payments() {
-  const { user } = useAuth();
   const profile = useProfile();
   const [statusFilter, setStatusFilter] = useState("all");
   const mainPaymentRes = useMainPayments();
@@ -31,11 +24,11 @@ export default function Payments() {
   });
 
   const currentPayments = filteredPayments.filter((payment) => {
-    return payment.sessionId === user?.currentSessionId;
+    return payment.sessionId === profile.data?.user?.currentSessionId;
   });
 
   const stalePayments = filteredPayments.filter((payment) => {
-    return payment.sessionId !== user?.currentSessionId;
+    return payment.sessionId !== profile.data?.user?.currentSessionId;
   });
 
   return (

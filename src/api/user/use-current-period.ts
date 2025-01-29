@@ -1,5 +1,5 @@
-import useAuth from "@/hooks/use-auth";
 import { useAllSessions } from "./use-all-sessions";
+import { useProfile } from "./use-profile";
 
 type Period = {
   session: { id: string; name: string };
@@ -11,22 +11,22 @@ type Period = {
  */
 export function useCurrentPeriod() {
   const allSessionsRes = useAllSessions();
-  const auth = useAuth();
+  const profile = useProfile();
 
   return {
     period: {
       semester: {
-        id: auth.user?.currentSemester,
-        name: auth.user?.currentSemester === 2 ? "Second" : "First",
+        id: profile.data?.user?.currentSemester,
+        name: profile.data?.user?.currentSemester === 2 ? "Second" : "First",
       },
       session: {
-        id: auth.user?.currentSessionId,
+        id: profile.data?.user?.currentSessionId,
         name: allSessionsRes.data?.find(
-          (session) => session.id === auth.user?.currentSessionId
+          (session) => session.id === profile.data?.user?.currentSessionId
         )?.name,
       },
     } as Period,
-    isLoading: auth.isLoggingIn,
-    error: auth.error,
+    isLoading: profile.isLoading,
+    error: profile.error,
   };
 }

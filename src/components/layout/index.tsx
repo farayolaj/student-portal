@@ -1,9 +1,9 @@
+import { LOGIN } from "@/constants/routes";
 import { Box, Flex } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import { useAuth } from "oidc-react";
 import { FC, PropsWithChildren, ReactNode, useEffect, useState } from "react";
 import { useProfile } from "../../api/user/use-profile";
-import { LOGIN } from "../../constants/routes";
-import useAuth from "../../hooks/use-auth";
 import FreeAccessRegistration from "../common/free-access-reg";
 import PortalAlert from "../common/portal-alert";
 import ScreeningInfo from "../payments/screening-info";
@@ -12,17 +12,16 @@ import SchoolBoardSidebar from "./schoolboard-sidebar";
 import { Sidebar } from "./sidebar";
 
 export type LayoutProps = {
-  show?: boolean;
   isAuthenticated?: boolean;
 };
 
 const Layout: FC<PropsWithChildren<LayoutProps>> = ({
   children,
-  show = true,
   isAuthenticated = true,
 }) => {
   const [connectivityText, setConnectivityText] = useState("");
   const [isOnline, setIsOnline] = useState(true);
+  const { push } = useRouter();
 
   useEffect(() => {
     const onOffline = () => {
@@ -46,21 +45,15 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
     };
   }, []);
 
-  const { user, authToken } = useAuth();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (isAuthenticated && !authToken) {
-      router.push(LOGIN);
-    }
-  }, [isAuthenticated, authToken, router]);
-
   let child: ReactNode;
+  const { userData } = useAuth();
   const profile = useProfile();
 
-  if (isAuthenticated && !user) child = null;
-  else if (!show) child = children;
-  else
+  if (!isAuthenticated) child = children;
+  else if (!userData) {
+    if (typeof window !== "undefined") push(LOGIN); // Router API is not available on the server
+    child = null;
+  } else
     child = (
       <Flex pos="relative" direction="column">
         <PortalAlert />
