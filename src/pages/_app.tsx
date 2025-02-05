@@ -42,12 +42,13 @@ async function getBaseApiUrl() {
 }
 
 export default function App({ Component, pageProps }: CustomAppProps) {
-  const { push } = useRouter();
+  const { push, pathname } = useRouter();
 
   useEffect(() => {
-    getBaseApiUrl()
-      .then((url) => localStorage.setItem("apiBaseUrl", url))
-      .catch((_error) => push(ERROR_PAGE));
+    if (pathname !== ERROR_PAGE)
+      getBaseApiUrl()
+        .then((url) => localStorage.setItem("apiBaseUrl", url))
+        .catch((_error) => push(ERROR_PAGE));
   }, [push]);
 
   const layoutProps = Component.layoutProps || {};
