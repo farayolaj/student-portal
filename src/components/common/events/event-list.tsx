@@ -64,7 +64,7 @@ function EventListItem({
       - {event.details.centre}
     </>
   ) : (
-    [event.details.location, event.details.centre].join(", ")
+    event.details.location && [event.details.location, event.details.centre].join(", ")
   );
 
   const style = {
