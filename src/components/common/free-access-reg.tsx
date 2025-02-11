@@ -50,9 +50,9 @@ export default function FreeAccessRegistration() {
   const freeAccessRegMutation = useFreeAccessReg({
     onSuccess(data, variables, context) {
       toast({
-        title: "Free access registration successful",
+        title: isGloSubscriber ? "Free access registration successful" : "",
         description:
-          "You can now access the Mobile Class LMS without data charges.",
+          isGloSubscriber ? "You can now access the Mobile Class LMS without data charges." : "Your preference has been saved",
         status: "success",
         isClosable: true,
       });
@@ -117,7 +117,7 @@ export default function FreeAccessRegistration() {
               isChecked={isGloSubscriber}
               onChange={() => setIsGloSubscriber(!isGloSubscriber)}
             >
-              I subscribe to GLO Network
+              <strong>I subscribe to GLO Network (uncheck if you don’t).</strong>
             </Checkbox>
             {isGloSubscriber ? (
               <FormControl
