@@ -8,6 +8,7 @@ import {
   AlertDialogHeader,
   AlertDialogOverlay,
   Button,
+  Checkbox,
   FormControl,
   FormErrorMessage,
   Input,
@@ -15,6 +16,7 @@ import {
   InputLeftElement,
   ListItem,
   OrderedList,
+  Select,
   Text,
   UnorderedList,
   useDisclosure,
@@ -40,6 +42,8 @@ export default function FreeAccessRegistration() {
   });
   const cancelRef = useRef();
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [isGloSubscriber, setIsGloSubscriber] = useState(true);
+  const [otherNetwork, setOtherNetwork] = useState("");
 
   const toast = useToast();
 
@@ -108,31 +112,57 @@ export default function FreeAccessRegistration() {
               </ListItem>
             </OrderedList>
 
-            <FormControl
-              isInvalid={!!phoneNumber && !isGloPhoneNumber(phoneNumber)}
+            <Checkbox
+              mt="1rem"
+              isChecked={isGloSubscriber}
+              onChange={() => setIsGloSubscriber(!isGloSubscriber)}
             >
-              <InputGroup mt={4} w={[null, null, "50%"]} colorScheme="primary">
-                <InputLeftElement pointerEvents="none">
-                  <FaSimCard />
-                </InputLeftElement>
-                <Input
-                  type="tel"
-                  placeholder="Enter your GLO SIM card number"
-                  value={phoneNumber}
-                  onChange={(ev) => setPhoneNumber(ev.target.value)}
-                  maxLength={
-                    phoneNumber.startsWith("0")
-                      ? 11
-                      : phoneNumber.startsWith("+")
+              I subscribe to GLO Network
+            </Checkbox>
+            {isGloSubscriber ? (
+              <FormControl
+                isInvalid={!!phoneNumber && !isGloPhoneNumber(phoneNumber)}
+              >
+                <InputGroup
+                  mt={4}
+                  w={[null, null, "50%"]}
+                  colorScheme="primary"
+                >
+                  <InputLeftElement pointerEvents="none">
+                    <FaSimCard />
+                  </InputLeftElement>
+                  <Input
+                    type="tel"
+                    placeholder="Enter your GLO SIM card number"
+                    value={phoneNumber}
+                    onChange={(ev) => setPhoneNumber(ev.target.value)}
+                    maxLength={
+                      phoneNumber.startsWith("0")
+                        ? 11
+                        : phoneNumber.startsWith("+")
                         ? 14
                         : 13
-                  }
-                />
-              </InputGroup>
-              <FormErrorMessage>
-                Ensure the phone number is a GLO phone number.
-              </FormErrorMessage>
-            </FormControl>
+                    }
+                  />
+                </InputGroup>
+                <FormErrorMessage>
+                  Ensure the phone number is a GLO phone number.
+                </FormErrorMessage>
+              </FormControl>
+            ) : (
+              <FormControl my={4}>
+                <Select
+                  placeholder="Select your network"
+                  value={otherNetwork}
+                  onChange={(e) => setOtherNetwork(e.target.value)}
+                  w={[null, null, "50%"]}
+                >
+                  <option value="MTN">MTN</option>
+                  <option value="Airtel">Airtel</option>
+                  <option value="9Mobile">9Mobile</option>
+                </Select>
+              </FormControl>
+            )}
 
             <Text>
               <strong>Important:</strong>
@@ -150,19 +180,37 @@ export default function FreeAccessRegistration() {
           </AlertDialogBody>
 
           <AlertDialogFooter>
-            <Button
-              mx="auto"
-              onClick={() => {
-                freeAccessRegMutation.mutate({ phoneNumber });
-              }}
-              isLoading={freeAccessRegMutation.isLoading}
-              isDisabled={
-                freeAccessRegMutation.isLoading ||
-                !isGloPhoneNumber(phoneNumber)
-              }
-            >
-              Submit
-            </Button>
+            {isGloSubscriber ? (
+              <Button
+                mx="auto"
+                onClick={() => {
+                  freeAccessRegMutation.mutate({ phoneNumber });
+                }}
+                isLoading={freeAccessRegMutation.isLoading}
+                isDisabled={
+                  freeAccessRegMutation.isLoading ||
+                  !isGloPhoneNumber(phoneNumber)
+                }
+                w="5rem"
+              >
+                Submit
+              </Button>
+            ) : (
+              <Button
+                mx="auto"
+                onClick={() => {
+                  freeAccessRegMutation.mutate({ phoneNumber: otherNetwork });
+                }}
+                isLoading={freeAccessRegMutation.isLoading}
+                isDisabled={
+                  freeAccessRegMutation.isLoading || otherNetwork === ""
+                }
+                w="5rem"
+              >
+                Submit
+              </Button>
+            )}
+
             <Button
               ref={cancelRef as any}
               mx="auto"
@@ -170,6 +218,7 @@ export default function FreeAccessRegistration() {
               onClick={() => {
                 onClose();
               }}
+              w="5rem"
             >
               Close
             </Button>
