@@ -116,8 +116,11 @@ export default function FreeAccessRegistration() {
               mt="1rem"
               isChecked={isGloSubscriber}
               onChange={() => setIsGloSubscriber(!isGloSubscriber)}
+              colorScheme="green"
             >
-              <strong>I subscribe to GLO Network (uncheck if you don’t).</strong>
+              <strong>
+                I subscribe to GLO Network (uncheck if you don’t).
+              </strong>
             </Checkbox>
             {isGloSubscriber ? (
               <FormControl
@@ -143,6 +146,8 @@ export default function FreeAccessRegistration() {
                         ? 14
                         : 13
                     }
+                    isRequired
+                    focusBorderColor="green.500" 
                   />
                 </InputGroup>
                 <FormErrorMessage>
@@ -156,6 +161,8 @@ export default function FreeAccessRegistration() {
                   value={otherNetwork}
                   onChange={(e) => setOtherNetwork(e.target.value)}
                   w={[null, null, "50%"]}
+                  isRequired
+                  focusBorderColor="green.500"
                 >
                   <option value="MTN">MTN</option>
                   <option value="Airtel">Airtel</option>
