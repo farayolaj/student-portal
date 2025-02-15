@@ -35,6 +35,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
         push(LOGIN);
       }}
       redirectUri={`${HOST_URL}${LOGIN}`}
+      postLogoutRedirectUri={`${HOST_URL}${LOGIN}`}
       responseType="code"
       loadUserInfo={false}
       scope={AUTH_SCOPE}
