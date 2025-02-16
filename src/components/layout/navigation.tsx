@@ -1,21 +1,21 @@
-import { VStack, Text, Link, Icon } from "@chakra-ui/react";
+import { LMS_LOGIN_URL } from "@/constants/config";
+import { Icon, Link, Text, VStack } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { FC } from "react";
-import { IconType } from "react-icons/lib";
 import {
-  IoHomeOutline,
   IoBookOutline,
+  IoCalendarOutline,
   IoDocumentsOutline,
   IoDocumentTextOutline,
-  IoReceiptOutline,
+  IoHomeOutline,
   IoPersonOutline,
-  IoCalendarOutline,
   IoPhonePortraitOutline,
+  IoReceiptOutline,
   IoShieldCheckmarkOutline,
 } from "react-icons/io5";
+import { IconType } from "react-icons/lib";
 import * as routes from "../../constants/routes";
-import { BiMessageRounded } from "react-icons/bi";
 
 type NavigationProps = {
   isOpen: boolean;
@@ -50,7 +50,7 @@ const Navigation: FC<NavigationProps> = ({ isOpen }) => {
       <NavLink
         title="Mobile Class LMS"
         icon={IoPhonePortraitOutline}
-        href="https://dlclms.ui.edu.ng"
+        href={LMS_LOGIN_URL}
         isOpen={isOpen}
         isActive={false}
         isExternal
