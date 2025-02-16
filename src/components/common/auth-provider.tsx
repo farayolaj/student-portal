@@ -8,14 +8,12 @@ import {
 } from "@/constants/config";
 import { HOME, LOGIN } from "@/constants/routes";
 import useLocalStorage from "@/hooks/use-local-storage";
-import { useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { AuthProvider as OidcAuthProvider } from "oidc-react";
 import { ReactNode } from "react";
 
 export default function AuthProvider({ children }: { children: ReactNode }) {
   const { push } = useRouter();
-  const toast = useToast();
   const [_, setAuthToken] = useLocalStorage<string | null>("token", null);
 
   return (

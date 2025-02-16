@@ -8,3 +8,4 @@ export const AUTH_CLIENT_SECRET = process.env.NEXT_PUBLIC_AUTH_CLIENT_SECRET!;
 export const HOST_URL = process.env.NEXT_PUBLIC_HOST_URL!;
 export const AUTH_SCOPE = process.env.NEXT_PUBLIC_AUTH_SCOPE!;
 export const AUTH_RESOURCE = process.env.NEXT_PUBLIC_AUTH_RESOURCE!;
+export const LMS_LOGIN_URL = process.env.NEXT_PUBLIC_LMS_LOGIN_URL!;

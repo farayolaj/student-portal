@@ -1,4 +1,5 @@
 import { useProfile } from "@/api/user/use-profile";
+import { LMS_LOGIN_URL } from "@/constants/config";
 import { PROFILE } from "@/constants/routes";
 import {
   Avatar,
@@ -105,6 +106,9 @@ export const Header: FC = () => {
           >
             <MenuItem as={NextLink} href={PROFILE}>
               Profile
+            </MenuItem>
+            <MenuItem as={NextLink} href={LMS_LOGIN_URL} target="_blank">
+              Mobile Class (LMS)
             </MenuItem>
             <MenuItem onClick={() => auth.signOutRedirect()}>Log Out</MenuItem>
           </MenuList>
