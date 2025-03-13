@@ -1,15 +1,14 @@
 import { useProfile } from "@/api/user/use-profile";
-import { useVerifyResultVerificationTransaction } from "@/api/verify-result/use-verify-result-verification-transaction";
 import { VERIFY_RESULT } from "@/constants/routes";
 import {
   Box,
-  Card,
-  Flex,
-  Icon,
-  CardHeader,
-  Heading,
-  CardBody,
   Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Flex,
+  Heading,
+  Icon,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { IoShieldCheckmark } from "react-icons/io5";

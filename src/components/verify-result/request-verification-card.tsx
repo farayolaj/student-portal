@@ -1,35 +1,35 @@
-import { AddIcon } from "@chakra-ui/icons";
-import {
-  useDisclosure,
-  Card,
-  CardHeader,
-  Heading,
-  CardBody,
-  VStack,
-  StackDivider,
-  Flex,
-  Button,
-  AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogBody,
-  AlertDialogFooter,
-  Box,
-  Text,
-  Icon,
-  UnorderedList,
-  Spinner,
-  useToast,
-  ListItem,
-} from "@chakra-ui/react";
-import { useState, useRef, Fragment } from "react";
-import DocumentUpload from "./document-upload";
-import { IoCheckmarkCircle, IoCloseCircle, IoTime } from "react-icons/io5";
 import { useUploadDocument } from "@/api/verify-result/use-upload-document";
 import queryClient from "@/lib/query-client";
-import { useVerificationResult } from "@/api/verify-result/use-verification-result";
-import { useDocumentUploads } from "@/api/verify-result/use-document-uploads";
+import { AddIcon } from "@chakra-ui/icons";
+import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  Box,
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Flex,
+  Heading,
+  Icon,
+  ListItem,
+  Spinner,
+  StackDivider,
+  Text,
+  UnorderedList,
+  useDisclosure,
+  useToast,
+  VStack,
+} from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
+import { Fragment, useEffect, useRef, useState } from "react";
+import { IoCheckmarkCircle, IoTime } from "react-icons/io5";
+import { verifyResultQueries } from "../../api/verify-result.queries";
+import DocumentUpload from "./document-upload";
 import ReadonlyDocumentUpload from "./readonly-document-upload";
 
 type RequestVerificationCardProps = {
@@ -42,26 +42,27 @@ export default function RequestVerificationCard({
   const [documents, setDocuments] = useState<DocumentUploadValue[]>([
     { id: crypto.randomUUID(), file: null, documentTypeId: "" },
   ]);
-  const verificationResultRes = useVerificationResult();
-  const result = verificationResultRes.data;
-  const documentUploadsRes = useDocumentUploads({
-    onSuccess(data) {
-      if (
-        data.length > 0 &&
-        documents.length === 1 &&
-        documents[0].file === null
-      )
-        setDocuments(
-          data.map((doc) => ({
-            id: doc.id,
-            existingId: doc.id,
-            file: null,
-            documentTypeId: doc.documentTypeId ?? "others",
-            customTitle: doc.customTitle,
-          }))
-        );
-    },
-  });
+  const { data: result } = useQuery(verifyResultQueries.verificationResult());
+  const { data: documentUploads } = useQuery(
+    verifyResultQueries.documentUploads()
+  );
+  useEffect(() => {
+    if (
+      documentUploads &&
+      documentUploads.length > 0 &&
+      documents.length === 1 &&
+      documents[0].file === null
+    )
+      setDocuments(
+        documentUploads.map((doc) => ({
+          id: doc.id,
+          existingId: doc.id,
+          file: null,
+          documentTypeId: doc.documentTypeId ?? "others",
+          customTitle: doc.customTitle,
+        }))
+      );
+  }, []);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
@@ -153,7 +154,7 @@ export default function RequestVerificationCard({
                       <StackDivider w="full" borderWidth={2} />
                     </Fragment>
                   ))
-                : documentUploadsRes.data?.map((doc) => (
+                : documentUploads?.map((doc) => (
                     <Fragment key={doc.id}>
                       <ReadonlyDocumentUpload value={doc} />
                       <StackDivider w="full" borderWidth={2} />
