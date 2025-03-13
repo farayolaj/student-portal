@@ -1,6 +1,7 @@
-import { useDeletionOpen } from "@/api/course/use-deletion-open";
 import { Flex, FormControl, FormLabel, Select } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
 import { FC } from "react";
+import { courseQueries } from "../../api/course.queries";
 import { useAllSessions } from "../../api/user/use-all-sessions";
 import RadioButtonGroup from "../common/radio-button-group";
 
@@ -20,12 +21,12 @@ const CourseListControls: FC<CourseListControlsProps> = ({
   inDeleteView,
 }) => {
   const allSessions = useAllSessions();
-  const canDeleteInFirstSemester = useDeletionOpen({
-    variables: { semester: 1 },
-  });
-  const canDeleteInSecondSemester = useDeletionOpen({
-    variables: { semester: 2 },
-  });
+  const { data: canDeleteInFirstSemester } = useQuery(
+    courseQueries.deletionOpenBy(1)
+  );
+  const { data: canDeleteInSecondSemester } = useQuery(
+    courseQueries.deletionOpenBy(2)
+  );
 
   return (
     <Flex
@@ -64,10 +65,7 @@ const CourseListControls: FC<CourseListControlsProps> = ({
           onChange={(e) => onSemesterChange(parseInt(e))}
           isEachDisabled={
             inDeleteView
-              ? [
-                  !canDeleteInFirstSemester.data ?? true,
-                  !canDeleteInSecondSemester.data ?? true,
-                ]
+              ? [!canDeleteInFirstSemester, !canDeleteInSecondSemester]
               : undefined
           }
         />

@@ -58,6 +58,14 @@ async function getRegisteredCourses(session: string, semester: number) {
 
   return (response.data.payload?.map(toCourse) || []) as Course[];
 }
+async function getCourseDeletionOpen(semester: number) {
+  const semesterString = semester === 2 ? "second" : "first";
+  const response = await getApi().get(
+    `/is_registration_delete_open?semester=${semesterString}`
+  );
+
+  return response.data.status as boolean;
+}
 
 export const courseQueries = {
   all: () => ["courses"] as const,
@@ -89,5 +97,11 @@ export const courseQueries = {
     queryOptions({
       queryKey: [...courseQueries.registered(), session, semester] as const,
       queryFn: () => getRegisteredCourses(session, semester),
+    }),
+  deletionOpen: () => [...courseQueries.all(), "deletion-open"] as const,
+  deletionOpenBy: (semester: number) =>
+    queryOptions({
+      queryKey: [...courseQueries.deletionOpen(), semester] as const,
+      queryFn: () => getCourseDeletionOpen(semester),
     }),
 };

@@ -1,5 +1,4 @@
 import { useCourseRegPrintUrl } from "@/api/course/use-course-reg-print-url";
-import { useDeletionOpen } from "@/api/course/use-deletion-open";
 import { useCurrentPeriod } from "@/api/user/use-current-period";
 import {
   Button,
@@ -43,9 +42,9 @@ const Courses: FC = () => {
   const canRegisterCurrentSemester = useRegistrationOpen({
     variables: { semester },
   });
-  const canDeleteCurrentSemester = useDeletionOpen({
-    variables: { semester },
-  });
+  const { data: canDeleteCurrentSemester } = useQuery(
+    courseQueries.deletionOpenBy(semester)
+  );
   const [view, setView] = useState("list");
   const {
     data: registeredCourses,
@@ -87,7 +86,7 @@ const Courses: FC = () => {
     sessionId === currentSessionId &&
     canRegisterCurrentSemester.data &&
     !registeredCoursesError &&
-    canDeleteCurrentSemester.data;
+    canDeleteCurrentSemester;
 
   const deleteCourses = useDeleteCourses();
   const onDelete = (ids: string[]) => {
