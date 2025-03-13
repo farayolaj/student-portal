@@ -18,21 +18,23 @@ import Image, { StaticImageData } from "next/image";
 import NextLink from "next/link";
 import { FC } from "react";
 import { courseQueries } from "../../api/course.queries";
-import { useDashboardInfo } from "../../api/dashboard/use-dashboard-info";
+import { dashboardQueries } from "../../api/dashboard.queries";
 import * as routes from "../../constants/routes";
 import getAbstractImage from "../../lib/get-abstract-image";
 
 const CoursesCard: FC = () => {
   const { period } = useCurrentPeriod();
-  const dashboardInfo = useDashboardInfo();
+  const { data: dashboardInfo, isLoading } = useQuery(
+    dashboardQueries.dashboardInfo()
+  );
   const { data: canAddCourses } = useQuery(
     courseQueries.registrationOpenBy(period.semester.id)
   );
-  const courses = dashboardInfo.data?.courses || [];
+  const courses = dashboardInfo?.courses || [];
 
   let content;
 
-  if (dashboardInfo.isInitialLoading) {
+  if (isLoading) {
     content = (
       <SimpleGrid gap={4} columns={[2, null, null, 4]}>
         {[1, 2, 3, 4].map((i) => (
