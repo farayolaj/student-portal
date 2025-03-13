@@ -1,5 +1,4 @@
 import { useInitiateTransaction } from "@/api/payment/use-initiate-transaction";
-import { useSundryPayments } from "@/api/payment/use-sundry-payments";
 import { PAYMENTS } from "@/constants/routes";
 import {
   Button,
@@ -13,18 +12,19 @@ import {
   VStack,
   useToast,
 } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import { FC, useState } from "react";
+import { FC } from "react";
+import { paymentQueries } from "../../api/payment.queries";
+import { useProfile } from "../../api/user/use-profile";
 import EventCalendar from "../common/events/event-calendar";
 import useRemitaInline from "../common/remita-inline";
-import { useProfile } from "../../api/user/use-profile";
-import { useAllTransactions } from "@/api/payment/use-all-transactions";
-import { all } from "axios";
 
 const mostSubscribedSundryCodes = ["75", "57"];
 
 const DisplayPanel: FC = () => {
-  const sundryPaymentsQuery = useSundryPayments({
+  const { data: sundryPayments } = useQuery({
+    ...paymentQueries.sundryList(),
     select: (data) =>
       data
         .filter((sundry) =>
@@ -37,19 +37,18 @@ const DisplayPanel: FC = () => {
         }),
   });
 
-  const AllTransactionQuery = useAllTransactions();
-  const paidPartPayment = AllTransactionQuery?.data?.filter(
+  const { data: allTransactions } = useQuery(paymentQueries.transactionsList());
+  const paidPartPayment = allTransactions?.filter(
     (item) => item.isPartPayment && item.status === "success"
   );
 
-  const currentSchoolFee = AllTransactionQuery?.data?.filter(
+  const currentSchoolFee = allTransactions?.filter(
     (item) => item.isCurrentSchoolFee && item.status === "success"
   );
 
-  const partPaymentIds = AllTransactionQuery?.data
+  const partPaymentIds = allTransactions
     ?.filter((item) => item.isPartPayment)
     .map((idx) => idx.encodedId);
-
 
   const toast = useToast();
   const router = useRouter();
@@ -125,7 +124,7 @@ const DisplayPanel: FC = () => {
       pb={"2rem"}
     >
       {paidPartPayment && paidPartPayment.length > 0
-        ? sundryPaymentsQuery.data?.map(
+        ? sundryPayments?.map(
             (sundry) =>
               !partPaymentIds?.includes(sundry.id) && (
                 <Tooltip
@@ -175,7 +174,7 @@ const DisplayPanel: FC = () => {
                 </Tooltip>
               )
           )
-        : sundryPaymentsQuery.data?.map((sundry) =>
+        : sundryPayments?.map((sundry) =>
             currentSchoolFee?.length === 0 ? (
               <Tooltip
                 label="Credentials verification required"

@@ -1,5 +1,4 @@
 import { useInitiateTransaction } from "@/api/payment/use-initiate-transaction";
-import { useSundryPayments } from "@/api/payment/use-sundry-payments";
 import {
   Button,
   Flex,
@@ -26,14 +25,15 @@ import {
   AutoCompleteItem,
   AutoCompleteList,
 } from "@choc-ui/chakra-autocomplete";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { paymentQueries } from "../../api/payment.queries";
 import useRemitaInline from "../common/remita-inline";
 
 export default function MakeSundryPaymentModal() {
   const { query, push } = useRouter();
-  const paymentsRes = useSundryPayments();
-  const sundryPayments = paymentsRes.data || [];
+  const { data: sundryPayments } = useQuery(paymentQueries.sundryList());
   const [selectedPaymentId, setSelectedPaymentId] = useState<
     string | undefined
   >();

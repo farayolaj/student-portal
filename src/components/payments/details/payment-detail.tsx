@@ -1,6 +1,5 @@
 import { useFetchReceipt } from "@/api/payment/use-fetch-receipt";
 import { useInitiateTransaction } from "@/api/payment/use-initiate-transaction";
-import { useMainPayments } from "@/api/payment/use-main-payments";
 import { useSession } from "@/api/user/use-session";
 import useRemitaInline from "@/components/common/remita-inline";
 import buildPaymentDetailUrl from "@/lib/payments/build-payment-detail-url";
@@ -33,7 +32,6 @@ export default function PaymentDetail({
   onPaymentSuccess,
 }: PaymentDetailProps) {
   const sessionRes = useSession(payment?.sessionId || "");
-  const mainPayments = useMainPayments();
   const descriptionArr = [
     payment?.level ? `${payment.level} Level` : undefined,
     payment?.programme,
@@ -174,13 +172,16 @@ export default function PaymentDetail({
                   {payment.description} {"(click here to pay)"}
                 </Link>
               ))
-              .reduce((prev, curr, idx) => {
-                if (idx !== 0 && idx === prerequisites.length - 1)
-                  prev.push(" and ");
-                else if (idx !== 0) prev.push(", ");
-                prev.push(curr);
-                return prev;
-              }, [] as (JSX.Element | string)[])}{" "}
+              .reduce(
+                (prev, curr, idx) => {
+                  if (idx !== 0 && idx === prerequisites.length - 1)
+                    prev.push(" and ");
+                  else if (idx !== 0) prev.push(", ");
+                  prev.push(curr);
+                  return prev;
+                },
+                [] as (JSX.Element | string)[]
+              )}{" "}
           </Text>
         </Center>
       )}

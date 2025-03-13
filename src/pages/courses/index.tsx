@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import NextLink from "next/link";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import {
   IoAdd,
   IoGrid,
@@ -65,14 +65,16 @@ const Courses: FC = () => {
     refetch: courseStatsRefetch,
   } = useQuery(courseQueries.statisticsFor(sessionId, semester));
 
-  if (courseStatsError) {
-    toast({
-      title: "Error fetching course statistics",
-      description: courseStatsError.message,
-      status: "error",
-      isClosable: true,
-    });
-  }
+  useEffect(() => {
+    if (courseStatsError) {
+      toast({
+        title: "Error fetching course statistics",
+        description: courseStatsError.message,
+        status: "error",
+        isClosable: true,
+      });
+    }
+  }, [courseStatsError]);
 
   const courses = registeredCourses || [];
   const canAddCourses =

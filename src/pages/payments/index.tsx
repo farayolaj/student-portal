@@ -1,8 +1,9 @@
-import { useMainPayments } from "@/api/payment/use-main-payments";
 import { useProfile } from "@/api/user/use-profile";
 import ScreeningInfo from "@/components/payments/screening-info";
 import { Box, Center, SimpleGrid, Spinner } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { paymentQueries } from "../../api/payment.queries";
 import PageTitle from "../../components/common/page-title";
 import Seo from "../../components/common/seo";
 import PaymentControl from "../../components/payments/payment-control";
@@ -11,9 +12,8 @@ import PaymentSummary from "../../components/payments/payment-summary";
 export default function Payments() {
   const profile = useProfile();
   const [statusFilter, setStatusFilter] = useState("all");
-  const mainPaymentRes = useMainPayments();
-  const payments = mainPaymentRes.data ?? [];
-  const sortedPayments = payments.sort((a, b) => {
+  const { data, isLoading } = useQuery(paymentQueries.mainList());
+  const sortedPayments = data.sort((a, b) => {
     if (a.status === b.status) return 0;
     if (a.status === "unpaid") return -1;
     else return 1;
@@ -39,7 +39,7 @@ export default function Payments() {
         statusFilter={statusFilter}
         onStatusFilterChange={setStatusFilter}
       />
-      {mainPaymentRes.isLoading ? (
+      {isLoading ? (
         <Center py={16}>
           <Spinner
             size="xl"

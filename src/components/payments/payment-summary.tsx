@@ -1,10 +1,12 @@
-import { useVerifyTransaction } from "@/api/payment/use-verify-transaction";
 import { useAllSessions } from "@/api/user/use-all-sessions";
 import buildPaymentDetailUrl from "@/lib/payments/build-payment-detail-url";
 import queryClient from "@/lib/query-client";
 import { Button, Card, CardBody, Flex, Text, Tooltip } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { IoCheckmarkCircle, IoTime } from "react-icons/io5";
+import { paymentQueries } from "../../api/payment.queries";
 
 type PaymentSummaryProps = {
   payment: Payment;
@@ -21,13 +23,15 @@ export default function PaymentSummary({
       sessions.find((session) => session.id === payment.sessionId),
   });
   const descriptionArr = [session?.name, payment.semester];
-  useVerifyTransaction({
-    variables: { rrr: payment.transaction?.rrr || "" },
+  const verifyTransaction = useQuery({
+    ...paymentQueries.verifyTransaction(payment.transaction?.rrr || ""),
     enabled: payment.status === "unpaid",
-    onSuccess: () => {
-      queryClient.invalidateQueries(["main-payments"]);
-    },
   });
+  useEffect(() => {
+    if (verifyTransaction.isSuccess && verifyTransaction.data)
+      queryClient.invalidateQueries(["main-payments"]);
+  }, [verifyTransaction, queryClient]);
+
   let description = descriptionArr.filter(Boolean).join(" | ");
   let statusIcon: JSX.Element;
   let statusText: string;
@@ -120,8 +124,8 @@ export default function PaymentSummary({
               {payment.status === "paid"
                 ? "View Details"
                 : payment.isActive
-                ? "View Details"
-                : "Payment Closed"}
+                  ? "View Details"
+                  : "Payment Closed"}
             </Button>
           </Flex>
         </CardBody>
