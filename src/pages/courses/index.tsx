@@ -1,7 +1,16 @@
 import { useCourseRegPrintUrl } from "@/api/course/use-course-reg-print-url";
 import { useDeletionOpen } from "@/api/course/use-deletion-open";
 import { useCurrentPeriod } from "@/api/user/use-current-period";
-import { Button, Flex, Icon, Link, Spinner, Tooltip, useToast } from "@chakra-ui/react";
+import {
+  Button,
+  Flex,
+  Icon,
+  Link,
+  Spinner,
+  Tooltip,
+  useToast,
+} from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
 import NextLink from "next/link";
 import { FC, useState } from "react";
 import {
@@ -11,9 +20,8 @@ import {
   IoPrintOutline,
   IoTrashOutline,
 } from "react-icons/io5";
-import { useCourseStatistics } from "../../api/course/use-course-statistics";
+import { courseQueries } from "../../api/course.queries";
 import { useDeleteCourses } from "../../api/course/use-delete-courses";
-import { useRegisteredCourses } from "../../api/course/use-registered-courses";
 import { useRegistrationOpen } from "../../api/course/use-registration-open";
 import PageTitle from "../../components/common/page-title";
 import RadioButtonGroup from "../../components/common/radio-button-group";
@@ -25,6 +33,7 @@ import DeleteCourseView from "../../components/courses/delete/delete-course-view
 import * as routes from "../../constants/routes";
 
 const Courses: FC = () => {
+  const toast = useToast();
   const { period } = useCurrentPeriod();
   const currentSessionId = period.session.id;
   const currentSemester = period.semester.id;
@@ -38,54 +47,57 @@ const Courses: FC = () => {
     variables: { semester },
   });
   const [view, setView] = useState("list");
-  const registeredCourses = useRegisteredCourses({
-    variables: { session: sessionId, semester: semester },
+  const {
+    data: registeredCourses,
+    error: registeredCoursesError,
+    isLoading: registeredCoursesIsLoading,
+    refetch: registeredCoursesRefetch,
+  } = useQuery({
+    ...courseQueries.registeredBy(sessionId, semester),
     enabled: !!sessionId,
     retry: (errorCount, error) => {
       const err = error as Error;
       if (err.message.includes("payment")) return false;
       else return errorCount < 3;
     },
-    refetchOnWindowFocus: false,
   });
-  const courseStats = useCourseStatistics({
-    variables: {
-      session: sessionId,
-      semester: semester,
-    },
-    onError: (err) => {
-      toast({
-        title: "Error fetching course statistics",
-        description: (err as Error).message,
-        status: "error",
-        isClosable: true,
-      });
-    },
-  });
+  const {
+    data: courseStats,
+    error: courseStatsError,
+    refetch: courseStatsRefetch,
+  } = useQuery(courseQueries.statisticsFor(sessionId, semester));
 
-  const courses = registeredCourses.data || [];
+  if (courseStatsError) {
+    toast({
+      title: "Error fetching course statistics",
+      description: courseStatsError.message,
+      status: "error",
+      isClosable: true,
+    });
+  }
+
+  const courses = registeredCourses || [];
   const canAddCourses =
     sessionId === currentSessionId &&
     semester === currentSemester &&
     !inDeleteCourseView &&
     canRegisterCurrentSemester.data &&
-    !registeredCourses.error;
+    !registeredCoursesError;
   const canDeleteCourses =
     sessionId === currentSessionId &&
     canRegisterCurrentSemester.data &&
-    !registeredCourses.error &&
+    !registeredCoursesError &&
     canDeleteCurrentSemester.data;
 
-  const toast = useToast();
   const deleteCourses = useDeleteCourses();
   const onDelete = (ids: string[]) => {
     deleteCourses.mutate(
       { ids },
       {
         onSuccess: () => {
-          registeredCourses.refetch();
+          registeredCoursesRefetch();
           setInDeleteCourseView(false);
-          courseStats.refetch();
+          courseStatsRefetch();
           toast({
             title: "Courses deleted successfully",
             status: "success",
@@ -119,10 +131,10 @@ const Courses: FC = () => {
         inDeleteView={inDeleteCourseView}
       />
       <CourseOverview
-        maxUnits={courseStats.data?.maxUnits || 0}
-        minUnits={courseStats.data?.minUnits || 0}
-        registeredUnits={courseStats.data?.totalUnits || 0}
-        coursesRegistered={courseStats.data?.totalCourses || 0}
+        maxUnits={courseStats?.maxUnits || 0}
+        minUnits={courseStats?.minUnits || 0}
+        registeredUnits={courseStats?.totalUnits || 0}
+        coursesRegistered={courseStats?.totalCourses || 0}
         minMaxActive={sessionId === currentSessionId}
       />
       <Flex mt={6} gap={4} justify="space-between" align="center">
@@ -152,7 +164,7 @@ const Courses: FC = () => {
             </Button>
           )}
           {!inDeleteCourseView && (
-            <Tooltip label={printUrl.error?.message ?? ''}>
+            <Tooltip label={printUrl.error?.message ?? ""}>
               <Button
                 mx="auto"
                 display="inline-flex"
@@ -192,8 +204,8 @@ const Courses: FC = () => {
         <CourseView
           courseList={courses}
           view={view as "list" | "grid"}
-          isLoading={registeredCourses.isLoading}
-          error={registeredCourses.error as Error}
+          isLoading={registeredCoursesIsLoading}
+          error={registeredCoursesError as Error}
         />
       )}
     </>
