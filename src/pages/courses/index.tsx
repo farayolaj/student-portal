@@ -21,7 +21,6 @@ import {
 } from "react-icons/io5";
 import { courseQueries } from "../../api/course.queries";
 import { useDeleteCourses } from "../../api/course/use-delete-courses";
-import { useRegistrationOpen } from "../../api/course/use-registration-open";
 import PageTitle from "../../components/common/page-title";
 import RadioButtonGroup from "../../components/common/radio-button-group";
 import Seo from "../../components/common/seo";
@@ -39,9 +38,9 @@ const Courses: FC = () => {
   const [sessionId, setSessionId] = useState(currentSessionId);
   const [semester, setSemester] = useState(currentSemester);
   const [inDeleteCourseView, setInDeleteCourseView] = useState(false);
-  const canRegisterCurrentSemester = useRegistrationOpen({
-    variables: { semester },
-  });
+  const { data: canRegisterCurrentSemester } = useQuery(
+    courseQueries.registrationOpenBy(semester)
+  );
   const { data: canDeleteCurrentSemester } = useQuery(
     courseQueries.deletionOpenBy(semester)
   );
@@ -80,11 +79,11 @@ const Courses: FC = () => {
     sessionId === currentSessionId &&
     semester === currentSemester &&
     !inDeleteCourseView &&
-    canRegisterCurrentSemester.data &&
+    canRegisterCurrentSemester &&
     !registeredCoursesError;
   const canDeleteCourses =
     sessionId === currentSessionId &&
-    canRegisterCurrentSemester.data &&
+    canRegisterCurrentSemester &&
     !registeredCoursesError &&
     canDeleteCurrentSemester;
 

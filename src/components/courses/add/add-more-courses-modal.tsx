@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Flex,
   Icon,
@@ -16,9 +15,10 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
-import { useSearchCourses } from "../../../api/course/use-search-courses";
+import { courseQueries } from "../../../api/course.queries";
 import useDebounce from "../../../hooks/use-debounce";
 import statusCodeToName from "../../../lib/status-code-to-name";
 
@@ -33,11 +33,9 @@ export default function AddMoreCoursesModal({
 }: AddMoreCoursesModalProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
-  const [searchResults, setSearchResults] = useState<Course[]>([]);
   const [selectedCourses, setSelectedCourses] = useState<Course[]>([]);
-  useSearchCourses({
-    variables: { searchTerm: debouncedSearchTerm },
-    onSuccess: setSearchResults,
+  const { data: searchResults } = useQuery({
+    ...courseQueries.searchBy(debouncedSearchTerm),
     enabled: !!debouncedSearchTerm,
   });
   const { isOpen, onOpen, onClose } = useDisclosure();

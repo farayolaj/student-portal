@@ -58,6 +58,7 @@ async function getRegisteredCourses(session: string, semester: number) {
 
   return (response.data.payload?.map(toCourse) || []) as Course[];
 }
+
 async function getCourseDeletionOpen(semester: number) {
   const semesterString = semester === 2 ? "second" : "first";
   const response = await getApi().get(
@@ -65,6 +66,25 @@ async function getCourseDeletionOpen(semester: number) {
   );
 
   return response.data.status as boolean;
+}
+
+async function getCourseRegOpen(semester: number) {
+  const semesterString = semester === 2 ? "second" : "first";
+  const response = await getApi().get(
+    `/is_registration_open?semester=${semesterString}`
+  );
+
+  return response.data.status as boolean;
+}
+
+async function searchCourses(searchTerm: string) {
+  const response = await getApi().get(
+    `/search_course/${encodeURI(searchTerm)}`
+  );
+
+  if (!response.data.status) throw new Error(response.data.message);
+
+  return (response.data.payload?.map(toCourse) || []) as Course[];
 }
 
 export const courseQueries = {
@@ -103,5 +123,19 @@ export const courseQueries = {
     queryOptions({
       queryKey: [...courseQueries.deletionOpen(), semester] as const,
       queryFn: () => getCourseDeletionOpen(semester),
+    }),
+  registrationOpen: () =>
+    [...courseQueries.all(), "registration-open"] as const,
+  registrationOpenBy: (semester: number) =>
+    queryOptions({
+      queryKey: [...courseQueries.registrationOpen(), semester] as const,
+      queryFn: () => getCourseRegOpen(semester),
+    }),
+  search: () => [...courseQueries.all(), "search"] as const,
+  searchBy: (searchTerm: string) =>
+    queryOptions({
+      queryKey: [...courseQueries.search(), searchTerm] as const,
+      queryFn: () => searchCourses(searchTerm),
+      initialData: [],
     }),
 };
