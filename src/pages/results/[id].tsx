@@ -1,15 +1,15 @@
-import { useRouter } from "next/router";
-import PageTitle from "../../components/common/page-title";
-import Seo from "../../components/common/seo";
-import Table from "../../components/common/custom-table";
-import ResultDetailOverview from "../../components/results/details/result-detail-overview";
-import { createColumnHelper } from "@tanstack/react-table";
 import { Box, chakra, Flex, SkeletonText } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
+import { createColumnHelper } from "@tanstack/react-table";
+import { useRouter } from "next/router";
 import { useState } from "react";
+import { resultQueries } from "../../api/result.queries";
+import Table from "../../components/common/custom-table";
+import PageTitle from "../../components/common/page-title";
 import RadioButtonGroup from "../../components/common/radio-button-group";
+import Seo from "../../components/common/seo";
+import ResultDetailOverview from "../../components/results/details/result-detail-overview";
 import ResultBarChart from "../../components/results/result-bar-chart";
-import { useSingleResultSession } from "@/api/result/use-single-result-session";
-import { useResult } from "@/api/result/use-result";
 
 const columnHelper = createColumnHelper<CourseResult>();
 
@@ -47,11 +47,12 @@ export default function ResultDetailPage() {
   const { query } = useRouter();
   const sessionId = query.id as string;
   const [semester, setSemester] = useState(0);
-  const resultSession = useSingleResultSession(sessionId);
-  const { data: result } = useResult({
-    variables: {
-      session: resultSession as ResultSession,
-    },
+  const { data: resultSession } = useQuery({
+    ...resultQueries.sessions(),
+    select: (data) => data.find((session) => session.id === sessionId),
+  });
+  const { data: result } = useQuery({
+    ...resultQueries.detailsBy(resultSession as ResultSession),
     enabled: !!resultSession,
   });
 

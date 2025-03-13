@@ -1,4 +1,3 @@
-import { useResult } from "@/api/result/use-result";
 import {
   Card,
   CardBody,
