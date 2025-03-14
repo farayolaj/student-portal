@@ -1,4 +1,3 @@
-import { usePracticumRequestForm } from "@/api/dashboard/use-praticum-form-submit";
 import { useDownloadDocument } from "@/api/document/use-download-document";
 import {
   Badge,
@@ -18,9 +17,10 @@ import {
   Textarea,
   useToast,
 } from "@chakra-ui/react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { requestPracticum } from "../../api/dashboard.mutations";
 import { dashboardQueries } from "../../api/dashboard.queries";
 
 type FormState = {
@@ -48,7 +48,9 @@ const PraticumFormCard = () => {
   const router = useRouter();
 
   const [formState, setFormState] = useState<FormState>(initialFormState);
-  const { mutate: submitForm } = usePracticumRequestForm();
+  const { mutate: submitForm } = useMutation({
+    mutationFn: requestPracticum,
+  });
 
   const { data: eligibility } = useQuery(
     dashboardQueries.practicumEligibility()

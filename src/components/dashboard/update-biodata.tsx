@@ -1,26 +1,26 @@
-import { useBiodataUpdate } from "@/api/dashboard/use-biodata-update";
 import { useProfile } from "@/api/user/use-profile";
 import {
+  Button,
   Card,
-  CardHeader,
   CardBody,
-  Heading,
+  CardHeader,
   chakra,
-  CheckboxGroup,
   Checkbox,
-  Stack,
+  CheckboxGroup,
   FormControl,
   FormLabel,
-  Input,
+  Heading,
   HStack,
-  Textarea,
-  RadioGroup,
+  Input,
   Radio,
-  Button,
+  RadioGroup,
+  Stack,
+  Textarea,
   useToast,
 } from "@chakra-ui/react";
-import { useRouter } from "next/router";
+import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
+import { updateBiodata } from "../../api/dashboard.mutations";
 
 const disabilityData = [
   "Attention deficit hyperactivity disorder (ADHD)",
@@ -63,12 +63,13 @@ const UpdateBioData = () => {
       setFormState((prevState) => ({
         ...prevState,
         gender: data.user.gender,
-      }))        
+      }));
     },
   });
 
-
-  const { mutate: submitForm } = useBiodataUpdate();
+  const { mutate: submitForm } = useMutation({
+    mutationFn: updateBiodata,
+  });
   const toast = useToast();
 
   const handleCheckboxChange = (newValues: string[]) => {
@@ -80,7 +81,6 @@ const UpdateBioData = () => {
     } else {
       newDisabilities.push(...newValues);
     }
-
 
     setFormState((prevState) => ({
       ...prevState,
@@ -161,7 +161,12 @@ const UpdateBioData = () => {
               gap={"1.5rem"}
             >
               {disabilityData.map((item, index) => (
-                <Checkbox borderColor={'black'} key={index} value={item} ml={"0rem !important"}>
+                <Checkbox
+                  borderColor={"black"}
+                  key={index}
+                  value={item}
+                  ml={"0rem !important"}
+                >
                   {item}
                 </Checkbox>
               ))}
