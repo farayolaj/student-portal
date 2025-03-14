@@ -1,16 +1,13 @@
 import { Flex, Spinner } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
+import { eventQueries } from "../../../api/event.queries";
 import Calendar from "../calendar";
-import { useEvents } from "@/api/event/use-events";
 import Events from "./events";
 
 export default function EventCalendar() {
-  const { data: events, isInitialLoading } = useEvents({
-    retry: false,
-    structuralSharing: false,
-    retryOnMount: false,
-  });
+  const { data: events, isLoading } = useQuery(eventQueries.list());
 
-  if (isInitialLoading)
+  if (isLoading)
     return (
       <Flex w="full" py={10} justify="center" align="center">
         <Spinner size="xl" color="black" />
