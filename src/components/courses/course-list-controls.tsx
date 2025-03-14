@@ -2,7 +2,7 @@ import { Flex, FormControl, FormLabel, Select } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { FC } from "react";
 import { courseQueries } from "../../api/course.queries";
-import { useAllSessions } from "../../api/user/use-all-sessions";
+import { userQueries } from "../../api/user.queries";
 import RadioButtonGroup from "../common/radio-button-group";
 
 type CourseListControlsProps = {
@@ -20,7 +20,7 @@ const CourseListControls: FC<CourseListControlsProps> = ({
   onSemesterChange,
   inDeleteView,
 }) => {
-  const allSessions = useAllSessions();
+  const { data: allSessions } = useQuery(userQueries.sessions());
   const { data: canDeleteInFirstSemester } = useQuery(
     courseQueries.deletionOpenBy(1)
   );
@@ -49,7 +49,7 @@ const CourseListControls: FC<CourseListControlsProps> = ({
             bg: "primary.50",
           }}
         >
-          {allSessions.data?.map((session) => (
+          {allSessions?.map((session) => (
             <option key={session.id} value={session.id}>
               {session.name}
             </option>

@@ -1,5 +1,4 @@
 import { useInitiatePrint } from "@/api/payment/use-initiate-print";
-import { useAllSessions } from "@/api/user/use-all-sessions";
 import CustomTable from "@/components/common/custom-table";
 import RequeryButton from "@/components/payments/requery-button";
 import { Badge, Button, Flex, Select, Spinner, Text } from "@chakra-ui/react";
@@ -7,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useState } from "react";
 import { paymentQueries } from "../api/payment.queries";
+import { userQueries } from "../api/user.queries";
 import PageTitle from "../components/common/page-title";
 import Seo from "../components/common/seo";
 
@@ -39,7 +39,7 @@ export default function Transactions() {
   const { data: allTransations, refetch: allTransationsRefetch } = useQuery(
     paymentQueries.transactionsList()
   );
-  const allSessions = useAllSessions();
+  const { data: allSessions } = useQuery(userQueries.sessions());
   const [session, setSession] = useState("all");
   const [status, setStatus] = useState("all");
   const data =
@@ -182,7 +182,7 @@ export default function Transactions() {
           onChange={(ev) => setSession(ev.target.value)}
         >
           <option value="all">All Sessions</option>
-          {allSessions.data?.map((session) => (
+          {allSessions?.map((session) => (
             <option key={session.id} value={session.id}>
               {session.name}
             </option>

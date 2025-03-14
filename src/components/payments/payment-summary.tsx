@@ -1,4 +1,3 @@
-import { useAllSessions } from "@/api/user/use-all-sessions";
 import buildPaymentDetailUrl from "@/lib/payments/build-payment-detail-url";
 import queryClient from "@/lib/query-client";
 import { Button, Card, CardBody, Flex, Text, Tooltip } from "@chakra-ui/react";
@@ -7,6 +6,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { IoCheckmarkCircle, IoTime } from "react-icons/io5";
 import { paymentQueries } from "../../api/payment.queries";
+import { userQueries } from "../../api/user.queries";
 
 type PaymentSummaryProps = {
   payment: Payment;
@@ -18,7 +18,8 @@ export default function PaymentSummary({
   isFresherSchoolFee,
 }: PaymentSummaryProps) {
   const { push } = useRouter();
-  const { data: session } = useAllSessions({
+  const { data: session } = useQuery({
+    ...userQueries.sessions(),
     select: (sessions) =>
       sessions.find((session) => session.id === payment.sessionId),
   });
