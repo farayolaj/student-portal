@@ -9,7 +9,7 @@ import {
   Tooltip,
   useToast,
 } from "@chakra-ui/react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import NextLink from "next/link";
 import { FC, useEffect, useState } from "react";
 import {
@@ -19,8 +19,8 @@ import {
   IoPrintOutline,
   IoTrashOutline,
 } from "react-icons/io5";
+import { deleteCourses } from "../../api/course.mutations";
 import { courseQueries } from "../../api/course.queries";
-import { useDeleteCourses } from "../../api/course/use-delete-courses";
 import PageTitle from "../../components/common/page-title";
 import RadioButtonGroup from "../../components/common/radio-button-group";
 import Seo from "../../components/common/seo";
@@ -89,9 +89,11 @@ const Courses: FC = () => {
     !registeredCoursesError &&
     canDeleteCurrentSemester;
 
-  const deleteCourses = useDeleteCourses();
+  const deleteCoursesMutation = useMutation({
+    mutationFn: deleteCourses,
+  });
   const onDelete = (ids: string[]) => {
-    deleteCourses.mutate(
+    deleteCoursesMutation.mutate(
       { ids },
       {
         onSuccess: () => {

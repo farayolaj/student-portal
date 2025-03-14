@@ -12,11 +12,11 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
+import { addCourses } from "../../api/course.mutations";
 import { courseQueries } from "../../api/course.queries";
-import { useAddCourses } from "../../api/course/use-add-courses";
 import PageTitle from "../../components/common/page-title";
 import Seo from "../../components/common/seo";
 import AddCourseOverviewCard from "../../components/courses/add/add-course-overview-card";
@@ -68,7 +68,9 @@ export default function AddCoursesPage(): JSX.Element {
     setSelectedCourses(selected);
   }, [courseList, selectedCourses.length]);
 
-  const addCourses = useAddCourses();
+  const addCoursesMutation = useMutation({
+    mutationFn: addCourses,
+  });
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef(null);
   const router = useRouter();
@@ -172,16 +174,16 @@ export default function AddCoursesPage(): JSX.Element {
                 colorScheme="blue"
                 ref={cancelRef}
                 onClick={onClose}
-                isDisabled={addCourses.isLoading}
+                isDisabled={addCoursesMutation.isPending}
               >
                 Cancel
               </Button>
               <Button
                 colorScheme="primary"
-                isDisabled={addCourses.isLoading}
+                isDisabled={addCoursesMutation.isPending}
                 onClick={() => {
                   onClose();
-                  addCourses.mutate(
+                  addCoursesMutation.mutate(
                     { courseIds: selectedCourses },
                     {
                       onSuccess: () => {
@@ -208,7 +210,7 @@ export default function AddCoursesPage(): JSX.Element {
                 }}
                 ml={3}
               >
-                {addCourses.isLoading ? <Spinner size="sm" /> : "Add"}
+                {addCoursesMutation.isPending ? <Spinner size="sm" /> : "Add"}
               </Button>
             </AlertDialogFooter>
           </AlertDialogContent>
