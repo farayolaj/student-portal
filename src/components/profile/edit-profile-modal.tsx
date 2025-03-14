@@ -1,22 +1,23 @@
-import { useUpdateProfile } from "@/api/user/use-update-profile";
 import {
+  Button,
+  chakra,
   Flex,
-  useToast,
-  Modal,
   FormControl,
   FormLabel,
   Input,
+  Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  Button,
-  chakra,
+  useToast,
 } from "@chakra-ui/react";
+import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
-import isMobile from "validator/lib/isMobilePhone";
 import isEmail from "validator/lib/isEmail";
+import isMobile from "validator/lib/isMobilePhone";
+import { updateProfile } from "../../api/user.mutations";
 
 type EditProfileModalProps = {
   isOpen: boolean;
@@ -34,7 +35,9 @@ export default function EditProfileModal({
   initialData,
   onSuccess,
 }: EditProfileModalProps) {
-  const { mutate: updateProfile } = useUpdateProfile();
+  const updateProfileMutation = useMutation({
+    mutationFn: updateProfile,
+  });
   const toast = useToast();
 
   const [phone, setPhone] = useState(initialData.phone);
@@ -58,7 +61,7 @@ export default function EditProfileModal({
         isClosable: true,
       });
     } else {
-      updateProfile(
+      updateProfileMutation.mutate(
         { phone, alternativeEmail },
         {
           onSuccess: () => {

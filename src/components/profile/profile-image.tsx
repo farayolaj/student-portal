@@ -1,5 +1,4 @@
 import { useProfile } from "@/api/user/use-profile";
-import { useUpdateProfileImage } from "@/api/user/use-update-profile-picture";
 import {
   Avatar,
   Box,
@@ -9,15 +8,17 @@ import {
   Spinner,
   useToast,
 } from "@chakra-ui/react";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { updateProfileImage } from "../../api/user.mutations";
 
 export default function ProfileImage() {
   const profile = useProfile();
   const toast = useToast();
   const queryClient = useQueryClient();
   const [uploadedImg, setUploadedImg] = useState<string | undefined>(undefined);
-  const updateProfile = useUpdateProfileImage({
+  const updateProfileImageMutation = useMutation({
+    mutationFn: updateProfileImage,
     onSuccess: () => {
       toast({
         title: "Success",
@@ -82,7 +83,7 @@ export default function ProfileImage() {
       isClosable: true,
     });
 
-    updateProfile.mutate({
+    updateProfileImageMutation.mutate({
       file,
     });
   };
@@ -97,7 +98,7 @@ export default function ProfileImage() {
             src={profile.data?.user?.profileImage || uploadedImg}
           />
         </Box>
-        {updateProfile.isLoading && (
+        {updateProfileImageMutation.isPending && (
           <Flex
             w="full"
             h="full"
@@ -125,13 +126,17 @@ export default function ProfileImage() {
             backdropFilter="auto"
             backdropBlur="sm"
           >
-            <Button as="label" size="sm" isDisabled={updateProfile.isLoading}>
+            <Button
+              as="label"
+              size="sm"
+              isDisabled={updateProfileImageMutation.isPending}
+            >
               <Input
                 type="file"
                 accept="image/*"
                 srOnly
                 onChange={onImageUpload}
-                isDisabled={updateProfile.isLoading}
+                isDisabled={updateProfileImageMutation.isPending}
               />
               Upload Image
             </Button>
