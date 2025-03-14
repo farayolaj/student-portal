@@ -1,4 +1,3 @@
-import { useUploadDocument } from "@/api/verify-result/use-upload-document";
 import queryClient from "@/lib/query-client";
 import { AddIcon } from "@chakra-ui/icons";
 import {
@@ -25,9 +24,10 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { IoCheckmarkCircle, IoTime } from "react-icons/io5";
+import { uploadDocument } from "../../api/verify-result.mutations";
 import { verifyResultQueries } from "../../api/verify-result.queries";
 import DocumentUpload from "./document-upload";
 import ReadonlyDocumentUpload from "./readonly-document-upload";
@@ -75,7 +75,7 @@ export default function RequestVerificationCard({
     return false;
   }, false);
 
-  const uploadDocument = useUploadDocument();
+  const uploadDocumentMutation = useMutation({ mutationFn: uploadDocument });
 
   const onSubmit = () => {
     setIsSubmitting(true);
@@ -83,7 +83,7 @@ export default function RequestVerificationCard({
       documents
         .filter((doc) => Boolean(doc.file))
         .map((doc) =>
-          uploadDocument.mutateAsync({
+          uploadDocumentMutation.mutateAsync({
             existingId: doc.existingId,
             file: doc.file as File,
             documentTypeId:
@@ -93,8 +93,8 @@ export default function RequestVerificationCard({
         )
     )
       .then(() => {
-        queryClient.invalidateQueries(["verification_result"]);
-        queryClient.invalidateQueries(["document-uploads"]);
+        queryClient.invalidateQueries(verifyResultQueries.verificationResult());
+        queryClient.invalidateQueries(verifyResultQueries.documentUploads());
       })
       .catch((err) => {
         toast({

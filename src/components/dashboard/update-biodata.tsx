@@ -19,7 +19,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { updateBiodata } from "../../api/dashboard.mutations";
 
 const disabilityData = [
@@ -58,14 +58,16 @@ const initialFormState: FormState = {
 
 const UpdateBioData = () => {
   const [formState, setFormState] = useState<FormState>(initialFormState);
-  const { data: profile } = useProfile({
-    onSuccess(data) {
+  const { data: profile } = useProfile();
+
+  useEffect(() => {
+    if (profile) {
       setFormState((prevState) => ({
         ...prevState,
-        gender: data.user.gender,
+        gender: profile.user.gender,
       }));
-    },
-  });
+    }
+  }, [profile]);
 
   const { mutate: submitForm } = useMutation({
     mutationFn: updateBiodata,

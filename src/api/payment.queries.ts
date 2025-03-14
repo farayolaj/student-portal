@@ -96,7 +96,6 @@ export const paymentQueries = {
       queryFn: () => getSundryPayments(),
       initialData: [],
     }),
-  details: () => [...paymentQueries.all(), "detail"],
   detailsBy: (
     id: string,
     transactionRef?: string,
@@ -104,7 +103,7 @@ export const paymentQueries = {
   ) =>
     queryOptions({
       queryKey: [
-        ...paymentQueries.details(),
+        ...paymentQueries.mainList().queryKey,
         id,
         transactionRef,
         transactionType,

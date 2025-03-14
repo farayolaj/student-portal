@@ -1,22 +1,22 @@
-import {
-  VerificationTransaction,
-  isVerificationTransactionError,
-} from "@/api/verify-result/use-verify-result-verification-transaction";
 import buildPaymentDetailUrl from "@/lib/payments/build-payment-detail-url";
 import {
   Box,
-  Card,
-  Flex,
-  Icon,
-  CardHeader,
-  Heading,
-  CardBody,
   Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Flex,
+  Heading,
+  Icon,
   Spinner,
   Text,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { IoShieldCheckmark } from "react-icons/io5";
+import {
+  isVerificationTransactionError,
+  VerificationTransaction,
+} from "../../api/verify-result.queries";
 
 type PayVerificationFeeCardProps = {
   data: VerificationTransaction;

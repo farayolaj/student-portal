@@ -1,19 +1,18 @@
+import { useProfile } from "@/api/user/use-profile";
+import { VERIFY_RESULT } from "@/constants/routes";
 import { Box, Card, CardBody, Heading, Link } from "@chakra-ui/react";
 import NextLink from "next/link";
-import { VERIFY_RESULT } from "@/constants/routes";
-import { useProfile } from "@/api/user/use-profile";
 
 const ScreeningInfo = () => {
-  const hasPaidOlevelRes = useProfile({
-    select: (data) => data.user.hasPaidOlevelVerification,
-  });
+  const { data } = useProfile();
+  const hasPaidOlevelRes = data?.user?.hasPaidOlevelVerification;
 
   return (
     <>
       <Box w={{ base: "100%", md: "75%" }} m={3}>
         <Card>
-          <CardBody textAlign='center'>
-            {hasPaidOlevelRes?.data === false ? (
+          <CardBody textAlign="center">
+            {hasPaidOlevelRes === false ? (
               <Heading fontSize="medium" fontWeight="semibold">
                 Please start your screening/verification process.
                 <Link px=".2rem" as={NextLink} href={VERIFY_RESULT}>

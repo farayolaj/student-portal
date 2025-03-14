@@ -1,5 +1,5 @@
 import { Card, CardBody, useToast } from "@chakra-ui/react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { paymentQueries } from "../../api/payment.queries";
@@ -15,10 +15,10 @@ export default function PaymentDetails() {
   const transactionRef = slug[1] || undefined;
   const transactionType = slug[2] || undefined;
   const toast = useToast();
+  const queryClient = useQueryClient();
   const {
     data: payment,
     error: paymentError,
-    refetch: paymentRefetch,
     isLoading: paymentIsLoading,
   } = useQuery(
     paymentQueries.detailsBy(id, transactionRef, transactionType as any)
@@ -44,16 +44,13 @@ export default function PaymentDetails() {
       <PageTitle showBackButton>Payment Details</PageTitle>
       <Card>
         <CardBody pt="1.5rem" px="1.875rem" pb="2rem">
-          <PaymentDetail
-            payment={payment}
-            onPaymentSuccess={() => paymentRefetch()}
-          />
+          <PaymentDetail payment={payment} />
           <PaymentTransactionDetail
             hasPaid={payment?.status === "paid"}
             transaction={payment?.transaction}
             onRequery={(isPaid) => {
               if (isPaid) {
-                paymentRefetch();
+                queryClient.invalidateQueries(paymentQueries.mainList());
               }
             }}
             isLoading={paymentIsLoading}

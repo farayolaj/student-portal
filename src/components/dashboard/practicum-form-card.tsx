@@ -17,7 +17,7 @@ import {
   Textarea,
   useToast,
 } from "@chakra-ui/react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { requestPracticum } from "../../api/dashboard.mutations";
@@ -48,14 +48,18 @@ const PraticumFormCard = () => {
   const router = useRouter();
 
   const [formState, setFormState] = useState<FormState>(initialFormState);
+  const queryClient = useQueryClient();
   const { mutate: submitForm } = useMutation({
     mutationFn: requestPracticum,
+    onSuccess: () => {
+      queryClient.invalidateQueries(dashboardQueries.practicumEligibility());
+    },
   });
 
   const { data: eligibility } = useQuery(
     dashboardQueries.practicumEligibility()
   );
-  const { intiateFetch, isLoading } = useDownloadDocument({
+  const { intiateFetch } = useDownloadDocument({
     url: eligibility?.print_url || "",
     onError: (error) => {
       toast({

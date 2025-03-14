@@ -21,10 +21,11 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { FaSimCard } from "react-icons/fa";
 import { registerForFreeAccess } from "../../api/common.mutations";
+import { userQueries } from "../../api/user.queries";
 
 function isGloPhoneNumber(phoneNumber: string) {
   if (/^\+?234/.test(phoneNumber)) {
@@ -48,9 +49,11 @@ export default function FreeAccessRegistration() {
 
   const toast = useToast();
 
+  const queryClient = useQueryClient();
   const freeAccessRegMutation = useMutation({
     mutationFn: registerForFreeAccess,
     onSuccess() {
+      queryClient.invalidateQueries(userQueries.profile());
       toast({
         title: isGloSubscriber ? "Free access registration successful" : "",
         description: isGloSubscriber

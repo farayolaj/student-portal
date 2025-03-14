@@ -30,7 +30,7 @@ export default function PaymentSummary({
   });
   useEffect(() => {
     if (verifyTransaction.isSuccess && verifyTransaction.data)
-      queryClient.invalidateQueries(["main-payments"]);
+      queryClient.invalidateQueries(paymentQueries.mainList());
   }, [verifyTransaction, queryClient]);
 
   let description = descriptionArr.filter(Boolean).join(" | ");

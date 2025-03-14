@@ -12,7 +12,7 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { addCourses } from "../../api/course.mutations";
@@ -43,6 +43,7 @@ export default function AddCoursesPage(): JSX.Element {
     enabled: !!period,
   });
 
+  const queryClient = useQueryClient();
   const {
     data: courseList,
     isLoading: courseListIsLoading,
@@ -70,6 +71,14 @@ export default function AddCoursesPage(): JSX.Element {
 
   const addCoursesMutation = useMutation({
     mutationFn: addCourses,
+    onSuccess: () => {
+      queryClient.invalidateQueries(
+        courseQueries.registeredBy(period?.session?.id as string, semester)
+      );
+      queryClient.invalidateQueries(
+        courseQueries.statisticsFor(period?.session?.id as string, semester)
+      );
+    },
   });
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef(null);

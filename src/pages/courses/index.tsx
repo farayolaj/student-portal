@@ -9,7 +9,7 @@ import {
   Tooltip,
   useToast,
 } from "@chakra-ui/react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import NextLink from "next/link";
 import { FC, useEffect, useState } from "react";
 import {
@@ -38,6 +38,7 @@ const Courses: FC = () => {
   const [sessionId, setSessionId] = useState(currentSessionId);
   const [semester, setSemester] = useState(currentSemester);
   const [inDeleteCourseView, setInDeleteCourseView] = useState(false);
+  const queryClient = useQueryClient();
   const { data: canRegisterCurrentSemester } = useQuery(
     courseQueries.registrationOpenBy(semester)
   );
@@ -49,7 +50,6 @@ const Courses: FC = () => {
     data: registeredCourses,
     error: registeredCoursesError,
     isLoading: registeredCoursesIsLoading,
-    refetch: registeredCoursesRefetch,
   } = useQuery({
     ...courseQueries.registeredBy(sessionId, semester),
     enabled: !!sessionId,
@@ -59,11 +59,9 @@ const Courses: FC = () => {
       else return errorCount < 3;
     },
   });
-  const {
-    data: courseStats,
-    error: courseStatsError,
-    refetch: courseStatsRefetch,
-  } = useQuery(courseQueries.statisticsFor(sessionId, semester));
+  const { data: courseStats, error: courseStatsError } = useQuery(
+    courseQueries.statisticsFor(sessionId, semester)
+  );
 
   useEffect(() => {
     if (courseStatsError) {
@@ -91,15 +89,21 @@ const Courses: FC = () => {
 
   const deleteCoursesMutation = useMutation({
     mutationFn: deleteCourses,
+    onSuccess: () => {
+      queryClient.invalidateQueries(
+        courseQueries.registeredBy(sessionId, semester)
+      );
+      queryClient.invalidateQueries(
+        courseQueries.statisticsFor(sessionId, semester)
+      );
+    },
   });
   const onDelete = (ids: string[]) => {
     deleteCoursesMutation.mutate(
       { ids },
       {
         onSuccess: () => {
-          registeredCoursesRefetch();
           setInDeleteCourseView(false);
-          courseStatsRefetch();
           toast({
             title: "Courses deleted successfully",
             status: "success",

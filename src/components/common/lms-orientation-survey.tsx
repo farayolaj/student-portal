@@ -1,4 +1,3 @@
-import { useProfile } from "@/api/user/use-profile";
 import transparentAbstractImage from "@/images/transparent_abstract.png";
 import {
   Box,
@@ -20,6 +19,7 @@ import isBefore from "date-fns/isBefore";
 import parse from "date-fns/parse";
 import { useState } from "react";
 import { submitLMSSurvey } from "../../api/common.mutations";
+import { userQueries } from "../../api/user.queries";
 
 export default function LMSOrientationSurvey({
   isFresher,
@@ -58,7 +58,7 @@ export default function LMSOrientationSurvey({
   const lmsSurveyMutation = useMutation({
     mutationFn: submitLMSSurvey,
     onSuccess() {
-      queryClient.refetchQueries(useProfile.getKey());
+      queryClient.invalidateQueries(userQueries.profile());
       toast({
         title: "Survey submitted successfully",
         description: "Thank you for your response.",

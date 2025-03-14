@@ -17,21 +17,18 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import NextLink from "next/link";
 import { useEffect, useState } from "react";
 import { IoCheckmarkCircle, IoTime } from "react-icons/io5";
 import { initiateTransaction } from "../../../api/payment.mutations";
+import { paymentQueries } from "../../../api/payment.queries";
 
 type PaymentDetailProps = {
   payment?: Payment;
-  onPaymentSuccess: () => void;
 };
 
-export default function PaymentDetail({
-  payment,
-  onPaymentSuccess,
-}: PaymentDetailProps) {
+export default function PaymentDetail({ payment }: PaymentDetailProps) {
   const sessionRes = useSession(payment?.sessionId || "");
   const descriptionArr = [
     payment?.level ? `${payment.level} Level` : undefined,
@@ -85,6 +82,7 @@ export default function PaymentDetail({
     }
   }, [payment?.transaction, payment?.containsPreselected]);
 
+  const queryClient = useQueryClient();
   const initiateTransactionMutation = useMutation({
     mutationFn: initiateTransaction,
   });
@@ -93,7 +91,9 @@ export default function PaymentDetail({
     onSuccess: (res: any) => {
       if (process.env.NODE_ENV === "development") console.log(res);
 
-      onPaymentSuccess();
+      queryClient.invalidateQueries(paymentQueries.mainList());
+      queryClient.invalidateQueries(paymentQueries.transactionsList());
+
       toast({
         status: "success",
         title: "Payment Successful",

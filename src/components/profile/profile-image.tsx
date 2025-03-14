@@ -11,6 +11,7 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { updateProfileImage } from "../../api/user.mutations";
+import { userQueries } from "../../api/user.queries";
 
 export default function ProfileImage() {
   const profile = useProfile();
@@ -26,7 +27,7 @@ export default function ProfileImage() {
         status: "success",
         isClosable: true,
       });
-      queryClient.invalidateQueries(["profile"]);
+      queryClient.invalidateQueries(userQueries.profile());
     },
     onError: (err) => {
       if (uploadedImg) {

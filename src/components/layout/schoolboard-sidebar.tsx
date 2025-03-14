@@ -11,7 +11,7 @@ import {
   VStack,
   useToast,
 } from "@chakra-ui/react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { FC } from "react";
 import { initiateTransaction } from "../../api/payment.mutations";
@@ -54,13 +54,20 @@ const DisplayPanel: FC = () => {
   const router = useRouter();
   const profile = useProfile();
 
+  const queryClient = useQueryClient();
   const initiateTransactionMutation = useMutation({
     mutationFn: initiateTransaction,
+    onSuccess: () => {
+      queryClient.invalidateQueries(paymentQueries.mainList());
+    },
   });
   const { initPayment } = useRemitaInline({
     isLive: process.env.NODE_ENV === "production",
     onSuccess: (res: any) => {
       if (process.env.NODE_ENV === "development") console.log(res);
+
+      queryClient.invalidateQueries(paymentQueries.mainList());
+      queryClient.invalidateQueries(paymentQueries.transactionsList());
 
       toast({
         status: "success",

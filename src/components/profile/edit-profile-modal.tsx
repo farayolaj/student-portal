@@ -13,11 +13,12 @@ import {
   ModalOverlay,
   useToast,
 } from "@chakra-ui/react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import isEmail from "validator/lib/isEmail";
 import isMobile from "validator/lib/isMobilePhone";
 import { updateProfile } from "../../api/user.mutations";
+import { userQueries } from "../../api/user.queries";
 
 type EditProfileModalProps = {
   isOpen: boolean;
@@ -26,15 +27,14 @@ type EditProfileModalProps = {
     phone: string;
     alternativeEmail: string;
   };
-  onSuccess: () => void;
 };
 
 export default function EditProfileModal({
   isOpen,
   onClose,
   initialData,
-  onSuccess,
 }: EditProfileModalProps) {
+  const queryClient = useQueryClient();
   const updateProfileMutation = useMutation({
     mutationFn: updateProfile,
   });
@@ -65,13 +65,13 @@ export default function EditProfileModal({
         { phone, alternativeEmail },
         {
           onSuccess: () => {
+            queryClient.invalidateQueries(userQueries.profile());
             toast({
               title: "Profile updated",
               description: "Your profile has been updated successfully",
               status: "success",
               isClosable: true,
             });
-            onSuccess();
             onClose();
           },
           onError: (err) => {
