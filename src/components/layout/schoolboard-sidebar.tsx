@@ -1,4 +1,3 @@
-import { useInitiateTransaction } from "@/api/payment/use-initiate-transaction";
 import { PAYMENTS } from "@/constants/routes";
 import {
   Button,
@@ -12,9 +11,10 @@ import {
   VStack,
   useToast,
 } from "@chakra-ui/react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { FC } from "react";
+import { initiateTransaction } from "../../api/payment.mutations";
 import { paymentQueries } from "../../api/payment.queries";
 import { useProfile } from "../../api/user/use-profile";
 import EventCalendar from "../common/events/event-calendar";
@@ -54,7 +54,9 @@ const DisplayPanel: FC = () => {
   const router = useRouter();
   const profile = useProfile();
 
-  const initiateTransaction = useInitiateTransaction();
+  const initiateTransactionMutation = useMutation({
+    mutationFn: initiateTransaction,
+  });
   const { initPayment } = useRemitaInline({
     isLive: process.env.NODE_ENV === "production",
     onSuccess: (res: any) => {
@@ -79,7 +81,7 @@ const DisplayPanel: FC = () => {
   });
 
   const initialisePayment = (payment: Payment) => {
-    initiateTransaction.mutate(
+    initiateTransactionMutation.mutate(
       {
         id: payment.id,
         paymentType: payment.paymentType,
@@ -164,7 +166,8 @@ const DisplayPanel: FC = () => {
                         alignSelf={"flex-end"}
                         onClick={() => initialisePayment(sundry)}
                         isDisabled={
-                          initiateTransaction.isLoading || unVerifiedFresher
+                          initiateTransactionMutation.isPending ||
+                          unVerifiedFresher
                         }
                       >
                         Pay
@@ -214,7 +217,8 @@ const DisplayPanel: FC = () => {
                       alignSelf={"flex-end"}
                       onClick={() => initialisePayment(sundry)}
                       isDisabled={
-                        initiateTransaction.isLoading || unVerifiedFresher
+                        initiateTransactionMutation.isPending ||
+                        unVerifiedFresher
                       }
                     >
                       Pay

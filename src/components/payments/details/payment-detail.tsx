@@ -1,5 +1,4 @@
 import { useFetchReceipt } from "@/api/payment/use-fetch-receipt";
-import { useInitiateTransaction } from "@/api/payment/use-initiate-transaction";
 import { useSession } from "@/api/user/use-session";
 import useRemitaInline from "@/components/common/remita-inline";
 import buildPaymentDetailUrl from "@/lib/payments/build-payment-detail-url";
@@ -18,9 +17,11 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
+import { useMutation } from "@tanstack/react-query";
 import NextLink from "next/link";
 import { useEffect, useState } from "react";
 import { IoCheckmarkCircle, IoTime } from "react-icons/io5";
+import { initiateTransaction } from "../../../api/payment.mutations";
 
 type PaymentDetailProps = {
   payment?: Payment;
@@ -84,7 +85,9 @@ export default function PaymentDetail({
     }
   }, [payment?.transaction, payment?.containsPreselected]);
 
-  const initiateTransaction = useInitiateTransaction();
+  const initiateTransactionMutation = useMutation({
+    mutationFn: initiateTransaction,
+  });
   const { initPayment } = useRemitaInline({
     isLive: process.env.NODE_ENV === "production",
     onSuccess: (res: any) => {
@@ -110,7 +113,7 @@ export default function PaymentDetail({
   });
 
   const initialisePayment = () => {
-    initiateTransaction.mutate(
+    initiateTransactionMutation.mutate(
       {
         id: payment?.id || "",
         preselectedId: isPreselectedSelected
@@ -271,11 +274,11 @@ export default function PaymentDetail({
               isDisabled={
                 !payment.isActive ||
                 prerequisites.length > 0 ||
-                initiateTransaction.isLoading ||
+                initiateTransactionMutation.isPending ||
                 receipt.isLoading
               }
             >
-              {initiateTransaction.isLoading ? (
+              {initiateTransactionMutation.isPending ? (
                 <Spinner color="white" size="xs" />
               ) : payment.isActive ? (
                 "Pay Now"

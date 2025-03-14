@@ -1,4 +1,3 @@
-import { useInitiateTransaction } from "@/api/payment/use-initiate-transaction";
 import {
   Button,
   Flex,
@@ -25,9 +24,10 @@ import {
   AutoCompleteItem,
   AutoCompleteList,
 } from "@choc-ui/chakra-autocomplete";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { initiateTransaction } from "../../api/payment.mutations";
 import { paymentQueries } from "../../api/payment.queries";
 import useRemitaInline from "../common/remita-inline";
 
@@ -58,7 +58,9 @@ export default function MakeSundryPaymentModal() {
     }
   }, [query.sundry, onOpen]);
 
-  const initiateTransaction = useInitiateTransaction();
+  const initiateTransactionMutation = useMutation({
+    mutationFn: initiateTransaction,
+  });
   const { initPayment } = useRemitaInline({
     isLive: process.env.NODE_ENV === "production",
     onSuccess: (res: any) => {
@@ -83,7 +85,7 @@ export default function MakeSundryPaymentModal() {
   });
 
   const initialisePayment = () => {
-    initiateTransaction.mutate(
+    initiateTransactionMutation.mutate(
       {
         id: selectedPayment?.id || "",
         paymentType: selectedPayment?.paymentType || "sundry",
@@ -196,7 +198,7 @@ export default function MakeSundryPaymentModal() {
                   }
                   minW={24}
                 >
-                  {initiateTransaction.isLoading ? (
+                  {initiateTransactionMutation.isPending ? (
                     <Spinner color="white" size="xs" />
                   ) : (
                     "Pay"
