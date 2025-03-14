@@ -1,4 +1,3 @@
-import { useLMSSurveyMutation } from "@/api/common/use-lms-survey-mutation";
 import { useProfile } from "@/api/user/use-profile";
 import transparentAbstractImage from "@/images/transparent_abstract.png";
 import {
@@ -16,10 +15,11 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import isBefore from "date-fns/isBefore";
 import parse from "date-fns/parse";
 import { useState } from "react";
+import { submitLMSSurvey } from "../../api/common.mutations";
 
 export default function LMSOrientationSurvey({
   isFresher,
@@ -55,8 +55,9 @@ export default function LMSOrientationSurvey({
   const toast = useToast();
 
   const queryClient = useQueryClient();
-  const lmsSurveyMutation = useLMSSurveyMutation({
-    onSuccess(data, variables, context) {
+  const lmsSurveyMutation = useMutation({
+    mutationFn: submitLMSSurvey,
+    onSuccess() {
       queryClient.refetchQueries(useProfile.getKey());
       toast({
         title: "Survey submitted successfully",
@@ -64,7 +65,7 @@ export default function LMSOrientationSurvey({
         status: "success",
       });
     },
-    onError(error, variables, context) {
+    onError(error) {
       const err = error as Error;
       toast({
         title: "Survey submission failed",
@@ -197,8 +198,8 @@ export default function LMSOrientationSurvey({
               onClick={() => {
                 lmsSurveyMutation.mutate({ attendance: attendanceOption });
               }}
-              isLoading={lmsSurveyMutation.isLoading}
-              isDisabled={lmsSurveyMutation.isLoading}
+              isLoading={lmsSurveyMutation.isPending}
+              isDisabled={lmsSurveyMutation.isPending}
               colorScheme="purple"
               bg="purple"
             >

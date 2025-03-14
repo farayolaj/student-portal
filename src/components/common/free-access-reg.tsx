@@ -1,4 +1,3 @@
-import { useFreeAccessReg } from "@/api/common/use-free-access-reg";
 import { useProfile } from "@/api/user/use-profile";
 import {
   AlertDialog,
@@ -22,8 +21,10 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
+import { useMutation } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { FaSimCard } from "react-icons/fa";
+import { registerForFreeAccess } from "../../api/common.mutations";
 
 function isGloPhoneNumber(phoneNumber: string) {
   if (/^\+?234/.test(phoneNumber)) {
@@ -47,12 +48,14 @@ export default function FreeAccessRegistration() {
 
   const toast = useToast();
 
-  const freeAccessRegMutation = useFreeAccessReg({
-    onSuccess(data, variables, context) {
+  const freeAccessRegMutation = useMutation({
+    mutationFn: registerForFreeAccess,
+    onSuccess() {
       toast({
         title: isGloSubscriber ? "Free access registration successful" : "",
-        description:
-          isGloSubscriber ? "You can now access the Mobile Class LMS without data charges." : "Your preference has been saved",
+        description: isGloSubscriber
+          ? "You can now access the Mobile Class LMS without data charges."
+          : "Your preference has been saved",
         status: "success",
         isClosable: true,
       });
@@ -143,11 +146,11 @@ export default function FreeAccessRegistration() {
                       phoneNumber.startsWith("0")
                         ? 11
                         : phoneNumber.startsWith("+")
-                        ? 14
-                        : 13
+                          ? 14
+                          : 13
                     }
                     isRequired
-                    focusBorderColor="green.500" 
+                    focusBorderColor="green.500"
                   />
                 </InputGroup>
                 <FormErrorMessage>
@@ -193,9 +196,9 @@ export default function FreeAccessRegistration() {
                 onClick={() => {
                   freeAccessRegMutation.mutate({ phoneNumber });
                 }}
-                isLoading={freeAccessRegMutation.isLoading}
+                isLoading={freeAccessRegMutation.isPending}
                 isDisabled={
-                  freeAccessRegMutation.isLoading ||
+                  freeAccessRegMutation.isPending ||
                   !isGloPhoneNumber(phoneNumber)
                 }
                 w="5rem"
@@ -208,9 +211,9 @@ export default function FreeAccessRegistration() {
                 onClick={() => {
                   freeAccessRegMutation.mutate({ phoneNumber: otherNetwork });
                 }}
-                isLoading={freeAccessRegMutation.isLoading}
+                isLoading={freeAccessRegMutation.isPending}
                 isDisabled={
-                  freeAccessRegMutation.isLoading || otherNetwork === ""
+                  freeAccessRegMutation.isPending || otherNetwork === ""
                 }
                 w="5rem"
               >
