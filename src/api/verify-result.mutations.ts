@@ -1,5 +1,4 @@
-import { createMutation } from "react-query-kit";
-import getApi from "../api";
+import getApi from "./api";
 
 type UseUploadDocumentVariables = {
   existingId?: string;
@@ -8,10 +7,12 @@ type UseUploadDocumentVariables = {
   file: File;
 };
 
-export const useUploadDocument = createMutation<
-  boolean,
-  UseUploadDocumentVariables
->(async ({ file, customName, documentTypeId, existingId }) => {
+export async function uploadDocument({
+  file,
+  customName,
+  documentTypeId,
+  existingId,
+}: UseUploadDocumentVariables) {
   const formData = new FormData();
 
   documentTypeId &&
@@ -29,4 +30,4 @@ export const useUploadDocument = createMutation<
     throw new Error(response.data.message || "Error submitting uploads.");
 
   return response.data.status as boolean;
-});
+}
