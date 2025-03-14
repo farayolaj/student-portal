@@ -15,10 +15,11 @@ import {
   Spinner,
   Text,
 } from "@chakra-ui/react";
+import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
 import NextLink from "next/link";
 import { FormEventHandler, useState } from "react";
-import { usePasswordReset } from "../api/auth/use-password-reset";
+import { resetPassword } from "../api/auth.mutations";
 import Seo from "../components/common/seo";
 import * as routes from "../constants/routes";
 import uiLogo from "../images/ui-logo.png";
@@ -26,13 +27,14 @@ import uiLogo from "../images/ui-logo.png";
 export default function ForgotPassword() {
   const [isResetRequestSent, setIsResetRequestSent] = useState(false);
   const [username, setUsername] = useState("");
-  const passwordReset = usePasswordReset({
+  const passwordResetMutation = useMutation({
+    mutationFn: resetPassword,
     onSuccess: () => setIsResetRequestSent(true),
   });
 
   const onPasswordReset: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    passwordReset.mutate({ username });
+    passwordResetMutation.mutate({ username });
   };
 
   return (
@@ -106,8 +108,11 @@ export default function ForgotPassword() {
                       </Link>
                     </FormHelperText>
                   </FormControl>
-                  <Button isDisabled={passwordReset.isLoading} type="submit">
-                    {passwordReset.isLoading ? (
+                  <Button
+                    isDisabled={passwordResetMutation.isPending}
+                    type="submit"
+                  >
+                    {passwordResetMutation.isPending ? (
                       <Spinner size="sm" />
                     ) : (
                       "Reset Password"

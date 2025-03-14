@@ -1,22 +1,23 @@
-import { useChangePassword } from "@/api/auth/use-change-password";
 import {
-  Heading,
   Box,
+  Button,
   chakra,
   FormControl,
-  FormLabel,
-  Input,
-  Button,
   FormErrorMessage,
+  FormLabel,
+  Heading,
+  Input,
   useToast,
 } from "@chakra-ui/react";
+import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
+import { changePassword } from "../../api/auth.mutations";
 
 export default function ChangePasswordForm() {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [newPasswordAgain, setNewPasswordAgain] = useState("");
-  const { mutate: changePassword } = useChangePassword();
+  const changePasswordMutation = useMutation({ mutationFn: changePassword });
   const toast = useToast();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -24,7 +25,7 @@ export default function ChangePasswordForm() {
 
     if (newPassword !== newPasswordAgain) return;
 
-    changePassword(
+    changePasswordMutation.mutate(
       { currentPassword, newPassword },
       {
         onSuccess: () => {
