@@ -106,7 +106,7 @@ export const Header: FC = () => {
             <MenuItem as={NextLink} href={PROFILE}>
               Profile
             </MenuItem>
-            <MenuItem onClick={() => auth.signOutRedirect()}>Log Out</MenuItem>
+            <MenuItem onClick={() => auth.signOut()}>Log Out</MenuItem>
           </MenuList>
         </Menu>
       </Flex>
