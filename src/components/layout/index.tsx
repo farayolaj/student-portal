@@ -1,4 +1,4 @@
-import { LOGIN } from "@/constants/routes";
+import { HOME } from "@/constants/routes";
 import { Box, Flex } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useAuth } from "oidc-react";
@@ -51,7 +51,7 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
 
   if (!isAuthenticated) child = children;
   else if (!userData) {
-    if (typeof window !== "undefined") push(LOGIN); // Router API is not available on the server
+    if (typeof window !== "undefined") push(HOME); // Router API is not available on the server
     child = null;
   } else
     child = (

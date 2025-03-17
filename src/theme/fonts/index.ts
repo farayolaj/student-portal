@@ -67,3 +67,5 @@ export const avenirNextLTPro = localFont({
   variable: "--font-avenir-next-lt-pro",
   preload: true,
 });
+
+

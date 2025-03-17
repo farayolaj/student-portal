@@ -13,3 +13,4 @@ export const PROFILE = "/profile";
 export const EVENTS = "/events";
 export const VERIFY_RESULT = "/verify-result";
 export const MY_MAILS = "/my-mails";
+export const LANDING_PAGE = "/landing";        
