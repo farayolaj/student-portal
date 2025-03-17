@@ -1,18 +1,20 @@
 import { Box, Button, Link } from "@chakra-ui/react";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 const Navbar = () => {
+  const router = useRouter();
   return (
     <Box
       justifyContent={"space-between"}
       borderBottom={"1px solid #DEDEDE"}
-      position={"sticky"}
+      px={{ base: "1rem", lg: "6rem" }}
       alignItems={"center"}
+      position={"sticky"}
       height={"4.875rem"}
       display={"flex"}
       w="100%"
       top={0}
-      px={"6rem"}
       bg="white"
       zIndex={999}
     >
@@ -45,10 +47,11 @@ const Navbar = () => {
       </Box> */}
       <Button
         h={"3rem"}
-        w={"8rem"}
+        w={{ base: "6rem", lg: "8rem" }}
         bg="#38A169"
         fontWeight={700}
         fontSize={"1rem"}
+        onClick={() => router.push("/login")}
       >
         Login
       </Button>

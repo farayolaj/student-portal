@@ -1,12 +1,20 @@
-import { Box, HStack, Link, Text, VStack } from "@chakra-ui/react";
+import { Box, Flex, HStack, Link, Text, VStack } from "@chakra-ui/react";
 import Image from "next/image";
 
 const Footer = () => {
   return (
-    <Box display={"flex"} flexDir={"column"} bg="#01011A" px="6rem" pt="4.5rem">
-      <HStack
+    <Box
+      display={"flex"}
+      flexDir={"column"}
+      bg="#01011A"
+      px={{ base: "1rem", lg: "6rem" }}
+      pt="4.5rem"
+    >
+      <Flex
+        flexDirection={{ base: "column", lg: "row" }}
         justifyContent={"space-between"}
         borderBottom={"1px solid #E1E4ED"}
+        gap={{ base: "1rem", lg: "0" }}
         pb="2.5rem"
       >
         <VStack alignItems={"flex-start"}>
@@ -24,7 +32,7 @@ const Footer = () => {
           </Text>
         </VStack>
 
-        <VStack alignItems={"flex-start"} w="25%">
+        <VStack alignItems={"flex-start"} w={{ lg: "25%" }}>
           <Text fontSize={"1rem"} color={"white"} fontWeight={700}>
             Need Help? Get Supported!{" "}
           </Text>
@@ -33,16 +41,21 @@ const Footer = () => {
             anytime, anywhere!{" "}
           </Text>
         </VStack>
-      </HStack>
+      </Flex>
 
-      <HStack
+      <Flex
+        flexDirection={{ base: "column", lg: "row" }}
         justifyContent={"space-between"}
         borderBottom={"1px solid #E1E4ED"}
         alignItems={"flex-start"}
         pb="4.5rem"
         pt="2.5rem"
       >
-        <VStack alignItems={"flex-start"} w="20%">
+        <VStack
+          alignItems={"flex-start"}
+          w={{ lg: "20%" }}
+          gap={{ base: "1rem", lg: 0 }}
+        >
           <Text fontSize={"1rem"} color={"white"} fontWeight={700}>
             Visit Self Help
           </Text>
@@ -59,7 +72,11 @@ const Footer = () => {
           </Link>
         </VStack>
 
-        <VStack alignItems={"flex-start"} w="20%">
+        <VStack
+          alignItems={"flex-start"}
+          w={{ lg: "20%" }}
+          gap={{ base: "1rem", lg: 0 }}
+        >
           <Text fontSize={"1rem"} color={"white"} fontWeight={700}>
             Web Ic Mobile Class
           </Text>
@@ -76,7 +93,11 @@ const Footer = () => {
           </Link>
         </VStack>
 
-        <VStack alignItems={"flex-start"} w="25%">
+        <VStack
+          alignItems={"flex-start"}
+          w={{ lg: "25%" }}
+          gap={{ base: "1rem", lg: 0 }}
+        >
           <Text fontSize={"1rem"} color={"white"} fontWeight={700}>
             Contact us
           </Text>
@@ -158,7 +179,7 @@ const Footer = () => {
             Resolve technical issues and programme concerns{" "}
           </Text>
         </VStack>
-      </HStack>
+      </Flex>
 
       <Text textAlign="center" py="1.5rem" color="#B4B9C9">
         UI-ODeL is dedicated to your success! Contact us today

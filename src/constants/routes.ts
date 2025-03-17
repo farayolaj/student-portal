@@ -1,4 +1,5 @@
-export const HOME = "/";
+export const HOME = "/";        
+export const DASHBOARD = "/dashboard";
 export const REGISTERED_COURSES = "/courses";
 export const ADD_COURSES = "/courses/add";
 export const DELETE_COURSES = "/courses/delete";
@@ -13,4 +14,3 @@ export const PROFILE = "/profile";
 export const EVENTS = "/events";
 export const VERIFY_RESULT = "/verify-result";
 export const MY_MAILS = "/my-mails";
-export const LANDING_PAGE = "/landing";        

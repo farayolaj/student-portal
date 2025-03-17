@@ -8,18 +8,25 @@ const Hero = () => {
       height="max-content"
       display={"flex"}
       justifyContent={"space-between"}
-      pl="6rem"
-      backgroundImage={"url(/landing-page/Pattern.png)"}
+      pl={{ base: "1rem", lg: "6rem" }}
+      pr={{ base: "1rem", lg: "0rem" }}
+      pt={{ base: "2rem", lg: "5rem" }}
       backgroundRepeat={"no-repeat"}
       backgroundPosition={"right"}
-      pt="5rem"
+      backgroundSize={"contain"}
+      backgroundImage={"url(/landing-page/Pattern.png)"}
     >
-      <VStack alignItems={"flex-start"} width={"50%"} pt="2rem" pb="8rem">
+      <VStack
+        alignItems={"flex-start"}
+        width={{ lg: "50%" }}
+        pt="2rem"
+        pb={{ base: "2rem", lg: "8rem" }}
+      >
         <Text
           color="#01011A"
-          fontSize={"4rem"}
           fontWeight={700}
           lineHeight={"110%"}
+          fontSize={{ base: "3rem", lg: "4rem" }}
         >
           Study at Your Own <br /> Pace with UI <br /> Distance Learning Centre
         </Text>
@@ -37,25 +44,30 @@ const Hero = () => {
           professionals & students worldwide.
         </Text>
 
-        <HStack gap="1rem">
+        <HStack gap="1rem" w={{ base: "100%", lg: "max-content" }}>
           <Button
             boxShadow={"0px 1px 2px 0px rgba(13, 32, 62, 0.5)"}
+            w={{ lg: "12rem" }}
             bg="white"
             color="black"
             _hover={{}}
-            w="12rem"
             h="3rem"
           >
             Explore Programs
           </Button>
 
-          <Button bg="#38A169" color={"white"} w={"12rem"} h="3rem">
+          <Button
+            w={{ lg: "12rem" }}
+            bg="#38A169"
+            color={"white"}
+            h="3rem"
+          >
             Apply Now
           </Button>
         </HStack>
       </VStack>
 
-      {/* <Box alignSelf={"flex-end"}>
+      {/* <Box alignSelf={"flex-end"} display={{base:"none", md:"none"}}>
         <Image
           src={"/landing-page/hero.png"}
           alt="hero image"

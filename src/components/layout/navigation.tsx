@@ -29,9 +29,9 @@ const Navigation: FC<NavigationProps> = ({ isOpen }) => {
       <NavLink
         title="Dashboard"
         icon={IoHomeOutline}
-        href={routes.HOME}
+        href={routes.DASHBOARD}
         isOpen={isOpen}
-        isActive={pathname === routes.HOME}
+        isActive={pathname === routes.DASHBOARD}
       />
       <NavLink
         title="Verify Result"
