@@ -4,7 +4,14 @@ import Footer from "@/components/landing/Footer";
 import Hero from "@/components/landing/Hero";
 import Navbar from "@/components/landing/Nav";
 import UpdateCard from "@/components/landing/UpdatesCard";
-import { Box, Button, Text, useToast, VStack } from "@chakra-ui/react";
+import {
+  AspectRatio,
+  Box,
+  Button,
+  Text,
+  useToast,
+  VStack,
+} from "@chakra-ui/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -79,9 +86,10 @@ export default function LandingPage() {
             fontSize={"1.25rem"}
             lineHeight={"2rem"}
           >
-            The Distance Learning Centre, University of Ibadan, is committed to
-            providing flexible, high-quality education tailored for students and
-            professionals worldwide.
+            The UI is the only University in Nigeria that has the entire country
+            as its catchment area. The UIDLC is commited to providing flexible,
+            accessible and high-quality education for students and working
+            professionals nationwide.
           </Text>
 
           <Button w="12rem" bg="#38A169" color="white">
@@ -292,39 +300,33 @@ export default function LandingPage() {
         <Box display={"flex"} gap="1.25rem" flexWrap={"wrap"}>
           <UpdateCard
             image="/landing-page/beach.png"
-            date="March 10, 2025"
-            title="Course Registration Deadline Announced"
-            description="All students are advised to complete their course registration before the deadline to avoid penalties."
+            title="Notice: Register Now & Pay Later!"
+            description="Don't miss out! Register for your virtual course lectures immediately with a part payment of ₦50,000. Balance payment is due before exams. Start your studies! Start attending your virtual lectures today."
           />
           <UpdateCard
             image="/landing-page/2.png"
-            date="March 10, 2025"
-            title="Virtual Orientation for New Students"
-            description="Join our live orientation session to learn about UI DLC resources, academic guidelines, and student support services."
+            title="SSO Login Revolutionizes Learner Experience"
+            description="The UIDLC has introduced a Single Sign-On (SSO) login feature, enabling students to access their portal, mobile class dashboard, and real-time course webinars seamlessly with just one login."
           />{" "}
           <UpdateCard
             image="/landing-page/3.png"
-            date="March 10, 2025"
-            title="Academic Calendar Released for 2025 Session"
-            description="Stay updated with important dates, including lecture schedules, exams, and registration deadlines."
+            title="Free Internet Offer!"
+            description="The DLC has provisioned toll-free data on the LMS! Subscribe today, fill the telco form on your portal dashboard, and enjoy free internet for your studies."
           />{" "}
           <UpdateCard
             image="/landing-page/4.png"
-            date="March 10, 2025"
-            title="Course Registration Deadline Announced"
-            description="All students are advised to complete their course registration before the deadline to avoid penalties."
+            title="Personalized Events Schedule Now Live!"
+            description="Login to the portal to access your personalized school events schedule. Stay organized and never miss an important event!"
           />
           <UpdateCard
             image="/landing-page/5.png"
-            date="March 10, 2025"
-            title="Virtual Orientation for New Students"
-            description="Join our live orientation session to learn about UI DLC resources, academic guidelines, and student support services."
+            title="Mobile Class App Just Got Better!"
+            description="We're excited to announce the deployment of Mobile Class 4.5! This update brings improved navigation, enhanced discussion forums, and streamlined course content. Explore the new features today! "
           />{" "}
           <UpdateCard
             image="/landing-page/3.png"
-            date="March 10, 2025"
-            title="Academic Calendar Released for 2025 Session"
-            description="Stay updated with important dates, including lecture schedules, exams, and registration deadlines."
+            title="Stay Informed!"
+            description="Students can now receive course notifications and messages directly on their Mobile Class App, ensuring they stay up-to-date with the latest updates."
           />{" "}
         </Box>
 

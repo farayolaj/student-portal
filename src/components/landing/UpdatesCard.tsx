@@ -3,14 +3,12 @@ import Image from "next/image";
 
 interface UpdateCardProps {
   description: string;
-  date: string;
   title: string;
   image: string;
 }
 
 const UpdateCard: React.FC<UpdateCardProps> = ({
   image,
-  date,
   title,
   description,
 }) => {
@@ -36,7 +34,7 @@ const UpdateCard: React.FC<UpdateCardProps> = ({
         />
       </Box>
       <VStack p=".5rem" alignItems={"flex-start"}>
-        <Text
+        {/* <Text
           fontSize={"14px"}
           bg="rgba(62, 175, 63, 0.05)"
           color="rgba(56, 161, 105, 1)"
@@ -45,7 +43,7 @@ const UpdateCard: React.FC<UpdateCardProps> = ({
           py="4px"
         >
           {date}
-        </Text>
+        </Text> */}
 
         <Text fontWeight={700} fontSize={"1.5rem"} color="#181A2A">
           {title}

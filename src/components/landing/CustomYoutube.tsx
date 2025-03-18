@@ -24,7 +24,6 @@ const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({
       boxShadow="lg"
       bg="black"
       mx="auto"
-
     >
       {!isPlaying ? (
         <Box
@@ -41,9 +40,9 @@ const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({
             icon={<FaPlay />}
             isRound
             size="lg"
-            position="absolute"
             top="50%"
             left="50%"
+            position="absolute"
             transform="translate(-50%, -50%)"
             bg="gray.300"
             color="black"
@@ -54,9 +53,9 @@ const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({
       ) : (
         <AspectRatio ratio={16 / 9}>
           <iframe
-            src={`https://www.youtube.com/embed/${videoId}`}
+            src={`https://www.youtube.com/embed/${videoId}&autoplay=1&mute=1`}
             title="YouTube video player"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
           />
         </AspectRatio>

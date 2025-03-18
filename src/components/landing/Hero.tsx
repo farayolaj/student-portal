@@ -1,7 +1,10 @@
 import { Box, Button, HStack, Link, Text, VStack } from "@chakra-ui/react";
+import { useAuth } from "oidc-react";
 import Image from "next/image";
 
 const Hero = () => {
+  const auth = useAuth();
+
   return (
     <Box
       bg="#F0FFF4"
@@ -28,7 +31,8 @@ const Hero = () => {
           lineHeight={"110%"}
           fontSize={{ base: "3rem", lg: "4rem" }}
         >
-          Study at Your Own <br /> Pace with UI <br /> Distance Learning Centre
+          Study at Your Own <br /> Pace with UI <br />
+          Open Distance <br /> e-Learning
         </Text>
         <Box w="100%">
           <Image
@@ -45,7 +49,7 @@ const Hero = () => {
         </Text>
 
         <HStack gap="1rem" w={{ base: "100%", lg: "max-content" }}>
-          <Button
+          {/* <Button
             boxShadow={"0px 1px 2px 0px rgba(13, 32, 62, 0.5)"}
             w={{ lg: "12rem" }}
             bg="white"
@@ -56,17 +60,17 @@ const Hero = () => {
             href="#"
           >
             Explore Programs
-          </Button>
+          </Button> */}
 
           <Button
+          minW={"7rem"}
             w={{ lg: "12rem" }}
             bg="#38A169"
             color={"white"}
             h="3rem"
-            as={Link}
-            href="https://modeofstudy.ui.edu.ng"
+            onClick={() => auth.signIn()}
           >
-            Apply Now
+            Start
           </Button>
         </HStack>
       </VStack>
