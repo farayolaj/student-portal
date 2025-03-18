@@ -4,11 +4,46 @@ import Footer from "@/components/landing/Footer";
 import Hero from "@/components/landing/Hero";
 import Navbar from "@/components/landing/Nav";
 import UpdateCard from "@/components/landing/UpdatesCard";
-import { Box, Text, VStack, Heading, Button } from "@chakra-ui/react";
+import { Box, Button, Text, useToast, VStack } from "@chakra-ui/react";
 import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
+import { useAuth } from "oidc-react";
+import { useEffect } from "react";
+import { DASHBOARD } from "../constants/routes";
+
+function snakeToSentence(snake: string) {
+  return snake
+    .split("_")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
 
 export default function LandingPage() {
+  const { userData } = useAuth();
+  const { push } = useRouter();
+  const searchParams = useSearchParams();
+  const toast = useToast();
+
+  const error = searchParams.get("error");
+  const errorDescription = searchParams.get("error_description");
+
+  useEffect(() => {
+    if (error && errorDescription) {
+      toast({
+        title: snakeToSentence(error),
+        description: errorDescription,
+        status: "error",
+        isClosable: true,
+      });
+    }
+  }, [error, errorDescription, toast]);
+
+  if (userData) {
+    push(DASHBOARD);
+  }
+
   return (
     <Box height="max-content">
       <Navbar />

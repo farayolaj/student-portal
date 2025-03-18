@@ -1,4 +1,4 @@
-import { Box, Heading, Text, VStack, HStack, Button } from "@chakra-ui/react";
+import { Box, Button, HStack, Link, Text, VStack } from "@chakra-ui/react";
 import Image from "next/image";
 
 const Hero = () => {
@@ -52,6 +52,8 @@ const Hero = () => {
             color="black"
             _hover={{}}
             h="3rem"
+            as={Link}
+            href="#"
           >
             Explore Programs
           </Button>
@@ -61,6 +63,8 @@ const Hero = () => {
             bg="#38A169"
             color={"white"}
             h="3rem"
+            as={Link}
+            href="https://modeofstudy.ui.edu.ng"
           >
             Apply Now
           </Button>

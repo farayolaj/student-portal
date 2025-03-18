@@ -6,7 +6,7 @@ import {
   AUTH_SERVER_URL,
   HOST_URL,
 } from "@/constants/config";
-import { HOME, LOGIN } from "@/constants/routes";
+import { DASHBOARD, HOME } from "@/constants/routes";
 import useLocalStorage from "@/hooks/use-local-storage";
 import { useRouter } from "next/router";
 import { AuthProvider as OidcAuthProvider } from "oidc-react";
@@ -26,14 +26,14 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
         if (!user) return;
 
         setAuthToken(user.access_token);
-        push(HOME);
+        push(DASHBOARD);
       }}
       onSignOut={() => {
         setAuthToken(null);
-        push(LOGIN);
+        push(HOME);
       }}
-      redirectUri={`${HOST_URL}${LOGIN}`}
-      postLogoutRedirectUri={`${HOST_URL}${LOGIN}`}
+      redirectUri={HOST_URL}
+      postLogoutRedirectUri={HOST_URL}
       responseType="code"
       loadUserInfo={false}
       scope={AUTH_SCOPE}

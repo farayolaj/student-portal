@@ -1,4 +1,4 @@
-export const HOME = "/";        
+export const HOME = "/";
 export const DASHBOARD = "/dashboard";
 export const REGISTERED_COURSES = "/courses";
 export const ADD_COURSES = "/courses/add";
@@ -7,7 +7,6 @@ export const RESULTS = "/results";
 export const PAYMENTS = "/payments";
 export const TRANSACTIONS = "/transactions";
 export const DOCUMENTS = "/documents";
-export const LOGIN = "/login";
 export const FORGOT_PASSWORD = "/forgot-password";
 export const ERROR_PAGE = "/error";
 export const PROFILE = "/profile";

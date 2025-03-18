@@ -1,9 +1,10 @@
-import { Box, Button, Link } from "@chakra-ui/react";
+import { Box, Button } from "@chakra-ui/react";
 import Image from "next/image";
-import { useRouter } from "next/router";
+import { useAuth } from "oidc-react";
 
 const Navbar = () => {
-  const router = useRouter();
+  const auth = useAuth();
+
   return (
     <Box
       justifyContent={"space-between"}
@@ -26,32 +27,13 @@ const Navbar = () => {
           alt="University of Ibadan Logo"
         />
       </Box>
-
-      {/* <Box display={"flex"} gap="3rem">
-        <Link
-          href={"#"}
-          fontWeight={500}
-          color={"#192F1E"}
-          _hover={{ color: "#38A169" }}
-        >
-          About Us
-        </Link>
-        <Link
-          href={"#"}
-          fontWeight={500}
-          color={"#192F1E"}
-          _hover={{ color: "#38A169" }}
-        >
-          Application / Change mode of study
-        </Link>
-      </Box> */}
       <Button
         h={"3rem"}
         w={{ base: "6rem", lg: "8rem" }}
         bg="#38A169"
         fontWeight={700}
         fontSize={"1rem"}
-        onClick={() => router.push("/login")}
+        onClick={() => auth.signIn()}
       >
         Login
       </Button>
