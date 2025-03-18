@@ -20,6 +20,7 @@ import { useAuth } from "oidc-react";
 import { useEffect } from "react";
 import { DASHBOARD } from "../constants/routes";
 
+
 function snakeToSentence(snake: string) {
   return snake
     .split("_")
@@ -300,31 +301,31 @@ export default function LandingPage() {
         <Box display={"flex"} gap="1.25rem" flexWrap={"wrap"}>
           <UpdateCard
             image="/landing-page/beach.png"
-            title="Notice: Register Now & Pay Later!"
-            description="Don't miss out! Register for your virtual course lectures immediately with a part payment of ₦50,000. Balance payment is due before exams. Start your studies! Start attending your virtual lectures today."
+            title="2nd Semester Commences!"
+            description="Virtual lectures for the 2nd semester begin on 24th March, 2025. View the detailed timetable <a id='drive' href='https://docs.google.com/document/d/1r1tPtsLDAXrDNYPFKul7AD5X7ehT-p1y/edit?usp=sharing&ouid=109018926769943332296&rtpof=true&sd=true' target='_blank'>here</a>"
           />
           <UpdateCard
             image="/landing-page/2.png"
-            title="SSO Login Revolutionizes Learner Experience"
-            description="The UIDLC has introduced a Single Sign-On (SSO) login feature, enabling students to access their portal, mobile class dashboard, and real-time course webinars seamlessly with just one login."
-          />{" "}
+            title="Register Now & Pay Later!"
+            description="Don't miss out! Register for your virtual course lectures immediately with a part payment of ₦50,000. Balance payment is due before exams. Start your studies! Start attending your virtual lectures today."
+          />
           <UpdateCard
             image="/landing-page/3.png"
-            title="Free Internet Offer!"
-            description="The DLC has provisioned toll-free data on the LMS! Subscribe today, fill the telco form on your portal dashboard, and enjoy free internet for your studies."
+            title="SSO Login Revolutionizes Learner Experience"
+            description="The UIDLC has introduced a Single Sign-On (SSO) login feature, enabling students to access their portal and mobile class with just one login."
           />{" "}
           <UpdateCard
             image="/landing-page/4.png"
-            title="Personalized Events Schedule Now Live!"
-            description="Login to the portal to access your personalized school events schedule. Stay organized and never miss an important event!"
-          />
-          <UpdateCard
-            image="/landing-page/5.png"
             title="Mobile Class App Just Got Better!"
-            description="We're excited to announce the deployment of Mobile Class 4.5! This update brings improved navigation, enhanced discussion forums, and streamlined course content. Explore the new features today! "
+            description="We're excited to announce the deployment of Mobile Class 4.5! This update brings improved navigation, enhanced discussion forums, and streamlined course content."
           />{" "}
           <UpdateCard
-            image="/landing-page/3.png"
+            image="/landing-page/5.png"
+            title="Save Data Costs with Mobile Class App!"
+            description="Use the Mobile Class App to minimize internet usage and save data! Download course materials and activities on-the-go, and access them offline. Only connect to the internet to participate in live activities."
+          />{" "}
+          <UpdateCard
+            image="/landing-page/6.png"
             title="Stay Informed!"
             description="Students can now receive course notifications and messages directly on their Mobile Class App, ensuring they stay up-to-date with the latest updates."
           />{" "}

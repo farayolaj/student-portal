@@ -29,10 +29,10 @@ const Hero = () => {
           color="#01011A"
           fontWeight={700}
           lineHeight={"110%"}
-          fontSize={{ base: "3rem", lg: "4rem" }}
+          fontSize={{ base: "2.25rem", lg: "4rem" }}
         >
-          Study at Your Own <br /> Pace with UI <br />
-          Open Distance <br /> e-Learning
+          Study at Your Own <br /> Pace with UI Open<br />
+          Distance e-Learning
         </Text>
         <Box w="100%">
           <Image
@@ -44,7 +44,7 @@ const Hero = () => {
         </Box>
 
         <Text fontSize="1.25rem" color="#606060" pt="1rem" pb="1.75rem">
-          Flexible, accredited programs designed for working <br />{" "}
+          Flexible, accredited programmes designed for working {" "}
           professionals & students worldwide.
         </Text>
 
@@ -75,14 +75,14 @@ const Hero = () => {
         </HStack>
       </VStack>
 
-      {/* <Box alignSelf={"flex-end"} display={{base:"none", md:"none"}}>
+      <Box alignSelf={"flex-end"} display={{base:"none", md:"block"}}>
         <Image
-          src={"/landing-page/hero.png"}
+          src={"/landing-page/Pic.png"}
           alt="hero image"
           width={600}
           height={600}
         />
-      </Box> */}
+      </Box>
     </Box>
   );
 };

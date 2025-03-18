@@ -34,17 +34,6 @@ const UpdateCard: React.FC<UpdateCardProps> = ({
         />
       </Box>
       <VStack p=".5rem" alignItems={"flex-start"}>
-        {/* <Text
-          fontSize={"14px"}
-          bg="rgba(62, 175, 63, 0.05)"
-          color="rgba(56, 161, 105, 1)"
-          fontWeight={500}
-          px="10px"
-          py="4px"
-        >
-          {date}
-        </Text> */}
-
         <Text fontWeight={700} fontSize={"1.5rem"} color="#181A2A">
           {title}
         </Text>
@@ -53,12 +42,12 @@ const UpdateCard: React.FC<UpdateCardProps> = ({
           color="#777777"
           fontSize={"18px"}
           lineHeight={{ base: "2rem", lg: "2.5rem" }}
-        >
-          {description}
-        </Text>
+          dangerouslySetInnerHTML={{ __html: description }}
+        />
       </VStack>
     </VStack>
   );
 };
+
 
 export default UpdateCard;

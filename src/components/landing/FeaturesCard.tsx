@@ -8,9 +8,9 @@ interface FeaturesCardProps {
 const FeaturesCard = ({ title, description }: FeaturesCardProps) => {
   return (
     <VStack
-      minH={{base:"12rem", lg:"15rem"}}  
-      maxWidth={{base:"25rem",lg:"19rem"}}
-      w={{base:"100%",lg:"22%"}}
+      maxWidth={{ base: "25rem", lg: "19rem" }}
+      minH={{ base: "12rem", lg: "15rem" }}
+      w={{ base: "100%", lg: "22%" }}
       alignItems={"flex-start"}
       bg="white"
       gap="5px"

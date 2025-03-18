@@ -103,14 +103,14 @@ const Footer = () => {
           </Text>
           <HStack gap="1rem">
             <Image
-              src={"/landing-page/Email.svg"}
+              src={"/landing-page/whatsapp.svg"}
               alt="email icon"
               width={50}
               height={50}
             />
             <VStack alignItems={"flex-start"}>
               <Text fontSize={"14px"} color={"white"} fontWeight={400}>
-                Whatsapp Ic:
+                Learner Support:
               </Text>
               <Text
                 mt="0rem !important"
@@ -155,7 +155,7 @@ const Footer = () => {
 
           <HStack gap="1rem" mt="1.5rem !important">
             <Image
-              src={"/landing-page/Email.svg"}
+              src={"/landing-page/Call.svg"}
               alt="email icon"
               width={50}
               height={50}

@@ -11,6 +11,7 @@ import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import "../components/common/calendar.css";
+import "../components/landing/landing.css";
 import Layout, { LayoutProps } from "../components/layout";
 import queryClient from "../lib/query-client";
 import theme from "../theme";
