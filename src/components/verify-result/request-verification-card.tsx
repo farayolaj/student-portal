@@ -62,7 +62,8 @@ export default function RequestVerificationCard({
           customTitle: doc.customTitle,
         }))
       );
-  }, []);
+  }, [documentUploads, documents]);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();

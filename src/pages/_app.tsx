@@ -49,7 +49,7 @@ export default function App({ Component, pageProps }: CustomAppProps) {
       getBaseApiUrl()
         .then((url) => localStorage.setItem("apiBaseUrl", url))
         .catch((_error) => push(ERROR_PAGE));
-  }, [push]);
+  }, [push, pathname]);
 
   const layoutProps = Component.layoutProps || {};
 

@@ -72,7 +72,7 @@ const Courses: FC = () => {
         isClosable: true,
       });
     }
-  }, [courseStatsError]);
+  }, [courseStatsError, toast]);
 
   const courses = registeredCourses || [];
   const canAddCourses =
