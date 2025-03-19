@@ -1,9 +1,9 @@
 import { Box, Text, VStack } from "@chakra-ui/react";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import { ReactNode } from "react";
 
 interface UpdateCardProps {
-  image: string;
+  image: StaticImageData | string;
   title: string;
   description: ReactNode;
 }

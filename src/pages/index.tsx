@@ -8,6 +8,7 @@ import {
   Box,
   Button,
   Link as ChakraLink,
+  Flex,
   SimpleGrid,
   Text,
   useToast,
@@ -20,6 +21,14 @@ import { useRouter } from "next/router";
 import { useAuth } from "oidc-react";
 import { useEffect } from "react";
 import { DASHBOARD } from "../constants/routes";
+
+import fourImg from "../images/home/4.png";
+import fiveImg from "../images/home/5.png";
+import sixImg from "../images/home/6.png";
+import admissionImg from "../images/home/admission-image.jpg";
+import monday24CalendarImg from "../images/home/monday-24-calendar.jpg";
+import payLaterImg from "../images/home/pay-later.jpg";
+import ssoImg from "../images/home/sso-diagram.png";
 
 function snakeToSentence(snake: string) {
   return snake
@@ -166,32 +175,37 @@ export default function LandingPage() {
           See More
         </Button>
       </Box>
-      <Box
-        w="85%"
-        display={{ base: "none", lg: "flex" }}
+      <Flex
+        w={["90%", null, "85%"]}
         position={"relative"}
-        justifyContent={"center"}
-        height={"75vh"}
-        my={"8.5rem"}
+        justify={"center"}
+        height={[null, null, "75vh"]}
+        my={["4rem", null, "8.5rem"]}
         mx="auto"
+        sx={{
+          "& #admission-img": {
+            display: ["none", null, "block"],
+          },
+        }}
       >
         <Image
+          id="admission-img"
           fill
           style={{
             objectFit: "cover",
             borderRadius: "1rem",
+            objectPosition: "top",
           }}
-          src="/landing-page/Image.png"
+          src={admissionImg}
           alt="apply image"
         />
-
         <Box
           gap={"1rem"}
           bg={"white"}
-          w={"45%"}
-          p={"2.5rem"}
+          w={[null, null, "45%"]}
+          p={["1rem", null, "2.5rem"]}
           borderRadius={".5rem"}
-          position={"absolute"}
+          position={[null, null, "absolute"]}
           bottom={"-35%"}
           left="5rem"
           display={"flex"}
@@ -229,51 +243,7 @@ export default function LandingPage() {
             Apply Now
           </Button>
         </Box>
-      </Box>
-      {/* Apply Mobile */}
-      <Box
-        gap={"1rem"}
-        bg={"white"}
-        w={"95%"}
-        mx="auto"
-        p={"1rem"}
-        my="2rem"
-        borderRadius={".5rem"}
-        display={{ base: "flex", lg: "none" }}
-        flexDirection={"column"}
-        alignItems={"flex-start"}
-        boxShadow={"0px 12px 24px -6px rgba(24, 26, 42, 0.12)"}
-      >
-        <Text
-          borderRadius={".345rem"}
-          fontWeight={600}
-          bg="#38A169"
-          color="white"
-          px="10px"
-          py="4px"
-          fontSize={"12px"}
-        >
-          Distance Learning Centre, UI – March 15, 2025
-        </Text>
-        <Text fontWeight={700} fontSize={"2rem"}>
-          Admission for 2024/2025 Session Now Open
-        </Text>
-        <Text color="#777777" fontSize={"1.1rem"} fontWeight={500}>
-          Applications are now open for the new academic session! Explore
-          flexible programs designed for working professionals and students
-          worldwide.
-        </Text>
-        <Button
-          as={Link}
-          href="https://modeofstudy.ui.edu.ng"
-          mt=".5rem"
-          w="12rem"
-          bg="#38A169"
-          color="white"
-        >
-          Apply Now
-        </Button>
-      </Box>{" "}
+      </Flex>
       {/* Updates */}
       <Box
         mb="5rem"
@@ -294,7 +264,7 @@ export default function LandingPage() {
 
         <SimpleGrid columns={[1, null, 2, 3]} gap="1.25rem">
           <UpdateCard
-            image="/landing-page/beach.png"
+            image={monday24CalendarImg}
             title="2nd Semester Commences!"
             description={
               <span>
@@ -312,27 +282,27 @@ export default function LandingPage() {
             }
           />
           <UpdateCard
-            image="/landing-page/2.png"
+            image={payLaterImg}
             title="Register Now & Pay Later!"
             description="Don't miss out! Register for your virtual course lectures immediately with a part payment of ₦50,000. Balance payment is due before exams. Start your studies! Start attending your virtual lectures today."
           />
           <UpdateCard
-            image="/landing-page/3.png"
+            image={ssoImg}
             title="SSO Login Revolutionizes Learner Experience"
             description="The UIDLC has introduced a Single Sign-On (SSO) login feature, enabling students to access their portal and mobile class with just one login."
           />{" "}
           <UpdateCard
-            image="/landing-page/4.png"
+            image={fourImg}
             title="Mobile Class App Just Got Better!"
             description="We're excited to announce the deployment of Mobile Class 4.5! This update brings improved navigation, enhanced discussion forums, and streamlined course content."
           />{" "}
           <UpdateCard
-            image="/landing-page/5.png"
+            image={fiveImg}
             title="Save Data Costs with Mobile Class App!"
             description="Use the Mobile Class App to minimize internet usage and save data! Download course materials and activities on-the-go, and access them offline. Only connect to the internet to participate in live activities."
           />{" "}
           <UpdateCard
-            image="/landing-page/6.png"
+            image={sixImg}
             title="Stay Informed!"
             description="Students can now receive course notifications and messages directly on their Mobile Class App, ensuring they stay up-to-date with the latest updates."
           />{" "}

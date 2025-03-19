@@ -191,8 +191,8 @@ export default function PhoneIcon(props: IconProps) {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(23.9131 24.03) rotate(90) scale(22.4958 22.5012)"
         >
-          <stop stop-color="#F6FAFD" stop-opacity="0.28" />
-          <stop offset="1" stop-color="#F6FAFD" />
+          <stop stopColor="#F6FAFD" stopOpacity="0.28" />
+          <stop offset="1" stopColor="#F6FAFD" />
         </radialGradient>
       </defs>
     </Icon>
