@@ -26,7 +26,7 @@ import { useProfile } from "../../api/user/use-profile";
 import * as routes from "../../constants/routes";
 
 const PaymentsCard: FC = () => {
-  const { data, isLoading } = useQuery({
+  const { data = [], isLoading } = useQuery({
     ...paymentQueries.mainList(),
     select: (payments) => {
       return payments.filter((payment) => payment.status === "unpaid");

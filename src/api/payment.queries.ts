@@ -88,13 +88,11 @@ export const paymentQueries = {
     queryOptions({
       queryKey: [...paymentQueries.all(), "main"],
       queryFn: () => getMainPayments(),
-      initialData: [],
     }),
   sundryList: () =>
     queryOptions({
       queryKey: [...paymentQueries.all(), "sundry"],
       queryFn: () => getSundryPayments(),
-      initialData: [],
     }),
   detailsBy: (
     id: string,

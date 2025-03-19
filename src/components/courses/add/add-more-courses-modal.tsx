@@ -34,7 +34,7 @@ export default function AddMoreCoursesModal({
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
   const [selectedCourses, setSelectedCourses] = useState<Course[]>([]);
-  const { data: searchResults } = useQuery({
+  const { data: searchResults = [] } = useQuery({
     ...courseQueries.searchBy(debouncedSearchTerm),
     enabled: !!debouncedSearchTerm,
   });

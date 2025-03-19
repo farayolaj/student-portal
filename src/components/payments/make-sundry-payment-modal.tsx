@@ -33,7 +33,7 @@ import useRemitaInline from "../common/remita-inline";
 
 export default function MakeSundryPaymentModal() {
   const { query, push } = useRouter();
-  const { data: sundryPayments } = useQuery(paymentQueries.sundryList());
+  const { data: sundryPayments = [] } = useQuery(paymentQueries.sundryList());
   const [selectedPaymentId, setSelectedPaymentId] = useState<
     string | undefined
   >();

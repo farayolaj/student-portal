@@ -12,7 +12,7 @@ import PaymentSummary from "../../components/payments/payment-summary";
 export default function Payments() {
   const profile = useProfile();
   const [statusFilter, setStatusFilter] = useState("all");
-  const { data, isLoading } = useQuery(paymentQueries.mainList());
+  const { data = [], isLoading } = useQuery(paymentQueries.mainList());
   const sortedPayments = data.sort((a, b) => {
     if (a.status === b.status) return 0;
     if (a.status === "unpaid") return -1;

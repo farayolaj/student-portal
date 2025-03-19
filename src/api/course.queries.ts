@@ -136,6 +136,5 @@ export const courseQueries = {
     queryOptions({
       queryKey: [...courseQueries.search(), searchTerm] as const,
       queryFn: () => searchCourses(searchTerm),
-      initialData: [],
     }),
 };

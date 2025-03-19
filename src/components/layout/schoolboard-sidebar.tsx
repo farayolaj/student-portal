@@ -23,7 +23,7 @@ import useRemitaInline from "../common/remita-inline";
 const mostSubscribedSundryCodes = ["75", "57"];
 
 const DisplayPanel: FC = () => {
-  const { data: sundryPayments } = useQuery({
+  const { data: sundryPayments = [] } = useQuery({
     ...paymentQueries.sundryList(),
     select: (data) =>
       data
