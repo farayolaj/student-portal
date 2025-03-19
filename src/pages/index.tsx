@@ -1,13 +1,14 @@
-import CustomYouTubePlayer from "@/components/landing/CustomYoutube";
-import FeaturesCard from "@/components/landing/FeaturesCard";
-import Footer from "@/components/landing/Footer";
-import Hero from "@/components/landing/Hero";
-import Navbar from "@/components/landing/Nav";
-import UpdateCard from "@/components/landing/UpdatesCard";
+import CustomYouTubePlayer from "@/components/landing/custom-youtube";
+import FeaturesCard from "@/components/landing/features-card";
+import Footer from "@/components/landing/footer";
+import Hero from "@/components/landing/hero";
+import Navbar from "@/components/landing/navbar";
+import UpdateCard from "@/components/landing/updates-card";
 import {
-  AspectRatio,
   Box,
   Button,
+  Link as ChakraLink,
+  SimpleGrid,
   Text,
   useToast,
   VStack,
@@ -19,7 +20,6 @@ import { useRouter } from "next/router";
 import { useAuth } from "oidc-react";
 import { useEffect } from "react";
 import { DASHBOARD } from "../constants/routes";
-
 
 function snakeToSentence(snake: string) {
   return snake
@@ -98,7 +98,7 @@ export default function LandingPage() {
           </Button>
         </VStack>
 
-        <CustomYouTubePlayer videoId="NPhVPQE6CUw?si=bx5iosvh5t3cr1n8" />
+        <CustomYouTubePlayer videoId="NPhVPQE6CUw" />
       </Box>
       {/* Features */}
       <Box
@@ -118,12 +118,8 @@ export default function LandingPage() {
           Easily navigate your student portal with tools designed for seamless
           learning and academic management.
         </Text>
-
-        <Box
-          justifyContent={{ base: "center", lg: "flex-start" }}
-          alignItems={"center"}
-          display={"flex"}
-          flexWrap={"wrap"}
+        <SimpleGrid
+          columns={[1, null, 2, 4]}
           gap="2rem"
           mt={{ base: "2rem", lg: "3rem" }}
         >
@@ -134,33 +130,32 @@ export default function LandingPage() {
           <FeaturesCard
             title="Institutional Email Generation"
             description="Get a personalized institutional email address."
-          />{" "}
+          />
           <FeaturesCard
             title="School Calendar & Events"
             description="Stay updated on important academic dates and events."
-          />{" "}
+          />
           <FeaturesCard
             title="Smart Link to Instructors"
             description="Directly connect with course instructors and e-tutors."
-          />{" "}
+          />
           <FeaturesCard
             title="Seamless Mobile Class Access"
             description="Automatic access to Mobile Class dashboard from the portal"
-          />{" "}
+          />
           <FeaturesCard
             title="Flexible Payments"
             description="Choose from various payment options (full, semester or part semester)."
-          />{" "}
+          />
           <FeaturesCard
             title="Programme Services"
             description="Access programme services online"
-          />{" "}
+          />
           <FeaturesCard
             title="Streamlined Experience"
             description="Enhanced portal, LMS, and webinar integration."
           />
-        </Box>
-
+        </SimpleGrid>
         <Button
           alignSelf={"center"}
           bg="white"
@@ -171,7 +166,6 @@ export default function LandingPage() {
           See More
         </Button>
       </Box>
-      {/* Apply */}
       <Box
         w="85%"
         display={{ base: "none", lg: "flex" }}
@@ -298,11 +292,24 @@ export default function LandingPage() {
           School Updates
         </Text>
 
-        <Box display={"flex"} gap="1.25rem" flexWrap={"wrap"}>
+        <SimpleGrid columns={[1, null, 2, 3]} gap="1.25rem">
           <UpdateCard
             image="/landing-page/beach.png"
             title="2nd Semester Commences!"
-            description="Virtual lectures for the 2nd semester begin on 24th March, 2025. View the detailed timetable <a id='drive' href='https://docs.google.com/document/d/1r1tPtsLDAXrDNYPFKul7AD5X7ehT-p1y/edit?usp=sharing&ouid=109018926769943332296&rtpof=true&sd=true' target='_blank'>here</a>"
+            description={
+              <span>
+                Virtual lectures for the 2nd semester begin on 24th March, 2025.
+                View the detailed timetable{" "}
+                <ChakraLink
+                  id="drive"
+                  href="https://docs.google.com/document/d/1r1tPtsLDAXrDNYPFKul7AD5X7ehT-p1y/edit?usp=sharing&ouid=109018926769943332296&rtpof=true&sd=true"
+                  target="_blank"
+                >
+                  here
+                </ChakraLink>
+                .
+              </span>
+            }
           />
           <UpdateCard
             image="/landing-page/2.png"
@@ -329,7 +336,7 @@ export default function LandingPage() {
             title="Stay Informed!"
             description="Students can now receive course notifications and messages directly on their Mobile Class App, ensuring they stay up-to-date with the latest updates."
           />{" "}
-        </Box>
+        </SimpleGrid>
 
         <Button
           border="1px solid #696A75"

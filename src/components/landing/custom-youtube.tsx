@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import { Box, AspectRatio, IconButton } from "@chakra-ui/react";
+import { AspectRatio, Box, IconButton } from "@chakra-ui/react";
+import { useState } from "react";
 import { FaPlay } from "react-icons/fa";
 
 interface CustomYouTubePlayerProps {
   videoId: string;
 }
 
-const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({
+export default function CustomYouTubePlayer({
   videoId,
-}) => {
+}: CustomYouTubePlayerProps) {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
   const handlePlay = (): void => {
@@ -54,7 +54,7 @@ const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({
       ) : (
         <AspectRatio ratio={16 / 9}>
           <iframe
-            src={`https://www.youtube.com/embed/${videoId}&autoplay=1&mute=1`}
+            src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1`}
             title="YouTube video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
@@ -63,6 +63,4 @@ const CustomYouTubePlayer: React.FC<CustomYouTubePlayerProps> = ({
       )}
     </Box>
   );
-};
-
-export default CustomYouTubePlayer;
+}

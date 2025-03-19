@@ -1,7 +1,11 @@
 import { Box, Flex, HStack, Link, Text, VStack } from "@chakra-ui/react";
 import Image from "next/image";
+import EmailIcon from "../../icons/email";
+import PhoneIcon from "../../icons/phone";
+import WhatsAppIcon from "../../icons/whatsapp";
+import uiLogo from "../../images/ui-logo.png";
 
-const Footer = () => {
+export default function Footer() {
   return (
     <Box
       display={"flex"}
@@ -19,8 +23,8 @@ const Footer = () => {
       >
         <VStack alignItems={"flex-start"}>
           <Image
-            src={"/landing-page/ui-logo.png"}
-            alt="logo"
+            src={uiLogo}
+            alt="University of Ibadan Logo"
             width={50}
             height={50}
           />
@@ -102,12 +106,7 @@ const Footer = () => {
             Contact us
           </Text>
           <HStack gap="1rem">
-            <Image
-              src={"/landing-page/whatsapp.svg"}
-              alt="email icon"
-              width={50}
-              height={50}
-            />
+            <WhatsAppIcon boxSize={50} />
             <VStack alignItems={"flex-start"}>
               <Text fontSize={"14px"} color={"white"} fontWeight={400}>
                 Learner Support:
@@ -132,12 +131,7 @@ const Footer = () => {
           </Text>
 
           <HStack gap="1rem" mt="1.5rem !important">
-            <Image
-              src={"/landing-page/Email.svg"}
-              alt="email icon"
-              width={50}
-              height={50}
-            />
+            <EmailIcon boxSize={50} />
             <VStack alignItems={"flex-start"}>
               <Text fontSize={"14px"} color={"white"} fontWeight={400}>
                 Email:
@@ -154,12 +148,7 @@ const Footer = () => {
           </HStack>
 
           <HStack gap="1rem" mt="1.5rem !important">
-            <Image
-              src={"/landing-page/Call.svg"}
-              alt="email icon"
-              width={50}
-              height={50}
-            />
+            <PhoneIcon boxSize={50} />
             <VStack alignItems={"flex-start"}>
               <Text fontSize={"14px"} color={"white"} fontWeight={400}>
                 Phone:
@@ -182,10 +171,8 @@ const Footer = () => {
       </Flex>
 
       <Text textAlign="center" py="1.5rem" color="#B4B9C9">
-        UI-ODeL is dedicated to your success! Contact us today
+        UI-ODeL is dedicated to your success! Contact us today.
       </Text>
     </Box>
   );
-};
-
-export default Footer;
+}

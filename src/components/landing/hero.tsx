@@ -1,8 +1,8 @@
-import { Box, Button, HStack, Link, Text, VStack } from "@chakra-ui/react";
-import { useAuth } from "oidc-react";
+import { Box, Button, HStack, Text, VStack } from "@chakra-ui/react";
 import Image from "next/image";
+import { useAuth } from "oidc-react";
 
-const Hero = () => {
+export default function Hero() {
   const auth = useAuth();
 
   return (
@@ -31,7 +31,8 @@ const Hero = () => {
           lineHeight={"110%"}
           fontSize={{ base: "2.25rem", lg: "4rem" }}
         >
-          Study at Your Own <br /> Pace with UI Open<br />
+          Study at Your Own <br /> Pace with UI Open
+          <br />
           Distance e-Learning
         </Text>
         <Box w="100%">
@@ -44,26 +45,13 @@ const Hero = () => {
         </Box>
 
         <Text fontSize="1.25rem" color="#606060" pt="1rem" pb="1.75rem">
-          Flexible, accredited programmes designed for working {" "}
-          professionals & students worldwide.
+          Flexible, accredited programmes designed for working professionals &
+          students worldwide.
         </Text>
 
         <HStack gap="1rem" w={{ base: "100%", lg: "max-content" }}>
-          {/* <Button
-            boxShadow={"0px 1px 2px 0px rgba(13, 32, 62, 0.5)"}
-            w={{ lg: "12rem" }}
-            bg="white"
-            color="black"
-            _hover={{}}
-            h="3rem"
-            as={Link}
-            href="#"
-          >
-            Explore Programs
-          </Button> */}
-
           <Button
-          minW={"7rem"}
+            minW={"7rem"}
             w={{ lg: "12rem" }}
             bg="#38A169"
             color={"white"}
@@ -75,7 +63,7 @@ const Hero = () => {
         </HStack>
       </VStack>
 
-      <Box alignSelf={"flex-end"} display={{base:"none", md:"block"}}>
+      <Box alignSelf={"flex-end"} display={{ base: "none", md: "block" }}>
         <Image
           src={"/landing-page/Pic.png"}
           alt="hero image"
@@ -85,6 +73,4 @@ const Hero = () => {
       </Box>
     </Box>
   );
-};
-
-export default Hero;
+}

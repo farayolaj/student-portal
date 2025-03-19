@@ -1,24 +1,23 @@
 import { Box, Text, VStack } from "@chakra-ui/react";
 import Image from "next/image";
+import { ReactNode } from "react";
 
 interface UpdateCardProps {
-  description: string;
-  title: string;
   image: string;
+  title: string;
+  description: ReactNode;
 }
 
-const UpdateCard: React.FC<UpdateCardProps> = ({
+export default function UpdateCard({
   image,
   title,
   description,
-}) => {
+}: UpdateCardProps) {
   return (
     <VStack
       border={"1px solid #E8E8EA"}
       alignItems={"flex-start"}
       borderRadius={"6px"}
-      w={{ md: "30%", lg: "32%" }}
-      maxW="25rem"
       gap={"1rem"}
       p={"1rem"}
     >
@@ -42,12 +41,10 @@ const UpdateCard: React.FC<UpdateCardProps> = ({
           color="#777777"
           fontSize={"18px"}
           lineHeight={{ base: "2rem", lg: "2.5rem" }}
-          dangerouslySetInnerHTML={{ __html: description }}
-        />
+        >
+          {description}
+        </Text>
       </VStack>
     </VStack>
   );
-};
-
-
-export default UpdateCard;
+}
