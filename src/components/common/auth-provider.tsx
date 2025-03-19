@@ -7,14 +7,12 @@ import {
   HOST_URL,
 } from "@/constants/config";
 import { DASHBOARD, HOME } from "@/constants/routes";
-import useLocalStorage from "@/hooks/use-local-storage";
 import { useRouter } from "next/router";
 import { AuthProvider as OidcAuthProvider } from "oidc-react";
 import { ReactNode } from "react";
 
 export default function AuthProvider({ children }: { children: ReactNode }) {
   const { push } = useRouter();
-  const [_, setAuthToken] = useLocalStorage<string | null>("token", null);
 
   return (
     <OidcAuthProvider
@@ -25,11 +23,9 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
       onSignIn={(user) => {
         if (!user) return;
 
-        setAuthToken(user.access_token);
         push(DASHBOARD);
       }}
       onSignOut={() => {
-        setAuthToken(null);
         push(HOME);
       }}
       redirectUri={HOST_URL}
