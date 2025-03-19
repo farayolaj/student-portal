@@ -2,6 +2,8 @@ import { Box, Button, HStack, Text, VStack } from "@chakra-ui/react";
 import Image from "next/image";
 import { useAuth } from "oidc-react";
 
+import heroCornerImg from "../../images/home/hero-corner.png";
+
 export default function Hero() {
   const auth = useAuth();
 
@@ -64,12 +66,7 @@ export default function Hero() {
       </VStack>
 
       <Box alignSelf={"flex-end"} display={{ base: "none", md: "block" }}>
-        <Image
-          src={"/landing-page/Pic.png"}
-          alt="hero image"
-          width={600}
-          height={600}
-        />
+        <Image src={heroCornerImg} alt="" width={600} height={600} />
       </Box>
     </Box>
   );
