@@ -25,16 +25,21 @@ export default function PaymentTransactionDetail({
   onRequery,
   isLoading,
 }: PaymentTransactionsProps) {
-  const verifyTransaction = useQuery({
+  const {
+    isSuccess: verifyTransactionIsSuccess,
+    data: verifyTransactionData,
+    isLoading: verifyTransactionIsLoading,
+    refetch: verifyTransactionRefetch,
+  } = useQuery({
     ...paymentQueries.verifyTransaction(transaction?.rrr || ""),
     enabled: !hasPaid,
   });
   const toast = useToast();
 
   useEffect(() => {
-    if (verifyTransaction.isSuccess && verifyTransaction.data)
-      onRequery(verifyTransaction.data);
-  }, [verifyTransaction, onRequery]);
+    if (verifyTransactionIsSuccess && verifyTransactionData)
+      onRequery(verifyTransactionData);
+  }, [verifyTransactionIsSuccess, verifyTransactionData, onRequery]);
 
   return (
     <Box mt={8}>
@@ -103,10 +108,10 @@ export default function PaymentTransactionDetail({
             <Flex justify="center" mt={8}>
               <Button
                 w="fit-content"
-                isDisabled={verifyTransaction.isLoading}
+                isDisabled={verifyTransactionIsLoading}
                 justifySelf="center"
                 onClick={() => {
-                  verifyTransaction.refetch().then((res) => {
+                  verifyTransactionRefetch().then((res) => {
                     if (res.data) {
                       toast({
                         title: "Payment is successful",

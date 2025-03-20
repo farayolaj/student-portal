@@ -23,16 +23,17 @@ export default function PaymentSummary({
       sessions.find((session) => session.id === payment.sessionId),
   });
   const descriptionArr = [session?.name, payment.semester];
-  const verifyTransaction = useQuery({
-    ...paymentQueries.verifyTransaction(payment.transaction?.rrr || ""),
-    enabled: payment.status === "unpaid",
-  });
+  const { isSuccess: verifyTransactionIsSuccess, data: verifyTransactionData } =
+    useQuery({
+      ...paymentQueries.verifyTransaction(payment.transaction?.rrr || ""),
+      enabled: payment.status === "unpaid",
+    });
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    if (verifyTransaction.isSuccess && verifyTransaction.data)
+    if (verifyTransactionIsSuccess && verifyTransactionData)
       queryClient.invalidateQueries(paymentQueries.mainList());
-  }, [verifyTransaction, queryClient]);
+  }, [verifyTransactionData, verifyTransactionIsSuccess, queryClient]);
 
   let description = descriptionArr.filter(Boolean).join(" | ");
   let statusIcon: JSX.Element;
