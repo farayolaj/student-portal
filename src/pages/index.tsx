@@ -19,15 +19,13 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
-import fourImg from "../images/home/4.png";
-import fiveImg from "../images/home/5.png";
-import sixImg from "../images/home/6.png";
 import admissionImg from "../images/home/admission-image.jpg";
-import monday24CalendarImg from "../images/home/monday-24-calendar.jpg";
-import payLaterImg from "../images/home/pay-later.jpg";
-import ssoImg from "../images/home/sso-diagram.png";
-import notificationImg from "../images/home/notification.png"
 import mobileClassImg from "../images/home/mobile-class.png";
+import monday24CalendarImg from "../images/home/monday-24-calendar.jpg";
+import notificationImg from "../images/home/notification.png";
+import payLaterImg from "../images/home/pay-later.jpg";
+import saveDataImg from "../images/home/save-data.webp";
+import ssoImg from "../images/home/sso-diagram.png";
 
 function snakeToSentence(snake: string) {
   return snake
@@ -290,7 +288,7 @@ export default function LandingPage() {
             description="We're excited to announce the deployment of Mobile Class 4.5! This update brings improved navigation, enhanced discussion forums, and streamlined course content."
           />{" "}
           <UpdateCard
-            image={fiveImg}
+            image={saveDataImg}
             title="Save Data Costs with Mobile Class App!"
             description="Use the Mobile Class App to minimize internet usage and save data! Download course materials and activities on-the-go, and access them offline. Only connect to the internet to participate in live activities."
           />{" "}

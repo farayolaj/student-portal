@@ -3,8 +3,8 @@ import Image from "next/image";
 import EmailIcon from "../../icons/email";
 import PhoneIcon from "../../icons/phone";
 import WhatsAppIcon from "../../icons/whatsapp";
-import uiLogo from "../../images/ui-logo.png";
 import mobileClass from "../../images/home/mobile-icon.png";
+import uiLogo from "../../images/ui-logo.png";
 
 export default function Footer() {
   return (
@@ -80,15 +80,21 @@ export default function Footer() {
         <VStack
           alignItems={"flex-start"}
           w={{ lg: "20%" }}
-          gap={{ base: "1rem", lg: 0 }}
+          gap={{ base: "1rem", lg: 2 }}
         >
-          <Flex align={"center"}>
-            <Image src={mobileClass} alt="" width={75} height={75} />
+          <Flex align={"center"} gap={2}>
+            <Image
+              src={mobileClass}
+              alt=""
+              width={32}
+              height={32}
+              style={{ borderRadius: "4px" }}
+            />
             <Text fontSize={"1rem"} color={"white"} fontWeight={700}>
               Mobile Class
             </Text>
           </Flex>
-          <Text pl="1rem" fontSize={"1rem"} color={"white"}>
+          <Text fontSize={"1rem"} color={"white"}>
             Connect with experienced E-Tutors on your course page and Mobile
             Class app for academic advisory.
           </Text>

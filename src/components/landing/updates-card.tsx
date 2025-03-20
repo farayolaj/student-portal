@@ -21,12 +21,17 @@ export default function UpdateCard({
       gap={"1rem"}
       p={"1rem"}
     >
-      <Box w="100%" h={{ base: "10rem", lg: "15rem" }} position={"relative"}>
+      <Box
+        w="100%"
+        h={{ base: "10rem", lg: "15rem" }}
+        position={"relative"}
+        rounded={"6px"}
+        overflow={"hidden"}
+      >
         <Image
           fill
           style={{
             objectFit: "cover",
-            borderRadius: "6px",
           }}
           src={image}
           alt="apply image"
