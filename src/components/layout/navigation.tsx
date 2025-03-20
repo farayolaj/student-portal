@@ -1,5 +1,5 @@
 import { LMS_LOGIN_URL } from "@/constants/config";
-import { Icon, Link, Text, VStack } from "@chakra-ui/react";
+import { Badge, Icon, Link, Text, VStack } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { FC } from "react";
@@ -48,11 +48,12 @@ const Navigation: FC<NavigationProps> = ({ isOpen }) => {
         isActive={pathname.startsWith(routes.REGISTERED_COURSES)}
       />
       <NavLink
-        title="Mobile Class LMS"
+        title="Mobile Class SSO"
         icon={IoPhonePortraitOutline}
         href={LMS_LOGIN_URL}
         isOpen={isOpen}
         isActive={false}
+        badge="New"
         isExternal
       />
       <NavLink
@@ -103,6 +104,7 @@ type NavLinkProps = {
   isOpen: boolean;
   isActive: boolean;
   isExternal?: boolean;
+  badge?: string;
 };
 
 const NavLink: FC<NavLinkProps> = ({
@@ -112,6 +114,7 @@ const NavLink: FC<NavLinkProps> = ({
   isOpen,
   isActive,
   isExternal,
+  badge,
 }) => {
   return (
     <Link
@@ -133,6 +136,11 @@ const NavLink: FC<NavLinkProps> = ({
       <Text as="span" display={isOpen ? "unset" : "none"}>
         {title}
       </Text>
+      {badge && (
+        <Badge colorScheme="primary" variant={"solid"}>
+          {badge}
+        </Badge>
+      )}
     </Link>
   );
 };
