@@ -51,7 +51,7 @@ export const resultQueries = {
   details: () => [...resultQueries.all(), "details"],
   detailsBy: (session: ResultSession, semester?: number) =>
     queryOptions({
-      queryKey: [...resultQueries.details(), session.id, semester],
+      queryKey: [...resultQueries.details(), session?.id, semester],
       queryFn: () => getResult(session, semester),
     }),
 };
