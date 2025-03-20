@@ -26,6 +26,8 @@ import admissionImg from "../images/home/admission-image.jpg";
 import monday24CalendarImg from "../images/home/monday-24-calendar.jpg";
 import payLaterImg from "../images/home/pay-later.jpg";
 import ssoImg from "../images/home/sso-diagram.png";
+import notificationImg from "../images/home/notification.png"
+import mobileClassImg from "../images/home/mobile-class.png";
 
 function snakeToSentence(snake: string) {
   return snake
@@ -220,8 +222,8 @@ export default function LandingPage() {
           </Text>
           <Text color="#777777" fontSize={"1.1rem"} fontWeight={500}>
             Applications are now open for the new academic session! Explore
-            flexible programs designed for working professionals and students
-            worldwide.
+            flexible programmes designed for working professionals and students
+            nationwide.
           </Text>
           <Button
             as={Link}
@@ -283,7 +285,7 @@ export default function LandingPage() {
             description="The UIDLC has introduced a Single Sign-On (SSO) login feature, enabling students to access their portal and mobile class with just one login."
           />{" "}
           <UpdateCard
-            image={fourImg}
+            image={mobileClassImg}
             title="Mobile Class App Just Got Better!"
             description="We're excited to announce the deployment of Mobile Class 4.5! This update brings improved navigation, enhanced discussion forums, and streamlined course content."
           />{" "}
@@ -293,7 +295,7 @@ export default function LandingPage() {
             description="Use the Mobile Class App to minimize internet usage and save data! Download course materials and activities on-the-go, and access them offline. Only connect to the internet to participate in live activities."
           />{" "}
           <UpdateCard
-            image={sixImg}
+            image={notificationImg}
             title="Stay Informed!"
             description="Students can now receive course notifications and messages directly on their Mobile Class App, ensuring they stay up-to-date with the latest updates."
           />{" "}

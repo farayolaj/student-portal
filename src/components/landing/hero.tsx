@@ -1,6 +1,6 @@
 import { Box, Button, HStack, Text, VStack } from "@chakra-ui/react";
-import Image from "next/image";
 import { useAuth } from "oidc-react";
+import Image from "next/image";
 
 import heroCornerImg from "../../images/home/hero-corner.png";
 
@@ -48,7 +48,7 @@ export default function Hero() {
 
         <Text fontSize="1.25rem" color="#606060" pt="1rem" pb="1.75rem">
           Flexible, accredited programmes designed for working professionals &
-          students worldwide.
+          students nationwide.
         </Text>
 
         <HStack gap="1rem" w={{ base: "100%", lg: "max-content" }}>
@@ -60,7 +60,7 @@ export default function Hero() {
             h="3rem"
             onClick={() => auth.signIn()}
           >
-            Start
+            Start Now
           </Button>
         </HStack>
       </VStack>

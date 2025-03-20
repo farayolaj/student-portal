@@ -4,6 +4,7 @@ import EmailIcon from "../../icons/email";
 import PhoneIcon from "../../icons/phone";
 import WhatsAppIcon from "../../icons/whatsapp";
 import uiLogo from "../../images/ui-logo.png";
+import mobileClass from "../../images/home/mobile-icon.png";
 
 export default function Footer() {
   return (
@@ -17,8 +18,8 @@ export default function Footer() {
       <Flex
         flexDirection={{ base: "column", lg: "row" }}
         justifyContent={"space-between"}
-        borderBottom={"1px solid #E1E4ED"}
         gap={{ base: "1rem", lg: "0" }}
+        borderBottom={"1px solid #E1E4ED"}
         pb="2.5rem"
       >
         <VStack alignItems={"flex-start"}>
@@ -81,14 +82,18 @@ export default function Footer() {
           w={{ lg: "20%" }}
           gap={{ base: "1rem", lg: 0 }}
         >
-          <Text fontSize={"1rem"} color={"white"} fontWeight={700}>
-            Web Ic Mobile Class
-          </Text>
-          <Text fontSize={"1rem"} color={"white"}>
+          <Flex align={"center"}>
+            <Image src={mobileClass} alt="" width={75} height={75} />
+            <Text fontSize={"1rem"} color={"white"} fontWeight={700}>
+              Mobile Class
+            </Text>
+          </Flex>
+          <Text pl="1rem" fontSize={"1rem"} color={"white"}>
             Connect with experienced E-Tutors on your course page and Mobile
             Class app for academic advisory.
           </Text>
           <Link
+            pl="1rem"
             pt=".5rem"
             color="#007AFF"
             href="https://dlcportal.ui.edu.ng/i-help"
