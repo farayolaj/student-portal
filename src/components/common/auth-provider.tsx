@@ -6,7 +6,7 @@ import {
   AUTH_SERVER_URL,
   HOST_URL,
 } from "@/constants/config";
-import { DASHBOARD, HOME } from "@/constants/routes";
+import { DASHBOARD, HOME, LOGIN } from "@/constants/routes";
 import { useRouter } from "next/router";
 import { AuthProvider as OidcAuthProvider } from "oidc-react";
 import { ReactNode } from "react";
@@ -28,7 +28,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
       onSignOut={() => {
         push(HOME);
       }}
-      redirectUri={HOST_URL}
+      redirectUri={`${HOST_URL}${LOGIN}`}
       postLogoutRedirectUri={HOST_URL}
       responseType="code"
       loadUserInfo={false}

@@ -17,10 +17,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useRouter } from "next/router";
-import { useAuth } from "oidc-react";
 import { useEffect } from "react";
-import { DASHBOARD } from "../constants/routes";
 
 import fourImg from "../images/home/4.png";
 import fiveImg from "../images/home/5.png";
@@ -38,8 +35,6 @@ function snakeToSentence(snake: string) {
 }
 
 export default function LandingPage() {
-  const { userData } = useAuth();
-  const { push } = useRouter();
   const searchParams = useSearchParams();
   const toast = useToast();
 
@@ -56,10 +51,6 @@ export default function LandingPage() {
       });
     }
   }, [error, errorDescription, toast]);
-
-  if (userData) {
-    push(DASHBOARD);
-  }
 
   return (
     <Box height="max-content">
