@@ -21,7 +21,7 @@ import { useProfile } from "../../api/user/use-profile";
 import { useAllTransactions } from "@/api/payment/use-all-transactions";
 import { all } from "axios";
 
-const mostSubscribedSundryCodes = ["75", "57"];
+const mostSubscribedSundryCodes = ["76", "57"];
 
 const DisplayPanel: FC = () => {
   const sundryPaymentsQuery = useSundryPayments({
