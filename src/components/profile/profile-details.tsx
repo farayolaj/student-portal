@@ -2,15 +2,15 @@ import { useCurrentPeriod } from "@/api/user/use-current-period";
 import { useProfile } from "@/api/user/use-profile";
 import { EditIcon } from "@chakra-ui/icons";
 import {
-  VStack,
-  StackDivider,
-  Flex,
-  Text,
-  IconButton,
   Box,
+  Flex,
   Heading,
+  IconButton,
   SkeletonText,
+  StackDivider,
+  Text,
   useDisclosure,
+  VStack,
 } from "@chakra-ui/react";
 import EditProfileModal from "./edit-profile-modal";
 
@@ -19,7 +19,11 @@ export default function ProfileDetails() {
   const currentPeriod = useCurrentPeriod();
   const user = profileRes?.data?.user;
   const academicProfile = profileRes?.data?.academicProfile;
-  const fullName = `${user?.lastName.toUpperCase()}, ${user?.firstName} ${user?.otherNames || ""}`.replace("undefined", "");
+  const fullName =
+    `${user?.lastName.toUpperCase()}, ${user?.firstName} ${user?.otherNames || ""}`.replace(
+      "undefined",
+      ""
+    );
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -138,7 +142,6 @@ export default function ProfileDetails() {
             alternativeEmail: user.alternativeEmail || "",
             phone: user.phone,
           }}
-          onSuccess={() => profileRes.refetch()}
         />
       )}
     </>

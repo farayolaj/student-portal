@@ -1,20 +1,22 @@
-import { useAllResults } from "@/api/result/use-all-results";
 import { SimpleGrid } from "@chakra-ui/react";
 
+import { useQuery } from "@tanstack/react-query";
+import { resultQueries } from "../../api/result.queries";
 import PageTitle from "../../components/common/page-title";
 import Seo from "../../components/common/seo";
 import ResultOverview from "../../components/results/result-overview";
 import ResultSummary from "../../components/results/result-summary";
 
 export default function Results() {
-  const { data: allResults = [] } = useAllResults({
+  const { data: resultSummaries = [] } = useQuery({
+    ...resultQueries.summaries(),
     select: (data) =>
       data.filter(
         (item) =>
           !item.session.id.includes("20") && !item.session.id.includes("22")
       ),
   });
-  const totalUnitsRegistered = allResults.reduce((acc, session) => {
+  const totalUnitsRegistered = resultSummaries.reduce((acc, session) => {
     return (
       acc +
       session.results.reduce((acc, result) => {
@@ -22,7 +24,7 @@ export default function Results() {
       }, 0)
     );
   }, 0);
-  const totalUnitsPassed = allResults.reduce((acc, session) => {
+  const totalUnitsPassed = resultSummaries.reduce((acc, session) => {
     return (
       acc +
       session.results.reduce((acc, result) => {
@@ -41,7 +43,7 @@ export default function Results() {
         cumUnitsPassed={totalUnitsPassed}
       />
       <SimpleGrid mt={8} columns={[1, null, 4]} gap={8}>
-        {allResults.map((sessionResult) => (
+        {resultSummaries.map((sessionResult) => (
           <ResultSummary
             key={sessionResult.session.id}
             sessionResultSummary={sessionResult}

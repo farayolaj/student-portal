@@ -1,16 +1,17 @@
-import { useDocumentTypes } from "@/api/verify-result/use-document-types";
 import {
-  SimpleGrid,
+  CloseButton,
   FormControl,
   FormLabel,
-  Select,
   Icon,
   Input,
-  CloseButton,
+  Select,
+  SimpleGrid,
   Text,
 } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { IoCloudUpload } from "react-icons/io5";
+import { verifyResultQueries } from "../../api/verify-result.queries";
 
 type DocumentUploadProps = {
   value: DocumentUploadValue;
@@ -27,13 +28,13 @@ export default function DocumentUpload({
   showRemoveButton = true,
   isDisabled,
 }: DocumentUploadProps) {
-  const documentTypesRes = useDocumentTypes();
+  const { data } = useQuery(verifyResultQueries.documentTypes());
 
   useEffect(() => {
-    if (!Boolean(value.documentTypeId) && documentTypesRes.data) {
-      onChange({ ...value, documentTypeId: documentTypesRes.data[0].id });
+    if (!Boolean(value.documentTypeId) && data) {
+      onChange({ ...value, documentTypeId: data[0].id });
     }
-  }, [documentTypesRes.data, onChange, value]);
+  }, [data, onChange, value]);
 
   return (
     <SimpleGrid
@@ -52,7 +53,7 @@ export default function DocumentUpload({
           value={value.documentTypeId}
           disabled={isDisabled}
         >
-          {documentTypesRes.data?.map((docType) => (
+          {data?.map((docType) => (
             <option key={docType.id} value={docType.id}>
               {docType.name}
             </option>

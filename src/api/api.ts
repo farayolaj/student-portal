@@ -1,5 +1,9 @@
 import axios, { AxiosInstance } from "axios";
-import { X_APP_KEY } from "../constants/config";
+import {
+  AUTH_CLIENT_ID,
+  AUTH_SERVER_URL,
+  X_APP_KEY,
+} from "../constants/config";
 
 let api: AxiosInstance;
 
@@ -11,7 +15,7 @@ export default function getApi() {
   //   // proper error machanism should come here
   //   return false;
   // }
-  const apiBaseUrl = baseURL + '/api';
+  const apiBaseUrl = baseURL + "/api";
   const headers: Record<string, string> = {
     "X-APP-KEY": X_APP_KEY,
   };
@@ -29,8 +33,9 @@ export default function getApi() {
   });
 
   api.interceptors.request.use((config) => {
-    const rawToken = localStorage.getItem("token");
-    const token = rawToken ? JSON.parse(rawToken) : undefined;
+    const key = `oidc.user:${AUTH_SERVER_URL}:${AUTH_CLIENT_ID}`;
+    const rawToken = sessionStorage.getItem(key);
+    const token = rawToken ? JSON.parse(rawToken).access_token : undefined;
 
     if (token) config.headers.set("Authorization", `Bearer ${token}`);
 

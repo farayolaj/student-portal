@@ -1,37 +1,39 @@
 import { useProfile } from "@/api/user/use-profile";
 import { PROFILE } from "@/constants/routes";
 import {
+  Avatar,
   Card,
-  CardHeader,
-  Heading,
   CardBody,
+  CardHeader,
+  Flex,
+  GridProps,
+  Heading,
+  Link,
+  SimpleGrid,
+  SkeletonText,
   Text,
   VStack,
-  Flex,
-  SkeletonText,
-  Avatar,
-  SimpleGrid,
-  GridProps,
-  Link,
 } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
 import NextLink from "next/link";
 import { FC, ReactNode } from "react";
-import { useDashboardInfo } from "../../api/dashboard/use-dashboard-info";
+import { dashboardQueries } from "../../api/dashboard.queries";
 
 const ProfileCard: FC = () => {
-  const dashboardInfo = useDashboardInfo();
+  const { data: dashboardInfo, isLoading } = useQuery(
+    dashboardQueries.dashboardInfo()
+  );
   const { data: profile } = useProfile();
-  const isLoading = dashboardInfo.isInitialLoading;
   const matricNo = profile?.academicProfile?.matricNumber;
-  const level = dashboardInfo.data?.programme?.level;
-  const entryMode = dashboardInfo.data?.programme?.entryMode;
-  const programme = dashboardInfo.data?.programme?.programme;
-  const cgpa = dashboardInfo.data?.cpga || "N/A";
-  const fullName = `${dashboardInfo.data?.user?.firstName} ${
-    dashboardInfo.data?.user?.otherNames || ""
-  } ${dashboardInfo.data?.user?.lastName}`;
-  const session = dashboardInfo.data?.programme.currentSession;
-  const examCentre = dashboardInfo.data?.programme.examCentre;
+  const level = dashboardInfo?.programme?.level;
+  const entryMode = dashboardInfo?.programme?.entryMode;
+  const programme = dashboardInfo?.programme?.programme;
+  const cgpa = dashboardInfo?.cpga || "N/A";
+  const fullName = `${dashboardInfo?.user?.firstName} ${
+    dashboardInfo?.user?.otherNames || ""
+  } ${dashboardInfo?.user?.lastName}`;
+  const session = dashboardInfo?.programme.currentSession;
+  const examCentre = dashboardInfo?.programme.examCentre;
 
   return (
     <Card>
@@ -52,10 +54,11 @@ const ProfileCard: FC = () => {
               rounded="md"
               size="xl"
               name={fullName}
-              src={dashboardInfo.data?.user.profileImage}
+              src={dashboardInfo?.user.profileImage}
               getInitials={(name) => {
-                const names = name.split(" ").filter(name => Boolean(name));
-                const initials = `${names[0].at(0)}${names.at(-1)?.at(0)}`.toUpperCase();
+                const names = name.split(" ").filter((name) => Boolean(name));
+                const initials =
+                  `${names[0].at(0)}${names.at(-1)?.at(0)}`.toUpperCase();
                 return initials;
               }}
             />

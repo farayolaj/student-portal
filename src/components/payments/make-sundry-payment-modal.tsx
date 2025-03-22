@@ -1,5 +1,3 @@
-import { useInitiateTransaction } from "@/api/payment/use-initiate-transaction";
-import { useSundryPayments } from "@/api/payment/use-sundry-payments";
 import {
   Button,
   Flex,
@@ -26,14 +24,16 @@ import {
   AutoCompleteItem,
   AutoCompleteList,
 } from "@choc-ui/chakra-autocomplete";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { initiateTransaction } from "../../api/payment.mutations";
+import { paymentQueries } from "../../api/payment.queries";
 import useRemitaInline from "../common/remita-inline";
 
 export default function MakeSundryPaymentModal() {
   const { query, push } = useRouter();
-  const paymentsRes = useSundryPayments();
-  const sundryPayments = paymentsRes.data || [];
+  const { data: sundryPayments = [] } = useQuery(paymentQueries.sundryList());
   const [selectedPaymentId, setSelectedPaymentId] = useState<
     string | undefined
   >();
@@ -58,11 +58,20 @@ export default function MakeSundryPaymentModal() {
     }
   }, [query.sundry, onOpen]);
 
-  const initiateTransaction = useInitiateTransaction();
+  const queryClient = useQueryClient();
+  const initiateTransactionMutation = useMutation({
+    mutationFn: initiateTransaction,
+    onSuccess: () => {
+      queryClient.invalidateQueries(paymentQueries.mainList());
+    },
+  });
   const { initPayment } = useRemitaInline({
     isLive: process.env.NODE_ENV === "production",
     onSuccess: (res: any) => {
       if (process.env.NODE_ENV === "development") console.log(res);
+
+      queryClient.invalidateQueries(paymentQueries.mainList());
+      queryClient.invalidateQueries(paymentQueries.transactionsList());
 
       toast({
         status: "success",
@@ -83,7 +92,7 @@ export default function MakeSundryPaymentModal() {
   });
 
   const initialisePayment = () => {
-    initiateTransaction.mutate(
+    initiateTransactionMutation.mutate(
       {
         id: selectedPayment?.id || "",
         paymentType: selectedPayment?.paymentType || "sundry",
@@ -196,7 +205,7 @@ export default function MakeSundryPaymentModal() {
                   }
                   minW={24}
                 >
-                  {initiateTransaction.isLoading ? (
+                  {initiateTransactionMutation.isPending ? (
                     <Spinner color="white" size="xs" />
                   ) : (
                     "Pay"

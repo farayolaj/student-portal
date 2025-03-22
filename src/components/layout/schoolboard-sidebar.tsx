@@ -1,5 +1,3 @@
-import { useInitiateTransaction } from "@/api/payment/use-initiate-transaction";
-import { useSundryPayments } from "@/api/payment/use-sundry-payments";
 import { PAYMENTS } from "@/constants/routes";
 import {
   Button,
@@ -13,18 +11,20 @@ import {
   VStack,
   useToast,
 } from "@chakra-ui/react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import { FC, useState } from "react";
+import { FC } from "react";
+import { initiateTransaction } from "../../api/payment.mutations";
+import { paymentQueries } from "../../api/payment.queries";
+import { useProfile } from "../../api/user/use-profile";
 import EventCalendar from "../common/events/event-calendar";
 import useRemitaInline from "../common/remita-inline";
-import { useProfile } from "../../api/user/use-profile";
-import { useAllTransactions } from "@/api/payment/use-all-transactions";
-import { all } from "axios";
 
 const mostSubscribedSundryCodes = ["76", "57"];
 
 const DisplayPanel: FC = () => {
-  const sundryPaymentsQuery = useSundryPayments({
+  const { data: sundryPayments = [] } = useQuery({
+    ...paymentQueries.sundryList(),
     select: (data) =>
       data
         .filter((sundry) =>
@@ -37,29 +37,37 @@ const DisplayPanel: FC = () => {
         }),
   });
 
-  const AllTransactionQuery = useAllTransactions();
-  const paidPartPayment = AllTransactionQuery?.data?.filter(
+  const { data: allTransactions } = useQuery(paymentQueries.transactionsList());
+  const paidPartPayment = allTransactions?.filter(
     (item) => item.isPartPayment && item.status === "success"
   );
 
-  const currentSchoolFee = AllTransactionQuery?.data?.filter(
+  const currentSchoolFee = allTransactions?.filter(
     (item) => item.isCurrentSchoolFee && item.status === "success"
   );
 
-  const partPaymentIds = AllTransactionQuery?.data
+  const partPaymentIds = allTransactions
     ?.filter((item) => item.isPartPayment)
     .map((idx) => idx.encodedId);
-
 
   const toast = useToast();
   const router = useRouter();
   const profile = useProfile();
 
-  const initiateTransaction = useInitiateTransaction();
+  const queryClient = useQueryClient();
+  const initiateTransactionMutation = useMutation({
+    mutationFn: initiateTransaction,
+    onSuccess: () => {
+      queryClient.invalidateQueries(paymentQueries.mainList());
+    },
+  });
   const { initPayment } = useRemitaInline({
     isLive: process.env.NODE_ENV === "production",
     onSuccess: (res: any) => {
       if (process.env.NODE_ENV === "development") console.log(res);
+
+      queryClient.invalidateQueries(paymentQueries.mainList());
+      queryClient.invalidateQueries(paymentQueries.transactionsList());
 
       toast({
         status: "success",
@@ -80,7 +88,7 @@ const DisplayPanel: FC = () => {
   });
 
   const initialisePayment = (payment: Payment) => {
-    initiateTransaction.mutate(
+    initiateTransactionMutation.mutate(
       {
         id: payment.id,
         paymentType: payment.paymentType,
@@ -125,7 +133,7 @@ const DisplayPanel: FC = () => {
       pb={"2rem"}
     >
       {paidPartPayment && paidPartPayment.length > 0
-        ? sundryPaymentsQuery.data?.map(
+        ? sundryPayments?.map(
             (sundry) =>
               !partPaymentIds?.includes(sundry.id) && (
                 <Tooltip
@@ -165,7 +173,8 @@ const DisplayPanel: FC = () => {
                         alignSelf={"flex-end"}
                         onClick={() => initialisePayment(sundry)}
                         isDisabled={
-                          initiateTransaction.isLoading || unVerifiedFresher
+                          initiateTransactionMutation.isPending ||
+                          unVerifiedFresher
                         }
                       >
                         Pay
@@ -175,7 +184,7 @@ const DisplayPanel: FC = () => {
                 </Tooltip>
               )
           )
-        : sundryPaymentsQuery.data?.map((sundry) =>
+        : sundryPayments?.map((sundry) =>
             currentSchoolFee?.length === 0 ? (
               <Tooltip
                 label="Credentials verification required"
@@ -215,7 +224,8 @@ const DisplayPanel: FC = () => {
                       alignSelf={"flex-end"}
                       onClick={() => initialisePayment(sundry)}
                       isDisabled={
-                        initiateTransaction.isLoading || unVerifiedFresher
+                        initiateTransactionMutation.isPending ||
+                        unVerifiedFresher
                       }
                     >
                       Pay

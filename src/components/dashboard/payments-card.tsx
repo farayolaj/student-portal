@@ -1,5 +1,5 @@
-import { useMainPayments } from "@/api/payment/use-main-payments";
 import { useSession } from "@/api/user/use-session";
+import buildPaymentDetailUrl from "@/lib/payments/build-payment-detail-url";
 import {
   Button,
   Card,
@@ -15,18 +15,19 @@ import {
   Tooltip,
   VStack,
 } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
 import { differenceInCalendarDays } from "date-fns";
 import NextLink from "next/link";
-import { FC, useState } from "react";
-import { IoTime } from "react-icons/io5";
-import * as routes from "../../constants/routes";
 import { useRouter } from "next/router";
-import buildPaymentDetailUrl from "@/lib/payments/build-payment-detail-url";
+import { FC } from "react";
+import { IoTime } from "react-icons/io5";
+import { paymentQueries } from "../../api/payment.queries";
 import { useProfile } from "../../api/user/use-profile";
-import ScreeningInfo from "../payments/screening-info";
+import * as routes from "../../constants/routes";
 
 const PaymentsCard: FC = () => {
-  const outstandingPaymentsRes = useMainPayments({
+  const { data = [], isLoading } = useQuery({
+    ...paymentQueries.mainList(),
     select: (payments) => {
       return payments.filter((payment) => payment.status === "unpaid");
     },
@@ -52,14 +53,13 @@ const PaymentsCard: FC = () => {
           </Text>
         </CardHeader>
         <CardBody>
-          {outstandingPaymentsRes.isLoading ? (
+          {isLoading ? (
             <Center py={10}>
               <Spinner size="lg" color="primary" />
             </Center>
-          ) : outstandingPaymentsRes.data &&
-            outstandingPaymentsRes.data.length > 0 ? (
+          ) : data && data.length > 0 ? (
             <VStack divider={<StackDivider />} gap={6}>
-              {outstandingPaymentsRes.data.map((payment) =>
+              {data.map((payment) =>
                 profile?.data?.user.isFresher &&
                 !profile?.data?.user?.isVerified &&
                 payment?.isSchoolFee ? (

@@ -1,5 +1,6 @@
-import { useVerifyTransaction } from "@/api/payment/use-verify-transaction";
 import { Button, useToast } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
+import { paymentQueries } from "../../api/payment.queries";
 
 type PaymentTransactionsProps = {
   transaction?: Transaction;
@@ -7,20 +8,23 @@ type PaymentTransactionsProps = {
   onSuccess: () => void;
 };
 
-const RequeryButton = ({ transaction, onSuccess }: PaymentTransactionsProps) => {
+const RequeryButton = ({
+  transaction,
+  onSuccess,
+}: PaymentTransactionsProps) => {
   const toast = useToast();
 
-  const verifyTransaction = useVerifyTransaction({
-    variables: { rrr: transaction?.rrr ?? "" },
-  });
+  const { isLoading, refetch } = useQuery(
+    paymentQueries.verifyTransaction(transaction?.rrr ?? "")
+  );
 
   return (
     <Button
       size="sm"
       colorScheme="yellow"
-      isDisabled={verifyTransaction.isLoading}
+      isDisabled={isLoading}
       onClick={() => {
-        verifyTransaction.refetch().then((res) => {
+        refetch().then((res) => {
           if (res.data) {
             toast({
               title: "Payment is successful",

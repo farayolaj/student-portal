@@ -1,17 +1,19 @@
-import { getProfile, useProfile } from "@/api/user/use-profile";
-import {
-  isVerificationTransactionError,
-  useVerifyResultVerificationTransaction,
-} from "@/api/verify-result/use-verify-result-verification-transaction";
+import { useProfile } from "@/api/user/use-profile";
 import PageTitle from "@/components/common/page-title";
 import Seo from "@/components/common/seo";
 import PayVerificationFeeCard from "@/components/verify-result/pay-verification-fee-card";
 import RequestVerificationCard from "@/components/verify-result/request-verification-card";
-import { Text, Alert } from "@chakra-ui/react";
+import { Alert } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
+import {
+  isVerificationTransactionError,
+  verifyResultQueries,
+} from "../api/verify-result.queries";
 
 export default function Profile() {
-  const resultVerificationTransaction =
-    useVerifyResultVerificationTransaction();
+  const { data } = useQuery(
+    verifyResultQueries.resultVerificationTransactionVerification()
+  );
 
   const profile = useProfile();
 
@@ -19,21 +21,16 @@ export default function Profile() {
     <>
       <Seo title="Result Verification" />
       <PageTitle showBackButton>Result Verification</PageTitle>
-      
+
       {profile?.data?.user.has_upload_verification_doc === false && (
         <Alert status="warning" mb="1rem" fontSize={18}>
           You need to upload your document for verification,<b>NOW.</b>
         </Alert>
       )}
-      {resultVerificationTransaction.data && (
-        <PayVerificationFeeCard data={resultVerificationTransaction.data} />
+      {data && <PayVerificationFeeCard data={data} />}
+      {data && !isVerificationTransactionError(data) && (
+        <RequestVerificationCard isDisabled={!data?.isPaid} />
       )}
-      {resultVerificationTransaction.data &&
-        !isVerificationTransactionError(resultVerificationTransaction.data) && (
-          <RequestVerificationCard
-            isDisabled={!resultVerificationTransaction.data?.isPaid}
-          />
-        )}
     </>
   );
 }

@@ -1,11 +1,12 @@
-import { usePaymentDetail } from "@/api/payment/use-payment-detail";
 import { Card, CardBody, useToast } from "@chakra-ui/react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { paymentQueries } from "../../api/payment.queries";
 import PageTitle from "../../components/common/page-title";
 import Seo from "../../components/common/seo";
 import PaymentDetail from "../../components/payments/details/payment-detail";
 import PaymentTransactionDetail from "../../components/payments/details/payment-transactions";
-import { useEffect } from "react";
 
 export default function PaymentDetails() {
   const router = useRouter();
@@ -14,17 +15,18 @@ export default function PaymentDetails() {
   const transactionRef = slug[1] || undefined;
   const transactionType = slug[2] || undefined;
   const toast = useToast();
-  const paymentRes = usePaymentDetail({
-    variables: {
-      id,
-      transactionRef: transactionRef,
-      transactionType: transactionType as any,
-    },
-  });
+  const queryClient = useQueryClient();
+  const {
+    data: payment,
+    error: paymentError,
+    isLoading: paymentIsLoading,
+  } = useQuery(
+    paymentQueries.detailsBy(id, transactionRef, transactionType as any)
+  );
 
   useEffect(() => {
-    if (paymentRes.error) {
-      const error = paymentRes.error as any;
+    if (paymentError) {
+      const error = paymentError as any;
       toast({
         title: "Error fetching payment details",
         description: error.message,
@@ -34,7 +36,7 @@ export default function PaymentDetails() {
         isClosable: true,
       });
     }
-  }, [paymentRes.error, id, toast]);
+  }, [paymentError, id, toast]);
 
   return (
     <>
@@ -42,19 +44,16 @@ export default function PaymentDetails() {
       <PageTitle showBackButton>Payment Details</PageTitle>
       <Card>
         <CardBody pt="1.5rem" px="1.875rem" pb="2rem">
-          <PaymentDetail
-            payment={paymentRes.data}
-            onPaymentSuccess={() => paymentRes.refetch()}
-          />
+          <PaymentDetail payment={payment} />
           <PaymentTransactionDetail
-            hasPaid={paymentRes.data?.status === "paid"}
-            transaction={paymentRes.data?.transaction}
+            hasPaid={payment?.status === "paid"}
+            transaction={payment?.transaction}
             onRequery={(isPaid) => {
               if (isPaid) {
-                paymentRes.refetch();
+                queryClient.invalidateQueries(paymentQueries.mainList());
               }
             }}
-            isLoading={paymentRes.isInitialLoading}
+            isLoading={paymentIsLoading}
           />
         </CardBody>
       </Card>

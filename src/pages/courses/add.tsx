@@ -1,23 +1,22 @@
 import { useCurrentPeriod } from "@/api/user/use-current-period";
 import {
-  Flex,
-  Button,
   AlertDialog,
   AlertDialogBody,
   AlertDialogContent,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogOverlay,
+  Button,
+  Flex,
+  Spinner,
   useDisclosure,
   useToast,
-  Spinner,
 } from "@chakra-ui/react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import { useRef, useState } from "react";
-import { useAddCourses } from "../../api/course/use-add-courses";
-import { useAllCourses } from "../../api/course/use-all-courses";
-import { useCourseConfig } from "../../api/course/use-course-config";
-import { useRegisteredCourses } from "../../api/course/use-registered-courses";
+import { useEffect, useRef, useState } from "react";
+import { addCourses } from "../../api/course.mutations";
+import { courseQueries } from "../../api/course.queries";
 import PageTitle from "../../components/common/page-title";
 import Seo from "../../components/common/seo";
 import AddCourseOverviewCard from "../../components/courses/add/add-course-overview-card";
@@ -32,50 +31,60 @@ export default function AddCoursesPage(): JSX.Element {
   const [view, setView] = useState("list");
   const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
   const [extraCourses, setExtraCourses] = useState<Course[]>([]);
-  const courseConfig = useCourseConfig();
-  const maxUnits = courseConfig.data?.find(
-    (c) => c.semester === semester
-  )?.maxUnits;
-  const minUnits = courseConfig.data?.find(
-    (c) => c.semester === semester
-  )?.minUnits;
+  const { data: courseConfig } = useQuery(courseQueries.config());
+  const maxUnits = courseConfig?.find((c) => c.semester === semester)?.maxUnits;
+  const minUnits = courseConfig?.find((c) => c.semester === semester)?.minUnits;
 
-  const registeredCourses = useRegisteredCourses({
-    variables: {
-      session: period?.session?.id as string,
-      semester: period.semester.id,
-    },
+  const { data: registeredCourses } = useQuery({
+    ...courseQueries.registeredBy(
+      period?.session?.id as string,
+      period.semester.id
+    ),
     enabled: !!period,
   });
 
-  const allCourses = useAllCourses({
-    variables: { semester },
-    enabled: !!registeredCourses.data,
+  const queryClient = useQueryClient();
+  const {
+    data: courseList,
+    isLoading: courseListIsLoading,
+    isError: courseListIsError,
+    error: courseListError,
+  } = useQuery({
+    ...courseQueries.listBy(semester),
+    enabled: !!registeredCourses,
     select: (data) => {
       return data.filter(
         (course) =>
-          registeredCourses.data?.findIndex((r) => r.id === course.id) == -1
+          registeredCourses?.findIndex((r) => r.id === course.id) == -1
       );
-    },
-    refetchOnMount: false,
-    refetchOnReconnect: false,
-    refetchOnWindowFocus: false,
-    onSuccess: (data) => {
-      if (selectedCourses.length > 0) return;
-
-      const selected = data
-        .filter((course) => course.preSelected)
-        .map((course) => course.id);
-      setSelectedCourses(selected);
     },
   });
 
-  const addCourses = useAddCourses();
+  useEffect(() => {
+    if (!courseList || selectedCourses.length > 0) return;
+
+    const selected = courseList
+      ?.filter((course) => course.preSelected)
+      ?.map((course) => course.id);
+    setSelectedCourses(selected);
+  }, [courseList, selectedCourses.length]);
+
+  const addCoursesMutation = useMutation({
+    mutationFn: addCourses,
+    onSuccess: () => {
+      queryClient.invalidateQueries(
+        courseQueries.registeredBy(period?.session?.id as string, semester)
+      );
+      queryClient.invalidateQueries(
+        courseQueries.statisticsFor(period?.session?.id as string, semester)
+      );
+    },
+  });
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef(null);
   const router = useRouter();
   const toast = useToast();
-  const allCoursesWithExtras = [...(allCourses.data || []), ...extraCourses];
+  const allCoursesWithExtras = [...(courseList || []), ...extraCourses];
 
   const onSelectAll = () => {
     setSelectedCourses(allCoursesWithExtras.map((course) => course.id));
@@ -100,7 +109,7 @@ export default function AddCoursesPage(): JSX.Element {
         minUnits={minUnits || 0}
         maxUnits={maxUnits || 0}
         selectedCourses={[
-          ...(registeredCourses.data || []),
+          ...(registeredCourses || []),
           ...allCoursesWithExtras.filter((course) =>
             selectedCourses.includes(course.id)
           ),
@@ -124,10 +133,8 @@ export default function AddCoursesPage(): JSX.Element {
         )}
       </Flex>
       <SelectCourseView
-        isLoading={allCourses.isLoading}
-        error={
-          allCourses.isError ? (allCourses.error as Error).message : undefined
-        }
+        isLoading={courseListIsLoading}
+        error={courseListIsError ? courseListError.message : undefined}
         courseList={allCoursesWithExtras}
         view={view as "list" | "grid"}
         selectedCourses={selectedCourses}
@@ -176,16 +183,16 @@ export default function AddCoursesPage(): JSX.Element {
                 colorScheme="blue"
                 ref={cancelRef}
                 onClick={onClose}
-                isDisabled={addCourses.isLoading}
+                isDisabled={addCoursesMutation.isPending}
               >
                 Cancel
               </Button>
               <Button
                 colorScheme="primary"
-                isDisabled={addCourses.isLoading}
+                isDisabled={addCoursesMutation.isPending}
                 onClick={() => {
                   onClose();
-                  addCourses.mutate(
+                  addCoursesMutation.mutate(
                     { courseIds: selectedCourses },
                     {
                       onSuccess: () => {
@@ -212,7 +219,7 @@ export default function AddCoursesPage(): JSX.Element {
                 }}
                 ml={3}
               >
-                {addCourses.isLoading ? <Spinner size="sm" /> : "Add"}
+                {addCoursesMutation.isPending ? <Spinner size="sm" /> : "Add"}
               </Button>
             </AlertDialogFooter>
           </AlertDialogContent>

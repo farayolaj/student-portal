@@ -1,14 +1,14 @@
-import { useAllDocuments } from "@/api/document/use-all-documents";
 import { Flex, Input, InputGroup, InputLeftElement } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
+import { documentQueries } from "../api/document.queries";
 import PageTitle from "../components/common/page-title";
 import Seo from "../components/common/seo";
 import DocumentGrid from "../components/documents/document-grid";
 
 export default function Documents() {
-  const documentsRes = useAllDocuments();
-  const documents = documentsRes.data ?? [];
+  const { data: documents = [] } = useQuery(documentQueries.list());
   const [search, setSearch] = useState("");
   const filteredDocuments = documents.filter(
     (document) =>

@@ -1,26 +1,27 @@
-import { usePracticumEligibility } from "@/api/dashboard/use-practicum-form-eligibility";
-import { usePracticumRequestForm } from "@/api/dashboard/use-praticum-form-submit";
 import { useDownloadDocument } from "@/api/document/use-download-document";
 import {
+  Badge,
+  Box,
+  Button,
   Card,
   CardBody,
   CardHeader,
-  Heading,
   chakra,
   FormControl,
   FormLabel,
-  Input,
-  Button,
-  useToast,
-  Textarea,
-  Text,
-  Badge,
-  Box,
+  Heading,
   HStack,
+  Input,
   Link,
+  Text,
+  Textarea,
+  useToast,
 } from "@chakra-ui/react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { requestPracticum } from "../../api/dashboard.mutations";
+import { dashboardQueries } from "../../api/dashboard.queries";
 
 type FormState = {
   schoolLocationDesc: string;
@@ -47,11 +48,19 @@ const PraticumFormCard = () => {
   const router = useRouter();
 
   const [formState, setFormState] = useState<FormState>(initialFormState);
-  const { mutate: submitForm } = usePracticumRequestForm();
+  const queryClient = useQueryClient();
+  const { mutate: submitForm } = useMutation({
+    mutationFn: requestPracticum,
+    onSuccess: () => {
+      queryClient.invalidateQueries(dashboardQueries.practicumEligibility());
+    },
+  });
 
-  const { data: eligibility } = usePracticumEligibility();
-  const { intiateFetch, isLoading } = useDownloadDocument({
-    url: eligibility?.payload?.print_url,
+  const { data: eligibility } = useQuery(
+    dashboardQueries.practicumEligibility()
+  );
+  const { intiateFetch } = useDownloadDocument({
+    url: eligibility?.print_url || "",
     onError: (error) => {
       toast({
         title: error.message,
@@ -98,15 +107,15 @@ const PraticumFormCard = () => {
     }));
   };
 
-  const DisplaySupervisor = ({ practicumForm } : any) => {
+  const DisplaySupervisor = ({ practicumForm }: any) => {
     return (
       <>
         <Card
-        height={"max-content"}
-        background={"white"}
-        display="flex"
-        p={"1rem"}
-        mt={"2rem"}
+          height={"max-content"}
+          background={"white"}
+          display="flex"
+          p={"1rem"}
+          mt={"2rem"}
         >
           <CardHeader>
             <Heading as="h2" fontSize="md">
@@ -116,58 +125,57 @@ const PraticumFormCard = () => {
           <CardBody>
             <Box mb="1">
               <HStack>
-                <Text fontSize="md" fontWeight="600">Approved Practicum School:</Text>
-                <span>{practicumForm?.approved_practicum_school}</span> 
+                <Text fontSize="md" fontWeight="600">
+                  Approved Practicum School:
+                </Text>
+                <span>{practicumForm?.approved_practicum_school}</span>
               </HStack>
             </Box>
             <Box>
               <HStack>
-                <Text fontSize="md" fontWeight="600">Supervisor:</Text>
-                <span>{practicumForm?.approved_supervisor}</span> 
+                <Text fontSize="md" fontWeight="600">
+                  Supervisor:
+                </Text>
+                <span>{practicumForm?.approved_supervisor}</span>
               </HStack>
             </Box>
 
-            {
-              practicumForm?.print_url && practicumForm?.print_url.length > 0 && (
+            {practicumForm?.print_url &&
+              practicumForm?.print_url.length > 0 && (
                 <Box>
                   <Text>
-                    Click the link to download your document { }
+                    Click the link to download your document {}
                     <Badge colorScheme="green" p="2" borderRadius="md">
-                      <Link href="#" onClick={() => intiateFetch()}> Practicum Letter</Link>
+                      <Link href="#" onClick={() => intiateFetch()}>
+                        {" "}
+                        Practicum Letter
+                      </Link>
                     </Badge>
                   </Text>
                 </Box>
-              )
-            }
-            
+              )}
           </CardBody>
         </Card>
       </>
-    )
-  }
+    );
+  };
 
   return (
     <>
-      {
-        eligibility?.status && eligibility?.payload?.is_submitted && (
-          <DisplaySupervisor practicumForm={eligibility?.payload} />
-        )
-      }
-      
+      {!!eligibility && eligibility.is_submitted && (
+        <DisplaySupervisor practicumForm={eligibility} />
+      )}
+
       <Card
         height={"max-content"}
         background={"white"}
-        display={
-          eligibility?.status && !eligibility?.payload?.is_submitted
-            ? "flex"
-            : "none"
-        }
+        display={!!eligibility && !eligibility.is_submitted ? "flex" : "none"}
         p={"1rem"}
         mt={"2rem"}
       >
         <CardHeader>
           <Heading as="h2" fontSize="md">
-            {`${eligibility?.payload.course_code}`} Practicum Form
+            {`${eligibility?.course_code}`} Practicum Form
           </Heading>
         </CardHeader>
         <CardBody>
@@ -253,7 +261,6 @@ const PraticumFormCard = () => {
         </CardBody>
       </Card>
     </>
-    
   );
 };
 

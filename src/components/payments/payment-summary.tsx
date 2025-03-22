@@ -1,10 +1,11 @@
-import { useVerifyTransaction } from "@/api/payment/use-verify-transaction";
-import { useAllSessions } from "@/api/user/use-all-sessions";
 import buildPaymentDetailUrl from "@/lib/payments/build-payment-detail-url";
-import queryClient from "@/lib/query-client";
 import { Button, Card, CardBody, Flex, Text, Tooltip } from "@chakra-ui/react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { IoCheckmarkCircle, IoTime } from "react-icons/io5";
+import { paymentQueries } from "../../api/payment.queries";
+import { userQueries } from "../../api/user.queries";
 
 type PaymentSummaryProps = {
   payment: Payment;
@@ -16,18 +17,24 @@ export default function PaymentSummary({
   isFresherSchoolFee,
 }: PaymentSummaryProps) {
   const { push } = useRouter();
-  const { data: session } = useAllSessions({
+  const { data: session } = useQuery({
+    ...userQueries.sessions(),
     select: (sessions) =>
       sessions.find((session) => session.id === payment.sessionId),
   });
   const descriptionArr = [session?.name, payment.semester];
-  useVerifyTransaction({
-    variables: { rrr: payment.transaction?.rrr || "" },
-    enabled: payment.status === "unpaid",
-    onSuccess: () => {
-      queryClient.invalidateQueries(["main-payments"]);
-    },
-  });
+  const { isSuccess: verifyTransactionIsSuccess, data: verifyTransactionData } =
+    useQuery({
+      ...paymentQueries.verifyTransaction(payment.transaction?.rrr || ""),
+      enabled: payment.status === "unpaid",
+    });
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (verifyTransactionIsSuccess && verifyTransactionData)
+      queryClient.invalidateQueries(paymentQueries.mainList());
+  }, [verifyTransactionData, verifyTransactionIsSuccess, queryClient]);
+
   let description = descriptionArr.filter(Boolean).join(" | ");
   let statusIcon: JSX.Element;
   let statusText: string;
@@ -120,8 +127,8 @@ export default function PaymentSummary({
               {payment.status === "paid"
                 ? "View Details"
                 : payment.isActive
-                ? "View Details"
-                : "Payment Closed"}
+                  ? "View Details"
+                  : "Payment Closed"}
             </Button>
           </Flex>
         </CardBody>

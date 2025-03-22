@@ -1,6 +1,4 @@
 import { useFetchReceipt } from "@/api/payment/use-fetch-receipt";
-import { useInitiateTransaction } from "@/api/payment/use-initiate-transaction";
-import { useMainPayments } from "@/api/payment/use-main-payments";
 import { useSession } from "@/api/user/use-session";
 import useRemitaInline from "@/components/common/remita-inline";
 import buildPaymentDetailUrl from "@/lib/payments/build-payment-detail-url";
@@ -19,21 +17,19 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import NextLink from "next/link";
 import { useEffect, useState } from "react";
 import { IoCheckmarkCircle, IoTime } from "react-icons/io5";
+import { initiateTransaction } from "../../../api/payment.mutations";
+import { paymentQueries } from "../../../api/payment.queries";
 
 type PaymentDetailProps = {
   payment?: Payment;
-  onPaymentSuccess: () => void;
 };
 
-export default function PaymentDetail({
-  payment,
-  onPaymentSuccess,
-}: PaymentDetailProps) {
+export default function PaymentDetail({ payment }: PaymentDetailProps) {
   const sessionRes = useSession(payment?.sessionId || "");
-  const mainPayments = useMainPayments();
   const descriptionArr = [
     payment?.level ? `${payment.level} Level` : undefined,
     payment?.programme,
@@ -86,13 +82,18 @@ export default function PaymentDetail({
     }
   }, [payment?.transaction, payment?.containsPreselected]);
 
-  const initiateTransaction = useInitiateTransaction();
+  const queryClient = useQueryClient();
+  const initiateTransactionMutation = useMutation({
+    mutationFn: initiateTransaction,
+  });
   const { initPayment } = useRemitaInline({
     isLive: process.env.NODE_ENV === "production",
     onSuccess: (res: any) => {
       if (process.env.NODE_ENV === "development") console.log(res);
 
-      onPaymentSuccess();
+      queryClient.invalidateQueries(paymentQueries.mainList());
+      queryClient.invalidateQueries(paymentQueries.transactionsList());
+
       toast({
         status: "success",
         title: "Payment Successful",
@@ -112,7 +113,7 @@ export default function PaymentDetail({
   });
 
   const initialisePayment = () => {
-    initiateTransaction.mutate(
+    initiateTransactionMutation.mutate(
       {
         id: payment?.id || "",
         preselectedId: isPreselectedSelected
@@ -174,13 +175,16 @@ export default function PaymentDetail({
                   {payment.description} {"(click here to pay)"}
                 </Link>
               ))
-              .reduce((prev, curr, idx) => {
-                if (idx !== 0 && idx === prerequisites.length - 1)
-                  prev.push(" and ");
-                else if (idx !== 0) prev.push(", ");
-                prev.push(curr);
-                return prev;
-              }, [] as (JSX.Element | string)[])}{" "}
+              .reduce(
+                (prev, curr, idx) => {
+                  if (idx !== 0 && idx === prerequisites.length - 1)
+                    prev.push(" and ");
+                  else if (idx !== 0) prev.push(", ");
+                  prev.push(curr);
+                  return prev;
+                },
+                [] as (JSX.Element | string)[]
+              )}{" "}
           </Text>
         </Center>
       )}
@@ -270,11 +274,11 @@ export default function PaymentDetail({
               isDisabled={
                 !payment.isActive ||
                 prerequisites.length > 0 ||
-                initiateTransaction.isLoading ||
+                initiateTransactionMutation.isPending ||
                 receipt.isLoading
               }
             >
-              {initiateTransaction.isLoading ? (
+              {initiateTransactionMutation.isPending ? (
                 <Spinner color="white" size="xs" />
               ) : payment.isActive ? (
                 "Pay Now"

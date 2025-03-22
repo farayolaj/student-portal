@@ -1,3 +1,4 @@
+import { useCurrentPeriod } from "@/api/user/use-current-period";
 import {
   Box,
   Card,
@@ -12,26 +13,28 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
 import Image, { StaticImageData } from "next/image";
 import NextLink from "next/link";
 import { FC } from "react";
-import { useDashboardInfo } from "../../api/dashboard/use-dashboard-info";
+import { courseQueries } from "../../api/course.queries";
+import { dashboardQueries } from "../../api/dashboard.queries";
 import * as routes from "../../constants/routes";
 import getAbstractImage from "../../lib/get-abstract-image";
-import { useRegistrationOpen } from "@/api/course/use-registration-open";
-import { useCurrentPeriod } from "@/api/user/use-current-period";
 
 const CoursesCard: FC = () => {
   const { period } = useCurrentPeriod();
-  const dashboardInfo = useDashboardInfo();
-  const { data: canAddCourses } = useRegistrationOpen({
-    variables: { semester: period.semester.id },
-  });
-  const courses = dashboardInfo.data?.courses || [];
+  const { data: dashboardInfo, isLoading } = useQuery(
+    dashboardQueries.dashboardInfo()
+  );
+  const { data: canAddCourses } = useQuery(
+    courseQueries.registrationOpenBy(period.semester.id)
+  );
+  const courses = dashboardInfo?.courses || [];
 
   let content;
 
-  if (dashboardInfo.isInitialLoading) {
+  if (isLoading) {
     content = (
       <SimpleGrid gap={4} columns={[2, null, null, 4]}>
         {[1, 2, 3, 4].map((i) => (

@@ -1,15 +1,14 @@
 import { useProfile } from "@/api/user/use-profile";
-import { useVerifyResultVerificationTransaction } from "@/api/verify-result/use-verify-result-verification-transaction";
 import { VERIFY_RESULT } from "@/constants/routes";
 import {
   Box,
-  Card,
-  Flex,
-  Icon,
-  CardHeader,
-  Heading,
-  CardBody,
   Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Flex,
+  Heading,
+  Icon,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { IoShieldCheckmark } from "react-icons/io5";
@@ -17,22 +16,18 @@ import { IoShieldCheckmark } from "react-icons/io5";
 export default function InitiateResultVerificationCard() {
   const router = useRouter();
 
-  const isVerifiedRes = useProfile({
-    select: (data) => data.user.isVerified,
-  });
+  const { data } = useProfile();
+  const hasPaidOlevelRes = data?.user?.hasPaidOlevelVerification;
+  const isVerifiedRes = data?.user?.isVerified;
 
-  const hasPaidOlevelRes = useProfile({
-    select: (data) => data.user.hasPaidOlevelVerification,
-  });
-
-  if (isVerifiedRes.data == undefined) return null;
-  if (isVerifiedRes.data) return null;
+  if (isVerifiedRes == undefined) return null;
+  if (isVerifiedRes) return null;
 
   return (
     <Card p={4} mt={8}>
       <Flex gap={6} align="center">
         <Icon as={IoShieldCheckmark} boxSize={24} color="primary.500" />
-        {hasPaidOlevelRes?.data === false ? (
+        {hasPaidOlevelRes === false ? (
           <Box>
             <CardHeader>
               <Heading fontSize="larger" fontWeight="semibold">

@@ -1,4 +1,4 @@
-import { HOME } from "@/constants/routes";
+import { DASHBOARD } from "@/constants/routes";
 import {
   Box,
   Card,
@@ -23,7 +23,7 @@ export default function Error() {
             <Link
               textAlign="center"
               as={NextLink}
-              href={HOME}
+              href={DASHBOARD}
               variant={"button"}
             >
               Go Back Home
@@ -36,6 +36,5 @@ export default function Error() {
 }
 
 Error.layoutProps = {
-  show: false,
   isAuthenticated: false,
 };

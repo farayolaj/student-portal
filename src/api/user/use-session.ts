@@ -1,9 +1,9 @@
-import { useAllSessions } from "./use-all-sessions";
+import { useQuery } from "@tanstack/react-query";
+import { userQueries } from "../user.queries";
 
 export function useSession(sessionId: string) {
-  const sessionRes = useAllSessions({
+  return useQuery({
+    ...userQueries.sessions(),
     select: (sessions) => sessions.find((s) => s.id === sessionId),
   });
-
-  return sessionRes;
 }

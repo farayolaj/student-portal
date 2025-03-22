@@ -1,5 +1,5 @@
-import useAuth from "@/hooks/use-auth";
-import { useAllSessions } from "./use-all-sessions";
+import { useQuery } from "@tanstack/react-query";
+import { userQueries } from "../user.queries";
 
 type Period = {
   session: { id: string; name: string };
@@ -10,23 +10,27 @@ type Period = {
  * Provides the current session id and semester.
  */
 export function useCurrentPeriod() {
-  const allSessionsRes = useAllSessions();
-  const auth = useAuth();
+  const { data: allSessions } = useQuery(userQueries.sessions());
+  const {
+    data: profile,
+    isLoading: profileIsLoading,
+    error: profileError,
+  } = useQuery(userQueries.profile());
 
   return {
     period: {
       semester: {
-        id: auth.user?.currentSemester,
-        name: auth.user?.currentSemester === 2 ? "Second" : "First",
+        id: profile?.user?.currentSemester,
+        name: profile?.user?.currentSemester === 2 ? "Second" : "First",
       },
       session: {
-        id: auth.user?.currentSessionId,
-        name: allSessionsRes.data?.find(
-          (session) => session.id === auth.user?.currentSessionId
+        id: profile?.user?.currentSessionId,
+        name: allSessions?.find(
+          (session) => session.id === profile?.user?.currentSessionId
         )?.name,
       },
     } as Period,
-    isLoading: auth.isLoggingIn,
-    error: auth.error,
+    isLoading: profileIsLoading,
+    error: profileError,
   };
 }
