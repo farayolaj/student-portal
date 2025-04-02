@@ -189,6 +189,8 @@ interface User {
   orientationSeatNo?: string;
   hasPaidOlevelVerification?: boolean;
   telcoNumber: string | null;
+  isFinalist: boolean;
+  isExtraYear: boolean;
 }
 
 interface AcademicProfile {

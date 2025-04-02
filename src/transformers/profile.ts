@@ -57,6 +57,8 @@ export const toUser = (user: any) =>
     has_upload_verification_doc: user.has_upload_verification_doc,
     orientationSeatNo: user.orientation_seat_no || undefined,
     telcoNumber: user.telco_number,
+    isFinalist: user.is_finalist,
+    isExtraYear: user.is_extraYear,
   }) as User;
 
 export const toAcademicProfile = (profile: any) =>

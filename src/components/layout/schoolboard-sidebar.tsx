@@ -125,6 +125,9 @@ const DisplayPanel: FC = () => {
   const unVerifiedFresher =
     profile?.data?.user.isFresher && !profile?.data?.user?.isVerified;
 
+  const isFinalistOrExtra =
+    profile?.data?.user?.isFinalist || profile?.data?.user?.isExtraYear;
+
   return (
     <VStack
       align="flex-start"
@@ -135,7 +138,8 @@ const DisplayPanel: FC = () => {
       {paidPartPayment && paidPartPayment.length > 0
         ? sundryPayments?.map(
             (sundry) =>
-              !partPaymentIds?.includes(sundry.id) && (
+              !partPaymentIds?.includes(sundry.id) &&
+              !isFinalistOrExtra && (
                 <Tooltip
                   label="Credentials verification required"
                   isDisabled={!unVerifiedFresher}
