@@ -138,8 +138,7 @@ const DisplayPanel: FC = () => {
       {paidPartPayment && paidPartPayment.length > 0
         ? sundryPayments?.map(
             (sundry) =>
-              !partPaymentIds?.includes(sundry.id) &&
-              !isFinalistOrExtra && (
+              !partPaymentIds?.includes(sundry.id) && (
                 <Tooltip
                   label="Credentials verification required"
                   isDisabled={!unVerifiedFresher}
