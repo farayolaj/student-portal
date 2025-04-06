@@ -152,7 +152,7 @@ const Bookstore: React.FC = () => {
 
   const calculateServiceCharge = () => {
     const subtotal = calculateSubtotal();
-    return subtotal === 0 ? 0 : subtotal + 505;
+    return subtotal === 0 ? 0 : 505;
   };
 
   const calculateTotal = () => {
