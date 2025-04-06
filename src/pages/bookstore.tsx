@@ -152,7 +152,7 @@ const Bookstore: React.FC = () => {
 
   const calculateServiceCharge = () => {
     const subtotal = calculateSubtotal();
-    return subtotal * 0.025;
+    return subtotal === 0 ? 0 : subtotal + 505;
   };
 
   const calculateTotal = () => {
@@ -297,8 +297,7 @@ const Bookstore: React.FC = () => {
               <Divider my={4} />
               <Text>Subtotal: ₦{calculateSubtotal().toLocaleString()}</Text>
               <Text>
-                Service Charge (2.5%): ₦
-                {calculateServiceCharge().toLocaleString()}
+                Service Charge: ₦{calculateServiceCharge().toLocaleString()}
               </Text>
               <Text fontSize={"1.2rem"} fontWeight="bold" mt={2}>
                 Total: ₦{calculateTotal().toLocaleString()}
@@ -332,8 +331,8 @@ const Bookstore: React.FC = () => {
                 )
               )}
               <Text pt="1rem" fontStyle={"italic"} fontWeight={"semibold"}>
-                NB: Kindly pick up the books at the New Administrative Complex - CBT
-                Centre, UI Extension, Ajibode-Sasa Road, Ibadan.
+                NB: Kindly pick up the books at the New Administrative Complex -
+                CBT Centre, UI Extension, Ajibode-Sasa Road, Ibadan.
               </Text>
               <Text
                 fontSize={"1.25rem"}
@@ -344,7 +343,7 @@ const Bookstore: React.FC = () => {
                 Total: ₦{calculateTotal().toLocaleString()}
               </Text>
             </ModalBody>
-            <ModalFooter justifyContent={"space-between"}>
+            <ModalFooter justifyContent={"start"}>
               <Button colorScheme="red" w="10rem" mr={3} onClick={onClose}>
                 Cancel
               </Button>
