@@ -31,8 +31,10 @@ async function getBaseApiUrl() {
     "X-APP-KEY": X_APP_KEY,
   };
 
-  if (process.env.NODE_ENV === "development")
+  if (process.env.NODE_ENV === "development") {
     headers["ngrok-skip-browser-warning"] = ",";
+    headers["skip_zrok_interstitial"] = ",";
+  }
 
   try {
     const res = await axios.get(url, { headers });

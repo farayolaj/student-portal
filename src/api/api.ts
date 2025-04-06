@@ -20,8 +20,10 @@ export default function getApi() {
     "X-APP-KEY": X_APP_KEY,
   };
 
-  if (process.env.NODE_ENV === "development")
+  if (process.env.NODE_ENV === "development") {
     headers["ngrok-skip-browser-warning"] = ",";
+    headers["skip_zrok_interstitial"] = ",";
+  }
 
   api = axios.create({
     baseURL: apiBaseUrl,

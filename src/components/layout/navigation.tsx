@@ -12,7 +12,7 @@ import {
   IoPersonOutline,
   IoPhonePortraitOutline,
   IoReceiptOutline,
-  IoShieldCheckmarkOutline,
+  IoShieldCheckmarkOutline, IoStorefrontOutline
 } from "react-icons/io5";
 import { IconType } from "react-icons/lib";
 import * as routes from "../../constants/routes";
@@ -91,8 +91,15 @@ const Navigation: FC<NavigationProps> = ({ isOpen }) => {
         isOpen={isOpen}
         isActive={pathname.startsWith(routes.PROFILE)}
       />
+      <NavLink
+        title="Bookstore"
+        icon={IoStorefrontOutline}
+        href={routes.BOOK_STORE}
+        isOpen={isOpen}
+        isActive={pathname.startsWith(routes.BOOK_STORE)}
+      />
     </VStack>
-  );
+  );  
 };
 
 export default Navigation;

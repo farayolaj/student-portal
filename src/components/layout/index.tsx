@@ -21,7 +21,7 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
 }) => {
   const [connectivityText, setConnectivityText] = useState("");
   const [isOnline, setIsOnline] = useState(true);
-  const { push } = useRouter();
+  const { push, pathname } = useRouter();
 
   useEffect(() => {
     const onOffline = () => {
@@ -101,7 +101,8 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
               >
                 {children}
               </Box>
-              <SchoolBoardSidebar />
+
+              {pathname !== "/bookstore" && <SchoolBoardSidebar />}
             </Box>
           </Box>
         </Flex>
