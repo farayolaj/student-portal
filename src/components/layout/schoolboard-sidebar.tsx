@@ -125,9 +125,6 @@ const DisplayPanel: FC = () => {
   const unVerifiedFresher =
     profile?.data?.user.isFresher && !profile?.data?.user?.isVerified;
 
-  const isFinalistOrExtra =
-    profile?.data?.user?.isFinalist || profile?.data?.user?.isExtraYear;
-
   return (
     <VStack
       align="flex-start"
@@ -135,7 +132,7 @@ const DisplayPanel: FC = () => {
       spacing={"28px"}
       pb={"2rem"}
     >
-      {paidPartPayment && paidPartPayment.length > 0 && !isFinalistOrExtra
+      {paidPartPayment && paidPartPayment.length > 0
         ? sundryPayments?.map(
             (sundry) =>
               !partPaymentIds?.includes(sundry.id) && (
