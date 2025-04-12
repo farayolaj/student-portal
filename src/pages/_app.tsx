@@ -20,40 +20,7 @@ type CustomAppProps = AppProps & {
   Component: NextComponentType & { layoutProps: LayoutProps };
 };
 
-async function getBaseApiUrl() {
-  const initialBaseUrl = process.env.NEXT_PUBLIC_API_URL;
-  const hostname = encodeURIComponent(window.location.hostname).replace(
-    "starrising",
-    "localhost"
-  );
-  const url = `${initialBaseUrl}/baseUrl?domain=${hostname}`;
-  const headers: Record<string, string> = {
-    "X-APP-KEY": X_APP_KEY,
-  };
-
-  if (process.env.NODE_ENV === "development") {
-    headers["ngrok-skip-browser-warning"] = ",";
-    headers["skip_zrok_interstitial"] = ",";
-  }
-
-  try {
-    const res = await axios.get(url, { headers });
-    return res.data.payload as string;
-  } catch (error) {
-    throw error;
-  }
-}
-
 export default function App({ Component, pageProps }: CustomAppProps) {
-  const { push, pathname } = useRouter();
-
-  useEffect(() => {
-    if (pathname !== ERROR_PAGE)
-      getBaseApiUrl()
-        .then((url) => localStorage.setItem("apiBaseUrl", url))
-        .catch((_error) => push(ERROR_PAGE));
-  }, [push, pathname]);
-
   const layoutProps = Component.layoutProps || {};
 
   return (

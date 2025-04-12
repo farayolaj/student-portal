@@ -10,12 +10,8 @@ let api: AxiosInstance;
 export default function getApi() {
   if (api) return api;
 
-  const baseURL = window.localStorage.getItem("apiBaseUrl") || "";
-  // if (baseURL.length === 0) {
-  //   // proper error machanism should come here
-  //   return false;
-  // }
-  const apiBaseUrl = baseURL + "/api";
+  const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL;
+
   const headers: Record<string, string> = {
     "X-APP-KEY": X_APP_KEY,
   };
