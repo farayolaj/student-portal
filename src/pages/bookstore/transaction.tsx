@@ -48,7 +48,6 @@ const BookstoreTransactionsPage = () => {
   const [selectedOrder, setSelectedOrder] = useState<BookOrder | null>(null);
   const { data, isLoading, error } = useQuery(bookstoreQueries.transactions());
 
-  console.log(data);
   const handleViewDetails = (order: BookOrder) => {
     setSelectedOrder(order);
     onOpen();
@@ -122,19 +121,27 @@ const BookstoreTransactionsPage = () => {
 
   if (error) {
     return (
-      <Box textAlign="center" py={10}>
-        <Text color="red.500">
-          Error loading transactions: {(error as Error).message}
-        </Text>
-      </Box>
+      <>
+        <Seo title="Bookstore Transactions" />
+        <PageTitle showBackButton>Bookstore Transactions</PageTitle>
+        <Box textAlign="center" py={10}>
+          <Text color="red.500">
+            Error loading transactions: {(error as Error).message}
+          </Text>
+        </Box>
+      </>
     );
   }
 
   if (!data || data.length === 0) {
     return (
-      <Box textAlign="center" py={10}>
-        <Text>No transactions found</Text>
-      </Box>
+      <>
+        <Seo title="Bookstore Transactions" />
+        <PageTitle showBackButton>Bookstore Transactions</PageTitle>
+        <Box textAlign="center" py={10}>
+          <Text>No transactions found</Text>
+        </Box>
+      </>
     );
   }
 

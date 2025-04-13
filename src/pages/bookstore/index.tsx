@@ -32,10 +32,9 @@ import {
   Skeleton,
   Spinner,
 } from "@chakra-ui/react";
-import beach from "../../images/home/beach.png";
-import resort from "../../images/home/6.png";
-import rock from "../../images/home/4.png";
-import car from "../../images/home/5.png";
+import book1 from "../../images/bookv1.jpg"
+import book2 from "../../images/bookv2.jpg";
+import book3 from "../../images/bookv3.jpg"; 
 import Seo from "../../components/common/seo";
 import PageTitle from "../../components/common/page-title";
 import { useBookstore } from "../../api/bookstore/use-list-bookstore";
@@ -156,7 +155,7 @@ const Bookstore: React.FC = () => {
     );
   };
 
-  const images: StaticImageData[] = [resort, beach, rock, car];
+  const images: StaticImageData[] = [book1, book2, book3];
 
   const [selectedMaterials, setSelectedMaterials] = useState<
     Record<string, { material: CourseMaterial; quantity: number }>
@@ -269,7 +268,7 @@ const Bookstore: React.FC = () => {
                           mb={4}
                         >
                           <Image
-                            src={images[Math.floor(Math.random() * 4)]}
+                            src={images[Math.floor(Math.random() * images.length)]}
                             alt={material.title}
                             fill
                             style={{
