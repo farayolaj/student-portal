@@ -10,7 +10,7 @@ import PaymentTransactionDetail from "../../components/payments/details/payment-
 
 export default function PaymentDetails() {
   const router = useRouter();
-  const slug = (router.query.slug as string).split("-");
+  const slug = (router.query.slug as string)?.split("-") || [];
   const id = slug[0];
   const transactionRef = slug[1] || undefined;
   const transactionType = slug[2] || undefined;
