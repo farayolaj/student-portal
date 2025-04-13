@@ -15,3 +15,4 @@ export const VERIFY_RESULT = "/verify-result";
 export const MY_MAILS = "/my-mails";
 export const LOGIN = "/login";
 export const BOOK_STORE = "/bookstore"
+export const BOOK_STORE_TRANSACTION = "/bookstore/transaction"

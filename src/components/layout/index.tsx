@@ -102,7 +102,7 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
                 {children}
               </Box>
 
-              {pathname !== "/bookstore" && <SchoolBoardSidebar />}
+              {!pathname.includes("/bookstore") && <SchoolBoardSidebar />}
             </Box>
           </Box>
         </Flex>
