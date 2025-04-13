@@ -1,52 +1,51 @@
-import React, { useState } from "react";
-import Image, { StaticImageData } from "next/image";
 import {
+  Badge,
   Box,
-  Grid,
-  GridItem,
-  Text,
   Button,
   Card,
   CardBody,
   CardFooter,
-  Heading,
-  Stack,
   Checkbox,
+  Divider,
+  Flex,
+  Grid,
+  GridItem,
+  Heading,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
   NumberInput,
   NumberInputField,
   NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
-  useToast,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
-  Badge,
-  Flex,
-  Divider,
   Skeleton,
-  Spinner,
+  Stack,
+  Text,
+  useDisclosure,
+  useToast
 } from "@chakra-ui/react";
-import beach from "../../images/home/beach.png";
-import resort from "../../images/home/6.png";
-import rock from "../../images/home/4.png";
-import car from "../../images/home/5.png";
-import Seo from "../../components/common/seo";
-import PageTitle from "../../components/common/page-title";
-import { useBookstore } from "../../api/bookstore/use-list-bookstore";
 import { useMutation } from "@tanstack/react-query";
+import Image, { StaticImageData } from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
 import {
   checkoutBookstore,
   initiateBookstorePayment,
 } from "../../api/bookstore.mutations";
+import { useBookstore } from "../../api/bookstore/use-list-bookstore";
+import PageTitle from "../../components/common/page-title";
 import useRemitaInline from "../../components/common/remita-inline";
-import Link from "next/link";
-import { useRouter } from "next/router";
+import Seo from "../../components/common/seo";
+import rock from "../../images/home/4.png";
+import car from "../../images/home/5.png";
+import resort from "../../images/home/6.png";
+import beach from "../../images/home/beach.png";
 
 interface CourseMaterial {
   id: string;
