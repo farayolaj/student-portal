@@ -237,7 +237,7 @@ const Bookstore: React.FC = () => {
                 gap={6}
               >
                 {[1, 2, 3, 4].map((i) => (
-                  <Skeleton w={"20rem"} h={"20rem"} />
+                  <Skeleton key={i} w={"20rem"} h={"20rem"} />
                 ))}
               </Grid>
             ) : bookStoreList?.length === 0 ? (
