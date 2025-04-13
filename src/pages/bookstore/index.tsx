@@ -1,36 +1,33 @@
-import React, { useState } from "react";
-import Image, { StaticImageData } from "next/image";
 import {
+  Badge,
   Box,
-  Grid,
-  GridItem,
-  Text,
   Button,
   Card,
   CardBody,
   CardFooter,
-  Heading,
-  Stack,
   Checkbox,
+  Divider,
+  Flex,
+  Grid,
+  GridItem,
+  Heading,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
   NumberInput,
   NumberInputField,
   NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
-  useToast,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
-  Badge,
-  Flex,
-  Divider,
   Skeleton,
-  Spinner,
+  Stack,
+  Text,
+  useDisclosure,
+  useToast
 } from "@chakra-ui/react";
 import book1 from "../../images/bookv1.jpg"
 import book2 from "../../images/bookv2.jpg";
@@ -39,13 +36,15 @@ import Seo from "../../components/common/seo";
 import PageTitle from "../../components/common/page-title";
 import { useBookstore } from "../../api/bookstore/use-list-bookstore";
 import { useMutation } from "@tanstack/react-query";
+import Image, { StaticImageData } from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
 import {
   checkoutBookstore,
   initiateBookstorePayment,
 } from "../../api/bookstore.mutations";
 import useRemitaInline from "../../components/common/remita-inline";
-import Link from "next/link";
-import { useRouter } from "next/router";
 
 interface CourseMaterial {
   id: string;
@@ -236,7 +235,7 @@ const Bookstore: React.FC = () => {
                 gap={6}
               >
                 {[1, 2, 3, 4].map((i) => (
-                  <Skeleton w={"20rem"} h={"20rem"} />
+                  <Skeleton key={i} w={"20rem"} h={"20rem"} />
                 ))}
               </Grid>
             ) : bookStoreList?.length === 0 ? (

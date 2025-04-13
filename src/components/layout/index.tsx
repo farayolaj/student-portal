@@ -46,11 +46,11 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
   }, []);
 
   let child: ReactNode;
-  const { userData } = useAuth();
+  const { userData, isLoading } = useAuth();
   const profile = useProfile();
 
   if (!isAuthenticated) child = children;
-  else if (!userData) {
+  else if (!isLoading && !userData) {
     if (typeof window !== "undefined") push(HOME); // Router API is not available on the server
     child = null;
   } else

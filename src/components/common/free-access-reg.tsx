@@ -149,8 +149,8 @@ export default function FreeAccessRegistration() {
                       phoneNumber.startsWith("0")
                         ? 11
                         : phoneNumber.startsWith("+")
-                          ? 14
-                          : 13
+                        ? 14
+                        : 13
                     }
                     isRequired
                     focusBorderColor="green.500"
@@ -177,7 +177,7 @@ export default function FreeAccessRegistration() {
               </FormControl>
             )}
 
-            <Text>
+            <Text as="section" mt={4}>
               <strong>Important:</strong>
               <UnorderedList>
                 <ListItem>
