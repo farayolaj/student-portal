@@ -33,3 +33,18 @@ export async function initiateBookstorePayment({
 
   return response.data.payload;
 }
+
+
+export async function cancelBookstorePayment({
+  order_id,
+}: {
+  order_id: string;
+}) {
+  const response = await getApi().post("/bookstore_payment_cancel", {
+    order_id,
+  });
+
+  if (!response.data.status) throw new Error(response.data.message);
+
+  return response.data;
+}

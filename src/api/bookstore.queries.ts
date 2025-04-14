@@ -8,7 +8,6 @@ async function listBooks() {
   return response.data.payload;
 }
 
-
 async function bookstoreTransaction() {
   const response = await getApi().get("/bookstore_transaction");
 
@@ -16,7 +15,6 @@ async function bookstoreTransaction() {
 
   return response.data.payload;
 }
-
 
 export const bookstoreQueries = {
   books: () => ({

@@ -13,7 +13,6 @@ import {
   Heading,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
@@ -27,24 +26,31 @@ import {
   Stack,
   Text,
   useDisclosure,
-  useToast
+  useToast,
 } from "@chakra-ui/react";
-import book1 from "../../images/bookv1.jpg"
-import book2 from "../../images/bookv2.jpg";
-import book3 from "../../images/bookv3.jpg"; 
+import book1 from "../../images/bookstore/book-bg-1.png";
+import book2 from "../../images/bookstore/book-bg-2.png";
+import book3 from "../../images/bookstore/book-bg-3.png";
+import book4 from "../../images/bookstore/book-bg-4.png";
+import book5 from "../../images/bookstore/book-bg-5.jpg";
+import book6 from "../../images/bookstore/book-bg-6.jpg";
+import book7 from "../../images/bookstore/book-bg-7.jpg";
+import book8 from "../../images/bookstore/book-bg-8.jpg";
+
 import Seo from "../../components/common/seo";
 import PageTitle from "../../components/common/page-title";
 import { useBookstore } from "../../api/bookstore/use-list-bookstore";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
+  cancelBookstorePayment,
   checkoutBookstore,
   initiateBookstorePayment,
 } from "../../api/bookstore.mutations";
 import useRemitaInline from "../../components/common/remita-inline";
+import { bookstoreQueries } from "../../api/bookstore.queries";
 
 interface CourseMaterial {
   id: string;
@@ -58,10 +64,66 @@ interface CourseMaterial {
 const Bookstore: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [orderId, setOrderId] = useState<string | null>(null);
+  const [timeLeft, setTimeLeft] = useState<number>(120);
+  const queryClient = useQueryClient();
+
+  const handleCancelOrder = () => {
+    if (orderId) {
+      cancelPaymentMutation.mutate(
+        { order_id: orderId },
+        {
+          onSuccess: () => {
+            toast({
+              title: "Order Cancelled",
+              description: "Your order has been cancelled successfully.",
+              status: "success",
+              isClosable: true,
+            });
+            queryClient.invalidateQueries(bookstoreQueries.books());
+            onClose();
+          },
+          onError: (error) => {
+            toast({
+              title: "Error cancelling order",
+              description: error.message,
+              status: "error",
+              isClosable: true,
+            });
+            onClose();
+          },
+        }
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      setTimeLeft(120);
+
+      // Start countdown
+      const interval = setInterval(() => {
+        setTimeLeft((prev) => {
+          if (prev <= 1) {
+            clearInterval(interval);
+            handleCancelOrder();
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => {
+        clearInterval(interval);
+      };
+    }
+  }, [isOpen]);
 
   const { data: bookStoreList, isLoading } = useBookstore();
   const checkoutMutation = useMutation({
     mutationFn: checkoutBookstore,
+  });
+  const cancelPaymentMutation = useMutation({
+    mutationFn: cancelBookstorePayment,
   });
 
   const handleCheckout = () => {
@@ -134,7 +196,6 @@ const Bookstore: React.FC = () => {
         },
         onSuccess: (data) => {
           onClose();
-          console.log(data);
           initPayment({
             amount: parseInt(data.payment_details.total_amount),
             key: data.split_payment.public_key || "",
@@ -154,7 +215,16 @@ const Bookstore: React.FC = () => {
     );
   };
 
-  const images: StaticImageData[] = [book1, book2, book3];
+  const images: StaticImageData[] = [
+    book1,
+    book2,
+    book3,
+    book4,
+    book5,
+    book6,
+    book7,
+    book8,
+  ];
 
   const [selectedMaterials, setSelectedMaterials] = useState<
     Record<string, { material: CourseMaterial; quantity: number }>
@@ -209,7 +279,11 @@ const Bookstore: React.FC = () => {
     return calculateSubtotal() + calculateServiceCharge();
   };
 
-  const router = useRouter();
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}m ${remainingSeconds}s`;
+  };
   return (
     <>
       <Seo title="Online Bookstore" />
@@ -251,88 +325,114 @@ const Bookstore: React.FC = () => {
                 }}
                 gap={6}
               >
-                {bookStoreList?.map((material: CourseMaterial) => (
-                  <GridItem key={material.id}>
-                    <Card
-                      variant="outline"
-                      height="100%"
-                      display="flex"
-                      flexDirection="column"
-                    >
-                      <CardBody flex={1} p="1rem">
-                        <Box
-                          position="relative"
-                          height="180px"
-                          width="100%"
-                          mb={4}
+                {bookStoreList?.map(
+                  (material: CourseMaterial, index: number) => {
+                    const image = images[index % images.length];
+                    return (
+                      <GridItem key={material.id}>
+                        <Card
+                          flexDirection="column"
+                          variant="outline"
+                          height="100%"
+                          display="flex"
+                          opacity={material.quantity === "0" ? 0.5 : 1}
                         >
-                          <Image
-                            src={images[Math.floor(Math.random() * images.length)]}
-                            alt={material.title}
-                            fill
-                            style={{
-                              objectFit: "cover",
-                              borderRadius: "8px",
-                            }}
-                          />
-                        </Box>
-                        <Stack spacing="3">
-                          <Text>{material.code}</Text>
-                          <Heading size="md" fontWeight={"semibold"}>
-                            {material.title}
-                            {material.code.includes("GES") && (
-                              <Badge ml={2} colorScheme="purple">
-                                GES
-                              </Badge>
-                            )}
-                          </Heading>
-                          <Text color="green" fontWeight={"bold"} fontSize="lg">
-                            ₦{material.price}
-                          </Text>
-                        </Stack>
-                      </CardBody>
-                      <CardFooter pt="0">
-                        <Flex
-                          width="100%"
-                          alignItems="center"
-                          justifyContent={"space-between"}
-                          gap={3}
-                        >
-                          <Flex gap="0.5rem">
-                            <Checkbox
-                              colorScheme="green"
-                              isChecked={!!selectedMaterials[material.id]}
-                              onChange={(e) =>
-                                handleMaterialSelect(material, e.target.checked)
-                              }
-                            />
-                            Place Order
-                          </Flex>
-                          {selectedMaterials[material.id] && (
-                            <NumberInput
-                              min={1}
-                              max={parseInt(material.quantity)}
-                              size="sm"
-                              maxW={20}
-                              value={selectedMaterials[material.id].quantity}
-                              onChange={(value) =>
-                                handleQuantityChange(material.id, value)
-                              }
-                              colorScheme="green"
-                              focusBorderColor="green"
+                          <CardBody flex={1} p="1rem">
+                            <Box
+                              position="relative"
+                              height="180px"
+                              width="100%"
+                              mb={4}
                             >
-                              <NumberInputField max={5} />
-                              <NumberInputStepper>
-                                <NumberIncrementStepper />
-                                <NumberDecrementStepper />
-                              </NumberInputStepper>
-                            </NumberInput>
-                          )}
-                        </Flex>
-                      </CardFooter>
-                    </Card>
-                  </GridItem>
-                ))}
+                              <Image
+                                src={image}
+                                alt={material.title}
+                                fill
+                                style={{
+                                  objectFit: "cover",
+                                  borderRadius: "8px",
+                                }}
+                              />
+                            </Box>
+                            <Stack spacing="3">
+                              <Flex justifyContent={"space-between"}>
+                                <Text>{material.code}</Text>
+                                {material.quantity === "0" && (
+                                  <Badge colorScheme="red">Out of Stock</Badge>
+                                )}
+                              </Flex>
+                              <Heading size="md" fontWeight={"semibold"}>
+                                {material.title}
+                                {material.code.includes("GES") && (
+                                  <Badge ml={2} colorScheme="purple">
+                                    GES
+                                  </Badge>
+                                )}
+                              </Heading>
+                              <Text
+                                color="green"
+                                fontWeight={"bold"}
+                                fontSize="lg"
+                              >
+                                ₦{material.price}
+                              </Text>
+                            </Stack>
+                          </CardBody>
+                          <CardFooter pt="0">
+                            <Flex
+                              width="100%"
+                              alignItems="center"
+                              justifyContent={"space-between"}
+                              gap={3}
+                            >
+                              <Flex gap="0.5rem">
+                                <Checkbox
+                                  colorScheme="green"
+                                  isChecked={!!selectedMaterials[material.id]}
+                                  onChange={(e) =>
+                                    handleMaterialSelect(
+                                      material,
+                                      e.target.checked
+                                    )
+                                  }
+                                  isDisabled={
+                                    material.quantity === "0" ||
+                                    checkoutMutation?.isPending
+                                  }
+                                />
+                                Place Order
+                              </Flex>
+                              {selectedMaterials[material.id] && (
+                                <NumberInput
+                                  min={0}
+                                  max={parseInt(material.quantity)}
+                                  size="sm"
+                                  maxW={20}
+                                  value={
+                                    selectedMaterials[material.id].quantity
+                                  }
+                                  onChange={(value) =>
+                                    handleQuantityChange(material.id, value)
+                                  }
+                                  colorScheme="green"
+                                  focusBorderColor="green"
+                                >
+                                  <NumberInputField
+                                    max={parseInt(material.quantity)}
+                                  />
+                                  <NumberInputStepper>
+                                    <NumberIncrementStepper />
+                                    <NumberDecrementStepper />
+                                  </NumberInputStepper>
+                                </NumberInput>
+                              )}
+                            </Flex>
+                          </CardFooter>
+                        </Card>
+                      </GridItem>
+                    );
+                  }
+                )}
               </Grid>
             )}
 
@@ -343,9 +443,9 @@ const Bookstore: React.FC = () => {
               borderWidth="1px"
               borderRadius="lg"
               boxShadow="md"
+              top={{ lg: "6" }}
               alignSelf="flex-start"
               position={{ lg: "sticky" }}
-              top={{ lg: "6" }}
             >
               <Text fontWeight={"bold"} fontSize={"1.3rem"} mb={4}>
                 Order Summary
@@ -383,11 +483,16 @@ const Bookstore: React.FC = () => {
         </Box>
 
         {/* Checkout Modal */}
-        <Modal isOpen={isOpen} onClose={onClose}>
+        <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader>Confirm Purchase</ModalHeader>
-            <ModalCloseButton />
+            <ModalHeader>
+              Confirm Purchase
+              <Text fontSize={"sm"} color="red" mt={1}>
+                This order auto-cancels in {formatTime(timeLeft)}
+              </Text>
+            </ModalHeader>
+
             <ModalBody>
               <Text mb={1}>You are about to purchase:</Text>
               {Object.values(selectedMaterials).map(
@@ -402,6 +507,7 @@ const Bookstore: React.FC = () => {
                 fontSize={"sm"}
                 fontStyle={"italic"}
                 fontWeight={"normal"}
+                color="grey"
               >
                 NB: <br />- Kindly pick up the books at the New Administrative
                 Complex - CBT Centre, UI Extension, Ajibode-Sasa Road, Ibadan.
@@ -419,13 +525,23 @@ const Bookstore: React.FC = () => {
               </Text>
             </ModalBody>
             <ModalFooter justifyContent={"start"}>
-              <Button colorScheme="red" w="10rem" mr={3} onClick={onClose}>
-                Cancel
+              <Button
+                colorScheme="red"
+                w="10rem"
+                mr={3}
+                onClick={handleCancelOrder}
+                isDisabled={cancelPaymentMutation.isPending}
+              >
+                Cancel Purchase
               </Button>
               <Button
                 colorScheme="green"
                 onClick={initialisePayment}
-                isDisabled={initiatePaymentMutation.isPending || !orderId}
+                isDisabled={
+                  initiatePaymentMutation.isPending ||
+                  !orderId ||
+                  cancelPaymentMutation.isPending
+                }
               >
                 Confirm Purchase
               </Button>

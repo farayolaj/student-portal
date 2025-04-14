@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { bookstoreQueries } from "../../api/bookstore.queries";
 import {
   Badge,
@@ -22,8 +22,11 @@ import Seo from "../../components/common/seo";
 import PageTitle from "../../components/common/page-title";
 import { createColumnHelper } from "@tanstack/react-table";
 import CustomTable from "../../components/common/custom-table";
+import { checkoutBookstore } from "../../api/bookstore.mutations";
+import RepeatOrderButton from "../../components/bookstore/repeat-trasaction";
 
 interface BookItem {
+  course_id: string;
   title: string;
   quantity: string;
   price: string;
@@ -59,6 +62,8 @@ const BookstoreTransactionsPage = () => {
         return <Badge colorScheme="yellow">Pending</Badge>;
       case "completed":
         return <Badge colorScheme="green">Completed</Badge>;
+      case "cancelled":
+        return <Badge colorScheme="red">Cancelled</Badge>;
       default:
         return <Badge colorScheme="gray">Unknown</Badge>;
     }
@@ -98,15 +103,18 @@ const BookstoreTransactionsPage = () => {
       ),
     }),
     columnHelper.accessor("id", {
-      header: "Action",
+      header: "Actions",
       cell: (props) => (
-        <Button
-          size="sm"
-          colorScheme="green"
-          onClick={() => handleViewDetails(props.row.original)}
-        >
-          View Details
-        </Button>
+        <Flex gap=".5rem">
+          <Button
+            size="sm"
+            colorScheme="green"
+            onClick={() => handleViewDetails(props.row.original)}
+          >
+            View Details
+          </Button>
+          <RepeatOrderButton order={props.row.original} />
+        </Flex>
       ),
     }),
   ];
@@ -159,7 +167,9 @@ const BookstoreTransactionsPage = () => {
         <ModalContent>
           <ModalHeader>Order Details</ModalHeader>
           <ModalCloseButton />
+
           <ModalBody>
+            {getStatusBadge(selectedOrder?.book_status || "")}
             {selectedOrder && (
               <Box>
                 <Text fontWeight="bold" mb={2}>
