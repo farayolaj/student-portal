@@ -23,6 +23,7 @@ import { bookstoreQueries } from "../../api/bookstore.queries";
 
 interface BookItem {
   course_id: string;
+  bookstore_id: string;
   title: string;
   quantity: string;
   price: string;
@@ -68,7 +69,7 @@ const RepeatOrderButton: React.FC<RepeatOrderButtonProps> = ({ order }) => {
               status: "success",
               isClosable: true,
             });
-            queryClient.invalidateQueries(bookstoreQueries.books());
+            queryClient.invalidateQueries(bookstoreQueries.transactions());
             onClose();
           },
           onError: (error) => {
@@ -109,8 +110,8 @@ const RepeatOrderButton: React.FC<RepeatOrderButtonProps> = ({ order }) => {
 
   const handleCheckout = () => {
     const booksToCheckout = Object.values(order.book_items).map(
-      ({ course_id, quantity }) => ({
-        id: parseInt(course_id),
+      ({ bookstore_id, quantity }) => ({
+        id: parseInt(bookstore_id),
         qty: parseInt(quantity),
       })
     );
@@ -152,6 +153,7 @@ const RepeatOrderButton: React.FC<RepeatOrderButtonProps> = ({ order }) => {
         description:
           "If payment doesn't reflect immediately, requery transaction status later.",
       });
+      queryClient.invalidateQueries(bookstoreQueries.transactions());
     },
     onError: (res: any) => {
       if (process.env.NODE_ENV === "development") console.error(res);
@@ -161,6 +163,8 @@ const RepeatOrderButton: React.FC<RepeatOrderButtonProps> = ({ order }) => {
         title: "Payment Failed",
         description: "Please try again later.",
       });
+
+      handleCancelOrder();
     },
   });
 

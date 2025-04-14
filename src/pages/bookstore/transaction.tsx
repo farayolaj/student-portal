@@ -24,9 +24,11 @@ import { createColumnHelper } from "@tanstack/react-table";
 import CustomTable from "../../components/common/custom-table";
 import { checkoutBookstore } from "../../api/bookstore.mutations";
 import RepeatOrderButton from "../../components/bookstore/repeat-trasaction";
+import CancelTransactionButton from "../../components/bookstore/cancel-transaction";
 
 interface BookItem {
   course_id: string;
+  bookstore_id:string;
   title: string;
   quantity: string;
   price: string;
@@ -114,6 +116,7 @@ const BookstoreTransactionsPage = () => {
             View Details
           </Button>
           <RepeatOrderButton order={props.row.original} />
+          <CancelTransactionButton order={props.row.original}/>
         </Flex>
       ),
     }),
