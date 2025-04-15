@@ -8,9 +8,10 @@ import Seo from "../components/common/seo";
 import CoursesCard from "../components/dashboard/courses-card";
 import PaymentsCard from "../components/dashboard/payments-card";
 import ProfileCard from "../components/dashboard/profile-card";
+import BookstoreDialog from "../components/common/bookstore-banner";
+import FreeAccessRegistration from "@/components/common/free-access-reg";
 
 export default function Home() {
-
   // const profile = useProfile();
   return (
     <>

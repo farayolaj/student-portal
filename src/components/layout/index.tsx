@@ -10,6 +10,7 @@ import ScreeningInfo from "../payments/screening-info";
 import SchoolBoardSidebar from "./schoolboard-sidebar";
 import { Sidebar } from "./sidebar";
 import { Header } from "./header";
+import BookstoreDialog from "../common/bookstore-banner";
 
 export type LayoutProps = {
   isAuthenticated?: boolean;
@@ -57,7 +58,7 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
     child = (
       <Flex pos="relative" direction="column">
         <PortalAlert />
-        <FreeAccessRegistration />
+        <BookstoreDialog />
         <Header />
         <Flex>
           <Sidebar />
