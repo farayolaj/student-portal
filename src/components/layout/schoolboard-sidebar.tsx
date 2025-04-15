@@ -1,10 +1,12 @@
 import { PAYMENTS } from "@/constants/routes";
 import {
+  Box,
   Button,
   Card,
   CardBody,
   CardHeader,
   Flex,
+  Spacer,
   StackDivider,
   Text,
   Tooltip,
@@ -19,6 +21,9 @@ import { paymentQueries } from "../../api/payment.queries";
 import { useProfile } from "../../api/user/use-profile";
 import EventCalendar from "../common/events/event-calendar";
 import useRemitaInline from "../common/remita-inline";
+import Image from "next/image";
+import book from "../../images/bookstore/book-bg-4.png";
+import Link from "next/link";
 
 const mostSubscribedSundryCodes = ["91", "76", "57"];
 
@@ -245,6 +250,34 @@ const DisplayPanel: FC = () => {
       >
         See other fees &rarr;
       </Button>
+
+      <Box pos="relative" rounded="md" overflow="hidden">
+        <Box pos="absolute" w="full" h="full">
+          <Image
+            src={book}
+            alt=""
+            role="presentation"
+            style={{ objectFit: "cover" }}
+            fill
+          />
+        </Box>
+        <VStack
+          w="full"
+          h="full"
+          p={2}
+          pos="relative"
+          bgColor="blackAlpha.700"
+          color="white"
+        >
+          <Text w="80%" textAlign={"center"} fontWeight="bold" color="white">
+            Get affordable books for as low as #800
+          </Text>
+          <Spacer />
+          <Button as={Link} href="/bookstore" fontSize="sm">
+            Check Bookstore
+          </Button>
+        </VStack>
+      </Box>
     </VStack>
   );
 };

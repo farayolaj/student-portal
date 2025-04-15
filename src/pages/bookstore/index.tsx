@@ -162,6 +162,8 @@ const Bookstore: React.FC = () => {
     onSuccess: (res: any) => {
       if (process.env.NODE_ENV === "development") console.log(res);
 
+      queryClient.invalidateQueries(bookstoreQueries.books());
+      queryClient.invalidateQueries(bookstoreQueries.transactions());
       toast({
         status: "success",
         title: "Payment Successful",

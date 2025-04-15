@@ -13,9 +13,9 @@ async function listTransactions() {
   );
 }
 
-async function verifyTransactions(rrr: string) {
+async function verifyTransactions(rrr: string, order_id?: string) {
   const response = await getApi().get("/verify_transaction", {
-    params: { rrr_code: rrr },
+    params: { rrr_code: rrr, order_id },
   });
 
   return response.data.status as boolean;
@@ -78,7 +78,7 @@ export const paymentQueries = {
       queryKey: ["transactions"],
       queryFn: () => listTransactions(),
     }),
-  verifyTransaction: (rrr: string) =>
+  verifyTransaction: (rrr: string, order_id?: string) =>
     queryOptions({
       queryKey: ["transactions", "verify", rrr],
       queryFn: () => verifyTransactions(rrr),
