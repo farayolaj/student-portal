@@ -20,7 +20,7 @@ import { useProfile } from "../../api/user/use-profile";
 import EventCalendar from "../common/events/event-calendar";
 import useRemitaInline from "../common/remita-inline";
 
-const mostSubscribedSundryCodes = ["76", "57"];
+const mostSubscribedSundryCodes = ["91", "76", "57"];
 
 const DisplayPanel: FC = () => {
   const { data: sundryPayments = [] } = useQuery({
