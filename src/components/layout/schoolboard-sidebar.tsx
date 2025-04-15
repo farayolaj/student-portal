@@ -25,7 +25,7 @@ import Image from "next/image";
 import book from "../../images/bookstore/book-bg-4.png";
 import Link from "next/link";
 
-const mostSubscribedSundryCodes = ["76", "57"];
+const mostSubscribedSundryCodes = ["91", "76", "57"];
 
 const DisplayPanel: FC = () => {
   const { data: sundryPayments = [] } = useQuery({
