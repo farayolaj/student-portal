@@ -12,7 +12,8 @@ import {
   IoPersonOutline,
   IoPhonePortraitOutline,
   IoReceiptOutline,
-  IoShieldCheckmarkOutline, IoStorefrontOutline
+  IoShieldCheckmarkOutline,
+  IoStorefrontOutline,
 } from "react-icons/io5";
 import { IconType } from "react-icons/lib";
 import * as routes from "../../constants/routes";
@@ -48,6 +49,13 @@ const Navigation: FC<NavigationProps> = ({ isOpen }) => {
         isActive={pathname.startsWith(routes.REGISTERED_COURSES)}
       />
       <NavLink
+        title="Bookstore"
+        icon={IoStorefrontOutline}
+        href={routes.BOOK_STORE}
+        isOpen={isOpen}
+        isActive={pathname.startsWith(routes.BOOK_STORE)}
+      />
+      <NavLink
         title="Mobile Class SSO"
         icon={IoPhonePortraitOutline}
         href={LMS_LOGIN_URL}
@@ -55,6 +63,13 @@ const Navigation: FC<NavigationProps> = ({ isOpen }) => {
         isActive={false}
         badge="New"
         isExternal
+      />
+      <NavLink
+        title="Events"
+        icon={IoCalendarOutline}
+        href={routes.EVENTS}
+        isOpen={isOpen}
+        isActive={pathname.startsWith(routes.EVENTS)}
       />
       <NavLink
         title="Results"
@@ -78,28 +93,14 @@ const Navigation: FC<NavigationProps> = ({ isOpen }) => {
         isActive={pathname.startsWith(routes.DOCUMENTS)}
       />
       <NavLink
-        title="Events"
-        icon={IoCalendarOutline}
-        href={routes.EVENTS}
-        isOpen={isOpen}
-        isActive={pathname.startsWith(routes.EVENTS)}
-      />
-      <NavLink
         title="Profile"
         icon={IoPersonOutline}
         href={routes.PROFILE}
         isOpen={isOpen}
         isActive={pathname.startsWith(routes.PROFILE)}
       />
-      <NavLink
-        title="Bookstore"
-        icon={IoStorefrontOutline}
-        href={routes.BOOK_STORE}
-        isOpen={isOpen}
-        isActive={pathname.startsWith(routes.BOOK_STORE)}
-      />
     </VStack>
-  );  
+  );
 };
 
 export default Navigation;
