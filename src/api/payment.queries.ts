@@ -88,6 +88,7 @@ export const paymentQueries = {
     queryOptions({
       queryKey: [...paymentQueries.all(), "main"],
       queryFn: () => getMainPayments(),
+      staleTime: 0,
     }),
   sundryList: () =>
     queryOptions({
@@ -107,5 +108,6 @@ export const paymentQueries = {
         transactionType,
       ],
       queryFn: () => getPaymentDetails(id, transactionRef, transactionType),
+      staleTime: 0,
     }),
 };
