@@ -53,6 +53,7 @@ const Navigation: FC<NavigationProps> = ({ isOpen }) => {
         icon={IoStorefrontOutline}
         href={routes.BOOK_STORE}
         isOpen={isOpen}
+        badge="New"
         isActive={pathname.startsWith(routes.BOOK_STORE)}
       />
       <NavLink

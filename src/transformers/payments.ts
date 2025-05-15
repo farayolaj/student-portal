@@ -24,7 +24,7 @@ export function toPayment(data: any): Payment {
     status: data.paid ? "paid" : "unpaid",
     title: data.description,
     dueDate: parse(data.date_due || data.due_date, "MMM. dd, yyyy", new Date()),
-    level: data.level ? data.level + "00" : undefined,
+    level: data.level ? (data.level.length > 1 ? data.level : data.level + "00") : undefined,
     sessionId: data.session,
     paymentType: data.payment_category,
     rawPaymentOption: data.payment_type_option || null,
