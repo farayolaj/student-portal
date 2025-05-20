@@ -53,7 +53,6 @@ export default function MakeSundryPaymentModal() {
 
   useEffect(() => {
     if (query.sundry == "open") {
-      setSelectedPaymentId(query.sundry as string);
       onOpen();
     }
   }, [query.sundry, onOpen]);
