@@ -1,6 +1,5 @@
 import { useFetchReceipt } from "@/api/payment/use-fetch-receipt";
 import { useSession } from "@/api/user/use-session";
-import useRemitaInline from "@/components/common/remita-inline";
 import buildPaymentDetailUrl from "@/lib/payments/build-payment-detail-url";
 import {
   Box,
@@ -17,18 +16,17 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import NextLink from "next/link";
 import { useEffect, useState } from "react";
 import { IoCheckmarkCircle, IoTime } from "react-icons/io5";
-import { initiateTransaction } from "../../../api/payment.mutations";
-import { paymentQueries } from "../../../api/payment.queries";
+import PaymentCountdownModal from "../payment-countdown-modal";
 
 type PaymentDetailProps = {
   payment?: Payment;
 };
 
 export default function PaymentDetail({ payment }: PaymentDetailProps) {
+  const [showPaymentCountdown, setShowPaymentCountdown] = useState(false);
   const sessionRes = useSession(payment?.sessionId || "");
   const descriptionArr = [
     payment?.level ? `${payment.level} Level` : undefined,
@@ -82,78 +80,18 @@ export default function PaymentDetail({ payment }: PaymentDetailProps) {
     }
   }, [payment?.transaction, payment?.containsPreselected]);
 
-  const queryClient = useQueryClient();
-  const initiateTransactionMutation = useMutation({
-    mutationFn: initiateTransaction,
-  });
-  const { initPayment } = useRemitaInline({
-    isLive: process.env.NODE_ENV === "production",
-    onSuccess: (res: any) => {
-      if (process.env.NODE_ENV === "development") console.log(res);
-
-      queryClient.invalidateQueries(paymentQueries.mainList());
-      queryClient.invalidateQueries(paymentQueries.transactionsList());
-
-      toast({
-        status: "success",
-        title: "Payment Successful",
-        description:
-          "If payment doesn't reflect immediately, requery transaction status later.",
-      });
-    },
-    onError: (res: any) => {
-      if (process.env.NODE_ENV === "development") console.error(res);
-
-      toast({
-        status: "error",
-        title: "Payment Failed",
-        description: "Please try again later.",
-      });
-    },
-  });
-
-  const initialisePayment = () => {
-    initiateTransactionMutation.mutate(
-      {
-        id: payment?.id || "",
-        preselectedId: isPreselectedSelected
-          ? payment?.preselected?.id
-          : undefined,
-        paymentType: payment?.paymentType || "main",
-        rawPaymentOption: payment?.rawPaymentOption,
-        transactionRef: payment?.transactionRef,
-        transactionType: payment?.transactionType,
-      },
-      {
-        onError: (error) => {
-          const err = error as Error;
-          toast({
-            status: "error",
-            title: "Error initializing payment",
-            description: err.message,
-          });
-        },
-        onSuccess: (data) => {
-          initPayment({
-            key: data.transaction?.publicKey || "",
-            processRrr: true,
-            transactionId: data.transaction?.id,
-            extendedData: {
-              customFields: [
-                {
-                  name: "rrr",
-                  value: data.transaction?.rrr,
-                },
-              ],
-            },
-          });
-        },
-      }
-    );
-  };
-
   return (
     <Box>
+      {payment && showPaymentCountdown && (
+        <PaymentCountdownModal
+          payment={payment}
+          includePreselected={isPreselectedSelected}
+          onClose={() => {
+            setShowPaymentCountdown(false);
+          }}
+          timeout={300}
+        />
+      )}
       {prerequisites.length > 0 && (
         <Center bg="lightgrey" p={2} mb={8}>
           <Text as="span" fontWeight="semibold" textAlign="center">
@@ -175,16 +113,13 @@ export default function PaymentDetail({ payment }: PaymentDetailProps) {
                   {payment.description} {"(click here to pay)"}
                 </Link>
               ))
-              .reduce(
-                (prev, curr, idx) => {
-                  if (idx !== 0 && idx === prerequisites.length - 1)
-                    prev.push(" and ");
-                  else if (idx !== 0) prev.push(", ");
-                  prev.push(curr);
-                  return prev;
-                },
-                [] as (JSX.Element | string)[]
-              )}{" "}
+              .reduce((prev, curr, idx) => {
+                if (idx !== 0 && idx === prerequisites.length - 1)
+                  prev.push(" and ");
+                else if (idx !== 0) prev.push(", ");
+                prev.push(curr);
+                return prev;
+              }, [] as (JSX.Element | string)[])}{" "}
           </Text>
         </Center>
       )}
@@ -270,21 +205,14 @@ export default function PaymentDetail({ payment }: PaymentDetailProps) {
         ) : (
           <Flex direction="column">
             <Button
-              onClick={initialisePayment}
+              onClick={() => setShowPaymentCountdown(true)}
               isDisabled={
                 !payment.isActive ||
                 prerequisites.length > 0 ||
-                initiateTransactionMutation.isPending ||
                 receipt.isLoading
               }
             >
-              {initiateTransactionMutation.isPending ? (
-                <Spinner color="white" size="xs" />
-              ) : payment.isActive ? (
-                "Pay Now"
-              ) : (
-                "Payment Closed"
-              )}
+              {payment.isActive ? "Pay Now" : "Payment Closed"}
             </Button>
             <Text as="span" fontSize="sm" fontWeight="semibold" mt={8}>
               {Boolean(payment.dueDate.getTime()) &&
@@ -322,7 +250,7 @@ export default function PaymentDetail({ payment }: PaymentDetailProps) {
           {payment?.preselected && (
             <Checkbox
               isChecked={isPreselectedSelected}
-              onChange={(_e) => setIsPreselectedSelected((prev) => !prev)}
+              onChange={() => setIsPreselectedSelected((prev) => !prev)}
             >
               {payment.preselected.title} (
               {Intl.NumberFormat("en-NG", {

@@ -11,19 +11,17 @@ import {
   Text,
   Tooltip,
   VStack,
-  useToast,
 } from "@chakra-ui/react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
-import { FC } from "react";
-import { initiateTransaction } from "../../api/payment.mutations";
+import { FC, useState } from "react";
 import { paymentQueries } from "../../api/payment.queries";
 import { useProfile } from "../../api/user/use-profile";
-import EventCalendar from "../common/events/event-calendar";
-import useRemitaInline from "../common/remita-inline";
-import Image from "next/image";
 import book from "../../images/bookstore/book-bg-4.png";
-import Link from "next/link";
+import EventCalendar from "../common/events/event-calendar";
+import PaymentCountdownModal from "../payments/payment-countdown-modal";
 
 const mostSubscribedSundryCodes = ["91", "76", "57"];
 
@@ -55,77 +53,8 @@ const DisplayPanel: FC = () => {
     ?.filter((item) => item.isPartPayment)
     .map((idx) => idx.encodedId);
 
-  const toast = useToast();
   const router = useRouter();
   const profile = useProfile();
-
-  const queryClient = useQueryClient();
-  const initiateTransactionMutation = useMutation({
-    mutationFn: initiateTransaction,
-    onSuccess: () => {
-      queryClient.invalidateQueries(paymentQueries.mainList());
-    },
-  });
-  const { initPayment } = useRemitaInline({
-    isLive: process.env.NODE_ENV === "production",
-    onSuccess: (res: any) => {
-      if (process.env.NODE_ENV === "development") console.log(res);
-
-      queryClient.invalidateQueries(paymentQueries.mainList());
-      queryClient.invalidateQueries(paymentQueries.transactionsList());
-
-      toast({
-        status: "success",
-        title: "Payment Successful",
-        description:
-          "If payment doesn't reflect immediately, requery transaction status later.",
-      });
-    },
-    onError: (res: any) => {
-      if (process.env.NODE_ENV === "development") console.error(res);
-
-      toast({
-        status: "error",
-        title: "Payment Failed",
-        description: "Please try again later.",
-      });
-    },
-  });
-
-  const initialisePayment = (payment: Payment) => {
-    initiateTransactionMutation.mutate(
-      {
-        id: payment.id,
-        paymentType: payment.paymentType,
-        transactionRef: undefined,
-      },
-      {
-        onError: (error) => {
-          const err = error as Error;
-          toast({
-            status: "error",
-            title: "Error initializing payment",
-            description: err.message,
-          });
-        },
-        onSuccess: (data) => {
-          initPayment({
-            key: data.transaction?.publicKey || "",
-            processRrr: true,
-            transactionId: data.transaction?.id,
-            extendedData: {
-              customFields: [
-                {
-                  name: "rrr",
-                  value: data.transaction?.rrr,
-                },
-              ],
-            },
-          });
-        },
-      }
-    );
-  };
 
   const unVerifiedFresher =
     profile?.data?.user.isFresher && !profile?.data?.user?.isVerified;
@@ -165,25 +94,10 @@ const DisplayPanel: FC = () => {
                           currency: "NGN",
                         }).format(sundry.amount)}
                       </Text>
-                      <Button
-                        variant={"outline"}
-                        sx={{
-                          color: "#2B7B51",
-                          borderColor: "#2B7B51",
-                          borderWidth: "3px",
-                          _hover: { bg: "#2B7B51", color: "white" },
-                        }}
-                        w="fit-content"
-                        size="md"
-                        alignSelf={"flex-end"}
-                        onClick={() => initialisePayment(sundry)}
-                        isDisabled={
-                          initiateTransactionMutation.isPending ||
-                          unVerifiedFresher
-                        }
-                      >
-                        Pay
-                      </Button>
+                      <PayButton
+                        payment={sundry}
+                        unVerifiedFresher={unVerifiedFresher}
+                      />
                     </Flex>
                   </Flex>
                 </Tooltip>
@@ -216,25 +130,10 @@ const DisplayPanel: FC = () => {
                       }).format(sundry.amount)}
                     </Text>
 
-                    <Button
-                      variant={"outline"}
-                      sx={{
-                        color: "#2B7B51",
-                        borderColor: "#2B7B51",
-                        borderWidth: "3px",
-                        _hover: { bg: "#2B7B51", color: "white" },
-                      }}
-                      w="fit-content"
-                      size="md"
-                      alignSelf={"flex-end"}
-                      onClick={() => initialisePayment(sundry)}
-                      isDisabled={
-                        initiateTransactionMutation.isPending ||
-                        unVerifiedFresher
-                      }
-                    >
-                      Pay
-                    </Button>
+                    <PayButton
+                      payment={sundry}
+                      unVerifiedFresher={unVerifiedFresher}
+                    />
                   </Flex>
                 </Flex>
               </Tooltip>
@@ -324,3 +223,43 @@ const SchoolBoardSidebar: FC = () => {
 };
 
 export default SchoolBoardSidebar;
+
+function PayButton({
+  payment,
+  unVerifiedFresher,
+}: {
+  payment: Payment;
+  unVerifiedFresher?: boolean;
+}) {
+  const [showPaymentCountdown, setShowPaymentCountdown] = useState(false);
+
+  return (
+    <>
+      <Button
+        variant={"outline"}
+        sx={{
+          color: "#2B7B51",
+          borderColor: "#2B7B51",
+          borderWidth: "3px",
+          _hover: { bg: "#2B7B51", color: "white" },
+        }}
+        w="fit-content"
+        size="md"
+        alignSelf={"flex-end"}
+        onClick={() => setShowPaymentCountdown(true)}
+        isDisabled={unVerifiedFresher}
+      >
+        Pay
+      </Button>
+      {showPaymentCountdown && (
+        <PaymentCountdownModal
+          payment={payment}
+          onClose={() => {
+            setShowPaymentCountdown(false);
+          }}
+          timeout={300}
+        />
+      )}
+    </>
+  );
+}

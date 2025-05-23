@@ -13,10 +13,8 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  Spinner,
   VStack,
   useDisclosure,
-  useToast,
 } from "@chakra-ui/react";
 import {
   AutoComplete,
@@ -24,14 +22,14 @@ import {
   AutoCompleteItem,
   AutoCompleteList,
 } from "@choc-ui/chakra-autocomplete";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { initiateTransaction } from "../../api/payment.mutations";
 import { paymentQueries } from "../../api/payment.queries";
-import useRemitaInline from "../common/remita-inline";
+import PaymentCountdownModal from "./payment-countdown-modal";
 
 export default function MakeSundryPaymentModal() {
+  const [showPaymentCountdown, setShowPaymentCountdown] = useState(false);
   const { query, push } = useRouter();
   const { data: sundryPayments = [] } = useQuery(paymentQueries.sundryList());
   const [selectedPaymentId, setSelectedPaymentId] = useState<
@@ -45,86 +43,17 @@ export default function MakeSundryPaymentModal() {
 
   const { isOpen, onOpen, onClose } = useDisclosure({
     onClose: () => {
-      const { sundry, ...queryRest } = query;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { sundry: _, ...queryRest } = query;
       return push({ query: queryRest });
     },
   });
-  const toast = useToast();
 
   useEffect(() => {
     if (query.sundry == "open") {
       onOpen();
     }
   }, [query.sundry, onOpen]);
-
-  const queryClient = useQueryClient();
-  const initiateTransactionMutation = useMutation({
-    mutationFn: initiateTransaction,
-    onSuccess: () => {
-      queryClient.invalidateQueries(paymentQueries.mainList());
-    },
-  });
-  const { initPayment } = useRemitaInline({
-    isLive: process.env.NODE_ENV === "production",
-    onSuccess: (res: any) => {
-      if (process.env.NODE_ENV === "development") console.log(res);
-
-      queryClient.invalidateQueries(paymentQueries.mainList());
-      queryClient.invalidateQueries(paymentQueries.transactionsList());
-
-      toast({
-        status: "success",
-        title: "Payment Successful",
-        description:
-          "If payment doesn't reflect immediately, requery transaction status later.",
-      });
-    },
-    onError: (res: any) => {
-      if (process.env.NODE_ENV === "development") console.error(res);
-
-      toast({
-        status: "error",
-        title: "Payment Failed",
-        description: "Please try again later.",
-      });
-    },
-  });
-
-  const initialisePayment = () => {
-    initiateTransactionMutation.mutate(
-      {
-        id: selectedPayment?.id || "",
-        paymentType: selectedPayment?.paymentType || "sundry",
-        transactionRef: undefined,
-      },
-      {
-        onError: (error) => {
-          const err = error as Error;
-          toast({
-            status: "error",
-            title: "Error initializing payment",
-            description: err.message,
-          });
-        },
-        onSuccess: (data) => {
-          onClose();
-          initPayment({
-            key: data.transaction?.publicKey || "",
-            processRrr: true,
-            transactionId: data.transaction?.id,
-            extendedData: {
-              customFields: [
-                {
-                  name: "rrr",
-                  value: data.transaction?.rrr,
-                },
-              ],
-            },
-          });
-        },
-      }
-    );
-  };
 
   return (
     <>
@@ -158,7 +87,7 @@ export default function MakeSundryPaymentModal() {
                     placeholder="Select a Fee: Search or select a fee"
                   />
                   <AutoCompleteList>
-                    {sundryPayments.map((payment, cid) => (
+                    {sundryPayments.map((payment) => (
                       <AutoCompleteItem
                         key={`${payment.id}-${payment.transactionRef}`}
                         value={payment.id}
@@ -196,7 +125,7 @@ export default function MakeSundryPaymentModal() {
                 </Button>
                 <Button
                   type="submit"
-                  onClick={initialisePayment}
+                  onClick={() => setShowPaymentCountdown(true)}
                   isDisabled={
                     !selectedPaymentId ||
                     !selectedPayment?.isActive ||
@@ -204,17 +133,22 @@ export default function MakeSundryPaymentModal() {
                   }
                   minW={24}
                 >
-                  {initiateTransactionMutation.isPending ? (
-                    <Spinner color="white" size="xs" />
-                  ) : (
-                    "Pay"
-                  )}
+                  Pay
                 </Button>
               </Flex>
             </VStack>
           </ModalBody>
         </ModalContent>
       </Modal>
+      {selectedPayment && showPaymentCountdown && (
+        <PaymentCountdownModal
+          payment={selectedPayment}
+          onClose={() => {
+            setShowPaymentCountdown(false);
+          }}
+          timeout={300}
+        />
+      )}
     </>
   );
 }

@@ -39,3 +39,15 @@ export async function initiateTransaction({
     transaction: data.split_payment,
   });
 }
+
+export async function cancelPayment({ rrr }: { rrr: string }) {
+  const response = await getApi().get("/cancel_transaction", {
+    params: {
+      rrr_code: rrr,
+    },
+  });
+
+  if (!response.data.status) throw new Error(response.data.message);
+
+  return;
+}
