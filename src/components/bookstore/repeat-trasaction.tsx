@@ -1,13 +1,7 @@
 import {
-  cancelBookstorePayment,
-  checkoutBookstore,
-  initiateBookstorePayment,
-} from "../../api/bookstore.mutations";
-import {
   Button,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
@@ -17,9 +11,14 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
-import useRemitaInline from "../common/remita-inline";
+import { useCallback, useEffect, useState } from "react";
+import {
+  cancelBookstorePayment,
+  checkoutBookstore,
+  initiateBookstorePayment,
+} from "../../api/bookstore.mutations";
 import { bookstoreQueries } from "../../api/bookstore.queries";
+import useRemitaInline from "../common/remita-inline";
 
 interface BookItem {
   course_id: string;
@@ -56,10 +55,17 @@ const RepeatOrderButton: React.FC<RepeatOrderButtonProps> = ({ order }) => {
   const checkoutMutation = useMutation({
     mutationFn: checkoutBookstore,
   });
+  const initiatePaymentMutation = useMutation({
+    mutationFn: initiateBookstorePayment,
+  });
+  const { mutate: cancelPayment, isPending: cancelPaymentIsPending } =
+    useMutation({
+      mutationFn: cancelBookstorePayment,
+    });
 
-  const handleCancelOrder = () => {
+  const handleCancelOrder = useCallback(() => {
     if (orderId) {
-      cancelPaymentMutation.mutate(
+      cancelPayment(
         { order_id: orderId },
         {
           onSuccess: () => {
@@ -84,7 +90,7 @@ const RepeatOrderButton: React.FC<RepeatOrderButtonProps> = ({ order }) => {
         }
       );
     }
-  };
+  }, [cancelPayment, onClose, orderId, queryClient, toast]);
 
   useEffect(() => {
     if (isOpen) {
@@ -106,7 +112,7 @@ const RepeatOrderButton: React.FC<RepeatOrderButtonProps> = ({ order }) => {
         clearInterval(interval);
       };
     }
-  }, [isOpen]);
+  }, [handleCancelOrder, isOpen]);
 
   const handleCheckout = () => {
     const booksToCheckout = Object.values(order.book_items).map(
@@ -135,16 +141,9 @@ const RepeatOrderButton: React.FC<RepeatOrderButtonProps> = ({ order }) => {
     );
   };
 
-  const initiatePaymentMutation = useMutation({
-    mutationFn: initiateBookstorePayment,
-  });
-  const cancelPaymentMutation = useMutation({
-    mutationFn: cancelBookstorePayment,
-  });
-
   const { initPayment } = useRemitaInline({
     isLive: process.env.NODE_ENV === "production",
-    onSuccess: (res: any) => {
+    onSuccess: (res) => {
       if (process.env.NODE_ENV === "development") console.log(res);
 
       toast({
@@ -155,7 +154,7 @@ const RepeatOrderButton: React.FC<RepeatOrderButtonProps> = ({ order }) => {
       });
       queryClient.invalidateQueries(bookstoreQueries.transactions());
     },
-    onError: (res: any) => {
+    onError: (res) => {
       if (process.env.NODE_ENV === "development") console.error(res);
 
       toast({
@@ -268,7 +267,7 @@ const RepeatOrderButton: React.FC<RepeatOrderButtonProps> = ({ order }) => {
               w="10rem"
               mr={3}
               onClick={handleCancelOrder}
-              isDisabled={cancelPaymentMutation.isPending}
+              isDisabled={cancelPaymentIsPending}
             >
               Cancel Purchase
             </Button>
@@ -278,7 +277,7 @@ const RepeatOrderButton: React.FC<RepeatOrderButtonProps> = ({ order }) => {
               isDisabled={
                 initiatePaymentMutation.isPending ||
                 !orderId ||
-                cancelPaymentMutation.isPending
+                cancelPaymentIsPending
               }
             >
               Confirm Purchase
