@@ -257,7 +257,6 @@ function PayButton({
           onClose={() => {
             setShowPaymentCountdown(false);
           }}
-          timeout={300}
         />
       )}
     </>

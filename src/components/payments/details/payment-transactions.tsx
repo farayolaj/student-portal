@@ -1,3 +1,4 @@
+import { cancelPayment } from "@/api/payment.mutations";
 import {
   Box,
   Button,
@@ -7,7 +8,7 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { paymentQueries } from "../../../api/payment.queries";
 import DetailItem from "./detail-item";
@@ -40,6 +41,32 @@ export default function PaymentTransactionDetail({
     if (verifyTransactionIsSuccess && verifyTransactionData)
       onRequery(verifyTransactionData);
   }, [verifyTransactionIsSuccess, verifyTransactionData, onRequery]);
+
+  const queryClient = useQueryClient();
+  const { mutate: cancelPaymentMutation, isPending: cancelPaymentIsPending } =
+    useMutation({
+      mutationFn: cancelPayment,
+      onSuccess: () => {
+        queryClient.invalidateQueries(paymentQueries.mainList());
+        queryClient.invalidateQueries(paymentQueries.transactionsList());
+
+        toast({
+          title: "Transaction Cancelled",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+      },
+      onError: (error) => {
+        toast({
+          title: "Error Cancelling Transaction",
+          description: error.message,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      },
+    });
 
   return (
     <Box mt={8}>
@@ -105,7 +132,20 @@ export default function PaymentTransactionDetail({
             />
           </SimpleGrid>
           {transaction?.status === "pending" && (
-            <Flex justify="center" mt={8}>
+            <Flex justify="space-around" mt={8}>
+              <Button
+                colorScheme="red"
+                w="fit-content"
+                onClick={() => {
+                  cancelPaymentMutation({
+                    rrr: transaction.rrr,
+                  });
+                }}
+                isLoading={cancelPaymentIsPending}
+                isDisabled={cancelPaymentIsPending}
+              >
+                Cancel Transaction
+              </Button>
               <Button
                 w="fit-content"
                 isDisabled={verifyTransactionIsLoading}
@@ -143,18 +183,5 @@ export default function PaymentTransactionDetail({
         </Flex>
       )}
     </Box>
-  );
-}
-
-function PaymentTransactionDetailsSkeleton() {
-  return (
-    <SimpleGrid columns={[1, null, 3]} gap={4}>
-      <DetailItem name="Transaction Reference" value="" isLoading />
-      <DetailItem name="RRR" value="" isLoading />
-      <DetailItem name="Status" value="" isLoading />
-      <DetailItem name="Date Initiated" value="" isLoading />
-      <DetailItem name="Date Payed" value="" isLoading />
-      <DetailItem name="Programme" value="" isLoading gridColumn="1 / -1" />
-    </SimpleGrid>
   );
 }

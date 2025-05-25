@@ -72,6 +72,23 @@ async function getPaymentDetails(
   });
 }
 
+async function getPendingTransaction(id: string, session: string) {
+  const response = await getApi().get("/validate_pending_transaction", {
+    params: { payment_id: id, session },
+  });
+
+  if (!response.data.status) throw new Error(response.data.message);
+
+  const { rrr_code, transaction_ref } = response.data.payload || {};
+
+  return !rrr_code && !transaction_ref
+    ? null
+    : {
+        rrr: rrr_code as string,
+        transactionRef: transaction_ref as string,
+      };
+}
+
 export const paymentQueries = {
   transactionsList: () =>
     queryOptions({
@@ -80,8 +97,8 @@ export const paymentQueries = {
     }),
   verifyTransaction: (rrr: string, order_id?: string) =>
     queryOptions({
-      queryKey: ["transactions", "verify", rrr],
-      queryFn: () => verifyTransactions(rrr),
+      queryKey: ["transactions", "verify", rrr, order_id],
+      queryFn: () => verifyTransactions(rrr, order_id),
     }),
   all: () => ["payments"],
   mainList: () =>
@@ -109,5 +126,10 @@ export const paymentQueries = {
       ],
       queryFn: () => getPaymentDetails(id, transactionRef, transactionType),
       staleTime: 0,
+    }),
+  pendingTransaction: (id: string, session: string) =>
+    queryOptions({
+      queryKey: ["pending_transaction", id, session],
+      queryFn: () => getPendingTransaction(id, session),
     }),
 };

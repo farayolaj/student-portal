@@ -146,7 +146,6 @@ export default function MakeSundryPaymentModal() {
           onClose={() => {
             setShowPaymentCountdown(false);
           }}
-          timeout={300}
         />
       )}
     </>

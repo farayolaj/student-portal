@@ -1,3 +1,4 @@
+import PaymentDetailSkeleton from "@/components/payments/details/payment-detail-skeleton";
 import { Card, CardBody, useToast } from "@chakra-ui/react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
@@ -13,20 +14,21 @@ export default function PaymentDetails() {
   const slug = (router.query.slug as string)?.split("-") || [];
   const id = slug[0];
   const transactionRef = slug[1] || undefined;
-  const transactionType = slug[2] || undefined;
+  const transactionType = (slug[2] || undefined) as
+    | "normal"
+    | "custom"
+    | undefined;
   const toast = useToast();
   const queryClient = useQueryClient();
   const {
     data: payment,
     error: paymentError,
     isLoading: paymentIsLoading,
-  } = useQuery(
-    paymentQueries.detailsBy(id, transactionRef, transactionType as any)
-  );
+  } = useQuery(paymentQueries.detailsBy(id, transactionRef, transactionType));
 
   useEffect(() => {
     if (paymentError) {
-      const error = paymentError as any;
+      const error = paymentError;
       toast({
         title: "Error fetching payment details",
         description: error.message,
@@ -44,7 +46,11 @@ export default function PaymentDetails() {
       <PageTitle showBackButton>Payment Details</PageTitle>
       <Card>
         <CardBody pt="1.5rem" px="1.875rem" pb="2rem">
-          <PaymentDetail payment={payment} />
+          {paymentIsLoading || !payment ? (
+            <PaymentDetailSkeleton />
+          ) : (
+            <PaymentDetail payment={payment} />
+          )}
           <PaymentTransactionDetail
             hasPaid={payment?.status === "paid"}
             transaction={payment?.transaction}

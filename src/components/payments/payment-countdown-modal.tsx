@@ -1,4 +1,4 @@
-import { cancelPayment, initiateTransaction } from "@/api/payment.mutations";
+import { initiateTransaction } from "@/api/payment.mutations";
 import { paymentQueries } from "@/api/payment.queries";
 import {
   Button,
@@ -14,15 +14,13 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import formatDuration from "date-fns/formatDuration";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback } from "react";
 import useRemitaInline from "../common/remita-inline";
 
 export default function PaymentCountdownModal({
   payment,
   includePreselected = false,
   onClose,
-  timeout = 3000,
 }: {
   payment: Payment;
   /**
@@ -31,16 +29,7 @@ export default function PaymentCountdownModal({
    */
   includePreselected?: boolean;
   onClose: () => void;
-  /**
-   * Timeout in seconds before the payment is automatically cancelled
-   * @default 3000
-   */
-  timeout?: number;
 }) {
-  const [secondsLeft, setSecondsLeft] = useState(timeout);
-  const [rrr, setRrr] = useState<string | null>(null);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-
   const toast = useToast();
   const queryClient = useQueryClient();
   const {
@@ -78,41 +67,9 @@ export default function PaymentCountdownModal({
     },
   });
 
-  const { mutate: cancelPaymentMutation, isPending: cancelPaymentIsPending } =
-    useMutation({
-      mutationFn: cancelPayment,
-      onSuccess: () => {
-        queryClient.invalidateQueries(paymentQueries.mainList());
-        queryClient.invalidateQueries(paymentQueries.transactionsList());
-
-        toast({
-          title: "Payment cancelled",
-          description: "Your payment has been successfully cancelled.",
-          status: "success",
-          duration: 3000,
-          isClosable: true,
-        });
-      },
-      onError: (error) => {
-        toast({
-          title: "Error cancelling payment",
-          description: error.message,
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-        });
-      },
-    });
-
   const handleCancel = useCallback(() => {
-    if (timerRef.current) clearInterval(timerRef.current);
-
-    if (rrr) cancelPaymentMutation({ rrr });
-    else if (payment.transaction?.rrr)
-      cancelPaymentMutation({ rrr: payment.transaction.rrr });
-
     onClose();
-  }, [cancelPaymentMutation, onClose, payment.transaction?.rrr, rrr]);
+  }, [onClose]);
 
   const initialisePayment = useCallback(() => {
     initiateTransactionMutation(
@@ -140,7 +97,6 @@ export default function PaymentCountdownModal({
           });
         },
         onSuccess: (data) => {
-          setRrr(data.transaction?.rrr || null);
           initPayment({
             key: data.transaction?.publicKey || "",
             processRrr: true,
@@ -154,38 +110,23 @@ export default function PaymentCountdownModal({
               ],
             },
           });
+          onClose();
         },
       }
     );
   }, [
     initiateTransactionMutation,
     payment.id,
-    payment.preselected?.id,
     payment.paymentType,
+    payment.preselected?.id,
     payment.rawPaymentOption,
     payment.transactionRef,
     payment.transactionType,
     includePreselected,
     toast,
     initPayment,
+    onClose,
   ]);
-
-  useEffect(() => {
-    timerRef.current = setInterval(() => {
-      setSecondsLeft((s) => s - 1);
-    }, 1000);
-
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (secondsLeft <= 0) {
-      // Automatically cancel the payment if the time runs out
-      handleCancel();
-    }
-  }, [secondsLeft, handleCancel]);
 
   return (
     <Modal isOpen={true} onClose={handleCancel} isCentered>
@@ -202,28 +143,10 @@ export default function PaymentCountdownModal({
                 currency: "NGN",
               }).format(payment.amount)}
             </Text>
-            <Text color="gray.600">
-              You have{" "}
-              <strong>
-                {secondsLeft > 0
-                  ? formatDuration(
-                      {
-                        minutes: Math.floor(secondsLeft / 60),
-                        seconds: secondsLeft % 60,
-                      },
-                      {
-                        format: ["minutes", "seconds"],
-                      }
-                    )
-                  : "0 seconds"}
-              </strong>{" "}
-              to complete this payment.
+            <Text color="gray.600" fontWeight={"bold"} textAlign={"center"}>
+              Please, note that this transaction will be cancelled after 24
+              hours if no payment is made.
             </Text>
-            {secondsLeft <= 30 && (
-              <Text color="red.500" fontWeight="bold">
-                This payment will be cancelled soon!
-              </Text>
-            )}
           </Flex>
         </ModalBody>
         <ModalFooter>
@@ -231,7 +154,7 @@ export default function PaymentCountdownModal({
             onClick={handleCancel}
             mr={3}
             variant="ghost"
-            isDisabled={initiateTransactionIsPending || cancelPaymentIsPending}
+            isDisabled={initiateTransactionIsPending}
           >
             Cancel
           </Button>
@@ -239,11 +162,7 @@ export default function PaymentCountdownModal({
             colorScheme="primary"
             onClick={initialisePayment}
             isLoading={initiateTransactionIsPending}
-            isDisabled={
-              initiateTransactionIsPending ||
-              cancelPaymentIsPending ||
-              secondsLeft <= 0
-            }
+            isDisabled={initiateTransactionIsPending}
           >
             Pay
           </Button>

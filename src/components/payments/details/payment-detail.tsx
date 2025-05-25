@@ -1,3 +1,5 @@
+import { cancelPayment } from "@/api/payment.mutations";
+import { paymentQueries } from "@/api/payment.queries";
 import { useFetchReceipt } from "@/api/payment/use-fetch-receipt";
 import { useSession } from "@/api/user/use-session";
 import buildPaymentDetailUrl from "@/lib/payments/build-payment-detail-url";
@@ -11,28 +13,28 @@ import {
   Heading,
   Link,
   SimpleGrid,
-  SkeletonText,
   Spinner,
   Text,
   useToast,
 } from "@chakra-ui/react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import NextLink from "next/link";
 import { useEffect, useState } from "react";
 import { IoCheckmarkCircle, IoTime } from "react-icons/io5";
 import PaymentCountdownModal from "../payment-countdown-modal";
 
 type PaymentDetailProps = {
-  payment?: Payment;
+  payment: Payment;
 };
 
 export default function PaymentDetail({ payment }: PaymentDetailProps) {
   const [showPaymentCountdown, setShowPaymentCountdown] = useState(false);
-  const sessionRes = useSession(payment?.sessionId || "");
+  const sessionRes = useSession(payment.sessionId || "");
   const descriptionArr = [
-    payment?.level ? `${payment.level} Level` : undefined,
-    payment?.programme,
+    payment.level ? `${payment.level} Level` : undefined,
+    payment.programme,
     sessionRes.data?.name,
-    payment?.semester,
+    payment.semester,
   ];
   const description = descriptionArr.filter(Boolean).join(" | ");
   let statusIcon: JSX.Element;
@@ -42,7 +44,7 @@ export default function PaymentDetail({ payment }: PaymentDetailProps) {
     isClosable: true,
   });
   const receipt = useFetchReceipt({
-    rrr: payment?.transaction?.rrr || "",
+    rrr: payment.transaction?.rrr || "",
     onError: (error) => {
       toast({
         status: "error",
@@ -52,7 +54,7 @@ export default function PaymentDetail({ payment }: PaymentDetailProps) {
     },
   });
 
-  if (payment?.status === "paid") {
+  if (payment.status === "paid") {
     if (payment.paymentOption === "part") {
       statusIcon = <IoCheckmarkCircle color="blue" />;
       statusText = "Partially Paid";
@@ -66,19 +68,48 @@ export default function PaymentDetail({ payment }: PaymentDetailProps) {
   }
 
   const [isPreselectedSelected, setIsPreselectedSelected] = useState(true);
-  const total = payment?.amount
+  const total = payment.amount
     ? payment.amount +
       (isPreselectedSelected ? payment.preselected?.amount || 0 : 0)
     : 0;
 
   const prerequisites =
-    payment?.prerequisites?.filter((pre) => !pre.isPaid) || [];
+    payment.prerequisites?.filter((pre) => !pre.isPaid) || [];
 
   useEffect(() => {
-    if (payment?.transaction) {
+    if (payment.transaction) {
       setIsPreselectedSelected(payment.containsPreselected);
     }
-  }, [payment?.transaction, payment?.containsPreselected]);
+  }, [payment.transaction, payment.containsPreselected]);
+
+  const { data: pendingTransaction } = useQuery(
+    paymentQueries.pendingTransaction(payment.id, payment.sessionId!)
+  );
+  const hasPending =
+    !!pendingTransaction &&
+    pendingTransaction.transactionRef !== payment.transactionRef;
+
+  const queryClient = useQueryClient();
+  const { mutate: cancelPaymentMutation, isPending: cancelPaymentIsPending } =
+    useMutation({
+      mutationFn: cancelPayment,
+      onSuccess: () => {
+        queryClient.invalidateQueries(paymentQueries.mainList());
+        queryClient.invalidateQueries(paymentQueries.transactionsList());
+        toast({
+          status: "success",
+          title: "Transaction Cancelled",
+          description: "Your transaction has been cancelled successfully.",
+        });
+      },
+      onError: (error) => {
+        toast({
+          status: "error",
+          title: "Error Cancelling Transaction",
+          description: error.message,
+        });
+      },
+    });
 
   return (
     <Box>
@@ -89,8 +120,35 @@ export default function PaymentDetail({ payment }: PaymentDetailProps) {
           onClose={() => {
             setShowPaymentCountdown(false);
           }}
-          timeout={300}
         />
+      )}
+      {hasPending && (
+        <Flex
+          bg="lightgrey"
+          flexDirection={"column"}
+          pt={2}
+          pb={3}
+          mb={8}
+          gap={4}
+        >
+          <Text as="span" fontWeight="semibold" textAlign="center">
+            You have a pending transaction for this payment. You must complete
+            the transaction or cancel it before you initiate a new payment.
+          </Text>
+          <Flex justify={"center"} gap={12}>
+            <Button
+              colorScheme={"red"}
+              onClick={() =>
+                cancelPaymentMutation({ rrr: pendingTransaction.rrr })
+              }
+              isLoading={cancelPaymentIsPending}
+              isDisabled={cancelPaymentIsPending}
+            >
+              Cancel
+            </Button>
+            <Button>Pay</Button>
+          </Flex>
+        </Flex>
       )}
       {prerequisites.length > 0 && (
         <Center bg="lightgrey" p={2} mb={8}>
@@ -130,62 +188,23 @@ export default function PaymentDetail({ payment }: PaymentDetailProps) {
         rowGap={8}
       >
         <Flex direction="column" fontSize="xl">
-          {payment ? (
-            <Text as="span" fontWeight="semibold">
-              {payment?.title || "Loading..."}
-            </Text>
-          ) : (
-            <SkeletonText
-              mt={2}
-              skeletonHeight="1.68rem"
-              w="15rem"
-              noOfLines={1}
-              isLoaded={!!payment}
-            />
-          )}
-          {payment ? (
-            <Text as="span" fontSize="3xl" fontWeight="bold">
-              {new Intl.NumberFormat("en-NG", {
-                style: "currency",
-                currency: "NGN",
-              }).format(total)}
-            </Text>
-          ) : (
-            <SkeletonText
-              mt={2}
-              skeletonHeight="2.5rem"
-              w="9.8rem"
-              noOfLines={1}
-            />
-          )}
-          {payment ? (
-            <Text as="span" mt={2} fontSize="sm">
-              {description}
-            </Text>
-          ) : (
-            <SkeletonText
-              mt={4}
-              skeletonHeight="1.18rem"
-              w="9rem"
-              noOfLines={1}
-              isLoaded={!!payment}
-            />
-          )}
+          <Text as="span" fontWeight="semibold">
+            {payment.title || "Loading..."}
+          </Text>
+          <Text as="span" fontSize="3xl" fontWeight="bold">
+            {new Intl.NumberFormat("en-NG", {
+              style: "currency",
+              currency: "NGN",
+            }).format(total)}
+          </Text>
+          <Text as="span" mt={2} fontSize="sm">
+            {description}
+          </Text>
           <Flex gap={2} align="center" mt={4}>
             {statusIcon}
-            {payment ? (
-              <Text as="span" fontSize="md">
-                {statusText}
-              </Text>
-            ) : (
-              <SkeletonText
-                mt={2}
-                skeletonHeight="1.4rem"
-                w="3rem"
-                noOfLines={1}
-                isLoaded={!!payment}
-              />
-            )}
+            <Text as="span" fontSize="md">
+              {statusText}
+            </Text>
           </Flex>
         </Flex>
         {!payment ? (
@@ -209,14 +228,15 @@ export default function PaymentDetail({ payment }: PaymentDetailProps) {
               isDisabled={
                 !payment.isActive ||
                 prerequisites.length > 0 ||
-                receipt.isLoading
+                receipt.isLoading ||
+                hasPending
               }
             >
               {payment.isActive ? "Pay Now" : "Payment Closed"}
             </Button>
             <Text as="span" fontSize="sm" fontWeight="semibold" mt={8}>
               {Boolean(payment.dueDate.getTime()) &&
-                `Due ${payment.dueDate?.toLocaleDateString()}`}
+                `Due ${payment.dueDate.toLocaleDateString()}`}
             </Text>
           </Flex>
         )}
@@ -226,7 +246,7 @@ export default function PaymentDetail({ payment }: PaymentDetailProps) {
       </Heading>
       <CheckboxGroup
         colorScheme="primary"
-        isDisabled={Boolean(payment?.transaction)}
+        isDisabled={Boolean(payment.transaction)}
       >
         <SimpleGrid
           columns={1}
@@ -244,10 +264,10 @@ export default function PaymentDetail({ payment }: PaymentDetailProps) {
             {Intl.NumberFormat("en-NG", {
               style: "currency",
               currency: "NGN",
-            }).format(payment?.amount || 0)}
+            }).format(payment.amount || 0)}
             )
           </Checkbox>
-          {payment?.preselected && (
+          {payment.preselected && (
             <Checkbox
               isChecked={isPreselectedSelected}
               onChange={() => setIsPreselectedSelected((prev) => !prev)}
