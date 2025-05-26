@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DATE_ONLY_FORMAT } from "@/constants/date";
-import parse from "date-fns/parse";
 import format from "date-fns/format";
+import parse from "date-fns/parse";
 
 export function toEvents(event: any): CalendarEvent {
   return {
@@ -38,7 +39,7 @@ export function toEventDateMapping(events: CalendarEvent[]) {
     return acc;
   }, new Map<string, CalendarEvent[]>());
 
-  for (let dateString of eventMapping.keys()) {
+  for (const dateString of eventMapping.keys()) {
     eventMapping.get(dateString)?.sort((a, b) => {
       if (!a.details.time) return -1;
       if (!b.details.time) return 1;

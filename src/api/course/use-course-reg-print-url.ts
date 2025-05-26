@@ -1,6 +1,6 @@
+import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import getApi from "../api";
-import { AxiosError } from "axios";
 
 export function useCourseRegPrintUrl(sessionId: string, semester: number) {
   const semesterString = semester == 1 ? "first" : "second";
@@ -11,7 +11,7 @@ export function useCourseRegPrintUrl(sessionId: string, semester: number) {
   useEffect(() => {
     setIsLoading(true);
     setError(null);
-    const response = getApi()
+    getApi()
       .get(
         `/courseregistrationprint?session=${encodeURIComponent(
           sessionId.split(".")[0]

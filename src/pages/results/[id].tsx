@@ -2,7 +2,7 @@ import { Box, chakra, Flex, SkeletonText } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { resultQueries } from "../../api/result.queries";
 import Table from "../../components/common/custom-table";
 import PageTitle from "../../components/common/page-title";
@@ -132,7 +132,7 @@ export default function ResultDetailPage() {
                   typeof props.getValue() === "number" ? "right" : "initial"
                 }
               >
-                {props.getValue() as any}
+                {props.getValue() as ReactNode}
               </Box>
             ),
           }}

@@ -15,9 +15,9 @@ export async function uploadDocument({
 }: UseUploadDocumentVariables) {
   const formData = new FormData();
 
-  documentTypeId &&
+  if (documentTypeId)
     formData.append("verification_documents_requirement_id", documentTypeId);
-  customName && formData.append("other", customName);
+  if (customName) formData.append("other", customName);
   formData.append("document_path", file);
 
   const path = existingId

@@ -1,4 +1,4 @@
-export default function filterUnique<T, S extends {}>(
+export default function filterUnique<T, S>(
   items: T[],
   selector?: (item: T) => S
 ) {

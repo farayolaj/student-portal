@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export function toPortalDocument(doc: any): PortalDocument {
   return {
     id: doc.slug,

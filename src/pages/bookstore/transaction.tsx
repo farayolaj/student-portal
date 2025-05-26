@@ -1,34 +1,32 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { bookstoreQueries } from "../../api/bookstore.queries";
 import {
   Badge,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  useDisclosure,
-  Button,
-  Text,
   Box,
-  Heading,
-  Spinner,
+  Button,
   Flex,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Spinner,
+  Text,
+  useDisclosure,
 } from "@chakra-ui/react";
-import { useState } from "react";
-import Seo from "../../components/common/seo";
-import PageTitle from "../../components/common/page-title";
+import { useQuery } from "@tanstack/react-query";
 import { createColumnHelper } from "@tanstack/react-table";
-import CustomTable from "../../components/common/custom-table";
-import { checkoutBookstore } from "../../api/bookstore.mutations";
-import RepeatOrderButton from "../../components/bookstore/repeat-trasaction";
+import { useState } from "react";
+import { bookstoreQueries } from "../../api/bookstore.queries";
 import CancelTransactionButton from "../../components/bookstore/cancel-transaction";
+import RepeatOrderButton from "../../components/bookstore/repeat-trasaction";
+import CustomTable from "../../components/common/custom-table";
+import PageTitle from "../../components/common/page-title";
+import Seo from "../../components/common/seo";
 
 interface BookItem {
   course_id: string;
-  bookstore_id:string;
+  bookstore_id: string;
   title: string;
   quantity: string;
   price: string;
@@ -116,7 +114,7 @@ const BookstoreTransactionsPage = () => {
             View Details
           </Button>
           <RepeatOrderButton order={props.row.original} />
-          <CancelTransactionButton order={props.row.original}/>
+          <CancelTransactionButton order={props.row.original} />
         </Flex>
       ),
     }),

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import parse from "date-fns/parse";
 
 const IMAGE_SERVER = "https://dlcoffice.ui.edu.ng";
@@ -59,7 +60,7 @@ export const toUser = (user: any) =>
     telcoNumber: user.telco_number,
     isFinalist: user.is_finalist,
     isExtraYear: user.is_extraYear,
-  }) as User;
+  } as User);
 
 export const toAcademicProfile = (profile: any) =>
   ({
@@ -71,10 +72,10 @@ export const toAcademicProfile = (profile: any) =>
     faculty: profile.programmeDetails?.faculty,
     level: profile.academicRecord?.current_level,
     examCenter: profile.academicRecord.exam_center,
-  }) as AcademicProfile;
+  } as AcademicProfile);
 
 export const toProfile = (profile: any) =>
   ({
     user: toUser(profile),
     academicProfile: toAcademicProfile(profile),
-  }) as Profile;
+  } as Profile);

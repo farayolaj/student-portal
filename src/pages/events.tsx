@@ -19,7 +19,7 @@ export default function Events() {
     )
     .filter(([date]) => isToday(date) || isFuture(date))
     .sort(([dateA], [dateB]) => compareAsc(dateA, dateB))
-    .flatMap(([_date, events]) => events);
+    .flatMap(([, events]) => events);
 
   if (isLoading)
     return (

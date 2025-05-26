@@ -107,7 +107,19 @@ const PraticumFormCard = () => {
     }));
   };
 
-  const DisplaySupervisor = ({ practicumForm }: any) => {
+  type PracticumForm = {
+    course_code?: string;
+    approved_practicum_school?: string;
+    approved_supervisor?: string;
+    print_url?: string;
+    is_submitted?: boolean;
+  };
+
+  const DisplaySupervisor = ({
+    practicumForm,
+  }: {
+    practicumForm: PracticumForm;
+  }) => {
     return (
       <>
         <Card

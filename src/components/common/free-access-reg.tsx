@@ -22,7 +22,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRef, useState } from "react";
+import { RefObject, useRef, useState } from "react";
 import { FaSimCard } from "react-icons/fa";
 import { registerForFreeAccess } from "../../api/common.mutations";
 import { userQueries } from "../../api/user.queries";
@@ -78,7 +78,7 @@ export default function FreeAccessRegistration() {
   return (
     <AlertDialog
       isOpen={isOpen}
-      leastDestructiveRef={cancelRef as any}
+      leastDestructiveRef={cancelRef as unknown as RefObject<HTMLButtonElement>}
       onClose={() => {
         onClose();
       }}
@@ -225,7 +225,7 @@ export default function FreeAccessRegistration() {
             )}
 
             <Button
-              ref={cancelRef as any}
+              ref={cancelRef as unknown as RefObject<HTMLButtonElement>}
               mx="auto"
               colorScheme="blackAlpha"
               onClick={() => {

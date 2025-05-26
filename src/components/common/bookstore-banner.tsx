@@ -1,17 +1,16 @@
-import bookimage from "../../images/bookstore/book-bg-5.jpg";
 import {
   AlertDialog,
+  AlertDialogBody,
   AlertDialogContent,
+  AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogOverlay,
-  useDisclosure,
-  Text,
-  AlertDialogBody,
-  AlertDialogFooter,
   Button,
+  Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { useRef } from "react";
+import { RefObject, useRef } from "react";
 import book from "../../images/bookstore/book-bg-3.png";
 
 const BookstoreDialog = () => {
@@ -25,7 +24,7 @@ const BookstoreDialog = () => {
       closeOnOverlayClick={false}
       onClose={() => onClose()}
       scrollBehavior="inside"
-      leastDestructiveRef={cancelRef as any}
+      leastDestructiveRef={cancelRef as unknown as RefObject<HTMLButtonElement>}
     >
       <AlertDialogOverlay>
         <AlertDialogContent
@@ -73,11 +72,17 @@ const BookstoreDialog = () => {
           </AlertDialogBody>
 
           <AlertDialogFooter justifyContent={"center"} gap="2rem">
-            <Button as={Link} onClick={onClose} href="/bookstore" w="max-content" bg="green">
+            <Button
+              as={Link}
+              onClick={onClose}
+              href="/bookstore"
+              w="max-content"
+              bg="green"
+            >
               Check Bookstore
             </Button>
             <Button
-              ref={cancelRef as any}
+              ref={cancelRef as unknown as null}
               bg="grey"
               onClick={() => {
                 onClose();

@@ -1,5 +1,4 @@
 import { useDownloadDocument } from "../document/use-download-document";
-import { useFetchDocument } from "../document/use-fetch-document";
 
 type UseFetchReceiptOpts = {
   rrr: string;

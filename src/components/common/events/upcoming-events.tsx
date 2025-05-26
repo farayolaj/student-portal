@@ -20,7 +20,7 @@ export default function UpcomingEvents({ eventMap }: UpcomingEventsProps) {
     )
     .filter(([date]) => isToday(date) || isFuture(date))
     .sort(([dateA], [dateB]) => compareAsc(dateA, dateB))
-    .flatMap(([_date, events]) => events)
+    .flatMap(([, events]) => events)
     .slice(0, 5);
 
   return (

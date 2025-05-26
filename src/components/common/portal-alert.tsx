@@ -9,7 +9,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
-import { useRef } from "react";
+import { RefObject, useRef } from "react";
 import { commonQueries } from "../../api/common.queries";
 
 export default function PortalAlert() {
@@ -21,7 +21,7 @@ export default function PortalAlert() {
   return data?.header || data?.body ? (
     <AlertDialog
       isOpen={isOpen}
-      leastDestructiveRef={cancelRef as any}
+      leastDestructiveRef={cancelRef as unknown as RefObject<HTMLButtonElement>}
       onClose={onClose}
       isCentered
       closeOnOverlayClick={false}
@@ -39,7 +39,11 @@ export default function PortalAlert() {
           ></AlertDialogBody>
 
           <AlertDialogFooter>
-            <Button mx="auto" ref={cancelRef as any} onClick={onClose}>
+            <Button
+              mx="auto"
+              ref={cancelRef as unknown as RefObject<HTMLButtonElement>}
+              onClick={onClose}
+            >
               Okay
             </Button>
           </AlertDialogFooter>

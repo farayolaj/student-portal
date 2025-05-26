@@ -44,10 +44,10 @@ export default function LMSOrientationSurvey({
   const surveyStatus = !isFresher
     ? "not-applicable"
     : isBefore(parsedDate, new Date())
-      ? "passed"
-      : !!orientationAttendance
-        ? "filled"
-        : "pending";
+    ? "passed"
+    : !!orientationAttendance
+    ? "filled"
+    : "pending";
 
   const [attendanceOption, setAttendanceOption] =
     useState<AttendanceOptions>("on-site");
@@ -108,7 +108,7 @@ export default function LMSOrientationSurvey({
               <Text>Choose your attendance option:</Text>
             </Box>
             <RadioGroup
-              onChange={setAttendanceOption as any}
+              onChange={setAttendanceOption as (value: string) => void}
               value={attendanceOption}
               mt={2}
             >

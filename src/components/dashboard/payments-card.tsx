@@ -98,7 +98,6 @@ type PaymentItemProps = {
 const PaymentItem: FC<PaymentItemProps> = ({ payment, isSchoolFee }) => {
   const { push } = useRouter();
   const sessionRes = useSession(payment?.sessionId || "");
-  const profile = useProfile();
 
   if (!payment) return null;
 

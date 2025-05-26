@@ -7,7 +7,7 @@ export function useResultPrintUrl(sessionId: string) {
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    const response = getApi()
+    getApi()
       .get(
         `/coursesummaryprint?session=${encodeURIComponent(
           sessionId.split(".")[0]

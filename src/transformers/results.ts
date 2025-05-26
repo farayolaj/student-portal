@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export function toResultSession(data: any) {
   return {
     id: data.exam_session_id,

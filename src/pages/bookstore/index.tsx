@@ -37,20 +37,20 @@ import book6 from "../../images/bookstore/book-bg-6.jpg";
 import book7 from "../../images/bookstore/book-bg-7.jpg";
 import book8 from "../../images/bookstore/book-bg-8.jpg";
 
-import Seo from "../../components/common/seo";
-import PageTitle from "../../components/common/page-title";
-import { useBookstore } from "../../api/bookstore/use-list-bookstore";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   cancelBookstorePayment,
   checkoutBookstore,
   initiateBookstorePayment,
 } from "../../api/bookstore.mutations";
-import useRemitaInline from "../../components/common/remita-inline";
 import { bookstoreQueries } from "../../api/bookstore.queries";
+import { useBookstore } from "../../api/bookstore/use-list-bookstore";
+import PageTitle from "../../components/common/page-title";
+import useRemitaInline from "../../components/common/remita-inline";
+import Seo from "../../components/common/seo";
 
 interface CourseMaterial {
   id: string;
@@ -66,10 +66,22 @@ const Bookstore: React.FC = () => {
   const [orderId, setOrderId] = useState<string | null>(null);
   const [timeLeft, setTimeLeft] = useState<number>(120);
   const queryClient = useQueryClient();
+  const toast = useToast();
 
-  const handleCancelOrder = () => {
+  const { data: bookStoreList, isLoading } = useBookstore();
+  const checkoutMutation = useMutation({
+    mutationFn: checkoutBookstore,
+  });
+  const {
+    mutate: cancelPaymentMutation,
+    isPending: cancelPaymentMutationIsPending,
+  } = useMutation({
+    mutationFn: cancelBookstorePayment,
+  });
+
+  const handleCancelOrder = useCallback(() => {
     if (orderId) {
-      cancelPaymentMutation.mutate(
+      cancelPaymentMutation(
         { order_id: orderId },
         {
           onSuccess: () => {
@@ -94,7 +106,7 @@ const Bookstore: React.FC = () => {
         }
       );
     }
-  };
+  }, [cancelPaymentMutation, onClose, orderId, queryClient, toast]);
 
   useEffect(() => {
     if (isOpen) {
@@ -116,15 +128,7 @@ const Bookstore: React.FC = () => {
         clearInterval(interval);
       };
     }
-  }, [isOpen]);
-
-  const { data: bookStoreList, isLoading } = useBookstore();
-  const checkoutMutation = useMutation({
-    mutationFn: checkoutBookstore,
-  });
-  const cancelPaymentMutation = useMutation({
-    mutationFn: cancelBookstorePayment,
-  });
+  }, [handleCancelOrder, isOpen]);
 
   const handleCheckout = () => {
     const booksToCheckout = Object.values(selectedMaterials).map(
@@ -159,7 +163,7 @@ const Bookstore: React.FC = () => {
 
   const { initPayment } = useRemitaInline({
     isLive: process.env.NODE_ENV === "production",
-    onSuccess: (res: any) => {
+    onSuccess: (res) => {
       if (process.env.NODE_ENV === "development") console.log(res);
 
       queryClient.invalidateQueries(bookstoreQueries.books());
@@ -171,7 +175,7 @@ const Bookstore: React.FC = () => {
           "If payment doesn't reflect immediately, requery transaction status later.",
       });
     },
-    onError: (res: any) => {
+    onError: (res) => {
       if (process.env.NODE_ENV === "development") console.error(res);
 
       toast({
@@ -231,7 +235,6 @@ const Bookstore: React.FC = () => {
   const [selectedMaterials, setSelectedMaterials] = useState<
     Record<string, { material: CourseMaterial; quantity: number }>
   >({});
-  const toast = useToast();
 
   const handleMaterialSelect = (
     material: CourseMaterial,
@@ -532,7 +535,7 @@ const Bookstore: React.FC = () => {
                 w="10rem"
                 mr={3}
                 onClick={handleCancelOrder}
-                isDisabled={cancelPaymentMutation.isPending}
+                isDisabled={cancelPaymentMutationIsPending}
               >
                 Cancel Purchase
               </Button>
@@ -542,7 +545,7 @@ const Bookstore: React.FC = () => {
                 isDisabled={
                   initiatePaymentMutation.isPending ||
                   !orderId ||
-                  cancelPaymentMutation.isPending
+                  cancelPaymentMutationIsPending
                 }
               >
                 Confirm Purchase

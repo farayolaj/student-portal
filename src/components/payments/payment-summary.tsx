@@ -35,7 +35,7 @@ export default function PaymentSummary({
       queryClient.invalidateQueries(paymentQueries.mainList());
   }, [verifyTransactionData, verifyTransactionIsSuccess, queryClient]);
 
-  let description = descriptionArr.filter(Boolean).join(" | ");
+  const description = descriptionArr.filter(Boolean).join(" | ");
   let statusIcon: JSX.Element;
   let statusText: string;
 
@@ -127,8 +127,8 @@ export default function PaymentSummary({
               {payment.status === "paid"
                 ? "View Details"
                 : payment.isActive
-                  ? "View Details"
-                  : "Payment Closed"}
+                ? "View Details"
+                : "Payment Closed"}
             </Button>
           </Flex>
         </CardBody>

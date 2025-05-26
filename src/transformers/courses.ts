@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export const toCourse = (course: any) =>
   ({
     id: course.main_course_id,

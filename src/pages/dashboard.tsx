@@ -1,15 +1,10 @@
-import { useProfile } from "@/api/user/use-profile";
-import LMSOrientationSurvey from "@/components/common/lms-orientation-survey";
 import InitiateResultVerificationCard from "@/components/dashboard/initiate-result-verification-card";
 import PraticumFormCard from "@/components/dashboard/practicum-form-card";
-import { Box } from "@chakra-ui/react";
 import PageTitle from "../components/common/page-title";
 import Seo from "../components/common/seo";
 import CoursesCard from "../components/dashboard/courses-card";
 import PaymentsCard from "../components/dashboard/payments-card";
 import ProfileCard from "../components/dashboard/profile-card";
-import BookstoreDialog from "../components/common/bookstore-banner";
-import FreeAccessRegistration from "@/components/common/free-access-reg";
 
 export default function Home() {
   // const profile = useProfile();

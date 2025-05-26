@@ -85,7 +85,7 @@ export default function Transactions() {
         }).format(props.getValue()),
     }),
     columnHelper.accessor("status", {
-      header: (props) => (
+      header: () => (
         <Text as="span" whiteSpace="nowrap">
           Status
         </Text>
@@ -96,10 +96,10 @@ export default function Transactions() {
           status === "success"
             ? "green"
             : status === "failed"
-              ? "red"
-              : status === "pending"
-                ? "yellow"
-                : "gray";
+            ? "red"
+            : status === "pending"
+            ? "yellow"
+            : "gray";
         return (
           <Badge colorScheme={colorScheme} variant="outline">
             {status}

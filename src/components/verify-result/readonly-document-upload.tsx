@@ -1,12 +1,4 @@
-import {
-  SimpleGrid,
-  FormControl,
-  FormLabel,
-  Icon,
-  Input,
-  Text,
-} from "@chakra-ui/react";
-import { IoCloudUpload } from "react-icons/io5";
+import { FormControl, FormLabel, Input, SimpleGrid } from "@chakra-ui/react";
 
 type ReadonlyDocumentUploadProps = {
   value: DocumentUpload;

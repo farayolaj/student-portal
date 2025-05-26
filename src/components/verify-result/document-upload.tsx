@@ -23,7 +23,7 @@ type DocumentUploadProps = {
 
 export default function DocumentUpload({
   value,
-  onChange = (_value) => {},
+  onChange = () => {},
   onRemove = () => {},
   showRemoveButton = true,
   isDisabled,
@@ -48,7 +48,7 @@ export default function DocumentUpload({
         <FormLabel>Document Title</FormLabel>
         <Select
           onChange={(ev) =>
-            onChange({ ...value, documentTypeId: ev.target.value as any })
+            onChange({ ...value, documentTypeId: ev.target.value })
           }
           value={value.documentTypeId}
           disabled={isDisabled}

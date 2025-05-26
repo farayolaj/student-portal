@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { toCourse } from "./courses";
 import { toUser } from "./profile";
 
