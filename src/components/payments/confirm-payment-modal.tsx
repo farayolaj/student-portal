@@ -17,7 +17,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCallback } from "react";
 import useRemitaInline from "../common/remita-inline";
 
-export default function PaymentCountdownModal({
+export default function ConfirmPaymentModal({
   payment,
   includePreselected = false,
   onClose,

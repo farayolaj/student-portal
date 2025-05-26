@@ -29,8 +29,8 @@ type RemitaInlineProps = {
 
 type UseRemitaInlineProps = {
   isLive: boolean;
-  onSuccess?: (response: any) => void;
-  onError?: (response: any) => void;
+  onSuccess?: (response: unknown) => void;
+  onError?: (response: unknown) => void;
   onClose?: () => void;
 };
 
@@ -85,7 +85,7 @@ function useRemitaInline(props: UseRemitaInlineProps) {
           onClose: props.onClose,
         };
 
-        // @ts-ignore
+        // @ts-expect-error RmPaymentEngine is loaded globally by script.
         const paymentEngine = RmPaymentEngine.init(payload);
         paymentEngine.showPaymentWidget();
       }

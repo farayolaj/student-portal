@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import parse from "date-fns/parse";
 
-const transactionTypes: Record<string, Payment["transactionType"]> = {
+export const TRANSACTION_TYPES: Record<string, Payment["transactionType"]> = {
   trans_normal: "normal",
   trans_custom: "custom",
 };
 
-const paymentOptions: Record<string, Payment["paymentOption"]> = {
+export const PAYMENT_OPTIONS: Record<string, Payment["paymentOption"]> = {
   full_first_sem: "full",
   part_first_sem_a: "part",
   part_first_sem_b: "balance",
@@ -24,15 +25,19 @@ export function toPayment(data: any): Payment {
     status: data.paid ? "paid" : "unpaid",
     title: data.description,
     dueDate: parse(data.date_due || data.due_date, "MMM. dd, yyyy", new Date()),
-    level: data.level ? (data.level.length > 1 ? data.level : data.level + "00") : undefined,
+    level: data.level
+      ? data.level.length > 1
+        ? data.level
+        : data.level + "00"
+      : undefined,
     sessionId: data.session,
     paymentType: data.payment_category,
     rawPaymentOption: data.payment_type_option || null,
     paymentOption: data.payment_type_option
-      ? paymentOptions[data.payment_type_option]
+      ? PAYMENT_OPTIONS[data.payment_type_option]
       : null,
     transactionType:
-      data.payment_transaction && transactionTypes[data.payment_transaction],
+      data.payment_transaction && TRANSACTION_TYPES[data.payment_transaction],
     transactionRef: data.transaction_ref,
     containsPreselected: data.preselected ? data.preselected !== 0 : false,
     preselected:
@@ -48,7 +53,7 @@ export function toPayment(data: any): Payment {
         id: pre.prerequisite,
         description: pre.description,
         transactionType:
-          pre.payment_transaction && transactionTypes[pre.payment_transaction],
+          pre.payment_transaction && TRANSACTION_TYPES[pre.payment_transaction],
         transactionRef: pre.transaction_ref,
         isPaid: pre.paid,
       })) ?? [],

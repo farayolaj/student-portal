@@ -1,16 +1,15 @@
-import { FC, PropsWithChildren, ReactNode, useEffect, useState } from "react";
 import { HOME } from "@/constants/routes";
 import { Box, Flex } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useAuth } from "oidc-react";
+import { FC, PropsWithChildren, ReactNode, useEffect, useState } from "react";
 import { useProfile } from "../../api/user/use-profile";
-import FreeAccessRegistration from "../common/free-access-reg";
+import BookstoreDialog from "../common/bookstore-banner";
 import PortalAlert from "../common/portal-alert";
 import ScreeningInfo from "../payments/screening-info";
+import { Header } from "./header";
 import SchoolBoardSidebar from "./schoolboard-sidebar";
 import { Sidebar } from "./sidebar";
-import { Header } from "./header";
-import BookstoreDialog from "../common/bookstore-banner";
 
 export type LayoutProps = {
   isAuthenticated?: boolean;

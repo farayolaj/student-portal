@@ -1,5 +1,10 @@
 import { queryOptions } from "@tanstack/react-query";
-import { toPayment, toTransaction } from "../transformers/payments";
+import {
+  PAYMENT_OPTIONS,
+  toPayment,
+  toTransaction,
+  TRANSACTION_TYPES,
+} from "../transformers/payments";
 import getApi from "./api";
 
 async function listTransactions() {
@@ -79,11 +84,22 @@ async function getPendingTransaction(id: string, session: string) {
 
   if (!response.data.status) throw new Error(response.data.message);
 
-  const { rrr_code, transaction_ref } = response.data.payload || {};
+  const {
+    payment_id,
+    payment_option,
+    description,
+    payment_transaction,
+    rrr_code,
+    transaction_ref,
+  } = response.data.payload || {};
 
   return !rrr_code && !transaction_ref
     ? null
     : {
+        paymentId: payment_id as string,
+        paymentOption: payment_option ? PAYMENT_OPTIONS[payment_option] : null,
+        description: description as string,
+        transactionType: TRANSACTION_TYPES[payment_transaction],
         rrr: rrr_code as string,
         transactionRef: transaction_ref as string,
       };

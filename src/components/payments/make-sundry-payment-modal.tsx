@@ -26,7 +26,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { paymentQueries } from "../../api/payment.queries";
-import PaymentCountdownModal from "./payment-countdown-modal";
+import ConfirmPaymentModal from "./confirm-payment-modal";
 
 export default function MakeSundryPaymentModal() {
   const [showPaymentCountdown, setShowPaymentCountdown] = useState(false);
@@ -141,7 +141,7 @@ export default function MakeSundryPaymentModal() {
         </ModalContent>
       </Modal>
       {selectedPayment && showPaymentCountdown && (
-        <PaymentCountdownModal
+        <ConfirmPaymentModal
           payment={selectedPayment}
           onClose={() => {
             setShowPaymentCountdown(false);

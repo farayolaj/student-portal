@@ -1,4 +1,3 @@
-import { cancelPayment } from "@/api/payment.mutations";
 import { paymentQueries } from "@/api/payment.queries";
 import { useFetchReceipt } from "@/api/payment/use-fetch-receipt";
 import { useSession } from "@/api/user/use-session";
@@ -17,11 +16,11 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import NextLink from "next/link";
 import { useEffect, useState } from "react";
 import { IoCheckmarkCircle, IoTime } from "react-icons/io5";
-import PaymentCountdownModal from "../payment-countdown-modal";
+import ConfirmPaymentModal from "../confirm-payment-modal";
 
 type PaymentDetailProps = {
   payment: Payment;
@@ -89,32 +88,10 @@ export default function PaymentDetail({ payment }: PaymentDetailProps) {
     !!pendingTransaction &&
     pendingTransaction.transactionRef !== payment.transactionRef;
 
-  const queryClient = useQueryClient();
-  const { mutate: cancelPaymentMutation, isPending: cancelPaymentIsPending } =
-    useMutation({
-      mutationFn: cancelPayment,
-      onSuccess: () => {
-        queryClient.invalidateQueries(paymentQueries.mainList());
-        queryClient.invalidateQueries(paymentQueries.transactionsList());
-        toast({
-          status: "success",
-          title: "Transaction Cancelled",
-          description: "Your transaction has been cancelled successfully.",
-        });
-      },
-      onError: (error) => {
-        toast({
-          status: "error",
-          title: "Error Cancelling Transaction",
-          description: error.message,
-        });
-      },
-    });
-
   return (
     <Box>
       {payment && showPaymentCountdown && (
-        <PaymentCountdownModal
+        <ConfirmPaymentModal
           payment={payment}
           includePreselected={isPreselectedSelected}
           onClose={() => {
@@ -123,31 +100,28 @@ export default function PaymentDetail({ payment }: PaymentDetailProps) {
         />
       )}
       {hasPending && (
-        <Flex
-          bg="lightgrey"
-          flexDirection={"column"}
-          pt={2}
-          pb={3}
-          mb={8}
-          gap={4}
-        >
+        <Flex bg="lightgrey" flexDirection={"column"} p={2} mb={8} gap={4}>
           <Text as="span" fontWeight="semibold" textAlign="center">
-            You have a pending transaction for this payment. You must complete
-            the transaction or cancel it before you initiate a new payment.
+            You have a conflicting and pending payment in progress at{" "}
+            {
+              <Link
+                key={`${payment.id}-${payment.transactionRef}`}
+                as={NextLink}
+                href={buildPaymentDetailUrl({
+                  id: pendingTransaction.paymentId,
+                  trxRef: pendingTransaction.transactionRef,
+                  trxType: pendingTransaction.transactionType,
+                })}
+                color={"#0000EE"}
+                textDecorationStyle="solid"
+                textDecorationLine="underline"
+              >
+                {pendingTransaction.description}
+              </Link>
+            }
+            . Please, click the link to complete the payment or cancel it before
+            proceeding.
           </Text>
-          <Flex justify={"center"} gap={12}>
-            <Button
-              colorScheme={"red"}
-              onClick={() =>
-                cancelPaymentMutation({ rrr: pendingTransaction.rrr })
-              }
-              isLoading={cancelPaymentIsPending}
-              isDisabled={cancelPaymentIsPending}
-            >
-              Cancel
-            </Button>
-            <Button>Pay</Button>
-          </Flex>
         </Flex>
       )}
       {prerequisites.length > 0 && (

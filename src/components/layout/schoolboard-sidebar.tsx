@@ -21,7 +21,7 @@ import { paymentQueries } from "../../api/payment.queries";
 import { useProfile } from "../../api/user/use-profile";
 import book from "../../images/bookstore/book-bg-4.png";
 import EventCalendar from "../common/events/event-calendar";
-import PaymentCountdownModal from "../payments/payment-countdown-modal";
+import ConfirmPaymentModal from "../payments/confirm-payment-modal";
 
 const mostSubscribedSundryCodes = ["91", "76", "57"];
 
@@ -252,7 +252,7 @@ function PayButton({
         Pay
       </Button>
       {showPaymentCountdown && (
-        <PaymentCountdownModal
+        <ConfirmPaymentModal
           payment={payment}
           onClose={() => {
             setShowPaymentCountdown(false);
