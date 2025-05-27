@@ -143,9 +143,11 @@ export const paymentQueries = {
       queryFn: () => getPaymentDetails(id, transactionRef, transactionType),
       staleTime: 0,
     }),
+  allPendingTransactions: () => ["pending_transactions"],
   pendingTransaction: (id: string, session: string) =>
     queryOptions({
-      queryKey: ["pending_transaction", id, session],
+      queryKey: [paymentQueries.allPendingTransactions(), id, session],
       queryFn: () => getPendingTransaction(id, session),
+      staleTime: 0,
     }),
 };

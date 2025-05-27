@@ -49,6 +49,9 @@ export default function PaymentTransactionDetail({
       onSuccess: () => {
         queryClient.invalidateQueries(paymentQueries.mainList());
         queryClient.invalidateQueries(paymentQueries.transactionsList());
+        queryClient.invalidateQueries({
+          queryKey: paymentQueries.allPendingTransactions(),
+        });
 
         toast({
           title: "Transaction Cancelled",
