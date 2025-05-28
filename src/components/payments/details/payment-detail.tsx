@@ -85,8 +85,7 @@ export default function PaymentDetail({ payment }: PaymentDetailProps) {
     paymentQueries.pendingTransaction(payment.id, payment.sessionId!)
   );
   const hasPending =
-    !!pendingTransaction &&
-    pendingTransaction.transactionRef !== payment.transactionRef;
+    !!pendingTransaction && pendingTransaction.paymentId !== payment.id;
 
   return (
     <Box>
