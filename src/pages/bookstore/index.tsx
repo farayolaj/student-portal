@@ -64,7 +64,7 @@ interface CourseMaterial {
 const Bookstore: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [orderId, setOrderId] = useState<string | null>(null);
-  const [timeLeft, setTimeLeft] = useState<number>(120);
+  const [timeLeft, setTimeLeft] = useState<number>(30);
   const queryClient = useQueryClient();
   const toast = useToast();
 

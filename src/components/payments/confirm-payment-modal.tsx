@@ -24,7 +24,7 @@ export default function ConfirmPaymentModal({
   payment,
   includePreselected = false,
   onClose,
-  timeout = 120,
+  timeout = 30,
 }: {
   payment: Payment;
   /**
@@ -35,7 +35,7 @@ export default function ConfirmPaymentModal({
   onClose: () => void;
   /**
    * Timeout in seconds before the payment is automatically cancelled
-   * @default 120
+   * @default 30
    */
   timeout?: number;
 }) {
@@ -179,7 +179,7 @@ export default function ConfirmPaymentModal({
                 : "0 seconds"}
             </Text>
             <Text fontWeight="semibold">
-              You are about to make {payment.title} transaction.
+              You are about to make {payment.title} payment.
             </Text>
             <Text fontSize="xl" fontWeight="bold">
               {new Intl.NumberFormat("en-NG", {

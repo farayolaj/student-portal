@@ -47,7 +47,7 @@ interface RepeatOrderButtonProps {
 const RepeatOrderButton: React.FC<RepeatOrderButtonProps> = ({ order }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [orderId, setOrderId] = useState<string | null>(null);
-  const [timeLeft, setTimeLeft] = useState<number>(120);
+  const [timeLeft, setTimeLeft] = useState<number>(30);
   const queryClient = useQueryClient();
 
   const toast = useToast();
