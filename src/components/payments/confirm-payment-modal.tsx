@@ -24,7 +24,7 @@ export default function ConfirmPaymentModal({
   payment,
   includePreselected = false,
   onClose,
-  timeout = 10,
+  timeout = 120,
 }: {
   payment: Payment;
   /**
@@ -35,7 +35,7 @@ export default function ConfirmPaymentModal({
   onClose: () => void;
   /**
    * Timeout in seconds before the payment is automatically cancelled
-   * @default 10
+   * @default 120
    */
   timeout?: number;
 }) {
@@ -165,7 +165,7 @@ export default function ConfirmPaymentModal({
         <ModalBody>
           <Flex direction="column" align="center" gap={4} textAlign="center">
             <Text color="red" textAlign={"center"}>
-              This payment will be cancelled in{" "}
+              This transaction auto-cancels in{" "}
               {secondsLeft > 0
                 ? formatDuration(
                     {
@@ -176,22 +176,25 @@ export default function ConfirmPaymentModal({
                       format: ["minutes", "seconds"],
                     }
                   )
-                : "0 seconds"}{" "}
-              if you do not proceed.
+                : "0 seconds"}
             </Text>
             <Text fontWeight="semibold">
-              You are about to pay for {payment.title}.
+              You are about to make {payment.title} transaction.
             </Text>
             <Text fontSize="xl" fontWeight="bold">
               {new Intl.NumberFormat("en-NG", {
-                style: "currency",
-                currency: "NGN",
+                style: "decimal",
               }).format(payment.amount)}
+              NGN
             </Text>
-            <UnorderedList textAlign={"left"} color="gray.600">
+            <UnorderedList
+              textAlign={"left"}
+              color="gray.600"
+              fontStyle={"italic"}
+            >
               <ListItem>
-                Payment must be completed within 24 hours for the transaction to
-                be valid.
+                Payment should be completed within 24 hours for the transaction
+                to be valid.
               </ListItem>
               <ListItem>
                 Contact Learner Support if transaction success is not
@@ -200,11 +203,10 @@ export default function ConfirmPaymentModal({
             </UnorderedList>
           </Flex>
         </ModalBody>
-        <ModalFooter>
+        <ModalFooter display={"flex"} justifyContent={"space-around"}>
           <Button
             onClick={handleCancel}
             mr={3}
-            variant="ghost"
             colorScheme="red"
             isDisabled={initiateTransactionIsPending}
           >
