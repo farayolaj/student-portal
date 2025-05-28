@@ -3,6 +3,7 @@ import { paymentQueries } from "@/api/payment.queries";
 import {
   Button,
   Flex,
+  ListItem,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -11,16 +12,19 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  UnorderedList,
   useToast,
 } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useCallback } from "react";
+import formatDuration from "date-fns/formatDuration";
+import { useCallback, useEffect, useRef, useState } from "react";
 import useRemitaInline from "../common/remita-inline";
 
 export default function ConfirmPaymentModal({
   payment,
   includePreselected = false,
   onClose,
+  timeout = 10,
 }: {
   payment: Payment;
   /**
@@ -29,7 +33,14 @@ export default function ConfirmPaymentModal({
    */
   includePreselected?: boolean;
   onClose: () => void;
+  /**
+   * Timeout in seconds before the payment is automatically cancelled
+   * @default 10
+   */
+  timeout?: number;
 }) {
+  const [secondsLeft, setSecondsLeft] = useState(timeout);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
   const toast = useToast();
   const queryClient = useQueryClient();
   const {
@@ -128,25 +139,65 @@ export default function ConfirmPaymentModal({
     onClose,
   ]);
 
+  useEffect(() => {
+    timerRef.current = setInterval(() => {
+      setSecondsLeft((s) => s - 1);
+    }, 1000);
+
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (secondsLeft <= 0) {
+      // Automatically cancel the payment if the time runs out
+      handleCancel();
+    }
+  }, [secondsLeft, handleCancel]);
+
   return (
-    <Modal isOpen={true} onClose={handleCancel} isCentered>
+    <Modal isOpen={true} onClose={handleCancel} size={"2xl"} isCentered>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Make Payment</ModalHeader>
+        <ModalHeader>Confirm Payment</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Flex direction="column" align="center" gap={4}>
-            <Text fontWeight="semibold">{payment.title}</Text>
-            <Text fontSize="lg" fontWeight="bold">
+          <Flex direction="column" align="center" gap={4} textAlign="center">
+            <Text color="red" textAlign={"center"}>
+              This payment will be cancelled in{" "}
+              {secondsLeft > 0
+                ? formatDuration(
+                    {
+                      minutes: Math.floor(secondsLeft / 60),
+                      seconds: secondsLeft % 60,
+                    },
+                    {
+                      format: ["minutes", "seconds"],
+                    }
+                  )
+                : "0 seconds"}{" "}
+              if you do not proceed.
+            </Text>
+            <Text fontWeight="semibold">
+              You are about to pay for {payment.title}.
+            </Text>
+            <Text fontSize="xl" fontWeight="bold">
               {new Intl.NumberFormat("en-NG", {
                 style: "currency",
                 currency: "NGN",
               }).format(payment.amount)}
             </Text>
-            <Text color="gray.600" fontWeight={"bold"} textAlign={"center"}>
-              Please, note that this transaction will be cancelled after 24
-              hours if no payment is made.
-            </Text>
+            <UnorderedList textAlign={"left"} color="gray.600">
+              <ListItem>
+                Payment must be completed within 24 hours for the transaction to
+                be valid.
+              </ListItem>
+              <ListItem>
+                Contact Learner Support if transaction success is not
+                reflected/communicated after 24 hours of payment.
+              </ListItem>
+            </UnorderedList>
           </Flex>
         </ModalBody>
         <ModalFooter>
@@ -154,9 +205,10 @@ export default function ConfirmPaymentModal({
             onClick={handleCancel}
             mr={3}
             variant="ghost"
+            colorScheme="red"
             isDisabled={initiateTransactionIsPending}
           >
-            Cancel
+            Cancel Payment
           </Button>
           <Button
             colorScheme="primary"
@@ -164,7 +216,7 @@ export default function ConfirmPaymentModal({
             isLoading={initiateTransactionIsPending}
             isDisabled={initiateTransactionIsPending}
           >
-            Pay
+            Proceed to Pay
           </Button>
         </ModalFooter>
       </ModalContent>
