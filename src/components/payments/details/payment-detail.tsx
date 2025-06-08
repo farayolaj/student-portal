@@ -81,11 +81,10 @@ export default function PaymentDetail({ payment }: PaymentDetailProps) {
     }
   }, [payment.transaction, payment.containsPreselected]);
 
-  const { data: pendingTransaction } = useQuery(
-    paymentQueries.pendingTransaction(payment.id, payment.sessionId!)
+  const { data: pendingTransactions } = useQuery(
+    paymentQueries.pendingTransactions(payment.id, payment.sessionId!)
   );
-  const hasPending =
-    !!pendingTransaction && pendingTransaction.paymentId !== payment.id;
+  const hasPending = !!pendingTransactions && pendingTransactions.length > 0;
 
   return (
     <Box>
@@ -101,23 +100,31 @@ export default function PaymentDetail({ payment }: PaymentDetailProps) {
       {hasPending && (
         <Flex bg="lightgrey" flexDirection={"column"} p={2} mb={8} gap={4}>
           <Text as="span" fontWeight="semibold" textAlign="center">
-            You have a conflicting and pending payment in progress at{" "}
-            {
-              <Link
-                key={`${payment.id}-${payment.transactionRef}`}
-                as={NextLink}
-                href={buildPaymentDetailUrl({
-                  id: pendingTransaction.paymentId,
-                  trxRef: pendingTransaction.transactionRef,
-                  trxType: pendingTransaction.transactionType,
-                })}
-                color={"#0000EE"}
-                textDecorationStyle="solid"
-                textDecorationLine="underline"
-              >
-                {pendingTransaction.description}
-              </Link>
-            }
+            You have conflicting and pending payment(s) in progress at{" "}
+            {pendingTransactions
+              .map((item) => (
+                <Link
+                  key={`${item.paymentId}-${item.transactionRef}`}
+                  as={NextLink}
+                  href={buildPaymentDetailUrl({
+                    id: item.paymentId,
+                    trxRef: item.transactionRef,
+                    trxType: item.transactionType,
+                  })}
+                  color={"#0000EE"}
+                  textDecorationStyle="solid"
+                  textDecorationLine="underline"
+                >
+                  {item.description}
+                </Link>
+              ))
+              .reduce((prev, curr, idx) => {
+                if (idx !== 0 && idx === prerequisites.length - 1)
+                  prev.push(" and ");
+                else if (idx !== 0) prev.push(", ");
+                prev.push(curr);
+                return prev;
+              }, [] as (JSX.Element | string)[])}
             . Please, click the link to complete the payment or cancel it before
             proceeding.
           </Text>

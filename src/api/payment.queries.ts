@@ -77,32 +77,41 @@ async function getPaymentDetails(
   });
 }
 
-async function getPendingTransaction(id: string, session: string) {
+async function getPendingTransactions(id: string, session: string) {
   const response = await getApi().get("/validate_pending_transaction", {
     params: { payment_id: id, session },
   });
 
   if (!response.data.status) throw new Error(response.data.message);
 
-  const {
-    payment_id,
-    payment_option,
-    description,
-    payment_transaction,
-    rrr_code,
-    transaction_ref,
-  } = response.data.payload || {};
-
-  return !rrr_code && !transaction_ref
-    ? null
-    : {
-        paymentId: payment_id as string,
-        paymentOption: payment_option ? PAYMENT_OPTIONS[payment_option] : null,
-        description: description as string,
-        transactionType: TRANSACTION_TYPES[payment_transaction],
-        rrr: rrr_code as string,
-        transactionRef: transaction_ref as string,
-      };
+  return (
+    response.data.payload?.map(
+      (item: {
+        payment_id: string;
+        payment_option: string;
+        description: string;
+        payment_transaction: string;
+        rrr_code: string;
+        transaction_ref: string;
+      }) => ({
+        paymentId: item.payment_id as string,
+        paymentOption: item.payment_option
+          ? PAYMENT_OPTIONS[item.payment_option]
+          : null,
+        description: item.description as string,
+        transactionType: TRANSACTION_TYPES[item.payment_transaction],
+        rrr: item.rrr_code as string,
+        transactionRef: item.transaction_ref as string,
+      })
+    ) || []
+  ).filter((item: { paymentId: string }) => item.paymentId !== id) as {
+    paymentId: string;
+    paymentOption: Payment["paymentOption"];
+    description: string;
+    transactionType: Payment["transactionType"];
+    rrr: string;
+    transactionRef: string;
+  }[];
 }
 
 export const paymentQueries = {
@@ -144,10 +153,10 @@ export const paymentQueries = {
       staleTime: 0,
     }),
   allPendingTransactions: () => ["pending_transactions"],
-  pendingTransaction: (id: string, session: string) =>
+  pendingTransactions: (id: string, session: string) =>
     queryOptions({
       queryKey: [paymentQueries.allPendingTransactions(), id, session],
-      queryFn: () => getPendingTransaction(id, session),
+      queryFn: () => getPendingTransactions(id, session),
       staleTime: 0,
     }),
 };
