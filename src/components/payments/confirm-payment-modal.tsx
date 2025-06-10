@@ -93,10 +93,8 @@ export default function ConfirmPaymentModal({
         paymentType: payment.paymentType,
         rawPaymentOption:
           payment.paymentType === "main" ? payment.rawPaymentOption : undefined,
-        transactionRef:
-          payment.paymentType === "main" ? payment.transactionRef : undefined,
-        transactionType:
-          payment.paymentType === "main" ? payment.transactionType : undefined,
+        transactionRef: payment.transactionRef,
+        transactionType: payment.transactionType,
       },
       {
         onError: (error) => {
