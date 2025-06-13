@@ -2,6 +2,7 @@ import { paymentQueries } from "@/api/payment.queries";
 import { useFetchReceipt } from "@/api/payment/use-fetch-receipt";
 import { useSession } from "@/api/user/use-session";
 import buildPaymentDetailUrl from "@/lib/payments/build-payment-detail-url";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -11,6 +12,10 @@ import {
   Flex,
   Heading,
   Link,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   SimpleGrid,
   Spinner,
   Text,
@@ -203,17 +208,27 @@ export default function PaymentDetail({ payment }: PaymentDetailProps) {
           </Button>
         ) : (
           <Flex direction="column">
-            <Button
-              onClick={() => setShowPaymentCountdown(true)}
-              isDisabled={
-                !payment.isActive ||
-                prerequisites.length > 0 ||
-                receipt.isLoading ||
-                hasPending
-              }
-            >
-              {payment.isActive ? "Pay Now" : "Payment Closed"}
-            </Button>
+            <Menu>
+              <MenuButton
+                as={Button}
+                rightIcon={<ChevronDownIcon />}
+                isDisabled={
+                  !payment.isActive ||
+                  prerequisites.length > 0 ||
+                  receipt.isLoading ||
+                  hasPending
+                }
+              >
+                {payment.isActive ? "Pay Now" : "Payment Closed"}
+              </MenuButton>
+              <MenuList>
+                <MenuItem onClick={() => setShowPaymentCountdown(true)}>
+                  Full Paymment
+                </MenuItem>
+                <MenuItem>Part Paymment (₦50,000)</MenuItem>
+                <MenuItem>Part Paymment (₦25,000)</MenuItem>
+              </MenuList>
+            </Menu>
             <Text as="span" fontSize="sm" fontWeight="semibold" mt={8}>
               {Boolean(payment.dueDate.getTime()) &&
                 `Due ${payment.dueDate.toLocaleDateString()}`}
