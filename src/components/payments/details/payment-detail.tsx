@@ -90,12 +90,13 @@ export default function PaymentDetail({ payment }: PaymentDetailProps) {
     paymentQueries.pendingTransactions(payment.id, payment.sessionId!)
   );
   const hasPending = !!pendingTransactions && pendingTransactions.length > 0;
+  const [paymentToConfirm, setPaymentToConfirm] = useState(payment);
 
   return (
     <Box>
       {payment && showPaymentCountdown && (
         <ConfirmPaymentModal
-          payment={payment}
+          payment={paymentToConfirm}
           includePreselected={isPreselectedSelected}
           onClose={() => {
             setShowPaymentCountdown(false);
@@ -222,11 +223,30 @@ export default function PaymentDetail({ payment }: PaymentDetailProps) {
                 {payment.isActive ? "Pay Now" : "Payment Closed"}
               </MenuButton>
               <MenuList>
-                <MenuItem onClick={() => setShowPaymentCountdown(true)}>
-                  Full Paymment
+                <MenuItem
+                  onClick={() => {
+                    setPaymentToConfirm(payment);
+                    setShowPaymentCountdown(true);
+                  }}
+                >
+                  Full Payment
                 </MenuItem>
-                <MenuItem>Part Paymment (₦50,000)</MenuItem>
-                <MenuItem>Part Paymment (₦25,000)</MenuItem>
+                {payment.paymentGroup?.map((grp) => (
+                  <MenuItem
+                    onClick={() => {
+                      setPaymentToConfirm({
+                        ...payment,
+                        id: grp.id,
+                        paymentOption: grp.paymentOption,
+                        paymentType: grp.paymentType,
+                      });
+                      setShowPaymentCountdown(true);
+                    }}
+                    key={grp.id}
+                  >
+                    {grp.description}
+                  </MenuItem>
+                ))}
               </MenuList>
             </Menu>
             <Text as="span" fontSize="sm" fontWeight="semibold" mt={8}>

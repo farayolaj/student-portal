@@ -57,6 +57,14 @@ export function toPayment(data: any): Payment {
         transactionRef: pre.transaction_ref,
         isPaid: pre.paid,
       })) ?? [],
+    paymentGroup: data.payment_group?.map((grp: any) => ({
+      id: grp.payment_id,
+      description: grp.description,
+      paymentType: grp.payment_type?.toLowerCase(),
+      paymentOption: grp.payment_option
+        ? PAYMENT_OPTIONS[grp.payment_option]
+        : null,
+    })),
     transaction: data.transaction
       ? {
           id: data.transaction.transaction_id,

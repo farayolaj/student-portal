@@ -116,7 +116,7 @@ interface Transaction {
   programmeName?: string;
   isPartPayment?: boolean;
   encodedId?: string;
-  isCurrentSchoolFee?: boolean 
+  isCurrentSchoolFee?: boolean;
 }
 
 interface Payment {
@@ -149,6 +149,12 @@ interface Payment {
     isPaid: boolean;
     transactionType?: "normal" | "custom";
     transactionRef?: string;
+  }[];
+  paymentGroup?: {
+    id: string;
+    description: string;
+    paymentType: "sundry" | "main";
+    paymentOption: "full" | "part" | "balance" | null;
   }[];
   transaction?: Transaction;
   isSchoolFee: boolean;
