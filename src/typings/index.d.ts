@@ -155,6 +155,7 @@ interface Payment {
     description: string;
     paymentType: "sundry" | "main";
     paymentOption: "full" | "part" | "balance" | null;
+    amount: number;
   }[];
   transaction?: Transaction;
   isSchoolFee: boolean;

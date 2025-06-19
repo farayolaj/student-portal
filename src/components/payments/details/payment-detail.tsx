@@ -224,27 +224,46 @@ export default function PaymentDetail({ payment }: PaymentDetailProps) {
               </MenuButton>
               <MenuList>
                 <MenuItem
+                  py={3}
                   onClick={() => {
                     setPaymentToConfirm(payment);
                     setShowPaymentCountdown(true);
                   }}
                 >
-                  Full Payment
+                  Full Payment - (
+                  {new Intl.NumberFormat("en-NG", {
+                    style: "currency",
+                    currency: "NGN",
+                  }).format(total)}
+                  )
                 </MenuItem>
                 {payment.paymentGroup?.map((grp) => (
                   <MenuItem
+                    py={3}
                     onClick={() => {
                       setPaymentToConfirm({
                         ...payment,
                         id: grp.id,
                         paymentOption: grp.paymentOption,
                         paymentType: grp.paymentType,
+                        amount: grp.amount,
+                        title: grp.description,
                       });
                       setShowPaymentCountdown(true);
                     }}
                     key={grp.id}
                   >
-                    {grp.description}
+                    {grp.description} - (
+                    {new Intl.NumberFormat("en-NG", {
+                      style: "currency",
+                      currency: "NGN",
+                    }).format(
+                      grp.amount +
+                        (isPreselectedSelected
+                          ? payment.preselected?.amount || 0
+                          : 0)
+                    )}
+                    )
                   </MenuItem>
                 ))}
               </MenuList>
