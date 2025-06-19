@@ -86,7 +86,7 @@ const DisplayPanel: FC = () => {
                     gap={1}
                     w="full"
                   >
-                    <Text as="p">{sundry.title}</Text>e{" "}
+                    <Text as="p">{sundry.title}</Text>{" "}
                     <Flex justify={"space-between"} align={"center"}>
                       <Text as="span">
                         {new Intl.NumberFormat("en-NG", {
