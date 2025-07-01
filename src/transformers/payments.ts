@@ -57,7 +57,7 @@ export function toPayment(data: any): Payment {
         transactionRef: pre.transaction_ref,
         isPaid: pre.paid,
       })) ?? [],
-    paymentGroup:
+    subPayments:
       data.payment_group?.map((grp: any) => ({
         id: grp.payment_id,
         description: grp.description,

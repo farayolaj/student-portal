@@ -150,7 +150,7 @@ interface Payment {
     transactionType?: "normal" | "custom";
     transactionRef?: string;
   }[];
-  paymentGroup?: {
+  subPayments?: {
     id: string;
     description: string;
     paymentType: "sundry" | "main";

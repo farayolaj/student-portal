@@ -237,7 +237,7 @@ export default function PaymentDetail({ payment }: PaymentDetailProps) {
                   }).format(total)}
                   )
                 </MenuItem>
-                {payment.paymentGroup?.map((grp) => (
+                {payment.subPayments?.map((grp) => (
                   <MenuItem
                     py={3}
                     onClick={() => {
