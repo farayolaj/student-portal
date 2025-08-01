@@ -9,7 +9,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
-import { sanitize } from "dompurify";
+import DOMPurify from "dompurify";
 import { RefObject, useRef } from "react";
 import { commonQueries } from "../../api/common.queries";
 
@@ -37,7 +37,7 @@ export default function PortalAlert() {
           <AlertDialogBody
             sx={{ "& > p": { mt: 2 } }}
             dangerouslySetInnerHTML={{
-              __html: data?.body ? sanitize(data.body) : "",
+              __html: data?.body ? DOMPurify.sanitize(data.body) : "",
             }}
           ></AlertDialogBody>
 
