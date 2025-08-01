@@ -27,8 +27,7 @@ function PrintButton({ rrr }: { rrr: string }) {
   return (
     <Button
       onClick={() => handleReceiptPrint(rrr)}
-      isDisabled={true}
-      // isDisabled={isLoading}
+      isDisabled={isLoading}
       minW="7.8rem"
     >
       {isLoading ? <Spinner color="white" size="xs" /> : "Print"}

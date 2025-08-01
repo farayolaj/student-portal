@@ -202,8 +202,7 @@ export default function PaymentDetail({ payment }: PaymentDetailProps) {
             onClick={() => {
               receipt.intiateFetch();
             }}
-            isDisabled={true}
-            // isDisabled={receipt.isLoading}
+            isDisabled={receipt.isLoading}
             minW="7.8rem"
           >
             {receipt.isLoading ? <Spinner color="white" size="xs" /> : "Print"}
