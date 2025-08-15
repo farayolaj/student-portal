@@ -47,7 +47,11 @@ const CoursesCard: FC = () => {
       <Flex direction="column" align="center" justify="center" gap={8} py={8}>
         <Text>You have not registered for any course.</Text>
         {canAddCourses && (
-          <Link as={NextLink} variant="button" href={routes.ADD_COURSES}>
+          <Link
+            as={NextLink}
+            variant="button"
+            href={routes.ADD_COURSES}
+          >
             Register Courses
           </Link>
         )}
@@ -77,7 +81,7 @@ const CoursesCard: FC = () => {
         </Heading>
         {courses.length > 0 && (
           <Text as="span">
-            <Link as={NextLink} href={routes.REGISTERED_COURSES}>
+            <Link as={NextLink} href={routes.COURSES}>
               See other courses &rarr;
             </Link>
           </Text>

@@ -1,5 +1,7 @@
 import { useCourseRegPrintUrl } from "@/api/course/use-course-reg-print-url";
 import { useCurrentPeriod } from "@/api/user/use-current-period";
+import CourseListControls from "@/components/courses/registration/course-list-controls";
+import DeleteCourseView from "@/components/courses/registration/delete/delete-course-view";
 import buildPaymentDetailUrl from "@/lib/payments/build-payment-detail-url";
 import {
   Button,
@@ -24,18 +26,16 @@ import {
   IoPrintOutline,
   IoTrashOutline,
 } from "react-icons/io5";
-import { deleteCourses } from "../../api/course.mutations";
-import { courseQueries } from "../../api/course.queries";
-import PageTitle from "../../components/common/page-title";
-import RadioButtonGroup from "../../components/common/radio-button-group";
-import Seo from "../../components/common/seo";
-import CourseListControls from "../../components/courses/course-list-controls";
-import CourseOverview from "../../components/courses/course-overview";
-import CourseView from "../../components/courses/course-view";
-import DeleteCourseView from "../../components/courses/delete/delete-course-view";
-import * as routes from "../../constants/routes";
+import { deleteCourses } from "../../../api/course.mutations";
+import { courseQueries } from "../../../api/course.queries";
+import PageTitle from "../../../components/common/page-title";
+import RadioButtonGroup from "../../../components/common/radio-button-group";
+import Seo from "../../../components/common/seo";
+import CourseOverview from "../../../components/courses/registration/course-overview";
+import CourseView from "../../../components/courses/registration/course-view";
+import * as routes from "../../../constants/routes";
 
-const Courses: FC = () => {
+const CourseRegistration: FC = () => {
   const toast = useToast();
   const { period } = useCurrentPeriod();
   const currentSessionId = period.session.id;
@@ -132,8 +132,8 @@ const Courses: FC = () => {
 
   return (
     <>
-      <Seo title="Registered Courses" />
-      <PageTitle showBackButton>Registered Courses</PageTitle>
+      <Seo title="Course Registration" />
+      <PageTitle showBackButton>Course Registration</PageTitle>
       <CourseListControls
         sessionId={sessionId}
         onSessionIdChange={setSessionId}
@@ -161,7 +161,7 @@ const Courses: FC = () => {
               h={10}
             >
               <Icon as={IoAdd} boxSize={6} />
-              Add Courses
+              Register Courses
             </Link>
           )}
           {canDeleteCourses && (
@@ -271,4 +271,4 @@ const Courses: FC = () => {
   );
 };
 
-export default Courses;
+export default CourseRegistration;

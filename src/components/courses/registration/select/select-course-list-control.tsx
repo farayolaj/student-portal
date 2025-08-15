@@ -1,8 +1,8 @@
 import { Flex, Spacer, Text } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { IoGrid, IoList } from "react-icons/io5";
-import { courseQueries } from "../../../api/course.queries";
-import RadioButtonGroup from "../../common/radio-button-group";
+import { courseQueries } from "../../../../api/course.queries";
+import RadioButtonGroup from "../../../common/radio-button-group";
 
 type SelectCourseListControlProps = {
   session: string;
