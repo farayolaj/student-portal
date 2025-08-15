@@ -4,6 +4,7 @@ import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { FC } from "react";
 import {
+  IoBookOutline,
   IoCalendarOutline,
   IoDocumentsOutline,
   IoDocumentTextOutline,
@@ -13,7 +14,7 @@ import {
   IoPhonePortraitOutline,
   IoReceiptOutline,
   IoShieldCheckmarkOutline,
-  IoStorefrontOutline
+  IoStorefrontOutline,
 } from "react-icons/io5";
 import { IconType } from "react-icons/lib";
 import * as routes from "../../constants/routes";
@@ -40,6 +41,16 @@ const Navigation: FC<NavigationProps> = ({ isOpen }) => {
         href={routes.VERIFY_RESULT}
         isOpen={isOpen}
         isActive={pathname.startsWith(routes.VERIFY_RESULT)}
+      />
+      <NavLink
+        title="Courses"
+        icon={IoBookOutline}
+        href={routes.COURSES}
+        isOpen={isOpen}
+        isActive={
+          pathname.startsWith(routes.COURSES) &&
+          !pathname.includes(routes.COURSE_REGISTRATION)
+        }
       />
       <NavLink
         title="Course Registration"
