@@ -310,3 +310,19 @@ interface Attachment extends MinimalAttachment {
 }
 
 type AttendanceOptions = "on-site" | "online" | "self-paced";
+
+type Webinar = {
+  id: string;
+  title: string;
+  joinUrl?: string;
+  scheduledAt: Date;
+  recordings: Array<{
+    id: string;
+    downloadUrl: string;
+    /** In minutes */
+    duration: number;
+    recordedAt: Date;
+  }>;
+  presentation?: string;
+  isLive: boolean;
+};
