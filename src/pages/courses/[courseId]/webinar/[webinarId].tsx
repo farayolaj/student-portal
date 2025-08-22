@@ -1,6 +1,10 @@
-import { courseQueries } from "@/api/course.queries";
-import { webinars } from "@/components/courses/course-webinar-view";
+import { webinarQueries } from "@/api/webinar.queries";
+import { useJoinCall } from "@/api/webinar/use-join-call";
 import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
   Box,
   Button,
   Card,
@@ -15,6 +19,7 @@ import {
   Spinner,
   Text,
   useColorModeValue,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
@@ -23,6 +28,7 @@ import { FC } from "react";
 import {
   IoCalendarOutline,
   IoCloudDownloadOutline,
+  IoDownloadOutline,
   IoLinkOutline,
   IoPlayCircleOutline,
   IoVideocamOutline,
@@ -30,40 +36,49 @@ import {
 import PageTitle from "../../../../components/common/page-title";
 import Seo from "../../../../components/common/seo";
 
-const webinar = webinars[0];
+const formatDate = (date: Date) => {
+  return new Intl.DateTimeFormat("en-US", {
+    dateStyle: "full",
+    timeStyle: "short",
+  }).format(date);
+};
+
+const formatDuration = (minutes: number) => {
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+  if (hours > 0) {
+    return `${hours}h ${mins}m`;
+  }
+  return `${mins}m`;
+};
 
 const WebinarDetail: FC = () => {
   const router = useRouter();
-  const { courseId /* webinarId */ } = router.query;
+  const { webinarId } = router.query;
 
   const {
-    data: course,
-    isLoading: courseIsLoading,
-    error: courseError,
-  } = useQuery({
-    ...courseQueries.detailsBy(courseId as string),
-  });
+    data: webinar,
+    isLoading,
+    error,
+  } = useQuery(webinarQueries.detailsBy(webinarId as string));
 
   const cardBg = useColorModeValue("white", "gray.700");
   const borderColor = useColorModeValue("gray.200", "gray.600");
 
-  const formatDate = (date: Date) => {
-    return new Intl.DateTimeFormat("en-US", {
-      dateStyle: "full",
-      timeStyle: "short",
-    }).format(date);
-  };
+  const toast = useToast();
+  const joinCall = useJoinCall({
+    onError: (error) => {
+      toast({
+        title: "Error Joining Webinar",
+        description: error.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    },
+  });
 
-  const formatDuration = (minutes: number) => {
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    if (hours > 0) {
-      return `${hours}h ${mins}m`;
-    }
-    return `${mins}m`;
-  };
-
-  if (courseIsLoading) {
+  if (isLoading) {
     return (
       <>
         <Seo title="Loading Webinar..." />
@@ -77,16 +92,39 @@ const WebinarDetail: FC = () => {
     );
   }
 
-  if (courseError || !course || !webinar) {
+  if (error) {
     return (
       <>
-        <Seo title="Webinar Not Found" />
-        <PageTitle showBackButton>Webinar Not Found</PageTitle>
+        <Seo title="Webinar" />
+        <PageTitle showBackButton>Webinar Details</PageTitle>
         <Card>
           <CardBody>
-            <Text color="red.500" textAlign="center">
-              {courseError?.message || "Webinar not found"}
-            </Text>
+            <Alert status="error">
+              <AlertIcon />
+              <AlertTitle>Error Loading Webinar</AlertTitle>
+              <AlertDescription>
+                {error.message ||
+                  "There was an error loading the webinar details. Please, try again later."}
+              </AlertDescription>
+            </Alert>
+          </CardBody>
+        </Card>
+      </>
+    );
+  }
+
+  if (!webinar) {
+    return (
+      <>
+        <Seo title="Webinar" />
+        <PageTitle showBackButton>Webinar Details</PageTitle>
+        <Card>
+          <CardBody>
+            <Alert status="warning">
+              <AlertIcon />
+              <AlertTitle>Webinar Not Found</AlertTitle>
+              <AlertDescription>The webinar was not found.</AlertDescription>
+            </Alert>
           </CardBody>
         </Card>
       </>
@@ -95,8 +133,8 @@ const WebinarDetail: FC = () => {
 
   return (
     <>
-      <Seo title={`Webinar - ${course.title}`} />
-      <PageTitle showBackButton>{course.code} - Webinar Details</PageTitle>
+      <Seo title={`Webinar - ${webinar.title}`} />
+      <PageTitle showBackButton>Webinar Details</PageTitle>
 
       {/* Webinar Header */}
       <Card mb={6}>
@@ -105,24 +143,39 @@ const WebinarDetail: FC = () => {
             <Flex align="center" gap={3}>
               <Icon as={IoVideocamOutline} boxSize={8} color="blue.500" />
               <Box>
-                <Heading size="lg">Introduction to {course.title}</Heading>
-                <Text color="gray.600">{course.code}</Text>
+                <Heading size="lg">{webinar.title}</Heading>
               </Box>
             </Flex>
 
             <Flex align="center" gap={2}>
               <Icon as={IoCalendarOutline} color="gray.500" />
               <Text fontSize="sm" fontWeight="semibold">
-                {formatDate(webinar.scheduledAt)}
+                {formatDate(webinar.scheduledFor)}
               </Text>
             </Flex>
 
             <Text color="gray.600" lineHeight="tall">
-              Opening webinar covering course overview and expectations. This
-              session will introduce key concepts and provide guidance for the
-              semester.
+              {webinar.description}
             </Text>
           </VStack>
+          {webinar.presentation && (
+            <Box mt={8}>
+              <Button
+                leftIcon={<Icon as={IoDownloadOutline} />}
+                size="sm"
+                as={Link}
+                href={webinar.presentation.url}
+                download={webinar.presentation.name}
+                _hover={{
+                  textDecoration: "none",
+                  bgColor: "primary.600",
+                }}
+                isExternal
+              >
+                Download Presentation
+              </Button>
+            </Box>
+          )}
         </CardBody>
       </Card>
 
@@ -134,10 +187,9 @@ const WebinarDetail: FC = () => {
               leftIcon={<Icon as={IoLinkOutline} />}
               colorScheme="blue"
               size="lg"
-              as={Link}
-              href={webinar.joinUrl || "#"}
-              isDisabled={!webinar.joinUrl}
-              isExternal
+              onClick={() => joinCall.join(webinar.id)}
+              isDisabled={joinCall.isJoining}
+              isLoading={joinCall.isJoining}
             >
               Join Webinar
             </Button>
@@ -186,7 +238,7 @@ const WebinarDetail: FC = () => {
                       colorScheme="green"
                       variant="outline"
                       as={Link}
-                      href={recording.downloadUrl}
+                      href={recording.url}
                       isExternal
                     >
                       Download

@@ -1,3 +1,4 @@
+import { useCurrentPeriod } from "@/api/user/use-current-period";
 import CourseWebinarView from "@/components/courses/course-webinar-view";
 import {
   Alert,
@@ -41,6 +42,8 @@ import statusCodeToName from "../../../lib/status-code-to-name";
 const CourseDetail: FC = () => {
   const router = useRouter();
   const { courseId } = router.query;
+  const { period } = useCurrentPeriod();
+  const currentSessionId = period.session.id;
 
   const {
     data: course,
@@ -187,7 +190,10 @@ const CourseDetail: FC = () => {
 
           {/* Webinars Tab */}
           <TabPanel px={0}>
-            <CourseWebinarView courseId={course.id} />
+            <CourseWebinarView
+              sessionId={currentSessionId}
+              courseId={course.id}
+            />
           </TabPanel>
         </TabPanels>
       </Tabs>

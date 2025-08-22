@@ -314,15 +314,20 @@ type AttendanceOptions = "on-site" | "online" | "self-paced";
 type Webinar = {
   id: string;
   title: string;
-  joinUrl?: string;
-  scheduledAt: Date;
+  description?: string;
+  scheduledFor: Date;
+  presentation?: {
+    url: string;
+    name: string;
+  }
+};
+
+type WebinarWithRecordings = Webinar & {
   recordings: Array<{
     id: string;
-    downloadUrl: string;
-    /** In minutes */
+    url: string;
+    /** In seconds */
     duration: number;
     recordedAt: Date;
   }>;
-  presentation?: string;
-  isLive: boolean;
 };

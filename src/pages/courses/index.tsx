@@ -73,7 +73,7 @@ const Courses: FC = () => {
               href={routes.COURSE_REGISTRATION}
               variant="button"
             >
-              Register for Courses
+              Register Courses
             </Link>
           </Flex>
         )}
