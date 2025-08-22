@@ -18,8 +18,8 @@ export const toWebinarWithRecordings = (webinar: any) =>
     ...toWebinar(webinar),
     recordings: webinar.recordings.map((recording: any) => ({
       id: recording.id,
-      url: recording.url,
+      url: recording.recording_url,
       duration: recording.duration,
-      recordedAt: new Date(recording.recorded_at),
+      dateRecorded: new Date(recording.date_recorded),
     })),
   } as WebinarWithRecordings);

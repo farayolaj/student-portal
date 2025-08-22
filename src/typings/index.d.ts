@@ -319,7 +319,7 @@ type Webinar = {
   presentation?: {
     url: string;
     name: string;
-  }
+  };
 };
 
 type WebinarWithRecordings = Webinar & {
@@ -328,6 +328,6 @@ type WebinarWithRecordings = Webinar & {
     url: string;
     /** In seconds */
     duration: number;
-    recordedAt: Date;
+    dateRecorded: Date;
   }>;
 };

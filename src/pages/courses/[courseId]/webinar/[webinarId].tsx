@@ -23,14 +23,15 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
+import formatDuration from "date-fns/formatDuration";
 import { useRouter } from "next/router";
 import { FC } from "react";
 import {
   IoCalendarOutline,
-  IoCloudDownloadOutline,
   IoDownloadOutline,
   IoLinkOutline,
   IoPlayCircleOutline,
+  IoPlayOutline,
   IoVideocamOutline,
 } from "react-icons/io5";
 import PageTitle from "../../../../components/common/page-title";
@@ -41,15 +42,6 @@ const formatDate = (date: Date) => {
     dateStyle: "full",
     timeStyle: "short",
   }).format(date);
-};
-
-const formatDuration = (minutes: number) => {
-  const hours = Math.floor(minutes / 60);
-  const mins = minutes % 60;
-  if (hours > 0) {
-    return `${hours}h ${mins}m`;
-  }
-  return `${mins}m`;
 };
 
 const WebinarDetail: FC = () => {
@@ -223,17 +215,23 @@ const WebinarDetail: FC = () => {
                           dateStyle: "full",
                           timeStyle: "short",
                           hour12: true,
-                        }).format(recording.recordedAt)}
+                        }).format(recording.dateRecorded)}
                       </Text>
                       <HStack spacing={4} mt={1}>
                         <Text fontSize="sm" color="gray.600">
-                          {formatDuration(recording.duration)}
+                          {formatDuration({
+                            hours: Math.floor(recording.duration / 3600),
+                            minutes: Math.floor(
+                              (recording.duration % 3600) / 60
+                            ),
+                            seconds: Math.floor(recording.duration % 60),
+                          })}
                         </Text>
                         <Text fontSize="sm" color="gray.600"></Text>
                       </HStack>
                     </Box>
                     <Button
-                      leftIcon={<Icon as={IoCloudDownloadOutline} />}
+                      leftIcon={<Icon as={IoPlayOutline} />}
                       size="sm"
                       colorScheme="green"
                       variant="outline"
@@ -241,7 +239,7 @@ const WebinarDetail: FC = () => {
                       href={recording.url}
                       isExternal
                     >
-                      Download
+                      Play Recording
                     </Button>
                   </Flex>
                 </Box>
