@@ -183,7 +183,9 @@ const CourseDetail: FC = () => {
                 <Heading size="md">Course Overview</Heading>
               </CardHeader>
               <CardBody>
-                <Text lineHeight="tall">{course.description}</Text>
+                <Text lineHeight="tall">
+                  {course.description || "No course overview available."}
+                </Text>
               </CardBody>
             </Card>
           </TabPanel>
