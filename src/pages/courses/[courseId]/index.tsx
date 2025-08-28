@@ -168,15 +168,15 @@ const CourseDetail: FC = () => {
               <SimpleGrid columns={[2, null, 4]} gap={4}>
                 <Flex align="center" gap={2}>
                   <Icon as={IoPersonOutline} color="primary.500" />
-                  <Text fontSize="sm">{course.lecturer || "N/A"}</Text>
+                  <Text as="span" fontSize="sm">{course.lecturer || "N/A"}</Text>
                 </Flex>
                 <Flex align="center" gap={2}>
                   <Icon as={IoBookOutline} color="primary.500" />
-                  <Text fontSize="sm">{course.units} Units</Text>
+                  <Text as="span" fontSize="sm">{course.units} Units</Text>
                 </Flex>
                 <Flex align="center" gap={2}>
                   <Icon as={IoDocumentOutline} color="primary.500" />
-                  <Text fontSize="sm">{statusCodeToName(course.status)}</Text>
+                  <Text as="span" fontSize="sm">{statusCodeToName(course.status)}</Text>
                 </Flex>
               </SimpleGrid>
               {course.materialLink && (
