@@ -59,8 +59,8 @@ const CoursesCard: FC = () => {
     );
   } else {
     content = (
-      <SimpleGrid gap={4} columns={[1, null, 2, 4]}>
-        {courses.slice(0, 4).map((course) => (
+      <SimpleGrid gap={4} columns={[1, null, 3]}>
+        {courses.map((course) => (
           <CourseItem
             key={course.id}
             code={course.code}
