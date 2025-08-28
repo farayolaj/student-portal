@@ -1,5 +1,6 @@
 import { webinarQueries } from "@/api/webinar.queries";
 import { useJoinCall } from "@/api/webinar/use-join-call";
+import WebinarRecordings from "@/components/courses/webinars/webinar-recordings";
 import {
   Alert,
   AlertDescription,
@@ -12,26 +13,27 @@ import {
   CardHeader,
   Flex,
   Heading,
-  HStack,
   Icon,
   Link,
   Skeleton,
   Spinner,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
   Text,
   useColorModeValue,
   useToast,
   VStack,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
-import formatDuration from "date-fns/formatDuration";
 import { useRouter } from "next/router";
 import { FC } from "react";
 import {
   IoCalendarOutline,
   IoDownloadOutline,
   IoLinkOutline,
-  IoPlayCircleOutline,
-  IoPlayOutline,
   IoVideocamOutline,
 } from "react-icons/io5";
 import PageTitle from "../../../../components/common/page-title";
@@ -189,69 +191,34 @@ const WebinarDetail: FC = () => {
         </CardBody>
       </Card>
 
-      {/* Recordings */}
-      <Card bg={cardBg} borderColor={borderColor}>
-        <CardHeader>
-          <Flex align="center" gap={2}>
-            <Icon as={IoPlayCircleOutline} color="green.500" />
-            <Heading size="md">Recordings</Heading>
-          </Flex>
-        </CardHeader>
-        <CardBody>
-          {webinar.recordings.length > 0 ? (
-            <VStack spacing={4} align="stretch">
-              {webinar.recordings.map((recording) => (
-                <Box
-                  key={recording.id}
-                  p={4}
-                  border="1px"
-                  borderColor={borderColor}
-                  rounded="md"
-                >
-                  <Flex justify="space-between" align="center">
-                    <Box>
-                      <Text fontWeight="semibold">
-                        {new Intl.DateTimeFormat("en-NG", {
-                          dateStyle: "full",
-                          timeStyle: "short",
-                          hour12: true,
-                        }).format(recording.dateRecorded)}
-                      </Text>
-                      <HStack spacing={4} mt={1}>
-                        <Text fontSize="sm" color="gray.600">
-                          {formatDuration({
-                            hours: Math.floor(recording.duration / 3600),
-                            minutes: Math.floor(
-                              (recording.duration % 3600) / 60
-                            ),
-                            seconds: Math.floor(recording.duration % 60),
-                          })}
-                        </Text>
-                        <Text fontSize="sm" color="gray.600"></Text>
-                      </HStack>
-                    </Box>
-                    <Button
-                      leftIcon={<Icon as={IoPlayOutline} />}
-                      size="sm"
-                      colorScheme="green"
-                      variant="outline"
-                      as={Link}
-                      href={recording.url}
-                      isExternal
-                    >
-                      Play Recording
-                    </Button>
-                  </Flex>
-                </Box>
-              ))}
-            </VStack>
-          ) : (
-            <Text color="gray.500" textAlign="center" py={8}>
-              No recordings available yet.
-            </Text>
-          )}
-        </CardBody>
-      </Card>
+      {/* Tabs Section */}
+      <Tabs colorScheme="primary" variant="soft-rounded">
+        <TabList>
+          <Tab>Recordings</Tab>
+          <Tab>Comments</Tab>
+        </TabList>
+
+        <TabPanels>
+          {/* Recordings Tab */}
+          <TabPanel px={0}>
+            <WebinarRecordings recordings={webinar.recordings} />
+          </TabPanel>
+
+          {/* Comments Tab */}
+          <TabPanel px={0}>
+            <Card bg={cardBg} borderColor={borderColor}>
+              <CardHeader>
+                <Heading size="md">Comments</Heading>
+              </CardHeader>
+              <CardBody>
+                <Text color="gray.500" textAlign="center" py={8}>
+                  Comments feature coming soon.
+                </Text>
+              </CardBody>
+            </Card>
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
     </>
   );
 };
