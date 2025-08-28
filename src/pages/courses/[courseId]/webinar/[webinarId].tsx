@@ -47,7 +47,32 @@ const formatDate = (date: Date) => {
 
 const WebinarDetail: FC = () => {
   const router = useRouter();
-  const { webinarId } = router.query;
+  const { webinarId, tab } = router.query;
+  
+  // Map tab names to indices
+  const tabMap = {
+    recordings: 0,
+    comments: 1,
+  };
+
+  // Get current tab index from URL, default to 0
+  const currentTabIndex = 
+    tab && typeof tab === 'string' && tab in tabMap 
+      ? tabMap[tab as keyof typeof tabMap] 
+      : 0;
+
+  // Handle tab change and update URL
+  const handleTabChange = (index: number) => {
+    const tabName = Object.keys(tabMap)[index];
+    router.replace(
+      {
+        pathname: router.pathname,
+        query: { ...router.query, tab: tabName },
+      },
+      undefined,
+      { shallow: true }
+    );
+  };
 
   const {
     data: webinar,
@@ -189,7 +214,12 @@ const WebinarDetail: FC = () => {
       </Card>
 
       {/* Tabs Section */}
-      <Tabs colorScheme="primary" variant="soft-rounded">
+      <Tabs 
+        colorScheme="primary" 
+        variant="soft-rounded" 
+        index={currentTabIndex} 
+        onChange={handleTabChange}
+      >
         <TabList>
           <Tab>Recordings</Tab>
           <Tab>Comments</Tab>

@@ -42,9 +42,34 @@ import statusCodeToName from "../../../lib/status-code-to-name";
 
 const CourseDetail: FC = () => {
   const router = useRouter();
-  const { courseId } = router.query;
+  const { courseId, tab } = router.query;
   const { period } = useCurrentPeriod();
   const currentSessionId = period.session.id;
+
+  // Map tab names to indices
+  const tabMap = {
+    overview: 0,
+    webinars: 1,
+  };
+
+  // Get current tab index from URL, default to 0
+  const currentTabIndex = 
+    tab && typeof tab === 'string' && tab in tabMap 
+      ? tabMap[tab as keyof typeof tabMap] 
+      : 0;
+
+  // Handle tab change and update URL
+  const handleTabChange = (index: number) => {
+    const tabName = Object.keys(tabMap)[index];
+    router.replace(
+      {
+        pathname: router.pathname,
+        query: { ...router.query, tab: tabName },
+      },
+      undefined,
+      { shallow: true }
+    );
+  };
 
   const {
     data: course,
@@ -208,7 +233,12 @@ const CourseDetail: FC = () => {
       </Card>
 
       {/* Course Content Tabs */}
-      <Tabs colorScheme="primary" variant="soft-rounded">
+      <Tabs 
+        colorScheme="primary" 
+        variant="soft-rounded" 
+        index={currentTabIndex} 
+        onChange={handleTabChange}
+      >
         <TabList>
           <Tab>Overview</Tab>
           <Tab>Webinars</Tab>
