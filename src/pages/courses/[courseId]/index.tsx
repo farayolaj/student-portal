@@ -14,7 +14,8 @@ import {
   Icon,
   Link,
   SimpleGrid,
-  Spinner,
+  Skeleton,
+  SkeletonText,
   Tab,
   TabList,
   TabPanel,
@@ -57,10 +58,49 @@ const CourseDetail: FC = () => {
     return (
       <>
         <Seo title="Loading Course..." />
-        <PageTitle showBackButton>Loading...</PageTitle>
-        <Flex justify="center" align="center" minH="200px">
-          <Spinner size="xl" />
+        <PageTitle showBackButton></PageTitle>
+        
+        {/* Course Header Skeleton */}
+        <Card mb={6}>
+          <CardBody>
+            <Flex direction={["column", null, "row"]} gap={6}>
+              <Skeleton 
+                w={["full", null, "200px"]} 
+                h="200px" 
+                flexShrink={0}
+                rounded="md"
+              />
+              <VStack align="stretch" flex={1} spacing={4}>
+                <Box>
+                  <Skeleton h="8" w="60%" mb={2} />
+                  <Skeleton h="6" w="40%" />
+                </Box>
+                <SimpleGrid columns={[2, null, 4]} gap={4}>
+                  <Skeleton h="5" />
+                  <Skeleton h="5" />
+                  <Skeleton h="5" />
+                </SimpleGrid>
+                <Skeleton h="10" w="200px" rounded="md" />
+              </VStack>
+            </Flex>
+          </CardBody>
+        </Card>
+
+        {/* Tabs Skeleton */}
+        <Flex gap={4} mb={4}>
+          <Skeleton h="10" w="100px" rounded="full" />
+          <Skeleton h="10" w="100px" rounded="full" />
         </Flex>
+
+        {/* Content Skeleton */}
+        <Card>
+          <CardHeader>
+            <Skeleton h="6" w="40%" />
+          </CardHeader>
+          <CardBody>
+            <SkeletonText noOfLines={4} spacing="4" skeletonHeight="2" />
+          </CardBody>
+        </Card>
       </>
     );
   }
@@ -69,7 +109,7 @@ const CourseDetail: FC = () => {
     return (
       <>
         <Seo title="Course Page" />
-        <PageTitle showBackButton>Course Page</PageTitle>
+        <PageTitle showBackButton></PageTitle>
         <Alert status="error">
           <AlertIcon />
           <AlertTitle>Error Loading Course Page</AlertTitle>
@@ -86,7 +126,7 @@ const CourseDetail: FC = () => {
     return (
       <>
         <Seo title="Course Page" />
-        <PageTitle showBackButton>Course Page</PageTitle>
+        <PageTitle showBackButton></PageTitle>
         <Alert status="info">
           <AlertIcon />
           <AlertTitle>Course Not Found</AlertTitle>
@@ -102,7 +142,6 @@ const CourseDetail: FC = () => {
     <>
       <Seo title={course.title} />
       <PageTitle showBackButton>
-        {course.code}: {course.title}
       </PageTitle>
 
       {/* Course Header */}

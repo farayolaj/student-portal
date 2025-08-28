@@ -14,7 +14,7 @@ const PageTitle: FC<PropsWithChildren<PageTitleProps>> = ({
   showBackButton = false,
 }) => {
   return (
-    <Flex align="center" gap={2} mb={12}>
+    <Flex align="center" gap={2} mb={6}>
       {showBackButton && (
         <IconButton
           aria-label="Go back"
