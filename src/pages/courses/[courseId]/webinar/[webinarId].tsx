@@ -1,5 +1,6 @@
 import { webinarQueries } from "@/api/webinar.queries";
 import { useJoinCall } from "@/api/webinar/use-join-call";
+import WebinarComments from "@/components/courses/webinars/webinar-comments";
 import WebinarRecordings from "@/components/courses/webinars/webinar-recordings";
 import {
   Alert,
@@ -10,7 +11,6 @@ import {
   Button,
   Card,
   CardBody,
-  CardHeader,
   Flex,
   Heading,
   Icon,
@@ -23,7 +23,6 @@ import {
   TabPanels,
   Tabs,
   Text,
-  useColorModeValue,
   useToast,
   VStack,
 } from "@chakra-ui/react";
@@ -56,8 +55,6 @@ const WebinarDetail: FC = () => {
     error,
   } = useQuery(webinarQueries.detailsBy(webinarId as string));
 
-  const cardBg = useColorModeValue("white", "gray.700");
-  const borderColor = useColorModeValue("gray.200", "gray.600");
 
   const toast = useToast();
   const joinCall = useJoinCall({
@@ -206,16 +203,7 @@ const WebinarDetail: FC = () => {
 
           {/* Comments Tab */}
           <TabPanel px={0}>
-            <Card bg={cardBg} borderColor={borderColor}>
-              <CardHeader>
-                <Heading size="md">Comments</Heading>
-              </CardHeader>
-              <CardBody>
-                <Text color="gray.500" textAlign="center" py={8}>
-                  Comments feature coming soon.
-                </Text>
-              </CardBody>
-            </Card>
+            <WebinarComments webinarId={webinar.id} />
           </TabPanel>
         </TabPanels>
       </Tabs>

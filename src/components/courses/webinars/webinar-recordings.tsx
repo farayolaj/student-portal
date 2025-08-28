@@ -51,7 +51,7 @@ const WebinarRecordings: FC<WebinarRecordingsProps> = ({ recordings }) => {
                 borderColor={borderColor}
                 rounded="md"
               >
-                <Flex justify="space-between" align="center">
+                <Flex justify="space-between" align="center" wrap="wrap">
                   <Box>
                     <Text fontWeight="semibold">
                       {new Intl.DateTimeFormat("en-NG", {

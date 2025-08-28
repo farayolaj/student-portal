@@ -23,3 +23,14 @@ export const toWebinarWithRecordings = (webinar: any) =>
       dateRecorded: new Date(recording.date_recorded),
     })),
   } as WebinarWithRecordings);
+
+export const toWebinarComment = (comment: any) =>
+  ({
+    id: comment.id,
+    content: comment.content,
+    author: {
+      id: comment.author_id,
+      name: comment.author_name,
+    },
+    createdAt: new Date(comment.created_at),
+  } as WebinarComment);

@@ -331,3 +331,23 @@ type WebinarWithRecordings = Webinar & {
     dateRecorded: Date;
   }>;
 };
+
+type WebinarComment = {
+  id: string;
+  content: string;
+  author: {
+    id: string;
+    name: string;
+  };
+  createdAt: Date;
+};
+
+type WebinarCommentList = {
+  paging: {
+    totalCount: number;
+    totalPages: number;
+    page: number;
+    perPage: number;
+  };
+  comments: WebinarComment[];
+};
