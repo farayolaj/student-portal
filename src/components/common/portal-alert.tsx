@@ -19,7 +19,7 @@ export default function PortalAlert() {
 
   const { data } = useQuery(commonQueries.portalAlert());
 
-  return data?.header || data?.body ? (
+  return data?.header && data?.body ? (
     <AlertDialog
       isOpen={isOpen}
       leastDestructiveRef={cancelRef as unknown as RefObject<HTMLButtonElement>}
