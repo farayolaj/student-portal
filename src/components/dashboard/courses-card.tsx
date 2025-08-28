@@ -63,9 +63,9 @@ const CoursesCard: FC = () => {
         {courses.map((course) => (
           <CourseItem
             key={course.id}
+            courseId={course.id}
             code={course.code}
             title={course.title}
-            units={course.units}
             image={getAbstractImage(course.id)}
           />
         ))}
@@ -79,13 +79,6 @@ const CoursesCard: FC = () => {
         <Heading as="h2" fontSize="md">
           Courses
         </Heading>
-        {courses.length > 0 && (
-          <Text as="span">
-            <Link as={NextLink} href={routes.COURSES}>
-              See other courses &rarr;
-            </Link>
-          </Text>
-        )}
       </CardHeader>
       <CardBody>{content}</CardBody>
     </Card>
@@ -93,13 +86,13 @@ const CoursesCard: FC = () => {
 };
 
 type CourseItemProps = {
+  courseId: string;
   code: string;
   title: string;
-  units: number;
   image: string | StaticImageData;
 };
 
-const CourseItem: FC<CourseItemProps> = ({ code, title, units, image }) => {
+const CourseItem: FC<CourseItemProps> = ({ courseId, code, title, image }) => {
   return (
     <Box pos="relative" rounded="md" overflow="hidden">
       <Box pos="absolute" w="full" h="full">
@@ -118,13 +111,25 @@ const CourseItem: FC<CourseItemProps> = ({ code, title, units, image }) => {
         pos="relative"
         bgColor="blackAlpha.700"
         color="white"
+        spacing={3}
+        justify="space-between"
       >
         <Text fontWeight="bold" color="primary.400">
           {code}
         </Text>
-        <Text textAlign="center">{title}</Text>
-        <Spacer />
-        <Text fontSize="sm">{units} Units</Text>
+        <Text textAlign="center" flex="1" mb={4}>
+          {title}
+        </Text>
+        <Link
+          as={NextLink}
+          href={`/courses/${courseId}`}
+          variant="button"
+          fontSize="sm"
+          w={{ base: "full", md: "auto" }}
+          textAlign="center"
+        >
+          View Details
+        </Link>
       </VStack>
     </Box>
   );
