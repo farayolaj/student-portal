@@ -2,7 +2,6 @@ export const HOME = "/";
 export const DASHBOARD = "/dashboard";
 export const COURSE_REGISTRATION = "/courses/registration";
 export const ADD_COURSES = "/courses/registration/add";
-export const COURSES = "/courses";
 export const COURSE_DETAIL = "/courses/[courseId]";
 export const WEBINAR_DETAIL = "/courses/[courseId]/webinar/[webinarId]";
 export const RESULTS = "/results";

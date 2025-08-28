@@ -43,16 +43,6 @@ const Navigation: FC<NavigationProps> = ({ isOpen }) => {
         isActive={pathname.startsWith(routes.VERIFY_RESULT)}
       />
       <NavLink
-        title="Courses"
-        icon={IoBookOutline}
-        href={routes.COURSES}
-        isOpen={isOpen}
-        isActive={
-          pathname.startsWith(routes.COURSES) &&
-          !pathname.includes(routes.COURSE_REGISTRATION)
-        }
-      />
-      <NavLink
         title="Course Registration"
         icon={IoLibraryOutline}
         href={routes.COURSE_REGISTRATION}
