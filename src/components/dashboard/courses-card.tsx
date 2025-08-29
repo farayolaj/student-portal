@@ -9,7 +9,6 @@ import {
   Link,
   SimpleGrid,
   Skeleton,
-  Spacer,
   Text,
   VStack,
 } from "@chakra-ui/react";
