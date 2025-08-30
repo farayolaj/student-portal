@@ -76,5 +76,6 @@ export const webinarQueries = {
     queryOptions({
       queryKey: [...webinarQueries.comments(), webinarId, pagination] as const,
       queryFn: () => getComments(webinarId, pagination),
+      staleTime: 0,
     }),
 };
