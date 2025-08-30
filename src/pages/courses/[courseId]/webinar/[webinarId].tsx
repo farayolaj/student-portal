@@ -17,18 +17,14 @@ import {
   Link,
   Skeleton,
   Spinner,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
+  Switch,
   Text,
   useToast,
   VStack,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import { FC } from "react";
+import React, { FC, useState } from "react";
 import {
   IoCalendarOutline,
   IoDownloadOutline,
@@ -47,27 +43,33 @@ const formatDate = (date: Date) => {
 
 const WebinarDetail: FC = () => {
   const router = useRouter();
-  const { webinarId, tab } = router.query;
-  
-  // Map tab names to indices
-  const tabMap = {
-    recordings: 0,
-    comments: 1,
-  };
+  const { webinarId, commentsOnly: commentsOnlyParam } = router.query;
 
-  // Get current tab index from URL, default to 0
-  const currentTabIndex = 
-    tab && typeof tab === 'string' && tab in tabMap 
-      ? tabMap[tab as keyof typeof tabMap] 
-      : 0;
+  // Initialize commentsOnly state from URL parameter
+  const [commentsOnly, setCommentsOnly] = useState(() => {
+    return commentsOnlyParam === "true";
+  });
 
-  // Handle tab change and update URL
-  const handleTabChange = (index: number) => {
-    const tabName = Object.keys(tabMap)[index];
+  // Update commentsOnly state when URL parameter changes
+  React.useEffect(() => {
+    setCommentsOnly(commentsOnlyParam === "true");
+  }, [commentsOnlyParam]);
+
+  // Function to handle toggle and update URL
+  const handleCommentsOnlyToggle = (checked: boolean) => {
+    setCommentsOnly(checked);
+
+    const newQuery = { ...router.query };
+    if (checked) {
+      newQuery.commentsOnly = "true";
+    } else {
+      delete newQuery.commentsOnly;
+    }
+
     router.replace(
       {
         pathname: router.pathname,
-        query: { ...router.query, tab: tabName },
+        query: newQuery,
       },
       undefined,
       { shallow: true }
@@ -79,7 +81,6 @@ const WebinarDetail: FC = () => {
     isLoading,
     error,
   } = useQuery(webinarQueries.detailsBy(webinarId as string));
-
 
   const toast = useToast();
   const joinCall = useJoinCall({
@@ -213,30 +214,36 @@ const WebinarDetail: FC = () => {
         </CardBody>
       </Card>
 
-      {/* Tabs Section */}
-      <Tabs 
-        colorScheme="primary" 
-        variant="soft-rounded" 
-        index={currentTabIndex} 
-        onChange={handleTabChange}
-      >
-        <TabList>
-          <Tab>Recordings</Tab>
-          <Tab>Comments</Tab>
-        </TabList>
+      {/* Content Section */}
+      <Card mb={6}>
+        <CardBody>
+          <Flex justify="space-between" align="center" mb={6}>
+            <Flex align="center" gap={2}>
+              <Heading size="md">Webinar Content</Heading>
+            </Flex>
+            <Flex align="center" gap={3}>
+              <Text fontSize="sm" fontWeight="medium">
+                Show Comments Only
+              </Text>
+              <Switch
+                colorScheme="primary"
+                isChecked={commentsOnly}
+                onChange={(e) => handleCommentsOnlyToggle(e.target.checked)}
+              />
+            </Flex>
+          </Flex>
 
-        <TabPanels>
-          {/* Recordings Tab */}
-          <TabPanel px={0}>
-            <WebinarRecordings recordings={webinar.recordings} />
-          </TabPanel>
+          <VStack spacing={12} align="stretch">
+            {/* Recordings Section - Hidden when comments only is enabled */}
+            {!commentsOnly && (
+              <WebinarRecordings recordings={webinar.recordings} />
+            )}
 
-          {/* Comments Tab */}
-          <TabPanel px={0}>
+            {/* Comments Section */}
             <WebinarComments webinarId={webinar.id} />
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
+          </VStack>
+        </CardBody>
+      </Card>
     </>
   );
 };
