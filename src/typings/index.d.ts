@@ -320,6 +320,7 @@ type Webinar = {
     url: string;
     name: string;
   };
+  enableComments: boolean;
 };
 
 type WebinarWithRecordings = Webinar & {

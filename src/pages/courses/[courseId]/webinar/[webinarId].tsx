@@ -240,7 +240,7 @@ const WebinarDetail: FC = () => {
             )}
 
             {/* Comments Section */}
-            <WebinarComments webinarId={webinar.id} />
+            <WebinarComments webinar={webinar} />
           </VStack>
         </CardBody>
       </Card>

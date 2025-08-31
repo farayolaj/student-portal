@@ -11,6 +11,7 @@ export const toWebinar = (webinar: any) =>
           name: webinar.presentation_name,
         }
       : undefined,
+    enableComments: webinar.enable_comments,
   } as Webinar);
 
 export const toWebinarWithRecordings = (webinar: any) =>

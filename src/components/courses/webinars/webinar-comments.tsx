@@ -28,10 +28,10 @@ import {
 } from "react-icons/io5";
 
 interface WebinarCommentsProps {
-  webinarId: string;
+  webinar: Webinar;
 }
 
-const WebinarComments: FC<WebinarCommentsProps> = ({ webinarId }) => {
+const WebinarComments: FC<WebinarCommentsProps> = ({ webinar }) => {
   const [comment, setComment] = useState("");
   const [page, setPage] = useState(1);
   const perPage = 10;
@@ -48,14 +48,14 @@ const WebinarComments: FC<WebinarCommentsProps> = ({ webinarId }) => {
     data: commentsData,
     isLoading,
     error,
-  } = useQuery(webinarQueries.commentsBy(webinarId, { page, perPage }));
+  } = useQuery(webinarQueries.commentsBy(webinar.id, { page, perPage }));
 
   const postCommentMutation = useMutation({
-    mutationFn: () => postComment(webinarId, comment),
+    mutationFn: () => postComment(webinar.id, comment),
     onSuccess: () => {
       setComment("");
       queryClient.invalidateQueries({
-        queryKey: [...webinarQueries.comments(), webinarId],
+        queryKey: [...webinarQueries.comments(), webinar.id],
       });
       toast({
         title: "Comment Posted",
@@ -80,7 +80,7 @@ const WebinarComments: FC<WebinarCommentsProps> = ({ webinarId }) => {
     mutationFn: (commentId: string) => deleteComment(commentId),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [...webinarQueries.comments(), webinarId],
+        queryKey: [...webinarQueries.comments(), webinar.id],
       });
       toast({
         title: "Comment Deleted",
@@ -137,35 +137,37 @@ const WebinarComments: FC<WebinarCommentsProps> = ({ webinarId }) => {
       </Flex>
       <VStack spacing={6} align="stretch">
         {/* Comment Form */}
-        <Box as="form" onSubmit={handleSubmit}>
-          <VStack spacing={4}>
-            <FormControl isInvalid={!!postCommentMutation.error}>
-              <Textarea
-                placeholder="Write a comment..."
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                minH="100px"
-                resize="vertical"
-              />
-              {postCommentMutation.error && (
-                <FormErrorMessage>
-                  {postCommentMutation.error.message}
-                </FormErrorMessage>
-              )}
-            </FormControl>
-            <Flex justify="flex-end" w="full">
-              <Button
-                type="submit"
-                colorScheme="primary"
-                isLoading={postCommentMutation.isPending}
-                isDisabled={!comment.trim() || postCommentMutation.isPending}
-                size="sm"
-              >
-                Post Comment
-              </Button>
-            </Flex>
-          </VStack>
-        </Box>
+        {webinar.enableComments && (
+          <Box as="form" onSubmit={handleSubmit}>
+            <VStack spacing={4}>
+              <FormControl isInvalid={!!postCommentMutation.error}>
+                <Textarea
+                  placeholder="Write a comment..."
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                  minH="100px"
+                  resize="vertical"
+                />
+                {postCommentMutation.error && (
+                  <FormErrorMessage>
+                    {postCommentMutation.error.message}
+                  </FormErrorMessage>
+                )}
+              </FormControl>
+              <Flex justify="flex-end" w="full">
+                <Button
+                  type="submit"
+                  colorScheme="primary"
+                  isLoading={postCommentMutation.isPending}
+                  isDisabled={!comment.trim() || postCommentMutation.isPending}
+                  size="sm"
+                >
+                  Post Comment
+                </Button>
+              </Flex>
+            </VStack>
+          </Box>
+        )}
 
         {/* Comments List */}
         {error ? (
@@ -263,6 +265,10 @@ const WebinarComments: FC<WebinarCommentsProps> = ({ webinarId }) => {
               {commentsData.paging.totalCount} comments
             </Text>
           </VStack>
+        ) : !webinar.enableComments ? (
+          <Text color="gray.500" textAlign="center" py={8}>
+            Comments are disabled.
+          </Text>
         ) : (
           <Text color="gray.500" textAlign="center" py={8}>
             No comments yet. Be the first to comment!
