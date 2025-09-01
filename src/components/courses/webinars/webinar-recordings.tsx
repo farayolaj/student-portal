@@ -1,3 +1,4 @@
+import { logPlayback as logPlaybackFn } from "@/api/webinar.mutations";
 import {
   Box,
   Button,
@@ -10,6 +11,7 @@ import {
   useColorModeValue,
   VStack,
 } from "@chakra-ui/react";
+import { useMutation } from "@tanstack/react-query";
 import formatDuration from "date-fns/formatDuration";
 import { FC } from "react";
 import { IoPlayCircleOutline, IoPlayOutline } from "react-icons/io5";
@@ -22,11 +24,18 @@ interface Recording {
 }
 
 interface WebinarRecordingsProps {
+  webinarId: string;
   recordings: Recording[];
 }
 
-const WebinarRecordings: FC<WebinarRecordingsProps> = ({ recordings }) => {
+const WebinarRecordings: FC<WebinarRecordingsProps> = ({
+  webinarId,
+  recordings,
+}) => {
   const borderColor = useColorModeValue("gray.200", "gray.600");
+  const { mutate: logPlayback } = useMutation({
+    mutationFn: logPlaybackFn,
+  });
 
   return (
     <Box>
@@ -72,6 +81,7 @@ const WebinarRecordings: FC<WebinarRecordingsProps> = ({ recordings }) => {
                   as={Link}
                   href={recording.url}
                   isExternal
+                  onClick={() => logPlayback(webinarId)}
                 >
                   Play
                 </Button>

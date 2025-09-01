@@ -254,7 +254,10 @@ const WebinarDetail: FC = () => {
           <VStack spacing={12} align="stretch">
             {/* Recordings Section - Hidden when comments only is enabled */}
             {!commentsOnly && (
-              <WebinarRecordings recordings={webinar.recordings} />
+              <WebinarRecordings
+                webinarId={webinar.id}
+                recordings={webinar.recordings}
+              />
             )}
 
             {/* Comments Section */}
