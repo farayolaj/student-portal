@@ -23,16 +23,17 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { FC, useState } from "react";
 import {
   IoCalendarOutline,
   IoDownloadOutline,
   IoLinkOutline,
-  IoVideocamOutline,
 } from "react-icons/io5";
 import PageTitle from "../../../../components/common/page-title";
 import Seo from "../../../../components/common/seo";
+import mobileClassWebinarIcon from "../../../../icons/mobile-class-webinar.png";
 
 const formatDate = (date: Date) => {
   return new Intl.DateTimeFormat("en-US", {
@@ -158,7 +159,15 @@ const WebinarDetail: FC = () => {
         <CardBody>
           <VStack align="stretch" spacing={4}>
             <Flex align="center" gap={3}>
-              <Icon as={IoVideocamOutline} boxSize={8} color="blue.500" />
+              {/* Replace icon with image */}
+              <Box boxSize={8} pos={"relative"}>
+                <Image
+                  src={mobileClassWebinarIcon.src}
+                  alt="Webinar"
+                  objectFit="contain"
+                  fill
+                />
+              </Box>
               <Box>
                 <Heading size="lg">{webinar.title}</Heading>
               </Box>
