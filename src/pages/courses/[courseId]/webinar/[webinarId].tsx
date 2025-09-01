@@ -2,6 +2,7 @@ import { webinarQueries } from "@/api/webinar.queries";
 import { useJoinCall } from "@/api/webinar/use-join-call";
 import WebinarComments from "@/components/courses/webinars/webinar-comments";
 import WebinarRecordings from "@/components/courses/webinars/webinar-recordings";
+import { formatDate, getWebinarTimingInfo } from "@/utils/webinar";
 import {
   Alert,
   AlertDescription,
@@ -19,6 +20,7 @@ import {
   Spinner,
   Switch,
   Text,
+  Tooltip,
   useToast,
   VStack,
 } from "@chakra-ui/react";
@@ -34,13 +36,6 @@ import {
 import PageTitle from "../../../../components/common/page-title";
 import Seo from "../../../../components/common/seo";
 import mobileClassWebinarIcon from "../../../../icons/mobile-class-webinar.png";
-
-const formatDate = (date: Date) => {
-  return new Intl.DateTimeFormat("en-US", {
-    dateStyle: "full",
-    timeStyle: "short",
-  }).format(date);
-};
 
 const WebinarDetail: FC = () => {
   const router = useRouter();
@@ -95,6 +90,11 @@ const WebinarDetail: FC = () => {
       });
     },
   });
+
+  // Get webinar timing information
+  const webinarTiming = webinar
+    ? getWebinarTimingInfo(webinar.scheduledFor)
+    : null;
 
   if (isLoading) {
     return (
@@ -209,16 +209,25 @@ const WebinarDetail: FC = () => {
       <Card mb={6} bg="blue.50" borderColor="blue.200">
         <CardBody>
           <VStack spacing={4}>
-            <Button
-              leftIcon={<Icon as={IoLinkOutline} />}
-              colorScheme="blue"
-              size="lg"
-              onClick={() => joinCall.join(webinar.id)}
-              isDisabled={joinCall.isJoining}
-              isLoading={joinCall.isJoining}
+            <Tooltip
+              label={webinarTiming?.tooltipMessage || ""}
+              isDisabled={
+                !webinarTiming?.tooltipMessage || webinarTiming?.canJoin
+              }
+              hasArrow
+              placement="top"
             >
-              Join Webinar
-            </Button>
+              <Button
+                leftIcon={<Icon as={IoLinkOutline} />}
+                colorScheme="blue"
+                size="lg"
+                onClick={() => joinCall.join(webinar.id)}
+                isDisabled={joinCall.isJoining || !webinarTiming?.canJoin}
+                isLoading={joinCall.isJoining}
+              >
+                Join Webinar
+              </Button>
+            </Tooltip>
           </VStack>
         </CardBody>
       </Card>

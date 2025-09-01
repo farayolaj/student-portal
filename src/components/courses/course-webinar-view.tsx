@@ -1,5 +1,6 @@
 import { webinarQueries } from "@/api/webinar.queries";
 import { useJoinCall } from "@/api/webinar/use-join-call";
+import { getWebinarTimingInfo } from "@/utils/webinar";
 import {
   Alert,
   AlertDescription,
@@ -15,6 +16,7 @@ import {
   SimpleGrid,
   Spinner,
   Text,
+  Tooltip,
   useToast,
   VStack,
 } from "@chakra-ui/react";
@@ -117,6 +119,9 @@ const WebinarCard: FC<WebinarCardProps> = ({ webinar, courseId }) => {
     },
   });
 
+  // Get webinar timing information
+  const webinarTiming = getWebinarTimingInfo(webinar.scheduledFor);
+
   return (
     <Card>
       <CardBody>
@@ -153,14 +158,21 @@ const WebinarCard: FC<WebinarCardProps> = ({ webinar, courseId }) => {
           >
             View Room
           </Button>
-          <Button
-            size="sm"
-            onClick={() => joinCall.join(webinar.id)}
-            isDisabled={joinCall.isJoining}
-            isLoading={joinCall.isJoining}
+          <Tooltip
+            label={webinarTiming.tooltipMessage || ""}
+            isDisabled={!webinarTiming.tooltipMessage || webinarTiming.canJoin}
+            hasArrow
+            placement="top"
           >
-            Join Webinar
-          </Button>
+            <Button
+              size="sm"
+              onClick={() => joinCall.join(webinar.id)}
+              isDisabled={joinCall.isJoining || !webinarTiming.canJoin}
+              isLoading={joinCall.isJoining}
+            >
+              Join Webinar
+            </Button>
+          </Tooltip>
         </Flex>
       </CardBody>
     </Card>
