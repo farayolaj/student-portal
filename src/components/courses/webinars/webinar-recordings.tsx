@@ -32,7 +32,7 @@ const WebinarRecordings: FC<WebinarRecordingsProps> = ({ recordings }) => {
     <Box>
       <Flex align="center" gap={2} mb={4}>
         <Icon as={IoPlayCircleOutline} color="green.500" />
-        <Heading size="md">Recordings</Heading>
+        <Heading size="md">Playback</Heading>
       </Flex>
       {recordings.length > 0 ? (
         <VStack spacing={4} align="stretch">
@@ -73,7 +73,7 @@ const WebinarRecordings: FC<WebinarRecordingsProps> = ({ recordings }) => {
                   href={recording.url}
                   isExternal
                 >
-                  Play Recording
+                  Play
                 </Button>
               </Flex>
             </Box>
