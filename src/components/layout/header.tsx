@@ -20,6 +20,7 @@ import { useAuth } from "oidc-react";
 import { FC } from "react";
 import { MdArrowDropDown } from "react-icons/md";
 import logo from "../../images/ui-logo.png";
+import { NotificationBox } from "../common/notification-box";
 import MobileCalendar from "./mobile-calendar";
 import MobileNavBar from "./mobile-nav-bar";
 
@@ -27,11 +28,9 @@ export const Header: FC = () => {
   const auth = useAuth();
   const profile = useProfile();
   const user = profile.data?.user;
-  const fullName =
-    `${user?.lastName.toUpperCase()}, ${user?.firstName} ${user?.otherNames || ""}`.replace(
-      "undefined",
-      ""
-    );
+  const fullName = `${user?.lastName.toUpperCase()}, ${user?.firstName} ${
+    user?.otherNames || ""
+  }`.replace("undefined", "");
 
   return (
     <HStack
@@ -70,8 +69,9 @@ export const Header: FC = () => {
         </Flex>
       </Flex>
       <Spacer h="min-content" />
-      <Flex gap={8} align="center">
+      <Flex gap={4} align="center">
         <MobileCalendar />
+        <NotificationBox />
         <Menu>
           <MenuButton>
             <HStack>

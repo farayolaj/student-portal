@@ -352,3 +352,11 @@ type WebinarCommentList = {
   };
   comments: WebinarComment[];
 };
+
+type EventNotification = {
+  id: string;
+  type: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data: Record<string, any>;
+  createdAt: Date;
+};
