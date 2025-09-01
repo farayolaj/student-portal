@@ -151,7 +151,7 @@ const WebinarCard: FC<WebinarCardProps> = ({ webinar, courseId }) => {
             textDecoration="none"
             _hover={{ textDecoration: "none" }}
           >
-            View Details
+            View Room
           </Button>
           <Button
             size="sm"
