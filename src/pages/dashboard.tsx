@@ -14,8 +14,8 @@ export default function Home() {
       <ProfileCard />
       <InitiateResultVerificationCard />
       <PraticumFormCard />
-      <CoursesCard />
       <PaymentsCard />
+      <CoursesCard />
     </>
   );
 }
