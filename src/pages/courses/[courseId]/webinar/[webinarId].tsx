@@ -1,13 +1,14 @@
+import { logPlayback as logPlaybackFn } from "@/api/webinar.mutations";
 import { webinarQueries } from "@/api/webinar.queries";
 import { useJoinCall } from "@/api/webinar/use-join-call";
 import WebinarComments from "@/components/courses/webinars/webinar-comments";
-import WebinarRecordings from "@/components/courses/webinars/webinar-recordings";
-import { formatDate, getWebinarTimingInfo } from "@/utils/webinar";
+import { formatDate } from "@/utils/webinar";
 import {
   Alert,
   AlertDescription,
   AlertIcon,
   AlertTitle,
+  Badge,
   Box,
   Button,
   Card,
@@ -18,16 +19,15 @@ import {
   Link,
   Skeleton,
   Spinner,
-  Switch,
   Text,
   Tooltip,
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import React, { FC, useState } from "react";
+import { FC } from "react";
 import {
   IoCalendarOutline,
   IoDownloadOutline,
@@ -39,38 +39,7 @@ import mobileClassWebinarIcon from "../../../../icons/mobile-class-webinar.png";
 
 const WebinarDetail: FC = () => {
   const router = useRouter();
-  const { webinarId, commentsOnly: commentsOnlyParam } = router.query;
-
-  // Initialize commentsOnly state from URL parameter
-  const [commentsOnly, setCommentsOnly] = useState(() => {
-    return commentsOnlyParam === "true";
-  });
-
-  // Update commentsOnly state when URL parameter changes
-  React.useEffect(() => {
-    setCommentsOnly(commentsOnlyParam === "true");
-  }, [commentsOnlyParam]);
-
-  // Function to handle toggle and update URL
-  const handleCommentsOnlyToggle = (checked: boolean) => {
-    setCommentsOnly(checked);
-
-    const newQuery = { ...router.query };
-    if (checked) {
-      newQuery.commentsOnly = "true";
-    } else {
-      delete newQuery.commentsOnly;
-    }
-
-    router.replace(
-      {
-        pathname: router.pathname,
-        query: newQuery,
-      },
-      undefined,
-      { shallow: true }
-    );
-  };
+  const { webinarId } = router.query;
 
   const {
     data: webinar,
@@ -90,11 +59,9 @@ const WebinarDetail: FC = () => {
       });
     },
   });
-
-  // Get webinar timing information
-  const webinarTiming = webinar
-    ? getWebinarTimingInfo(webinar.scheduledFor)
-    : null;
+  const { mutate: logPlayback } = useMutation({
+    mutationFn: logPlaybackFn,
+  });
 
   if (isLoading) {
     return (
@@ -159,7 +126,6 @@ const WebinarDetail: FC = () => {
         <CardBody>
           <VStack align="stretch" spacing={4}>
             <Flex align="center" gap={3}>
-              {/* Replace icon with image */}
               <Box boxSize={8} pos={"relative"}>
                 <Image
                   src={mobileClassWebinarIcon.src}
@@ -169,7 +135,19 @@ const WebinarDetail: FC = () => {
                 />
               </Box>
               <Box>
-                <Heading size="lg">{webinar.title}</Heading>
+                <Heading size="lg" display="inline">
+                  {webinar.title}
+                </Heading>
+                {webinar.status === "started" && (
+                  <Badge ms={3} colorScheme="red" variant={"solid"}>
+                    Live
+                  </Badge>
+                )}
+                {webinar.status === "ended" && (
+                  <Badge ms={3} colorScheme="gray" variant={"solid"}>
+                    Ended
+                  </Badge>
+                )}
               </Box>
             </Flex>
 
@@ -209,25 +187,52 @@ const WebinarDetail: FC = () => {
       <Card mb={6} bg="blue.50" borderColor="blue.200">
         <CardBody>
           <VStack spacing={4}>
-            <Tooltip
-              label={webinarTiming?.tooltipMessage || ""}
-              isDisabled={
-                !webinarTiming?.tooltipMessage || webinarTiming?.canJoin
-              }
-              hasArrow
-              placement="top"
-            >
-              <Button
-                leftIcon={<Icon as={IoLinkOutline} />}
-                colorScheme="blue"
-                size="lg"
-                onClick={() => joinCall.join(webinar.id)}
-                isDisabled={joinCall.isJoining || !webinarTiming?.canJoin}
-                isLoading={joinCall.isJoining}
+            {webinar.status === "ended" ? (
+              <Tooltip
+                label={"The recording is not yet available, check back again."}
+                isDisabled={!!webinar.recordingUrl}
+                hasArrow
+                placement="top"
               >
-                Join Webinar
-              </Button>
-            </Tooltip>
+                <Button
+                  leftIcon={<Icon as={IoLinkOutline} />}
+                  colorScheme="blue"
+                  size="lg"
+                  onClick={() => {
+                    logPlayback(webinar.id);
+                    window.open(webinar.recordingUrl!, "_blank");
+                  }}
+                  isDisabled={!webinar.recordingUrl}
+                  isLoading={joinCall.isJoining}
+                >
+                  Playback
+                </Button>
+              </Tooltip>
+            ) : (
+              <Tooltip
+                label={`Webinar will start on ${formatDate(
+                  webinar.scheduledFor
+                )}.`}
+                isDisabled={
+                  webinar.status === "started" ||
+                  webinar.status === "pending-start"
+                }
+                hasArrow
+                placement="top"
+              >
+                <Button
+                  leftIcon={<Icon as={IoLinkOutline} />}
+                  size="lg"
+                  onClick={() => joinCall.join(webinar.id)}
+                  isDisabled={
+                    joinCall.isJoining || webinar.status === "upcoming"
+                  }
+                  isLoading={joinCall.isJoining}
+                >
+                  Join Webinar
+                </Button>
+              </Tooltip>
+            )}
           </VStack>
         </CardBody>
       </Card>
@@ -235,34 +240,7 @@ const WebinarDetail: FC = () => {
       {/* Content Section */}
       <Card mb={6}>
         <CardBody>
-          <Flex justify="space-between" align="center" mb={6}>
-            <Flex align="center" gap={2}>
-              <Heading size="md">Webinar Content</Heading>
-            </Flex>
-            <Flex align="center" gap={3}>
-              <Text fontSize="sm" fontWeight="medium">
-                Show Comments Only
-              </Text>
-              <Switch
-                colorScheme="primary"
-                isChecked={commentsOnly}
-                onChange={(e) => handleCommentsOnlyToggle(e.target.checked)}
-              />
-            </Flex>
-          </Flex>
-
-          <VStack spacing={12} align="stretch">
-            {/* Recordings Section - Hidden when comments only is enabled */}
-            {!commentsOnly && (
-              <WebinarRecordings
-                webinarId={webinar.id}
-                recordings={webinar.recordings}
-              />
-            )}
-
-            {/* Comments Section */}
-            <WebinarComments webinar={webinar} />
-          </VStack>
+          <WebinarComments webinar={webinar} />
         </CardBody>
       </Card>
     </>

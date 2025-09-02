@@ -1,11 +1,12 @@
+import { logPlayback as logPlaybackFn } from "@/api/webinar.mutations";
 import { webinarQueries } from "@/api/webinar.queries";
 import { useJoinCall } from "@/api/webinar/use-join-call";
-import { getWebinarTimingInfo } from "@/utils/webinar";
 import {
   Alert,
   AlertDescription,
   AlertIcon,
   AlertTitle,
+  Badge,
   Box,
   Button,
   Card,
@@ -20,7 +21,7 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import NextLink from "next/link";
 import { FC } from "react";
 import { IoCalendarOutline } from "react-icons/io5";
@@ -118,9 +119,9 @@ const WebinarCard: FC<WebinarCardProps> = ({ webinar, courseId }) => {
       });
     },
   });
-
-  // Get webinar timing information
-  const webinarTiming = getWebinarTimingInfo(webinar.scheduledFor);
+  const { mutate: logPlayback } = useMutation({
+    mutationFn: logPlaybackFn,
+  });
 
   return (
     <Card>
@@ -130,6 +131,11 @@ const WebinarCard: FC<WebinarCardProps> = ({ webinar, courseId }) => {
             <Box>
               <Flex align="center" gap={2} mb={2}>
                 <Heading size="sm">{webinar.title}</Heading>
+                {webinar.status === "started" && (
+                  <Badge colorScheme="red" variant={"solid"}>
+                    Live
+                  </Badge>
+                )}
               </Flex>
 
               <VStack align="flex-start" spacing={1}>
@@ -158,21 +164,47 @@ const WebinarCard: FC<WebinarCardProps> = ({ webinar, courseId }) => {
           >
             View Room
           </Button>
-          <Tooltip
-            label={webinarTiming.tooltipMessage || ""}
-            isDisabled={!webinarTiming.tooltipMessage || webinarTiming.canJoin}
-            hasArrow
-            placement="top"
-          >
-            <Button
-              size="sm"
-              onClick={() => joinCall.join(webinar.id)}
-              isDisabled={joinCall.isJoining || !webinarTiming.canJoin}
-              isLoading={joinCall.isJoining}
+          {webinar.status === "ended" ? (
+            <Tooltip
+              label={"The recording is not yet available, check back again."}
+              isDisabled={!!webinar.recordingUrl}
+              hasArrow
+              placement="top"
             >
-              Join Webinar
-            </Button>
-          </Tooltip>
+              <Button
+                size="sm"
+                colorScheme="blue"
+                onClick={() => {
+                  logPlayback(webinar.id);
+                  window.open(webinar.recordingUrl!, "_blank");
+                }}
+                isDisabled={!webinar.recordingUrl}
+              >
+                Playback
+              </Button>
+            </Tooltip>
+          ) : (
+            <Tooltip
+              label={`Webinar will start on ${formatDate(
+                webinar.scheduledFor
+              )}.`}
+              isDisabled={
+                webinar.status === "started" ||
+                webinar.status === "pending-start"
+              }
+              hasArrow
+              placement="top"
+            >
+              <Button
+                size="sm"
+                onClick={() => joinCall.join(webinar.id)}
+                isDisabled={joinCall.isJoining || webinar.status === "upcoming"}
+                isLoading={joinCall.isJoining}
+              >
+                Join Webinar
+              </Button>
+            </Tooltip>
+          )}
         </Flex>
       </CardBody>
     </Card>

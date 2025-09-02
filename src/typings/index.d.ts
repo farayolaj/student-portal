@@ -315,22 +315,16 @@ type Webinar = {
   id: string;
   title: string;
   description?: string;
+  status: "upcoming" | "pending-start" | "started" | "ended";
   scheduledFor: Date;
   presentation?: {
     url: string;
     name: string;
   };
+  recordingUrl: string | null;
+  startTime: Date | null;
+  endTime: Date | null;
   enableComments: boolean;
-};
-
-type WebinarWithRecordings = Webinar & {
-  recordings: Array<{
-    id: string;
-    url: string;
-    /** In seconds */
-    duration: number;
-    dateRecorded: Date;
-  }>;
 };
 
 type WebinarComment = {

@@ -1,8 +1,4 @@
-import {
-  toWebinar,
-  toWebinarComment,
-  toWebinarWithRecordings,
-} from "@/transformers/webinars";
+import { toWebinar, toWebinarComment } from "@/transformers/webinars";
 import { queryOptions } from "@tanstack/react-query";
 import getApi from "./api";
 
@@ -22,10 +18,8 @@ async function getWebinar(webinarId: string) {
   if (!response.data.status) throw new Error(response.data.message);
 
   return (
-    response.data.payload
-      ? toWebinarWithRecordings(response.data.payload)
-      : null
-  ) as WebinarWithRecordings | null;
+    response.data.payload ? toWebinar(response.data.payload) : null
+  ) as Webinar | null;
 }
 
 async function getComments(
