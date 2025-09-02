@@ -104,11 +104,6 @@ export const NotificationBox = () => {
 
   const notifications = notificationsData?.notifications || [];
 
-  const handleMarkAllAsRead = () => {
-    const unreadIds = notifications.map((notification) => notification.id);
-    markReadMutation.mutate({ ids: unreadIds });
-  };
-
   const handleMarkAsRead = (notificationId: string) => {
     markReadMutation.mutate({ ids: [notificationId] });
   };
@@ -162,17 +157,6 @@ export const NotificationBox = () => {
                 </Text>
               )}
             </VStack>
-            {notificationCount > 0 && (
-              <Button
-                size="sm"
-                variant="ghost"
-                colorScheme="primary"
-                onClick={handleMarkAllAsRead}
-                isLoading={markReadMutation.isPending}
-              >
-                Mark all as read
-              </Button>
-            )}
           </Flex>
         </PopoverHeader>
         <PopoverBody p={0} maxH="400px" overflowY="auto">
@@ -206,63 +190,56 @@ export const NotificationBox = () => {
             </Flex>
           ) : (
             <VStack spacing={0} align="stretch">
-              {notifications
-                .map(processNotification)
-                .map((notification, index) => {
-                  const title = notification.title;
-                  const message = notification.message;
-                  const timeAgo = formatDistanceToNow(notification.createdAt, {
-                    addSuffix: true,
-                  });
+              {notifications.map((notification, index) => {
+                const title = notification.title;
+                const message = notification.message;
+                const timeAgo = formatDistanceToNow(notification.createdAt, {
+                  addSuffix: true,
+                });
 
-                  return (
-                    <Box key={notification.id}>
-                      <Box
-                        p={4}
-                        bg={"gray.50"}
-                        _hover={{ bg: "gray.100" }}
-                        cursor="pointer"
-                        onClick={() => handleMarkAsRead(notification.id)}
-                        position="relative"
-                      >
-                        <VStack
-                          spacing={1}
+                return (
+                  <Box key={notification.id}>
+                    <Box
+                      p={4}
+                      bg={"gray.50"}
+                      _hover={{ bg: "gray.100" }}
+                      cursor="pointer"
+                      onClick={() => handleMarkAsRead(notification.id)}
+                      position="relative"
+                    >
+                      <VStack spacing={1} align="flex-start" flex={1} minW={0}>
+                        <Flex
+                          w="full"
+                          justify="space-between"
                           align="flex-start"
-                          flex={1}
-                          minW={0}
                         >
-                          <Flex
-                            w="full"
-                            justify="space-between"
-                            align="flex-start"
-                          >
-                            <Text
-                              fontWeight={"semibold"}
-                              fontSize="sm"
-                              color={"gray.900"}
-                              noOfLines={2}
-                              flex={1}
-                            >
-                              {title}
-                            </Text>
-                          </Flex>
                           <Text
-                            fontSize="xs"
-                            color="gray.600"
-                            noOfLines={3}
-                            w="full"
+                            fontWeight={"semibold"}
+                            fontSize="sm"
+                            color={"gray.900"}
+                            noOfLines={2}
+                            flex={1}
                           >
-                            {message}
+                            {title}
                           </Text>
-                          <Text fontSize="xs" color="gray.500" mt={1}>
-                            {timeAgo}
-                          </Text>
-                        </VStack>
-                      </Box>
-                      {index < notifications.length - 1 && <Divider />}
+                        </Flex>
+                        <Text
+                          fontSize="xs"
+                          color="gray.600"
+                          noOfLines={3}
+                          w="full"
+                        >
+                          {message}
+                        </Text>
+                        <Text fontSize="xs" color="gray.500" mt={1}>
+                          {timeAgo}
+                        </Text>
+                      </VStack>
                     </Box>
-                  );
-                })}
+                    {index < notifications.length - 1 && <Divider />}
+                  </Box>
+                );
+              })}
               {notificationsData?.paging?.totalPages &&
                 notificationsData.paging.totalPages > 1 && (
                   <Box p={4} borderTop="1px" borderColor="gray.200">
@@ -314,31 +291,3 @@ export const NotificationBox = () => {
     </Popover>
   );
 };
-
-function processNotification({ id, data, type, createdAt }: EventNotification) {
-  let title = "Notification";
-  let message = "You have a new notification";
-
-  switch (type) {
-    case "webinar.new":
-      title = "New Webinar Scheduled";
-      message = `Webinar titled "${
-        data.title
-      }" has been scheduled for ${new Date(data.scheduledFor).toLocaleString(
-        "en-NG",
-        { dateStyle: "full", timeStyle: "short" }
-      )}.`;
-      break;
-    case "webinar.new_comment":
-      title = `New Comment on Webinar (${data.webinarTitle}) by ${data.author}`;
-      message = data.content;
-      break;
-  }
-
-  return {
-    id,
-    title,
-    message,
-    createdAt,
-  };
-}
