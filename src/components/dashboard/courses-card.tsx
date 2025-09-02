@@ -85,7 +85,7 @@ const CourseItem: FC<CourseItemProps> = ({ course }) => {
   const currentSessionId = period.session.id;
   const { data: earliestWebinar } = useQuery({
     ...webinarQueries.listBy(currentSessionId, course.id),
-    select: (data) => data?.[0],
+    select: (data) => data?.[data.length - 1],
   });
 
   return (
