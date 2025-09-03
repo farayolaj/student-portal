@@ -2,6 +2,7 @@ import { useCurrentPeriod } from "@/api/user/use-current-period";
 import { webinarQueries } from "@/api/webinar.queries";
 import {
   AspectRatio,
+  Badge,
   Card,
   CardBody,
   CardHeader,
@@ -12,6 +13,7 @@ import {
   Skeleton,
   Spacer,
   Text,
+  Tooltip,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import isPast from "date-fns/isPast";
@@ -83,10 +85,9 @@ type CourseItemProps = {
 const CourseItem: FC<CourseItemProps> = ({ course }) => {
   const { period } = useCurrentPeriod();
   const currentSessionId = period.session.id;
-  const { data: earliestWebinar } = useQuery({
-    ...webinarQueries.listBy(currentSessionId, course.id),
-    select: (data) => data?.[data.length - 1],
-  });
+  const { data: webinars } = useQuery(webinarQueries.listBy(currentSessionId, course.id));
+  const earliestWebinar = webinars?.[webinars.length - 1];
+  const liveWebinar = webinars?.find(w => w.status === 'started');
 
   return (
     <Card
@@ -104,6 +105,29 @@ const CourseItem: FC<CourseItemProps> = ({ course }) => {
             style={{ objectFit: "cover" }}
             fill
           />
+          {liveWebinar && (
+            <Tooltip label="Click to join the live webinar" placement="top" hasArrow>
+              <Badge
+                as={NextLink}
+                href={routes.WEBINAR_DETAIL.replace("[courseId]", course.id).replace("[webinarId]", liveWebinar.id)}
+                position="absolute"
+                bottom={2}
+                right={2}
+                colorScheme={"red"}
+                variant={'solid'}
+                animation="pulse-bg 1.2s infinite"
+                sx={{
+                  '@keyframes pulse-bg': {
+                    '0%': { backgroundColor: 'red.500' },
+                    '50%': { backgroundColor: 'red.300' },
+                    '100%': { backgroundColor: 'red.500' },
+                  },
+                }}
+              >
+                Live Webinar
+              </Badge>
+            </Tooltip>
+          )}
         </div>
       </AspectRatio>
       <CardBody p={5} display="flex">
@@ -124,9 +148,8 @@ const CourseItem: FC<CourseItemProps> = ({ course }) => {
           {earliestWebinar && (
             <Text fontSize="sm" color="blackAlpha.700">
               {isPast(earliestWebinar.scheduledFor) ? "Started" : "Begins"}{" "}
-              {earliestWebinar.scheduledFor.toLocaleString(undefined, {
-                dateStyle: "medium",
-                timeStyle: "short",
+              {earliestWebinar.scheduledFor.toLocaleDateString(undefined, {
+                dateStyle: "full",
               })}
             </Text>
           )}
