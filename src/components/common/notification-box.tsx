@@ -203,8 +203,6 @@ export const NotificationBox = () => {
                       p={4}
                       bg={"gray.50"}
                       _hover={{ bg: "gray.100" }}
-                      cursor="pointer"
-                      onClick={() => handleMarkAsRead(notification.id)}
                       position="relative"
                     >
                       <VStack spacing={1} align="flex-start" flex={1} minW={0}>
@@ -231,9 +229,20 @@ export const NotificationBox = () => {
                         >
                           {message}
                         </Text>
-                        <Text fontSize="xs" color="gray.500" mt={1}>
-                          {timeAgo}
-                        </Text>
+                        <Flex justify="space-between" align="center" w="full" mt={2}>
+                          <Text fontSize="xs" color="gray.500">
+                            {timeAgo}
+                          </Text>
+                          <Button
+                            size="xs"
+                            variant="outline"
+                            colorScheme="primary"
+                            onClick={() => handleMarkAsRead(notification.id)}
+                            isLoading={markReadMutation.isPending && markReadMutation.variables?.ids.includes(notification.id)}
+                          >
+                            Mark as read
+                          </Button>
+                        </Flex>
                       </VStack>
                     </Box>
                     {index < notifications.length - 1 && <Divider />}
