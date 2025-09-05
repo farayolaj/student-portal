@@ -34,7 +34,7 @@ interface WebinarCommentsProps {
 const WebinarComments: FC<WebinarCommentsProps> = ({ webinar }) => {
   const [comment, setComment] = useState("");
   const [page, setPage] = useState(1);
-  const perPage = 10;
+  const perPage = 20;
 
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const commentBg = useColorModeValue("gray.50", "gray.600");
