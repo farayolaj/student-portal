@@ -22,6 +22,8 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { FC, useState } from "react";
 import {
+  IoArrowDownOutline,
+  IoArrowUpOutline,
   IoChatbubbleOutline,
   IoPersonCircleOutline,
   IoTrashOutline,
@@ -34,6 +36,7 @@ interface WebinarCommentsProps {
 const WebinarComments: FC<WebinarCommentsProps> = ({ webinar }) => {
   const [comment, setComment] = useState("");
   const [page, setPage] = useState(1);
+  const [sort, setSort] = useState<"DESC" | "ASC">("DESC"); // Newest first by default
   const perPage = 20;
 
   const borderColor = useColorModeValue("gray.200", "gray.600");
@@ -48,7 +51,7 @@ const WebinarComments: FC<WebinarCommentsProps> = ({ webinar }) => {
     data: commentsData,
     isLoading,
     error,
-  } = useQuery(webinarQueries.commentsBy(webinar.id, { page, perPage }));
+  } = useQuery(webinarQueries.commentsBy(webinar.id, { page, perPage, sort }));
 
   const postCommentMutation = useMutation({
     mutationFn: () => postComment(webinar.id, comment),
@@ -134,6 +137,23 @@ const WebinarComments: FC<WebinarCommentsProps> = ({ webinar }) => {
       <Flex align="center" gap={2} mb={4}>
         <Icon as={IoChatbubbleOutline} color="blue.500" />
         <Heading size="md">Comments</Heading>
+        {/* Sort Order Control */}
+        <Box ml="auto">
+          <Button
+            size="sm"
+            variant="outline"
+            leftIcon={
+              <Icon
+                as={sort === "DESC" ? IoArrowDownOutline : IoArrowUpOutline}
+              />
+            }
+            onClick={() =>
+              setSort((prev) => (prev === "DESC" ? "ASC" : "DESC"))
+            }
+          >
+            Sort: {sort === "DESC" ? "Newest" : "Oldest"} First
+          </Button>
+        </Box>
       </Flex>
       <VStack spacing={6} align="stretch">
         {/* Comment Form */}

@@ -27,7 +27,8 @@ async function getComments(
   pagination = {
     page: 1,
     perPage: 10,
-  }
+  },
+  sortDir: "ASC" | "DESC" = "DESC"
 ) {
   const response = await getApi("/v1/api").get(
     `/webinars/${webinarId}/comments`,
@@ -35,6 +36,7 @@ async function getComments(
       params: {
         page: pagination.page,
         perPage: pagination.perPage,
+        sortDir,
       },
     }
   );
@@ -65,11 +67,12 @@ export const webinarQueries = {
   comments: () => [...webinarQueries.all(), "comments"] as const,
   commentsBy: (
     webinarId: string,
-    pagination: { page: number; perPage: number }
+    pagination: { page: number; perPage: number; sort?: "ASC" | "DESC" }
   ) =>
     queryOptions({
       queryKey: [...webinarQueries.comments(), webinarId, pagination] as const,
-      queryFn: () => getComments(webinarId, pagination),
+      queryFn: () =>
+        getComments(webinarId, pagination, pagination.sort || "DESC"),
       staleTime: 0,
     }),
 };
