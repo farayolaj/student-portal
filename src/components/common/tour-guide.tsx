@@ -1,6 +1,7 @@
 import React from 'react';
 import Joyride, { CallBackProps, Step, Styles } from 'react-joyride';
 import { useColorModeValue } from '@chakra-ui/react';
+import { IoClose } from 'react-icons/io5';
 
 export interface TourGuideProps {
   steps: Step[];
@@ -28,6 +29,40 @@ export const TourGuide: React.FC<TourGuideProps> = ({
   const primaryColor = '#38A169'; // Primary color from the theme
   const textColor = useColorModeValue('gray.800', 'white');
   const borderColor = useColorModeValue('gray.200', 'gray.600');
+
+  // Inject custom CSS to fix button content
+  React.useEffect(() => {
+    const styleId = 'joyride-button-fix';
+    const existingStyle = document.getElementById(styleId);
+    
+    if (!existingStyle) {
+      const style = document.createElement('style');
+      style.id = styleId;
+      style.textContent = `
+        .react-joyride__tooltip button[data-action="primary"]:empty::after {
+          content: "Next";
+          color: white;
+        }
+        .react-joyride__tooltip button[data-action="back"]:empty::after {
+          content: "Previous";
+          color: inherit;
+        }
+        .react-joyride__tooltip button[data-action="close"] {
+          font-size: 12px !important;
+          width: 16px !important;
+          height: 16px !important;
+        }
+      `;
+      document.head.appendChild(style);
+    }
+    
+    return () => {
+      const style = document.getElementById(styleId);
+      if (style) {
+        style.remove();
+      }
+    };
+  }, []);
 
   const customStyles: Styles = {
     options: {
@@ -62,13 +97,20 @@ export const TourGuide: React.FC<TourGuideProps> = ({
       backgroundColor: primaryColor,
       borderRadius: '6px',
       border: 'none',
-      color: 'white',
+      color: '#ffffff !important',
       fontSize: '14px',
       fontWeight: '500',
       padding: '8px 16px',
       cursor: 'pointer',
       outline: 'none',
       transition: 'background-color 0.2s',
+      minWidth: '60px',
+      height: '36px',
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      lineHeight: '1',
+      textAlign: 'center',
     },
     buttonBack: {
       backgroundColor: 'transparent',
@@ -82,38 +124,49 @@ export const TourGuide: React.FC<TourGuideProps> = ({
       outline: 'none',
       marginRight: '8px',
       transition: 'background-color 0.2s',
+      minWidth: '60px',
+      height: '36px',
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      lineHeight: '1',
+      textAlign: 'center',
     },
     buttonSkip: {
       backgroundColor: 'transparent',
       border: 'none',
-      color: 'gray.500',
+      color: '#718096',
       fontSize: '12px',
       cursor: 'pointer',
       outline: 'none',
       textDecoration: 'underline',
       marginRight: 'auto',
+      padding: '4px 8px',
     },
     buttonClose: {
       backgroundColor: 'transparent',
       border: 'none',
-      color: 'gray.500',
-      fontSize: '16px',
+      color: '#718096',
+      fontSize: '12px',
       cursor: 'pointer',
       outline: 'none',
       position: 'absolute',
       right: '8px',
       top: '8px',
-      width: '24px',
-      height: '24px',
+      width: '16px',
+      height: '16px',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
+      borderRadius: '2px',
+      transition: 'background-color 0.2s',
+      lineHeight: '1',
     },
   };
 
   const locale = {
     back: 'Previous',
-    close: '✕',
+    close: '×',
     last: 'Finish',
     next: 'Next',
     nextLabelWithProgress: (opts: { stepIndex: number; totalSteps: number }) =>
@@ -141,6 +194,8 @@ export const TourGuide: React.FC<TourGuideProps> = ({
       floaterProps={{
         disableAnimation: false,
       }}
+      // Add explicit debug logging
+      debug={false}
     />
   );
 };
