@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-- This is a Next.js (TypeScript) monorepo for an education portal frontend.
+- This is a Next.js (TypeScript) for an education portal frontend that uses pnpm as package manager.
 - Chakra UI is used for UI components; React Query manages data fetching and caching.
 - The codebase is modular, with feature folders under `src/components/`, API logic in `src/api/`, and utility functions in `src/lib/` and `src/utils/`.
 
