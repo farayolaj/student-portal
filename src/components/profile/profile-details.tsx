@@ -1,3 +1,4 @@
+import { dashboardQueries } from "@/api/dashboard.queries";
 import { useCurrentPeriod } from "@/api/user/use-current-period";
 import { useProfile } from "@/api/user/use-profile";
 import { EditIcon } from "@chakra-ui/icons";
@@ -12,6 +13,7 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
 import EditProfileModal from "./edit-profile-modal";
 
 export default function ProfileDetails() {
@@ -19,11 +21,16 @@ export default function ProfileDetails() {
   const currentPeriod = useCurrentPeriod();
   const user = profileRes?.data?.user;
   const academicProfile = profileRes?.data?.academicProfile;
-  const fullName =
-    `${user?.lastName.toUpperCase()}, ${user?.firstName} ${user?.otherNames || ""}`.replace(
-      "undefined",
-      ""
-    );
+  const fullName = `${user?.lastName.toUpperCase()}, ${user?.firstName} ${
+    user?.otherNames || ""
+  }`.replace("undefined", "");
+  const { data: currentSession, isLoading: currentSessionIsLoading } = useQuery(
+    {
+      ...dashboardQueries.dashboardInfo(),
+      select: (data) => data?.programme.currentSession,
+    }
+  );
+
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -122,8 +129,13 @@ export default function ProfileDetails() {
               value={academicProfile?.faculty}
             />
             <ProfileDetailsItem
+              isLoading={profileRes.isLoading || currentSessionIsLoading}
+              name="Current Session"
+              value={currentSession}
+            />
+            <ProfileDetailsItem
               isLoading={profileRes.isLoading || currentPeriod.isLoading}
-              name="Session"
+              name="School Session"
               value={currentPeriod.period.session.name}
             />
             <ProfileDetailsItem

@@ -35,6 +35,8 @@ const PaymentsCard: FC = () => {
 
   const profile = useProfile();
 
+  if (isLoading || data.length === 0) return null;
+
   return (
     <>
       <Card mt={6}>
