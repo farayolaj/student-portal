@@ -2,6 +2,8 @@ import { logPlayback as logPlaybackFn } from "@/api/webinar.mutations";
 import { webinarQueries } from "@/api/webinar.queries";
 import { useJoinCall } from "@/api/webinar/use-join-call";
 import WebinarComments from "@/components/courses/webinars/webinar-comments";
+import TourHelpButton from "@/components/common/tour-help-button";
+import { useTourContext } from "@/components/common/tour-provider";
 import { formatDate } from "@/utils/webinar";
 import {
   Alert,
@@ -63,6 +65,9 @@ const WebinarDetail: FC = () => {
     mutationFn: logPlaybackFn,
   });
 
+  // Get tour functionality from global context
+  const { completeTour } = useTourContext();
+
   if (isLoading) {
     return (
       <>
@@ -119,13 +124,24 @@ const WebinarDetail: FC = () => {
   return (
     <>
       <Seo title={`Webinar - ${webinar.title}`} />
-      <PageTitle showBackButton>Webinar Details</PageTitle>
+      <PageTitle showBackButton>
+        <Flex align="center" gap={3}>
+          Webinar Details
+          <TourHelpButton
+            onStartTour={completeTour.startTour}
+            onResetTour={completeTour.resetTour}
+            isCompleted={completeTour.isCompleted}
+            tourName="webinar guide"
+            size="sm"
+          />
+        </Flex>
+      </PageTitle>
 
       {/* Webinar Header */}
       <Card mb={6}>
         <CardBody>
           <VStack align="stretch" spacing={4}>
-            <Flex align="center" gap={3}>
+            <Flex align="center" gap={3} data-tour="webinar-title">
               <Box boxSize={8} pos={"relative"}>
                 <Image
                   src={mobileClassWebinarIcon.src}
@@ -204,6 +220,7 @@ const WebinarDetail: FC = () => {
                   }}
                   isDisabled={!webinar.recordingUrl}
                   isLoading={joinCall.isJoining}
+                  data-tour="webinar-join-button"
                 >
                   Playback
                 </Button>
@@ -228,6 +245,7 @@ const WebinarDetail: FC = () => {
                     joinCall.isJoining || webinar.status === "upcoming"
                   }
                   isLoading={joinCall.isJoining}
+                  data-tour="webinar-join-button"
                 >
                   Join Webinar
                 </Button>
@@ -238,7 +256,7 @@ const WebinarDetail: FC = () => {
       </Card>
 
       {/* Content Section */}
-      <Card mb={6}>
+      <Card mb={6} data-tour="webinar-comments-section">
         <CardBody>
           <WebinarComments webinar={webinar} />
         </CardBody>

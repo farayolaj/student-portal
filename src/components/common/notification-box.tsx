@@ -116,7 +116,7 @@ export const NotificationBox = () => {
       placement="bottom-end"
     >
       <PopoverTrigger>
-        <Box position="relative" cursor="pointer">
+        <Box position="relative" cursor="pointer" data-tour="notification-bell">
           <IconButton
             aria-label="Notifications"
             icon={<Icon as={MdOutlineNotifications} boxSize={6} />}
@@ -138,6 +138,7 @@ export const NotificationBox = () => {
               justifyContent="center"
               fontSize="xs"
               fontWeight="bold"
+              data-tour="notification-badge"
             >
               {notificationCount > 99 ? "99+" : notificationCount}
             </Badge>

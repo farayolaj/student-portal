@@ -158,7 +158,7 @@ const WebinarComments: FC<WebinarCommentsProps> = ({ webinar }) => {
       <VStack spacing={6} align="stretch">
         {/* Comment Form */}
         {webinar.enableComments && (
-          <Box as="form" onSubmit={handleSubmit}>
+          <Box as="form" onSubmit={handleSubmit} data-tour="webinar-comment-form">
             <VStack spacing={4}>
               <FormControl isInvalid={!!postCommentMutation.error}>
                 <Textarea
