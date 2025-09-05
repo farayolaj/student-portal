@@ -1,5 +1,5 @@
 import { dashboardQueries } from "@/api/dashboard.queries";
-import { useCurrentPeriod } from "@/api/user/use-current-period";
+import { useSchoolPeriod } from "@/api/user/use-current-period";
 import { useProfile } from "@/api/user/use-profile";
 import { EditIcon } from "@chakra-ui/icons";
 import {
@@ -18,7 +18,7 @@ import EditProfileModal from "./edit-profile-modal";
 
 export default function ProfileDetails() {
   const profileRes = useProfile();
-  const currentPeriod = useCurrentPeriod();
+  const schoolPeriod = useSchoolPeriod();
   const user = profileRes?.data?.user;
   const academicProfile = profileRes?.data?.academicProfile;
   const fullName = `${user?.lastName.toUpperCase()}, ${user?.firstName} ${
@@ -134,14 +134,14 @@ export default function ProfileDetails() {
               value={currentSession}
             />
             <ProfileDetailsItem
-              isLoading={profileRes.isLoading || currentPeriod.isLoading}
+              isLoading={profileRes.isLoading || schoolPeriod.isLoading}
               name="School Session"
-              value={currentPeriod.period.session.name}
+              value={schoolPeriod.period.session.name}
             />
             <ProfileDetailsItem
               isLoading={profileRes.isLoading}
               name="Semester"
-              value={`${currentPeriod.period.semester.name} Semester`}
+              value={`${schoolPeriod.period.semester.name} Semester`}
             />
           </VStack>
         </Box>

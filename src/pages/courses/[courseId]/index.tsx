@@ -1,4 +1,4 @@
-import { useCurrentPeriod } from "@/api/user/use-current-period";
+import { useSchoolPeriod } from "@/api/user/use-current-period";
 import CourseWebinarView from "@/components/courses/course-webinar-view";
 import {
   Alert,
@@ -43,7 +43,7 @@ import statusCodeToName from "../../../lib/status-code-to-name";
 const CourseDetail: FC = () => {
   const router = useRouter();
   const { courseId, tab } = router.query;
-  const { period } = useCurrentPeriod();
+  const { period } = useSchoolPeriod();
   const currentSessionId = period.session.id;
 
   // Map tab names to indices
@@ -53,9 +53,9 @@ const CourseDetail: FC = () => {
   };
 
   // Get current tab index from URL, default to 0
-  const currentTabIndex = 
-    tab && typeof tab === 'string' && tab in tabMap 
-      ? tabMap[tab as keyof typeof tabMap] 
+  const currentTabIndex =
+    tab && typeof tab === "string" && tab in tabMap
+      ? tabMap[tab as keyof typeof tabMap]
       : 0;
 
   // Handle tab change and update URL
@@ -84,14 +84,14 @@ const CourseDetail: FC = () => {
       <>
         <Seo title="Loading Course..." />
         <PageTitle showBackButton></PageTitle>
-        
+
         {/* Course Header Skeleton */}
         <Card mb={6}>
           <CardBody>
             <Flex direction={["column", null, "row"]} gap={6}>
-              <Skeleton 
-                w={["full", null, "200px"]} 
-                h="200px" 
+              <Skeleton
+                w={["full", null, "200px"]}
+                h="200px"
                 flexShrink={0}
                 rounded="md"
               />
@@ -166,8 +166,7 @@ const CourseDetail: FC = () => {
   return (
     <>
       <Seo title={course.title} />
-      <PageTitle showBackButton>
-      </PageTitle>
+      <PageTitle showBackButton></PageTitle>
 
       {/* Course Header */}
       <Card mb={6}>
@@ -193,15 +192,21 @@ const CourseDetail: FC = () => {
               <SimpleGrid columns={[2, null, 4]} gap={4}>
                 <Flex align="center" gap={2}>
                   <Icon as={IoPersonOutline} color="primary.500" />
-                  <Text as="span" fontSize="sm">{course.lecturer || "N/A"}</Text>
+                  <Text as="span" fontSize="sm">
+                    {course.lecturer || "N/A"}
+                  </Text>
                 </Flex>
                 <Flex align="center" gap={2}>
                   <Icon as={IoBookOutline} color="primary.500" />
-                  <Text as="span" fontSize="sm">{course.units} Units</Text>
+                  <Text as="span" fontSize="sm">
+                    {course.units} Units
+                  </Text>
                 </Flex>
                 <Flex align="center" gap={2}>
                   <Icon as={IoDocumentOutline} color="primary.500" />
-                  <Text as="span" fontSize="sm">{statusCodeToName(course.status)}</Text>
+                  <Text as="span" fontSize="sm">
+                    {statusCodeToName(course.status)}
+                  </Text>
                 </Flex>
               </SimpleGrid>
               {course.materialLink && (
@@ -233,10 +238,10 @@ const CourseDetail: FC = () => {
       </Card>
 
       {/* Course Content Tabs */}
-      <Tabs 
-        colorScheme="primary" 
-        variant="soft-rounded" 
-        index={currentTabIndex} 
+      <Tabs
+        colorScheme="primary"
+        variant="soft-rounded"
+        index={currentTabIndex}
         onChange={handleTabChange}
       >
         <TabList>

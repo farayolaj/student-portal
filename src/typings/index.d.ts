@@ -9,6 +9,10 @@ interface Programme {
   entryMode: string;
   entrySession: string;
   level: string;
+  /** Student's current academic session.
+   * This may be different from the current school session
+   * due to the student having deferred the session or being a graduate.
+   */
   currentSession: string;
   currentSessionId: string;
   department: string;

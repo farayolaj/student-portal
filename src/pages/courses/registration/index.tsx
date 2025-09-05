@@ -1,5 +1,5 @@
 import { useCourseRegPrintUrl } from "@/api/course/use-course-reg-print-url";
-import { useCurrentPeriod } from "@/api/user/use-current-period";
+import { useSchoolPeriod } from "@/api/user/use-current-period";
 import CourseListControls from "@/components/courses/registration/course-list-controls";
 import DeleteCourseView from "@/components/courses/registration/delete/delete-course-view";
 import buildPaymentDetailUrl from "@/lib/payments/build-payment-detail-url";
@@ -37,7 +37,7 @@ import * as routes from "../../../constants/routes";
 
 const CourseRegistration: FC = () => {
   const toast = useToast();
-  const { period } = useCurrentPeriod();
+  const { period } = useSchoolPeriod();
   const currentSessionId = period.session.id;
   const currentSemester = period.semester.id;
   const [sessionId, setSessionId] = useState(currentSessionId);

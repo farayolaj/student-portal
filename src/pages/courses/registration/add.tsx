@@ -1,4 +1,4 @@
-import { useCurrentPeriod } from "@/api/user/use-current-period";
+import { useSchoolPeriod } from "@/api/user/use-current-period";
 import AddCourseOverviewCard from "@/components/courses/registration/add/add-course-overview-card";
 import AddMoreCoursesModal from "@/components/courses/registration/add/add-more-courses-modal";
 import {
@@ -26,7 +26,7 @@ import SelectCourseView from "../../../components/courses/registration/select/se
 import { COURSE_REGISTRATION } from "../../../constants/routes";
 
 export default function AddCoursesPage(): JSX.Element {
-  const { period } = useCurrentPeriod();
+  const { period } = useSchoolPeriod();
   const [semester, setSemester] = useState(period.semester.id);
   const [view, setView] = useState("list");
   const [selectedCourses, setSelectedCourses] = useState<string[]>([]);

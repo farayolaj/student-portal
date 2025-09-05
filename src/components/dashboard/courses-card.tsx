@@ -1,4 +1,4 @@
-import { useCurrentPeriod } from "@/api/user/use-current-period";
+import { useSchoolPeriod } from "@/api/user/use-current-period";
 import { webinarQueries } from "@/api/webinar.queries";
 import {
   AspectRatio,
@@ -26,7 +26,7 @@ import * as routes from "../../constants/routes";
 import getAbstractImage from "../../lib/get-abstract-image";
 
 const CoursesCard: FC = () => {
-  const { period } = useCurrentPeriod();
+  const { period } = useSchoolPeriod();
   const { data: dashboardInfo, isLoading } = useQuery(
     dashboardQueries.dashboardInfo()
   );
@@ -83,11 +83,13 @@ type CourseItemProps = {
 };
 
 const CourseItem: FC<CourseItemProps> = ({ course }) => {
-  const { period } = useCurrentPeriod();
+  const { period } = useSchoolPeriod();
   const currentSessionId = period.session.id;
-  const { data: webinars } = useQuery(webinarQueries.listBy(currentSessionId, course.id));
+  const { data: webinars } = useQuery(
+    webinarQueries.listBy(currentSessionId, course.id)
+  );
   const earliestWebinar = webinars?.[webinars.length - 1];
-  const liveWebinar = webinars?.find(w => w.status === 'started');
+  const liveWebinar = webinars?.find((w) => w.status === "started");
 
   return (
     <Card
@@ -106,21 +108,28 @@ const CourseItem: FC<CourseItemProps> = ({ course }) => {
             fill
           />
           {liveWebinar && (
-            <Tooltip label="Click to join the live webinar" placement="top" hasArrow>
+            <Tooltip
+              label="Click to join the live webinar"
+              placement="top"
+              hasArrow
+            >
               <Badge
                 as={NextLink}
-                href={routes.WEBINAR_DETAIL.replace("[courseId]", course.id).replace("[webinarId]", liveWebinar.id)}
+                href={routes.WEBINAR_DETAIL.replace(
+                  "[courseId]",
+                  course.id
+                ).replace("[webinarId]", liveWebinar.id)}
                 position="absolute"
                 bottom={2}
                 right={2}
                 colorScheme={"red"}
-                variant={'solid'}
+                variant={"solid"}
                 animation="pulse-bg 1.2s infinite"
                 sx={{
-                  '@keyframes pulse-bg': {
-                    '0%': { backgroundColor: 'red.500' },
-                    '50%': { backgroundColor: 'red.300' },
-                    '100%': { backgroundColor: 'red.500' },
+                  "@keyframes pulse-bg": {
+                    "0%": { backgroundColor: "red.500" },
+                    "50%": { backgroundColor: "red.300" },
+                    "100%": { backgroundColor: "red.500" },
                   },
                 }}
               >
