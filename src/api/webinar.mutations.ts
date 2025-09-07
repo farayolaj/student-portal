@@ -1,10 +1,11 @@
 import getApi from "./api";
 
-export async function postComment(webinarId: string, content: string) {
+export async function postComment(webinarId: string, content: string, notifyAll: boolean = false) {
   const response = await getApi("/v1/api").post(
     `/webinars/${webinarId}/comments`,
     {
       content,
+      notify_all: notifyAll ? "true" : "false",
     }
   );
 
