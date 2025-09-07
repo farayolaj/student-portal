@@ -7,12 +7,14 @@ import {
   Flex,
   FormControl,
   FormErrorMessage,
+  FormLabel,
   Heading,
   HStack,
   Icon,
   IconButton,
   Skeleton,
   SkeletonText,
+  Switch,
   Text,
   Textarea,
   useColorModeValue,
@@ -35,6 +37,7 @@ interface WebinarCommentsProps {
 
 const WebinarComments: FC<WebinarCommentsProps> = ({ webinar }) => {
   const [comment, setComment] = useState("");
+  const [notifyAll, setNotifyAll] = useState(false);
   const [page, setPage] = useState(1);
   const [sort, setSort] = useState<"DESC" | "ASC">("DESC"); // Newest first by default
   const perPage = 20;
@@ -54,9 +57,10 @@ const WebinarComments: FC<WebinarCommentsProps> = ({ webinar }) => {
   } = useQuery(webinarQueries.commentsBy(webinar.id, { page, perPage, sort }));
 
   const postCommentMutation = useMutation({
-    mutationFn: () => postComment(webinar.id, comment),
+    mutationFn: () => postComment(webinar.id, comment, notifyAll),
     onSuccess: () => {
       setComment("");
+      setNotifyAll(false);
       queryClient.invalidateQueries({
         queryKey: [...webinarQueries.comments(), webinar.id],
       });
@@ -174,7 +178,19 @@ const WebinarComments: FC<WebinarCommentsProps> = ({ webinar }) => {
                   </FormErrorMessage>
                 )}
               </FormControl>
-              <Flex justify="flex-end" w="full">
+              <Flex justify="space-between" align="center" w="full">
+                <FormControl display="flex" alignItems="center" w="auto">
+                  <FormLabel htmlFor="notify-all" mb="0" fontSize="sm" fontWeight="medium">
+                    Notify all participants
+                  </FormLabel>
+                  <Switch
+                    id="notify-all"
+                    isChecked={notifyAll}
+                    onChange={(e) => setNotifyAll(e.target.checked)}
+                    colorScheme="primary"
+                    size="md"
+                  />
+                </FormControl>
                 <Button
                   type="submit"
                   colorScheme="primary"
