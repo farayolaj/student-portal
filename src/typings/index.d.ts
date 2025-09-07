@@ -37,6 +37,7 @@ interface Course {
   semester: number;
   units: number;
   materialLink?: string;
+  courseGuideUrl: string | null;
   preSelected?: boolean;
 }
 

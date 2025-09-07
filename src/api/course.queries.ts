@@ -25,8 +25,8 @@ async function getCourseConfig() {
 }
 
 async function getCourseDetails(id: string) {
-  const route = `/course_details/${encodeURIComponent(id)}`;
-  const response = await getApi().get(route);
+  const route = `/student/course/details/${encodeURIComponent(id)}`;
+  const response = await getApi('/v1/api').get(route);
 
   if (!response.data.status) throw new Error("Could not fetch course details");
 
