@@ -1,4 +1,6 @@
-import { useCurrentPeriod } from "@/api/user/use-current-period";
+import { useSchoolPeriod } from "@/api/user/use-current-period";
+import AddCourseOverviewCard from "@/components/courses/registration/add/add-course-overview-card";
+import AddMoreCoursesModal from "@/components/courses/registration/add/add-more-courses-modal";
 import {
   AlertDialog,
   AlertDialogBody,
@@ -15,18 +17,16 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
-import { addCourses } from "../../api/course.mutations";
-import { courseQueries } from "../../api/course.queries";
-import PageTitle from "../../components/common/page-title";
-import Seo from "../../components/common/seo";
-import AddCourseOverviewCard from "../../components/courses/add/add-course-overview-card";
-import AddMoreCoursesModal from "../../components/courses/add/add-more-courses-modal";
-import SelectCourseListControl from "../../components/courses/select/select-course-list-control";
-import SelectCourseView from "../../components/courses/select/select-course-view";
-import { REGISTERED_COURSES } from "../../constants/routes";
+import { addCourses } from "../../../api/course.mutations";
+import { courseQueries } from "../../../api/course.queries";
+import PageTitle from "../../../components/common/page-title";
+import Seo from "../../../components/common/seo";
+import SelectCourseListControl from "../../../components/courses/registration/select/select-course-list-control";
+import SelectCourseView from "../../../components/courses/registration/select/select-course-view";
+import { COURSE_REGISTRATION } from "../../../constants/routes";
 
 export default function AddCoursesPage(): JSX.Element {
-  const { period } = useCurrentPeriod();
+  const { period } = useSchoolPeriod();
   const [semester, setSemester] = useState(period.semester.id);
   const [view, setView] = useState("list");
   const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
@@ -201,7 +201,7 @@ export default function AddCoursesPage(): JSX.Element {
                           status: "success",
                           isClosable: true,
                         });
-                        router.push(REGISTERED_COURSES);
+                        router.push(COURSE_REGISTRATION);
                       },
                       onError: (error) => {
                         const err = error as Error;

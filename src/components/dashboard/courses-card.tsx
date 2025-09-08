@@ -1,6 +1,8 @@
-import { useCurrentPeriod } from "@/api/user/use-current-period";
+import { useSchoolPeriod } from "@/api/user/use-current-period";
+import { webinarQueries } from "@/api/webinar.queries";
 import {
-  Box,
+  AspectRatio,
+  Badge,
   Card,
   CardBody,
   CardHeader,
@@ -11,10 +13,11 @@ import {
   Skeleton,
   Spacer,
   Text,
-  VStack,
+  Tooltip,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
-import Image, { StaticImageData } from "next/image";
+import isPast from "date-fns/isPast";
+import Image from "next/image";
 import NextLink from "next/link";
 import { FC } from "react";
 import { courseQueries } from "../../api/course.queries";
@@ -23,7 +26,7 @@ import * as routes from "../../constants/routes";
 import getAbstractImage from "../../lib/get-abstract-image";
 
 const CoursesCard: FC = () => {
-  const { period } = useCurrentPeriod();
+  const { period } = useSchoolPeriod();
   const { data: dashboardInfo, isLoading } = useQuery(
     dashboardQueries.dashboardInfo()
   );
@@ -55,15 +58,9 @@ const CoursesCard: FC = () => {
     );
   } else {
     content = (
-      <SimpleGrid gap={4} columns={[1, null, 2, 4]}>
-        {courses.slice(0, 4).map((course) => (
-          <CourseItem
-            key={course.id}
-            code={course.code}
-            title={course.title}
-            units={course.units}
-            image={getAbstractImage(course.id)}
-          />
+      <SimpleGrid gap={4} columns={[1, null, 3]}>
+        {courses.map((course) => (
+          <CourseItem key={course.id} course={course} />
         ))}
       </SimpleGrid>
     );
@@ -75,13 +72,6 @@ const CoursesCard: FC = () => {
         <Heading as="h2" fontSize="md">
           Courses
         </Heading>
-        {courses.length > 0 && (
-          <Text as="span">
-            <Link as={NextLink} href={routes.REGISTERED_COURSES}>
-              See other courses &rarr;
-            </Link>
-          </Text>
-        )}
       </CardHeader>
       <CardBody>{content}</CardBody>
     </Card>
@@ -89,40 +79,100 @@ const CoursesCard: FC = () => {
 };
 
 type CourseItemProps = {
-  code: string;
-  title: string;
-  units: number;
-  image: string | StaticImageData;
+  course: Course;
 };
 
-const CourseItem: FC<CourseItemProps> = ({ code, title, units, image }) => {
+const CourseItem: FC<CourseItemProps> = ({ course }) => {
+  const { period } = useSchoolPeriod();
+  const currentSessionId = period.session.id;
+  const { data: webinars } = useQuery(
+    webinarQueries.listBy(currentSessionId, course.id)
+  );
+  const earliestWebinar = webinars?.[webinars.length - 1];
+  const liveWebinar = webinars?.find((w) => w.status === "started");
+
   return (
-    <Box pos="relative" rounded="md" overflow="hidden">
-      <Box pos="absolute" w="full" h="full">
-        <Image
-          src={image}
-          alt=""
-          role="presentation"
-          style={{ objectFit: "cover" }}
-          fill
-        />
-      </Box>
-      <VStack
-        w="full"
-        h="full"
-        p={2}
-        pos="relative"
-        bgColor="blackAlpha.700"
-        color="white"
-      >
-        <Text fontWeight="bold" color="primary.400">
-          {code}
-        </Text>
-        <Text textAlign="center">{title}</Text>
-        <Spacer />
-        <Text fontSize="sm">{units} Units</Text>
-      </VStack>
-    </Box>
+    <Card
+      rounded="lg"
+      overflow="hidden"
+      _hover={{
+        "& img": { filter: "auto", brightness: "60%" },
+      }}
+    >
+      <AspectRatio pos="relative" w="full" ratio={3 / 2} overflow="hidden">
+        <div>
+          <Image
+            alt=""
+            src={getAbstractImage(course.id)}
+            style={{ objectFit: "cover" }}
+            fill
+          />
+          {liveWebinar && (
+            <Tooltip
+              label="Click to join the live webinar"
+              placement="top"
+              hasArrow
+            >
+              <Badge
+                as={NextLink}
+                href={routes.WEBINAR_DETAIL.replace(
+                  "[courseId]",
+                  course.id
+                ).replace("[webinarId]", liveWebinar.id)}
+                position="absolute"
+                bottom={2}
+                right={2}
+                colorScheme={"red"}
+                variant={"solid"}
+                animation="pulse-bg 1.2s infinite"
+                sx={{
+                  "@keyframes pulse-bg": {
+                    "0%": { backgroundColor: "red.500" },
+                    "50%": { backgroundColor: "red.300" },
+                    "100%": { backgroundColor: "red.500" },
+                  },
+                }}
+              >
+                Live Webinar
+              </Badge>
+            </Tooltip>
+          )}
+        </div>
+      </AspectRatio>
+      <CardBody p={5} display="flex">
+        <Flex direction="column" align="flex-start">
+          <Text fontSize="sm" fontWeight="bold">
+            {course.code}
+          </Text>
+          <Text fontSize="2xl" fontWeight="semibold" textOverflow="ellipsis">
+            {course.title}
+          </Text>
+          <Text fontSize="sm" fontWeight="bold" color="blackAlpha.700" minH={6}>
+            {course.lecturer}
+          </Text>
+          <Text my={2} noOfLines={3} minH={16} title={course.description}>
+            {course.description}
+          </Text>
+          <Spacer />
+          {earliestWebinar && (
+            <Text fontSize="sm" color="blackAlpha.700">
+              {isPast(earliestWebinar.scheduledFor) ? "Started" : "Begins"}{" "}
+              {earliestWebinar.scheduledFor.toLocaleDateString(undefined, {
+                dateStyle: "full",
+              })}
+            </Text>
+          )}
+          <Link
+            mt={4}
+            as={NextLink}
+            variant="button"
+            href={routes.COURSE_DETAIL.replace("[courseId]", course.id)}
+          >
+            Enter Virtual Class
+          </Link>
+        </Flex>
+      </CardBody>
+    </Card>
   );
 };
 

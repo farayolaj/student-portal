@@ -5,10 +5,10 @@ import {
   X_APP_KEY,
 } from "../constants/config";
 
-let api: AxiosInstance;
+const apiMap: Record<string, AxiosInstance> = {};
 
-export default function getApi() {
-  if (api) return api;
+export default function getApi(prefix = "/api") {
+  if (apiMap[prefix]) return apiMap[prefix];
 
   const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -21,8 +21,8 @@ export default function getApi() {
     headers["skip_zrok_interstitial"] = ",";
   }
 
-  api = axios.create({
-    baseURL: apiBaseUrl,
+  apiMap[prefix] = axios.create({
+    baseURL: apiBaseUrl + prefix,
     headers,
 
     validateStatus: function (status) {
@@ -30,7 +30,7 @@ export default function getApi() {
     },
   });
 
-  api.interceptors.request.use((config) => {
+  apiMap[prefix].interceptors.request.use((config) => {
     const key = `oidc.user:${AUTH_SERVER_URL}:${AUTH_CLIENT_ID}`;
     const rawToken = sessionStorage.getItem(key);
     const token = rawToken ? JSON.parse(rawToken).access_token : undefined;
@@ -40,5 +40,5 @@ export default function getApi() {
     return config;
   });
 
-  return api;
+  return apiMap[prefix];
 }

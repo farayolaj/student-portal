@@ -9,6 +9,10 @@ interface Programme {
   entryMode: string;
   entrySession: string;
   level: string;
+  /** Student's current academic session.
+   * This may be different from the current school session
+   * due to the student having deferred the session or being a graduate.
+   */
   currentSession: string;
   currentSessionId: string;
   department: string;
@@ -33,6 +37,7 @@ interface Course {
   semester: number;
   units: number;
   materialLink?: string;
+  courseGuideUrl: string | null;
   preSelected?: boolean;
 }
 
@@ -310,3 +315,49 @@ interface Attachment extends MinimalAttachment {
 }
 
 type AttendanceOptions = "on-site" | "online" | "self-paced";
+
+type Webinar = {
+  id: string;
+  title: string;
+  description?: string;
+  status: "upcoming" | "pending-start" | "started" | "ended";
+  scheduledFor: Date;
+  presentation?: {
+    url: string;
+    name: string;
+  };
+  recordingUrl: string | null;
+  startTime: Date | null;
+  endTime: Date | null;
+  enableComments: boolean;
+};
+
+type WebinarComment = {
+  id: string;
+  content: string;
+  author: {
+    id: string;
+    name: string;
+  };
+  createdAt: Date;
+};
+
+type WebinarCommentList = {
+  paging: {
+    totalCount: number;
+    totalPages: number;
+    page: number;
+    perPage: number;
+  };
+  comments: WebinarComment[];
+};
+
+type EventNotification = {
+  id: string;
+  type: string;
+  title: string;
+  message: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data: Record<string, any>;
+  createdAt: Date;
+};

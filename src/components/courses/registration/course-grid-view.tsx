@@ -9,9 +9,9 @@ import {
 } from "@chakra-ui/react";
 import Image from "next/image";
 import { FC } from "react";
-import CourseMaterialDownload from "./course-material-download";
-import getAbstractImage from "../../lib/get-abstract-image";
-import statusCodeToName from "../../lib/status-code-to-name";
+import getAbstractImage from "../../../lib/get-abstract-image";
+import statusCodeToName from "../../../lib/status-code-to-name";
+import CourseMaterialDownload from "../course-material-download";
 
 type CourseGridViewProps = {
   courseList: Course[];

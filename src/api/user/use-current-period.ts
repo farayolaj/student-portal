@@ -7,9 +7,12 @@ type Period = {
 };
 
 /**
- * Provides the current session id and semester.
+ * Provides the current school session id and semester.
+ * This is distinct from the student's current session and semester
+ * as a student may be on a different semester from the current one
+ * due to being a graduate or taking a deferment.
  */
-export function useCurrentPeriod() {
+export function useSchoolPeriod() {
   const { data: allSessions } = useQuery(userQueries.sessions());
   const {
     data: profile,

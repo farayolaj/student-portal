@@ -26,13 +26,10 @@ const ProfileCard: FC = () => {
   const { data: profile } = useProfile();
   const matricNo = profile?.academicProfile?.matricNumber;
   const level = dashboardInfo?.programme?.level;
-  const entryMode = dashboardInfo?.programme?.entryMode;
   const programme = dashboardInfo?.programme?.programme;
-  const cgpa = dashboardInfo?.cpga || "N/A";
   const fullName = `${dashboardInfo?.user?.firstName} ${
     dashboardInfo?.user?.otherNames || ""
   } ${dashboardInfo?.user?.lastName}`;
-  const session = dashboardInfo?.programme.currentSession;
   const examCentre = dashboardInfo?.programme.examCentre;
 
   return (
@@ -57,13 +54,14 @@ const ProfileCard: FC = () => {
               src={dashboardInfo?.user.profileImage}
               getInitials={(name) => {
                 const names = name.split(" ").filter((name) => Boolean(name));
-                const initials =
-                  `${names[0].at(0)}${names.at(-1)?.at(0)}`.toUpperCase();
+                const initials = `${names[0].at(0)}${names
+                  .at(-1)
+                  ?.at(0)}`.toUpperCase();
                 return initials;
               }}
             />
             <SimpleGrid
-              columns={[2, null, 5]}
+              columns={[2, null, 3]}
               columnGap={8}
               rowGap={4}
               w="full"
@@ -80,24 +78,12 @@ const ProfileCard: FC = () => {
               />
               <ProfileCardItem
                 isLoading={isLoading}
-                name="Entry Mode"
-                value={entryMode}
-              />
-              <ProfileCardItem isLoading={isLoading} name="CGPA" value={cgpa} />
-              <ProfileCardItem
-                isLoading={isLoading}
-                name="Session"
-                value={session}
-              />
-              <ProfileCardItem
-                isLoading={isLoading}
                 name="Examination Centre"
                 value={
                   <Text as="span" textAlign="center">
                     {examCentre}
                   </Text>
                 }
-                gridColumn={["initial", null, "1 / span 2"]}
               />
               <ProfileCardItem
                 isLoading={isLoading}
@@ -107,7 +93,7 @@ const ProfileCard: FC = () => {
                     {programme}
                   </Text>
                 }
-                gridColumn={["1 / -1", null, "3 / -1"]}
+                gridColumn={"1 / -1"}
               />
             </SimpleGrid>
           </Flex>

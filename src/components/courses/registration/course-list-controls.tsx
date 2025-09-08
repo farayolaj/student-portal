@@ -1,9 +1,9 @@
 import { Flex, FormControl, FormLabel, Select } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { FC } from "react";
-import { courseQueries } from "../../api/course.queries";
-import { userQueries } from "../../api/user.queries";
-import RadioButtonGroup from "../common/radio-button-group";
+import { courseQueries } from "../../../api/course.queries";
+import { userQueries } from "../../../api/user.queries";
+import RadioButtonGroup from "../../common/radio-button-group";
 
 type CourseListControlsProps = {
   sessionId: string;

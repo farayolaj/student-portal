@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "NODE_ENV=production next build",
-    "start": "next start",
+    "start": "pnpm dlx serve@latest out",
     "lint": "next lint",
     "gen:theme-typings": "chakra-cli tokens src/theme/index.ts",
     "postinstall": "pnpm gen:theme-typings"

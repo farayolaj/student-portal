@@ -1,5 +1,6 @@
 import { useCourseRegPrintUrl } from "@/api/course/use-course-reg-print-url";
-import { useCurrentPeriod } from "@/api/user/use-current-period";
+import { useSchoolPeriod } from "@/api/user/use-current-period";
+import CourseListControls from "@/components/courses/registration/course-list-controls";
 import buildPaymentDetailUrl from "@/lib/payments/build-payment-detail-url";
 import {
   Button,
@@ -17,19 +18,23 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import NextLink from "next/link";
 import { FC, useEffect, useState } from "react";
-import { IoAdd, IoGrid, IoList, IoPrintOutline } from "react-icons/io5";
-import { courseQueries } from "../../api/course.queries";
-import PageTitle from "../../components/common/page-title";
-import RadioButtonGroup from "../../components/common/radio-button-group";
-import Seo from "../../components/common/seo";
-import CourseListControls from "../../components/courses/course-list-controls";
-import CourseOverview from "../../components/courses/course-overview";
-import CourseView from "../../components/courses/course-view";
-import * as routes from "../../constants/routes";
+import {
+  IoAdd,
+  IoGrid,
+  IoList,
+  IoPrintOutline,
+} from "react-icons/io5";
+import { courseQueries } from "../../../api/course.queries";
+import PageTitle from "../../../components/common/page-title";
+import RadioButtonGroup from "../../../components/common/radio-button-group";
+import Seo from "../../../components/common/seo";
+import CourseOverview from "../../../components/courses/registration/course-overview";
+import CourseView from "../../../components/courses/registration/course-view";
+import * as routes from "../../../constants/routes";
 
-const Courses: FC = () => {
+const CourseRegistration: FC = () => {
   const toast = useToast();
-  const { period } = useCurrentPeriod();
+  const { period } = useSchoolPeriod();
   const currentSessionId = period.session.id;
   const currentSemester = period.semester.id;
   const [sessionId, setSessionId] = useState(currentSessionId);
@@ -77,8 +82,8 @@ const Courses: FC = () => {
 
   return (
     <>
-      <Seo title="Registered Courses" />
-      <PageTitle showBackButton>Registered Courses</PageTitle>
+      <Seo title="Course Registration" />
+      <PageTitle showBackButton>Course Registration</PageTitle>
       <CourseListControls
         sessionId={sessionId}
         onSessionIdChange={setSessionId}
@@ -106,7 +111,7 @@ const Courses: FC = () => {
               h={10}
             >
               <Icon as={IoAdd} boxSize={6} />
-              Add Courses
+              Register Courses
             </Link>
           )}
           <Popover trigger="hover">
@@ -196,4 +201,4 @@ const Courses: FC = () => {
   );
 };
 
-export default Courses;
+export default CourseRegistration;

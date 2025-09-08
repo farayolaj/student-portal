@@ -1,6 +1,6 @@
 import { Box, SimpleGrid } from "@chakra-ui/react";
 import { FC } from "react";
-import NameValueCard from "../common/name-value-card";
+import NameValueCard from "../../common/name-value-card";
 
 type CourseOverviewProps = {
   maxUnits: number;

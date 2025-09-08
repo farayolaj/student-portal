@@ -18,9 +18,9 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { IoSearchOutline } from "react-icons/io5";
-import { courseQueries } from "../../../api/course.queries";
-import useDebounce from "../../../hooks/use-debounce";
-import statusCodeToName from "../../../lib/status-code-to-name";
+import { courseQueries } from "../../../../api/course.queries";
+import useDebounce from "../../../../hooks/use-debounce";
+import statusCodeToName from "../../../../lib/status-code-to-name";
 
 type AddMoreCoursesModalProps = {
   onAdd: (course: Course) => void;
