@@ -23,6 +23,7 @@ export const toWebinar = (webinar: any) => {
     description: webinar.description,
     status: calculateWebinarStatus(startTime, endTime, scheduledFor),
     scheduledFor,
+    plannedDuration: parseInt(webinar.planned_duration, 10),
     startTime,
     endTime,
     presentation: webinar.presentation_url

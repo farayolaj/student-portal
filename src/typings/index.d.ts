@@ -322,6 +322,8 @@ type Webinar = {
   description?: string;
   status: "upcoming" | "pending-start" | "started" | "ended";
   scheduledFor: Date;
+  // In minutes
+  plannedDuration: number;
   presentation?: {
     url: string;
     name: string;

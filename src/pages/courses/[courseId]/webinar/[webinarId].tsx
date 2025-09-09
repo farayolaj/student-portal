@@ -29,6 +29,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import addMinutes from "date-fns/addMinutes";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { FC } from "react";
@@ -159,7 +160,21 @@ const WebinarDetail: FC = () => {
             <Flex align="center" gap={2}>
               <Icon as={IoCalendarOutline} color="gray.500" />
               <Text fontSize="sm" fontWeight="semibold">
-                {formatDate(webinar.scheduledFor)}
+                {new Intl.DateTimeFormat("en-NG", {
+                  dateStyle: "full",
+                }).format(webinar.scheduledFor)}
+                ,{" "}
+                {new Intl.DateTimeFormat("en-NG", {
+                  timeStyle: "short",
+                  hour12: true,
+                }).format(webinar.scheduledFor)}{" "}
+                to{" "}
+                {new Intl.DateTimeFormat("en-NG", {
+                  timeStyle: "short",
+                  hour12: true,
+                }).format(
+                  addMinutes(webinar.scheduledFor, webinar.plannedDuration)
+                )}
               </Text>
             </Flex>
 

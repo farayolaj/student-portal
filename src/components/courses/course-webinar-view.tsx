@@ -26,6 +26,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import addMinutes from "date-fns/addMinutes";
 import NextLink from "next/link";
 import { FC } from "react";
 import { IoCalendarOutline, IoChevronDown } from "react-icons/io5";
@@ -99,9 +100,10 @@ const CourseWebinarView: FC<CourseWebinarViewProps> = ({
 export default CourseWebinarView;
 
 const formatDate = (date: Date) => {
-  return new Intl.DateTimeFormat("en-US", {
+  return new Intl.DateTimeFormat("en-NG", {
     dateStyle: "medium",
     timeStyle: "short",
+    hour12: true,
   }).format(date);
 };
 
@@ -151,7 +153,21 @@ const WebinarCard: FC<WebinarCardProps> = ({ webinar, courseId }) => {
                 <Flex align="center" gap={2}>
                   <Icon as={IoCalendarOutline} boxSize={4} color="gray.500" />
                   <Text fontSize="sm" color="gray.600">
-                    {formatDate(webinar.scheduledFor)}
+                    {new Intl.DateTimeFormat("en-NG", {
+                      dateStyle: "medium",
+                    }).format(webinar.scheduledFor)}
+                    ,{" "}
+                    {new Intl.DateTimeFormat("en-NG", {
+                      timeStyle: "short",
+                      hour12: true,
+                    }).format(webinar.scheduledFor)}{" "}
+                    -{" "}
+                    {new Intl.DateTimeFormat("en-NG", {
+                      timeStyle: "short",
+                      hour12: true,
+                    }).format(
+                      addMinutes(webinar.scheduledFor, webinar.plannedDuration)
+                    )}
                   </Text>
                 </Flex>
               </VStack>
