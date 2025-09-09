@@ -326,7 +326,11 @@ type Webinar = {
     url: string;
     name: string;
   };
-  recordingUrl: string | null;
+  recordings: Array<{
+    id: string;
+    url: string;
+    date: Date;
+  }>;
   startTime: Date | null;
   endTime: Date | null;
   enableComments: boolean;

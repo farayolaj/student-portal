@@ -14,6 +14,10 @@ import {
   Flex,
   Heading,
   Icon,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   SimpleGrid,
   Spinner,
   Text,
@@ -24,7 +28,7 @@ import {
 import { useMutation, useQuery } from "@tanstack/react-query";
 import NextLink from "next/link";
 import { FC } from "react";
-import { IoCalendarOutline } from "react-icons/io5";
+import { IoCalendarOutline, IoChevronDown } from "react-icons/io5";
 import * as routes from "../../constants/routes";
 
 type CourseWebinarViewProps = {
@@ -125,8 +129,13 @@ const WebinarCard: FC<WebinarCardProps> = ({ webinar, courseId }) => {
 
   return (
     <Card>
-      <CardBody>
-        <Flex justify="space-between" align="flex-start" mb={4}>
+      <CardBody
+        display={"flex"}
+        flexDir={"column"}
+        gap={4}
+        justifyContent={"space-between"}
+      >
+        <Flex justify="space-between" align="flex-start">
           <Flex gap={3}>
             <Box>
               <Flex align="center" gap={2} mb={2}>
@@ -165,24 +174,54 @@ const WebinarCard: FC<WebinarCardProps> = ({ webinar, courseId }) => {
             View Room
           </Button>
           {webinar.status === "ended" ? (
-            <Tooltip
-              label={"The recording is not yet available, check back again."}
-              isDisabled={!!webinar.recordingUrl}
-              hasArrow
-              placement="top"
-            >
+            webinar.recordings.length === 0 ? (
+              <Tooltip
+                label={"The recording is not yet available, check back again."}
+                hasArrow
+                placement="top"
+              >
+                <Button size="sm" colorScheme="blue" isDisabled>
+                  Playback
+                </Button>
+              </Tooltip>
+            ) : webinar.recordings.length === 1 ? (
               <Button
                 size="sm"
                 colorScheme="blue"
                 onClick={() => {
                   logPlayback(webinar.id);
-                  window.open(webinar.recordingUrl!, "_blank");
+                  window.open(webinar.recordings[0].url, "_blank");
                 }}
-                isDisabled={!webinar.recordingUrl}
               >
                 Playback
               </Button>
-            </Tooltip>
+            ) : (
+              <Menu>
+                <MenuButton
+                  as={Button}
+                  size="sm"
+                  colorScheme="blue"
+                  rightIcon={<IoChevronDown />}
+                >
+                  Playback
+                </MenuButton>
+                <MenuList>
+                  {webinar.recordings
+                    .sort((a, b) => b.date.getTime() - a.date.getTime())
+                    .map((recording, index) => (
+                      <MenuItem
+                        key={recording.id}
+                        onClick={() => {
+                          logPlayback(webinar.id);
+                          window.open(recording.url, "_blank");
+                        }}
+                      >
+                        Recording {index + 1} - {formatDate(recording.date)}
+                      </MenuItem>
+                    ))}
+                </MenuList>
+              </Menu>
+            )
           ) : (
             <Tooltip
               label={`Webinar will start on ${formatDate(

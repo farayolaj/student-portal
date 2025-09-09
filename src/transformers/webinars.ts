@@ -31,7 +31,11 @@ export const toWebinar = (webinar: any) => {
           name: webinar.presentation_name,
         }
       : undefined,
-    recordingUrl: webinar.recording_url,
+    recordings: (webinar.recordings ?? []).map((recording: any) => ({
+      id: recording.id,
+      url: recording.url,
+      date: new Date(recording.date),
+    })),
     enableComments: webinar.enable_comments,
   } satisfies Webinar;
 };

@@ -17,6 +17,10 @@ import {
   Heading,
   Icon,
   Link,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Skeleton,
   Spinner,
   Text,
@@ -30,6 +34,7 @@ import { useRouter } from "next/router";
 import { FC } from "react";
 import {
   IoCalendarOutline,
+  IoChevronDown,
   IoDownloadOutline,
   IoLinkOutline,
 } from "react-icons/io5";
@@ -188,26 +193,63 @@ const WebinarDetail: FC = () => {
         <CardBody>
           <VStack spacing={4}>
             {webinar.status === "ended" ? (
-              <Tooltip
-                label={"The recording is not yet available, check back again."}
-                isDisabled={!!webinar.recordingUrl}
-                hasArrow
-                placement="top"
-              >
+              webinar.recordings.length === 0 ? (
+                <Tooltip
+                  label={
+                    "The recording is not yet available, check back again."
+                  }
+                  hasArrow
+                  placement="top"
+                >
+                  <Button
+                    leftIcon={<Icon as={IoLinkOutline} />}
+                    colorScheme="blue"
+                    size="lg"
+                    isDisabled
+                  >
+                    Playback
+                  </Button>
+                </Tooltip>
+              ) : webinar.recordings.length === 1 ? (
                 <Button
                   leftIcon={<Icon as={IoLinkOutline} />}
                   colorScheme="blue"
                   size="lg"
                   onClick={() => {
                     logPlayback(webinar.id);
-                    window.open(webinar.recordingUrl!, "_blank");
+                    window.open(webinar.recordings[0].url, "_blank");
                   }}
-                  isDisabled={!webinar.recordingUrl}
-                  isLoading={joinCall.isJoining}
                 >
                   Playback
                 </Button>
-              </Tooltip>
+              ) : (
+                <Menu>
+                  <MenuButton
+                    as={Button}
+                    leftIcon={<Icon as={IoLinkOutline} />}
+                    rightIcon={<IoChevronDown />}
+                    colorScheme="blue"
+                    size="lg"
+                  >
+                    Playback
+                  </MenuButton>
+                  <MenuList>
+                    {webinar.recordings
+                      .sort((a, b) => b.date.getTime() - a.date.getTime())
+                      .map((recording, index) => (
+                        <MenuItem
+                          key={recording.id}
+                          onClick={() => {
+                            logPlayback(webinar.id);
+                            window.open(recording.url, "_blank");
+                          }}
+                        >
+                          Recording {index + 1} - {formatDate(recording.date)}
+                        </MenuItem>
+                      ))}
+                  </MenuList>
+                </Menu>
+              )
             ) : (
               <Tooltip
                 label={`Webinar will start on ${formatDate(
