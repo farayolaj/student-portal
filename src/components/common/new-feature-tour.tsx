@@ -184,6 +184,7 @@ function getTourSteps(courseId: string, webinarId: string): Step[] {
       content: "This concludes the tour of the new features.",
       target: "body",
       placement: "center",
+      hideCloseButton: true,
     },
   ] satisfies Step[];
 }
