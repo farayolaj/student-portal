@@ -12,15 +12,32 @@ export type TourState = {
 
 export default function reducer(state: TourState, action: TourAction) {
   switch (action.type) {
-    case actionTypes.SET_TOUR:
-      return {
-        ...state,
-        tour: action.payload,
-      };
     case actionTypes.START_TOUR:
       return {
         ...state,
+        tour: action.payload,
         isRunning: true,
+      };
+    case actionTypes.PLAY_TOUR:
+      return {
+        ...state,
+        isRunning: true,
+      };
+    case actionTypes.STOP_TOUR:
+      return {
+        ...state,
+        isRunning: false,
+      };
+    case actionTypes.GO_TO_STEP:
+      if (
+        action.payload < 0 ||
+        (state.tour && action.payload >= state.tour.steps.length)
+      ) {
+        return state;
+      }
+      return {
+        ...state,
+        stepIndex: action.payload,
       };
     default:
       return state;

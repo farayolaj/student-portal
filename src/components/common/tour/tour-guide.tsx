@@ -1,7 +1,6 @@
-import React from 'react';
-import Joyride, { CallBackProps, Step, Styles } from 'react-joyride';
 import { useColorModeValue } from '@chakra-ui/react';
-import { IoClose } from 'react-icons/io5';
+import React, { ComponentProps } from 'react';
+import Joyride, { CallBackProps, Step } from 'react-joyride';
 
 export interface TourGuideProps {
   steps: Step[];
@@ -34,7 +33,7 @@ export const TourGuide: React.FC<TourGuideProps> = ({
   React.useEffect(() => {
     const styleId = 'joyride-button-fix';
     const existingStyle = document.getElementById(styleId);
-    
+
     if (!existingStyle) {
       const style = document.createElement('style');
       style.id = styleId;
@@ -55,7 +54,7 @@ export const TourGuide: React.FC<TourGuideProps> = ({
       `;
       document.head.appendChild(style);
     }
-    
+
     return () => {
       const style = document.getElementById(styleId);
       if (style) {
@@ -64,7 +63,7 @@ export const TourGuide: React.FC<TourGuideProps> = ({
     };
   }, []);
 
-  const customStyles: Styles = {
+  const customStyles: ComponentProps<typeof Joyride>['styles'] = {
     options: {
       primaryColor,
       backgroundColor: bg,
@@ -164,17 +163,6 @@ export const TourGuide: React.FC<TourGuideProps> = ({
     },
   };
 
-  const locale = {
-    back: 'Previous',
-    close: '×',
-    last: 'Finish',
-    next: 'Next',
-    nextLabelWithProgress: (opts: { stepIndex: number; totalSteps: number }) =>
-      `Next (${opts.stepIndex + 1}/${opts.totalSteps})`,
-    open: 'Open the dialog',
-    skip: 'Skip tour',
-  };
-
   return (
     <Joyride
       steps={steps}
@@ -186,16 +174,9 @@ export const TourGuide: React.FC<TourGuideProps> = ({
       showSkipButton={showSkipButton}
       disableOverlayClose={disableOverlayClose}
       styles={customStyles}
-      locale={locale}
       hideCloseButton={false}
       scrollToFirstStep={true}
       spotlightClicks={false}
-      disableBeacon={false}
-      floaterProps={{
-        disableAnimation: false,
-      }}
-      // Add explicit debug logging
-      debug={false}
     />
   );
 };
