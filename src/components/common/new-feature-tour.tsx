@@ -1,3 +1,6 @@
+import { dashboardQueries } from "@/api/dashboard.queries";
+import { tourQueries } from "@/api/tour.queries";
+import { webinarQueries } from "@/api/webinar.queries";
 import { COURSE_DETAIL, DASHBOARD, WEBINAR_DETAIL } from "@/constants/routes";
 import {
   Button,
@@ -7,6 +10,7 @@ import {
   Flex,
   Heading,
 } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
 import { Step } from "react-joyride";
 import { completeTour, playTour, setTour } from "./tour/actions";
@@ -19,9 +23,23 @@ export default function NewFeatureTour() {
   const tourDispatch = useTourDispatch();
   const tourState = useTourState();
 
-  // Select a course with an active webinar and a course guide.
-  const courseId = "255";
-  const webinarId = "35";
+  const { data: enrolledCourses } = useQuery({
+    ...dashboardQueries.dashboardInfo(),
+    select: (data) => data.courses,
+  });
+  const { data: tourSettings } = useQuery(tourQueries.tourSettings());
+  const courseId = tourSettings?.courseId;
+  const sessionId = tourSettings?.sessionId;
+  const { data: webinarId } = useQuery({
+    ...webinarQueries.listBy(sessionId!, courseId!),
+    enabled: !!sessionId && !!courseId,
+    select: (data) =>
+      data.find((webinar) =>
+        ["started", "pending-start"].includes(webinar.status)
+      )?.id,
+  });
+  const isEnrolledInTourCourse =
+    enrolledCourses?.some((c) => c.id === courseId) ?? false;
 
   useEffect(() => {
     if (!isTourSet && courseId && webinarId) {
@@ -29,7 +47,7 @@ export default function NewFeatureTour() {
       tourDispatch(setTour(TOUR_KEY, steps));
       setIsTourSet(true);
     }
-  }, [isTourSet, tourDispatch]);
+  }, [courseId, isTourSet, tourDispatch, webinarId]);
 
   const startTour = useCallback(() => {
     tourDispatch(playTour());
@@ -39,7 +57,12 @@ export default function NewFeatureTour() {
     tourDispatch(completeTour());
   }, [tourDispatch]);
 
-  if (tourState.isCompleted || tourState.tour?.key !== TOUR_KEY) return null;
+  if (
+    tourState.isCompleted ||
+    tourState.tour?.key !== TOUR_KEY ||
+    !isEnrolledInTourCourse
+  )
+    return null;
 
   return (
     <Card mt={8}>

@@ -89,9 +89,10 @@ type CourseItemProps = {
 const CourseItem: FC<CourseItemProps> = ({ course }) => {
   const { period } = useSchoolPeriod();
   const currentSessionId = period.session.id;
-  const { data: webinars } = useQuery(
-    webinarQueries.listBy(currentSessionId, course.id)
-  );
+  const { data: webinars } = useQuery({
+    ...webinarQueries.listBy(currentSessionId, course.id),
+    enabled: !!currentSessionId,
+  });
   const earliestWebinar = webinars?.[webinars.length - 1];
   const liveWebinar = webinars?.find((w) => w.status === "started");
 
