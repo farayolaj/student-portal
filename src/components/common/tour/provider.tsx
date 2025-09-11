@@ -27,6 +27,7 @@ export default function TourProvider({ children }: { children: ReactNode }) {
     tour: null,
     isRunning: false,
     stepIndex: 0,
+    isCompleted: false,
   });
 
   const handleTourCallback = useCallback(

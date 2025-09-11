@@ -2,14 +2,16 @@ import { Step } from "react-joyride";
 
 export const actionTypes = {
   PLAY_TOUR: "PLAY_TOUR",
-  START_TOUR: "START_TOUR",
+  SET_TOUR: "SET_TOUR",
   STOP_TOUR: "STOP_TOUR",
   GO_TO_STEP: "GO_TO_STEP",
+  COMPLETE_TOUR: "COMPLETE_TOUR",
+  RESET_TOUR: "RESET_TOUR",
 } as const;
 
-export function startTour(key: string, steps: Array<Step>) {
+export function setTour(key: string, steps: Array<Step>) {
   return {
-    type: actionTypes.START_TOUR,
+    type: actionTypes.SET_TOUR,
     payload: {
       key,
       steps,
@@ -36,8 +38,22 @@ export function goToStep(index: number) {
   };
 }
 
+export function completeTour() {
+  return {
+    type: actionTypes.COMPLETE_TOUR,
+  };
+}
+
+export function resetTour() {
+  return {
+    type: actionTypes.RESET_TOUR,
+  };
+}
+
 export type TourAction =
   | ReturnType<typeof playTour>
-  | ReturnType<typeof startTour>
+  | ReturnType<typeof setTour>
   | ReturnType<typeof stopTour>
-  | ReturnType<typeof goToStep>;
+  | ReturnType<typeof goToStep>
+  | ReturnType<typeof completeTour>
+  | ReturnType<typeof resetTour>;
