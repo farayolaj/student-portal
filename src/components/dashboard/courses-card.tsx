@@ -157,9 +157,11 @@ const CourseItem: FC<CourseItemProps> = ({ course }) => {
           {earliestWebinar && (
             <Text fontSize="sm" color="blackAlpha.700">
               {isPast(earliestWebinar.scheduledFor) ? "Started" : "Begins"}{" "}
-              {earliestWebinar.scheduledFor.toLocaleDateString(undefined, {
+              {new Intl.DateTimeFormat("en-NG", {
                 dateStyle: "full",
-              })}
+                timeStyle: "short",
+                hour12: true,
+              }).format(earliestWebinar.scheduledFor)}
             </Text>
           )}
           <Link

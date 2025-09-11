@@ -23,6 +23,7 @@ export const toWebinar = (webinar: any) => {
     description: webinar.description,
     status: calculateWebinarStatus(startTime, endTime, scheduledFor),
     scheduledFor,
+    plannedDuration: parseInt(webinar.planned_duration, 10),
     startTime,
     endTime,
     presentation: webinar.presentation_url
@@ -31,7 +32,11 @@ export const toWebinar = (webinar: any) => {
           name: webinar.presentation_name,
         }
       : undefined,
-    recordingUrl: webinar.recording_url,
+    recordings: (webinar.recordings ?? []).map((recording: any) => ({
+      id: recording.id,
+      url: recording.url,
+      date: new Date(recording.date),
+    })),
     enableComments: webinar.enable_comments,
   } satisfies Webinar;
 };

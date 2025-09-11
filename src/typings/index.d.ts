@@ -37,6 +37,7 @@ interface Course {
   semester: number;
   units: number;
   materialLink?: string;
+  courseGuideUrl: string | null;
   preSelected?: boolean;
 }
 
@@ -321,11 +322,17 @@ type Webinar = {
   description?: string;
   status: "upcoming" | "pending-start" | "started" | "ended";
   scheduledFor: Date;
+  // In minutes
+  plannedDuration: number;
   presentation?: {
     url: string;
     name: string;
   };
-  recordingUrl: string | null;
+  recordings: Array<{
+    id: string;
+    url: string;
+    date: Date;
+  }>;
   startTime: Date | null;
   endTime: Date | null;
   enableComments: boolean;

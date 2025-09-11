@@ -1,9 +1,9 @@
 import { logPlayback as logPlaybackFn } from "@/api/webinar.mutations";
 import { webinarQueries } from "@/api/webinar.queries";
 import { useJoinCall } from "@/api/webinar/use-join-call";
-import WebinarComments from "@/components/courses/webinars/webinar-comments";
 import TourHelpButton from "@/components/common/tour-help-button";
 import { useTourContext } from "@/components/common/tour-provider";
+import WebinarComments from "@/components/courses/webinars/webinar-comments";
 import { formatDate } from "@/utils/webinar";
 import {
   Alert,
@@ -19,6 +19,10 @@ import {
   Heading,
   Icon,
   Link,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Skeleton,
   Spinner,
   Text,
@@ -27,11 +31,13 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import addMinutes from "date-fns/addMinutes";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { FC } from "react";
 import {
   IoCalendarOutline,
+  IoChevronDown,
   IoDownloadOutline,
   IoLinkOutline,
 } from "react-icons/io5";
@@ -170,7 +176,21 @@ const WebinarDetail: FC = () => {
             <Flex align="center" gap={2}>
               <Icon as={IoCalendarOutline} color="gray.500" />
               <Text fontSize="sm" fontWeight="semibold">
-                {formatDate(webinar.scheduledFor)}
+                {new Intl.DateTimeFormat("en-NG", {
+                  dateStyle: "full",
+                }).format(webinar.scheduledFor)}
+                ,{" "}
+                {new Intl.DateTimeFormat("en-NG", {
+                  timeStyle: "short",
+                  hour12: true,
+                }).format(webinar.scheduledFor)}{" "}
+                to{" "}
+                {new Intl.DateTimeFormat("en-NG", {
+                  timeStyle: "short",
+                  hour12: true,
+                }).format(
+                  addMinutes(webinar.scheduledFor, webinar.plannedDuration)
+                )}
               </Text>
             </Flex>
 
@@ -204,27 +224,63 @@ const WebinarDetail: FC = () => {
         <CardBody>
           <VStack spacing={4}>
             {webinar.status === "ended" ? (
-              <Tooltip
-                label={"The recording is not yet available, check back again."}
-                isDisabled={!!webinar.recordingUrl}
-                hasArrow
-                placement="top"
-              >
+              webinar.recordings.length === 0 ? (
+                <Tooltip
+                  label={
+                    "The recording is not yet available, check back again."
+                  }
+                  hasArrow
+                  placement="top"
+                >
+                  <Button
+                    leftIcon={<Icon as={IoLinkOutline} />}
+                    colorScheme="blue"
+                    size="lg"
+                    isDisabled
+                  >
+                    Playback
+                  </Button>
+                </Tooltip>
+              ) : webinar.recordings.length === 1 ? (
                 <Button
                   leftIcon={<Icon as={IoLinkOutline} />}
                   colorScheme="blue"
                   size="lg"
                   onClick={() => {
                     logPlayback(webinar.id);
-                    window.open(webinar.recordingUrl!, "_blank");
+                    window.open(webinar.recordings[0].url, "_blank");
                   }}
-                  isDisabled={!webinar.recordingUrl}
-                  isLoading={joinCall.isJoining}
-                  data-tour="webinar-join-button"
                 >
                   Playback
                 </Button>
-              </Tooltip>
+              ) : (
+                <Menu>
+                  <MenuButton
+                    as={Button}
+                    leftIcon={<Icon as={IoLinkOutline} />}
+                    rightIcon={<IoChevronDown />}
+                    colorScheme="blue"
+                    size="lg"
+                  >
+                    Playback
+                  </MenuButton>
+                  <MenuList>
+                    {webinar.recordings
+                      .sort((a, b) => b.date.getTime() - a.date.getTime())
+                      .map((recording, index) => (
+                        <MenuItem
+                          key={recording.id}
+                          onClick={() => {
+                            logPlayback(webinar.id);
+                            window.open(recording.url, "_blank");
+                          }}
+                        >
+                          Recording {index + 1} - {formatDate(recording.date)}
+                        </MenuItem>
+                      ))}
+                  </MenuList>
+                </Menu>
+              )
             ) : (
               <Tooltip
                 label={`Webinar will start on ${formatDate(

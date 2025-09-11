@@ -122,9 +122,10 @@ const WebinarComments: FC<WebinarCommentsProps> = ({ webinar }) => {
   };
 
   const formatDate = (date: Date) => {
-    return new Intl.DateTimeFormat("en-US", {
+    return new Intl.DateTimeFormat("en-NG", {
       dateStyle: "medium",
       timeStyle: "short",
+      hour12: true,
     }).format(date);
   };
 
@@ -180,7 +181,12 @@ const WebinarComments: FC<WebinarCommentsProps> = ({ webinar }) => {
               </FormControl>
               <Flex justify="space-between" align="center" w="full">
                 <FormControl display="flex" alignItems="center" w="auto">
-                  <FormLabel htmlFor="notify-all" mb="0" fontSize="sm" fontWeight="medium">
+                  <FormLabel
+                    htmlFor="notify-all"
+                    mb="0"
+                    fontSize="sm"
+                    fontWeight="medium"
+                  >
                     Notify all participants
                   </FormLabel>
                   <Switch

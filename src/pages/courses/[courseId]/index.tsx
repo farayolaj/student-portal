@@ -209,29 +209,54 @@ const CourseDetail: FC = () => {
                   </Text>
                 </Flex>
               </SimpleGrid>
-              {course.materialLink && (
-                <Link
-                  variant="button"
-                  href={course.materialLink}
-                  mt={2}
-                  py={2}
-                  px={3}
-                  lineHeight={0}
-                  display="inline-flex"
-                  w="fit-content"
-                  gap={2}
-                  alignItems="center"
-                  isExternal
-                >
-                  <Icon
-                    aria-label="Download course material"
-                    role="presentation"
-                    as={IoDownloadOutline}
-                    fontSize={"1.8rem"}
-                  />
-                  <Text as="span">Download Course Material</Text>
-                </Link>
-              )}
+              <Flex direction={["column", "row"]} gap={2} wrap="wrap">
+                {course.materialLink && (
+                  <Link
+                    variant="button"
+                    href={course.materialLink}
+                    py={2}
+                    px={3}
+                    lineHeight={0}
+                    display="inline-flex"
+                    w="fit-content"
+                    gap={2}
+                    alignItems="center"
+                    fontSize={'0.8rem'}
+                    isExternal
+                  >
+                    <Icon
+                      aria-label="Download course material"
+                      role="presentation"
+                      as={IoDownloadOutline}
+                      fontSize={"1.2em"}
+                    />
+                    <Text as="span">Download Course Material</Text>
+                  </Link>
+                )}
+                {course.courseGuideUrl && (
+                  <Link
+                    variant="button"
+                    href={course.courseGuideUrl}
+                    py={2}
+                    px={3}
+                    lineHeight={0}
+                    display="inline-flex"
+                    w="fit-content"
+                    gap={2}
+                    alignItems="center"
+                    isExternal
+                    fontSize={'0.8rem'}
+                  >
+                    <Icon
+                      aria-label="Download course guide"
+                      role="presentation"
+                      as={IoDownloadOutline}
+                      fontSize={"1.2em"}
+                    />
+                    <Text as="span">Course Guide</Text>
+                  </Link>
+                )}
+              </Flex>
             </VStack>
           </Flex>
         </CardBody>
