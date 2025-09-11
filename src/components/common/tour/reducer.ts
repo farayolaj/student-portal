@@ -35,12 +35,6 @@ export default function reducer(state: TourState, action: TourAction) {
         isRunning: false,
       };
     case actionTypes.GO_TO_STEP:
-      if (
-        action.payload < 0 ||
-        (state.tour && action.payload >= state.tour.steps.length)
-      ) {
-        return state;
-      }
       return {
         ...state,
         stepIndex: action.payload,

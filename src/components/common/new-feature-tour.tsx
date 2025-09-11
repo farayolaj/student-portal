@@ -1,11 +1,11 @@
 import { COURSE_DETAIL, DASHBOARD, WEBINAR_DETAIL } from "@/constants/routes";
 import {
   Button,
+  Card,
+  CardBody,
+  CardHeader,
   Flex,
-  Modal,
-  ModalBody,
-  ModalHeader,
-  ModalOverlay,
+  Heading,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import { Step } from "react-joyride";
@@ -15,14 +15,13 @@ import { useTourDispatch, useTourState } from "./tour/hooks";
 const TOUR_KEY = "new-feature-tour";
 
 export default function NewFeatureTour() {
-  const [isOpen, setIsOpen] = useState(true);
   const [isTourSet, setIsTourSet] = useState(false);
   const tourDispatch = useTourDispatch();
   const tourState = useTourState();
 
   // Select a course with an active webinar and a course guide.
-  const courseId = "course-101";
-  const webinarId = "webinar-202";
+  const courseId = "255";
+  const webinarId = "35";
 
   useEffect(() => {
     if (!isTourSet && courseId && webinarId) {
@@ -43,29 +42,31 @@ export default function NewFeatureTour() {
   if (tourState.isCompleted || tourState.tour?.key !== TOUR_KEY) return null;
 
   return (
-    <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-      <ModalOverlay>
-        <ModalHeader>New Feature Tour</ModalHeader>
-        <ModalBody>
-          <p>We have added a new feature to enhance your experience!</p>
-          <p>Would you like to take a quick tour?</p>
-          <Flex justify={"center"} gap={8}>
-            <Button onClick={startTour}>Start Tour</Button>
-            <Button variant="outline" onClick={skipTour}>
-              Skip
-            </Button>
-          </Flex>
-        </ModalBody>
-      </ModalOverlay>
-    </Modal>
+    <Card mt={8}>
+      <CardHeader>
+        <Heading as="h2" fontSize="md">
+          New Feature Tour
+        </Heading>
+      </CardHeader>
+      <CardBody>
+        <p>We have added some new features to enhance your experience!</p>
+        <p>Would you like to take a quick tour?</p>
+        <Flex gap={8} mt={4}>
+          <Button variant="outline" onClick={skipTour}>
+            Skip
+          </Button>
+          <Button onClick={startTour}>Start Tour</Button>
+        </Flex>
+      </CardBody>
+    </Card>
   );
 }
 
 function getTourSteps(courseId: string, webinarId: string): Step[] {
-  const coursePage = COURSE_DETAIL.replace(":courseId", courseId);
+  const coursePage = COURSE_DETAIL.replace("[courseId]", courseId);
   const webinarsTab = `${coursePage}?tab=webinars`;
-  const webinarPage = WEBINAR_DETAIL.replace(":courseId", courseId).replace(
-    ":webinarId",
+  const webinarPage = WEBINAR_DETAIL.replace("[courseId]", courseId).replace(
+    "[webinarId]",
     webinarId
   );
 
@@ -156,7 +157,7 @@ function getTourSteps(courseId: string, webinarId: string): Step[] {
       title: "Post Comments",
       content:
         "You can post comments about the webinar here if it is enabled by the instructor.",
-      target: '[data-tour-id="webinar-comments-form"]',
+      target: '[data-tour-id="webinar-comment-form"]',
     },
     {
       content: `By default, when you post a comment, no notification will be sent. \

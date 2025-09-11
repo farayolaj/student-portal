@@ -5,11 +5,18 @@ import {
   Dispatch,
   ReactNode,
   useCallback,
+  useEffect,
   useMemo,
   useReducer,
 } from "react";
 import { ACTIONS, CallBackProps, EVENTS, ORIGIN, STATUS } from "react-joyride";
-import { goToStep, stopTour, TourAction } from "./actions";
+import {
+  completeTour,
+  goToStep,
+  playTour,
+  stopTour,
+  TourAction,
+} from "./actions";
 import reducer, { TourState } from "./reducer";
 
 type TourContextType = {
@@ -30,6 +37,18 @@ export default function TourProvider({ children }: { children: ReactNode }) {
     isCompleted: false,
   });
 
+  useEffect(() => {
+    const handleRouteChangeComplete = () => {
+      dispatch(playTour());
+    };
+
+    router.events.on("routeChangeComplete", handleRouteChangeComplete);
+
+    return () => {
+      router.events.off("routeChangeComplete", handleRouteChangeComplete);
+    };
+  }, [router.events]);
+
   const handleTourCallback = useCallback(
     (data: CallBackProps) => {
       const { action, index, origin, status, type, step } = data;
@@ -38,20 +57,34 @@ export default function TourProvider({ children }: { children: ReactNode }) {
         dispatch(stopTour());
       }
 
-      if (type === EVENTS.STEP_AFTER || type === EVENTS.TARGET_NOT_FOUND) {
+      if (
+        ([EVENTS.STEP_AFTER, EVENTS.TARGET_NOT_FOUND] as string[]).includes(
+          type
+        )
+      ) {
         // Update state to advance the tour
         if (action === ACTIONS.PREV) {
-          if (step.data?.prevPage) router.push(step.data.prevPage);
-          dispatch(goToStep(index - 1));
-        } else {
-          if (step.data?.nextPage) router.push(step.data.nextPage);
-          dispatch(goToStep(index + 1));
+          if (step.data?.prevPage) {
+            dispatch(stopTour());
+            dispatch(goToStep(index - 1));
+            router.push(step.data.prevPage);
+          } else dispatch(goToStep(index - 1));
+        } else if (action === ACTIONS.NEXT) {
+          if (step.data?.nextPage) {
+            dispatch(stopTour());
+            dispatch(goToStep(index + 1));
+            router.push(step.data.nextPage);
+          } else dispatch(goToStep(index + 1));
         }
-      } else if (status === STATUS.FINISHED || status === STATUS.SKIPPED) {
-        dispatch(stopTour());
+      } else if (
+        ([STATUS.FINISHED, STATUS.SKIPPED] as string[]).includes(status)
+      ) {
+        dispatch(completeTour());
       }
 
-      console.groupCollapsed(type);
+      console.groupCollapsed(
+        type === EVENTS.TOUR_STATUS ? `${type}:${status}` : type
+      );
       console.log(data);
       console.groupEnd();
     },

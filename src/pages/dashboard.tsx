@@ -1,3 +1,4 @@
+import NewFeatureTour from "@/components/common/new-feature-tour";
 import InitiateResultVerificationCard from "@/components/dashboard/initiate-result-verification-card";
 import PraticumFormCard from "@/components/dashboard/practicum-form-card";
 import PageTitle from "../components/common/page-title";
@@ -12,6 +13,7 @@ export default function Home() {
       <Seo title="Dashboard" />
       <PageTitle>Dashboard</PageTitle>
       <ProfileCard />
+      <NewFeatureTour />
       <InitiateResultVerificationCard />
       <PraticumFormCard />
       <PaymentsCard />
