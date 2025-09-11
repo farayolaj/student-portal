@@ -1,4 +1,4 @@
-import { PAYMENTS } from "@/constants/routes";
+import { BOOK_STORE, PAYMENTS } from "@/constants/routes";
 import {
   Box,
   Button,
@@ -186,12 +186,13 @@ const sidebarContent = {
     title: "School Board",
     component: <DisplayPanel />,
   },
+  [BOOK_STORE as string]: null,
   DEFAULT: {
     title: "School Board",
     component: (
       <>
-        {" "}
-        <DisplayPanel /> <EventCalendar />{" "}
+        <DisplayPanel />
+        <EventCalendar />
       </>
     ),
   },
@@ -200,7 +201,11 @@ const sidebarContent = {
 const SchoolBoardSidebar: FC = () => {
   const { pathname } = useRouter();
 
-  const content = sidebarContent[pathname] || sidebarContent["DEFAULT"];
+  let content = sidebarContent[pathname];
+
+  if (content === undefined) content = sidebarContent["DEFAULT"];
+
+  if (!content) return null;
 
   return (
     <VStack

@@ -21,7 +21,7 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
 }) => {
   const [connectivityText, setConnectivityText] = useState("");
   const [isOnline, setIsOnline] = useState(true);
-  const { push, pathname } = useRouter();
+  const { push } = useRouter();
 
   useEffect(() => {
     const onOffline = () => {
@@ -61,49 +61,44 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
         <Header />
         <Flex>
           <Sidebar />
-          <Box
-            h="calc(100vh - 4rem)"
-            pos="relative"
-            overflowY="auto"
-            w="full"
-            bg="gray.200"
-            sx={{
-              scrollbarGutter: [null, null, "stable"],
-              "&::-webkit-scrollbar": {
-                width: [null, null, "10px"],
-              },
-              "&::-webkit-scrollbar-track": {
-                background: [null, null, "gray.200"],
-              },
-              "&::-webkit-scrollbar-thumb": {
-                background: [null, null, "gray.400"],
-                borderRadius: [null, null, "16px"],
-              },
-            }}
-          >
+          <Box h="calc(100vh - 4rem)" pos="relative" w="full" bg="gray.200">
             {profile?.data?.user.isFresher &&
               !profile?.data?.user?.isVerified && <ScreeningInfo />}
             <Box
               display={"flex"}
               flexDirection={{ base: "column", lg: "row" }}
               pos="relative"
-              minH="full"
+              h="full"
             >
               <Box
                 alignSelf="flex-start"
                 as="main"
                 w="100%"
-                // pos="sticky"
+                h="full"
+                overflowY={"auto"}
                 top="0rem"
                 p={6}
                 pr={[null, null, 4]}
                 pb={6}
+                sx={{
+                  scrollbarGutter: [null, null, "stable"],
+                  "&::-webkit-scrollbar": {
+                    width: [null, null, "10px"],
+                  },
+                  "&::-webkit-scrollbar-track": {
+                    background: [null, null, "gray.200"],
+                  },
+                  "&::-webkit-scrollbar-thumb": {
+                    background: [null, null, "gray.400"],
+                    borderRadius: [null, null, "16px"],
+                  },
+                }}
                 data-tour-id="page"
               >
                 {children}
               </Box>
 
-              {!pathname.includes("/bookstore") && <SchoolBoardSidebar />}
+              <SchoolBoardSidebar />
             </Box>
           </Box>
         </Flex>
