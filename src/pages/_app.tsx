@@ -1,5 +1,5 @@
 import AuthProvider from "@/components/common/auth-provider";
-import { TourProvider } from "@/components/common/tour-provider";
+import TourProvider from "@/components/common/tour/provider";
 import { avenirNextLTPro } from "@/theme/fonts";
 import { ChakraProvider } from "@chakra-ui/react";
 import { QueryClientProvider } from "@tanstack/react-query";

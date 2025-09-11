@@ -221,7 +221,7 @@ const CourseDetail: FC = () => {
                     w="fit-content"
                     gap={2}
                     alignItems="center"
-                    fontSize={'0.8rem'}
+                    fontSize={"0.8rem"}
                     isExternal
                   >
                     <Icon
@@ -245,7 +245,8 @@ const CourseDetail: FC = () => {
                     gap={2}
                     alignItems="center"
                     isExternal
-                    fontSize={'0.8rem'}
+                    fontSize={"0.8rem"}
+                    data-tour-id="course-guide-link"
                   >
                     <Icon
                       aria-label="Download course guide"
@@ -271,7 +272,7 @@ const CourseDetail: FC = () => {
       >
         <TabList>
           <Tab>Overview</Tab>
-          <Tab>Webinars</Tab>
+          <Tab data-tour-id="webinars-tab-btn">Webinars</Tab>
         </TabList>
 
         <TabPanels>
@@ -290,7 +291,7 @@ const CourseDetail: FC = () => {
           </TabPanel>
 
           {/* Webinars Tab */}
-          <TabPanel px={0}>
+          <TabPanel px={0} data-tour-id="webinars-tab-panel">
             <CourseWebinarView
               sessionId={currentSessionId}
               courseId={course.id}

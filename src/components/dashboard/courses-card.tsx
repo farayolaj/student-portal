@@ -67,7 +67,7 @@ const CoursesCard: FC = () => {
   }
 
   return (
-    <Card mt={8} mb={4}>
+    <Card mt={8} mb={4} data-tour-id="course-list">
       <CardHeader display="flex" justifyContent="space-between">
         <Heading as="h2" fontSize="md">
           Courses
@@ -98,6 +98,7 @@ const CourseItem: FC<CourseItemProps> = ({ course }) => {
       _hover={{
         "& img": { filter: "auto", brightness: "60%" },
       }}
+      data-tour-id={`course-card-${course.id}`}
     >
       <AspectRatio pos="relative" w="full" ratio={3 / 2} overflow="hidden">
         <div>

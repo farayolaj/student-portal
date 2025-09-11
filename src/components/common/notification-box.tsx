@@ -116,7 +116,11 @@ export const NotificationBox = () => {
       placement="bottom-end"
     >
       <PopoverTrigger>
-        <Box position="relative" cursor="pointer" data-tour="notification-bell">
+        <Box
+          position="relative"
+          cursor="pointer"
+          data-tour-id="notifications-menu"
+        >
           <IconButton
             aria-label="Notifications"
             icon={<Icon as={MdOutlineNotifications} boxSize={6} />}
@@ -138,7 +142,6 @@ export const NotificationBox = () => {
               justifyContent="center"
               fontSize="xs"
               fontWeight="bold"
-              data-tour="notification-badge"
             >
               {notificationCount > 99 ? "99+" : notificationCount}
             </Badge>
@@ -230,7 +233,12 @@ export const NotificationBox = () => {
                         >
                           {message}
                         </Text>
-                        <Flex justify="space-between" align="center" w="full" mt={2}>
+                        <Flex
+                          justify="space-between"
+                          align="center"
+                          w="full"
+                          mt={2}
+                        >
                           <Text fontSize="xs" color="gray.500">
                             {timeAgo}
                           </Text>
@@ -239,7 +247,12 @@ export const NotificationBox = () => {
                             variant="outline"
                             colorScheme="primary"
                             onClick={() => handleMarkAsRead(notification.id)}
-                            isLoading={markReadMutation.isPending && markReadMutation.variables?.ids.includes(notification.id)}
+                            isLoading={
+                              markReadMutation.isPending &&
+                              markReadMutation.variables?.ids.includes(
+                                notification.id
+                              )
+                            }
                           >
                             Mark as read
                           </Button>

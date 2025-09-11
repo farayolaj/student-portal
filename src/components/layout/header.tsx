@@ -1,7 +1,5 @@
 import { useProfile } from "@/api/user/use-profile";
 import { PROFILE } from "@/constants/routes";
-import TourHelpButton from "@/components/common/tour-help-button";
-import { useTourContext } from "@/components/common/tour-provider";
 import {
   Avatar,
   Flex,
@@ -33,9 +31,6 @@ export const Header: FC = () => {
   const fullName = `${user?.lastName.toUpperCase()}, ${user?.firstName} ${
     user?.otherNames || ""
   }`.replace("undefined", "");
-
-  // Get tour context for global help
-  const { notificationTour } = useTourContext();
 
   return (
     <HStack
@@ -77,13 +72,6 @@ export const Header: FC = () => {
       <Flex gap={4} align="center">
         <MobileCalendar />
         <NotificationBox />
-        <TourHelpButton
-          onStartTour={notificationTour.startTour}
-          onResetTour={notificationTour.resetTour}
-          isCompleted={notificationTour.isCompleted}
-          tourName="notification guide"
-          size="sm"
-        />
         <Menu>
           <MenuButton>
             <HStack>

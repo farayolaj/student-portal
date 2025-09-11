@@ -98,6 +98,7 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
                 p={6}
                 pr={[null, null, 4]}
                 pb={6}
+                data-tour-id="page"
               >
                 {children}
               </Box>

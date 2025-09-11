@@ -155,6 +155,7 @@ const WebinarComments: FC<WebinarCommentsProps> = ({ webinar }) => {
             onClick={() =>
               setSort((prev) => (prev === "DESC" ? "ASC" : "DESC"))
             }
+            data-tour-id="webinar-comments-sort-btn"
           >
             Sort: {sort === "DESC" ? "Newest" : "Oldest"} First
           </Button>
@@ -163,7 +164,11 @@ const WebinarComments: FC<WebinarCommentsProps> = ({ webinar }) => {
       <VStack spacing={6} align="stretch">
         {/* Comment Form */}
         {webinar.enableComments && (
-          <Box as="form" onSubmit={handleSubmit} data-tour="webinar-comment-form">
+          <Box
+            as="form"
+            onSubmit={handleSubmit}
+            data-tour-id="webinar-comment-form"
+          >
             <VStack spacing={4}>
               <FormControl isInvalid={!!postCommentMutation.error}>
                 <Textarea
@@ -180,7 +185,12 @@ const WebinarComments: FC<WebinarCommentsProps> = ({ webinar }) => {
                 )}
               </FormControl>
               <Flex justify="space-between" align="center" w="full">
-                <FormControl display="flex" alignItems="center" w="auto">
+                <FormControl
+                  display="flex"
+                  alignItems="center"
+                  w="auto"
+                  data-tour-id="webinar-comment-notify-all-switch"
+                >
                   <FormLabel
                     htmlFor="notify-all"
                     mb="0"
@@ -229,7 +239,11 @@ const WebinarComments: FC<WebinarCommentsProps> = ({ webinar }) => {
             ))}
           </VStack>
         ) : commentsData && commentsData.comments.length > 0 ? (
-          <VStack spacing={4} align="stretch">
+          <VStack
+            spacing={4}
+            align="stretch"
+            data-tour-id="webinar-comments-list"
+          >
             {commentsData.comments.map((comment) => (
               <Box
                 key={comment.id}

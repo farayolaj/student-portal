@@ -130,7 +130,7 @@ const WebinarCard: FC<WebinarCardProps> = ({ webinar, courseId }) => {
   });
 
   return (
-    <Card>
+    <Card data-tour-id={`webinar-${webinar.id}-card`}>
       <CardBody
         display={"flex"}
         flexDir={"column"}
@@ -186,6 +186,7 @@ const WebinarCard: FC<WebinarCardProps> = ({ webinar, courseId }) => {
             variant="outline"
             textDecoration="none"
             _hover={{ textDecoration: "none" }}
+            data-tour-id={`webinar-room-${webinar.id}-btn`}
           >
             View Room
           </Button>
@@ -255,6 +256,7 @@ const WebinarCard: FC<WebinarCardProps> = ({ webinar, courseId }) => {
                 onClick={() => joinCall.join(webinar.id)}
                 isDisabled={joinCall.isJoining || webinar.status === "upcoming"}
                 isLoading={joinCall.isJoining}
+                data-tour-id={`webinar-${webinar.id}-action`}
               >
                 Join Webinar
               </Button>
