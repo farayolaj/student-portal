@@ -154,6 +154,16 @@ const WebinarDetail: FC = () => {
                     Ended
                   </Badge>
                 )}
+                {webinar.status === "upcoming" && (
+                  <Badge ms={3} colorScheme="primary" variant={"solid"}>
+                    Upcoming
+                  </Badge>
+                )}
+                {webinar.status === "pending-start" && (
+                  <Badge ms={3} colorScheme="blue" variant={"solid"}>
+                    Pending Moderator Entry
+                  </Badge>
+                )}
               </Box>
             </Flex>
 
