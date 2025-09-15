@@ -39,6 +39,7 @@ interface Course {
   materialLink?: string;
   courseGuideUrl: string | null;
   preSelected?: boolean;
+  courseRoomUrl: string | null;
 }
 
 interface CourseStatistics {

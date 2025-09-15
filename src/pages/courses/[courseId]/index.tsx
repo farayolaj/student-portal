@@ -31,6 +31,7 @@ import { useRouter } from "next/router";
 import { FC } from "react";
 import {
   IoBookOutline,
+  IoChatbubbleOutline,
   IoDocumentOutline,
   IoDownloadOutline,
   IoPersonOutline,
@@ -215,16 +216,13 @@ const CourseDetail: FC = () => {
                   label={"Course material is unavailable at the moment."}
                   isDisabled={!!course.materialLink}
                   hasArrow
-                  placement="top"
+                  placement="auto"
                 >
                   <Button
                     onClick={() =>
                       course.materialLink &&
                       window.open(course.materialLink, "_blank")
                     }
-                    variant="outline"
-                    display="inline-flex"
-                    gap={2}
                     alignItems="center"
                     size="sm"
                     isDisabled={!course.materialLink}
@@ -234,6 +232,7 @@ const CourseDetail: FC = () => {
                       role="presentation"
                       as={IoDownloadOutline}
                       fontSize={"1.2em"}
+                      me={2}
                     />
                     <Text as="span">Course Material</Text>
                   </Button>
@@ -242,16 +241,13 @@ const CourseDetail: FC = () => {
                   label={"Course guide is unavailable at the moment."}
                   isDisabled={!!course.courseGuideUrl}
                   hasArrow
-                  placement="top"
+                  placement="auto"
                 >
                   <Button
                     onClick={() =>
                       course.courseGuideUrl &&
                       window.open(course.courseGuideUrl, "_blank")
                     }
-                    variant="outline"
-                    display="inline-flex"
-                    gap={2}
                     alignItems="center"
                     size="sm"
                     isDisabled={!course.courseGuideUrl}
@@ -261,8 +257,34 @@ const CourseDetail: FC = () => {
                       role="presentation"
                       as={IoDownloadOutline}
                       fontSize={"1.2em"}
+                      me={2}
                     />
                     <Text as="span">Course Guide</Text>
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                  label={"No room exists for this course yet."}
+                  isDisabled={!!course.courseRoomUrl}
+                  hasArrow
+                  placement="auto"
+                >
+                  <Button
+                    onClick={() =>
+                      course.courseRoomUrl &&
+                      window.open(course.courseRoomUrl, "_blank")
+                    }
+                    size="sm"
+                    colorScheme="blue"
+                    isDisabled={!course.courseRoomUrl}
+                  >
+                    <Icon
+                      aria-label="Go to course room"
+                      role="presentation"
+                      as={IoChatbubbleOutline}
+                      fontSize={"1.2em"}
+                      me={2}
+                    />
+                    <Text as="span">Course Room</Text>
                   </Button>
                 </Tooltip>
               </Flex>
