@@ -245,46 +245,47 @@ const WebinarComments: FC<WebinarCommentsProps> = ({ webinar }) => {
             data-tour-id="webinar-comments-list"
           >
             {commentsData.comments.map((comment) => (
-              <Box
-                key={comment.id}
-                p={4}
-                bg={commentBg}
-                rounded="md"
-                border="1px"
-                borderColor={borderColor}
-              >
-                <Flex justify="space-between" align="flex-start" mb={2}>
-                  <HStack spacing={3}>
-                    <Icon
-                      as={IoPersonCircleOutline}
-                      boxSize={8}
-                      color="gray.500"
-                    />
-                    <VStack align="flex-start" spacing={0}>
-                      <Text fontWeight="semibold" fontSize="sm">
-                        {comment.author.name}
-                      </Text>
+              <HStack key={comment.id} spacing={3} align="flex-start">
+                <Icon
+                  as={IoPersonCircleOutline}
+                  mt={2}
+                  boxSize={8}
+                  color="gray.500"
+                />
+                <Box
+                  w="full"
+                  p={2}
+                  bg={commentBg}
+                  rounded="md"
+                  border="1px"
+                  borderColor={borderColor}
+                >
+                  <Flex justify="space-between" align="flex-start" mb={2}>
+                    <Text fontWeight="semibold" fontSize="sm">
+                      {comment.author.name}
+                    </Text>
+                    <Flex gap={2} alignItems={"center"}>
                       <Text fontSize="xs" color="gray.500">
                         {formatDate(comment.createdAt)}
                       </Text>
-                    </VStack>
-                  </HStack>
-                  {profile?.academicProfile.id === comment.author.id && (
-                    <IconButton
-                      aria-label="Delete comment"
-                      icon={<Icon as={IoTrashOutline} />}
-                      size="sm"
-                      variant="ghost"
-                      colorScheme="red"
-                      onClick={() => handleDelete(comment.id)}
-                      isLoading={deleteCommentMutation.isPending}
-                    />
-                  )}
-                </Flex>
-                <Text fontSize="sm" lineHeight="tall" pl={11}>
-                  {comment.content}
-                </Text>
-              </Box>
+                      {profile?.academicProfile.id === comment.author.id && (
+                        <IconButton
+                          aria-label="Delete comment"
+                          icon={<Icon as={IoTrashOutline} />}
+                          size="sm"
+                          variant="ghost"
+                          colorScheme="red"
+                          onClick={() => handleDelete(comment.id)}
+                          isLoading={deleteCommentMutation.isPending}
+                        />
+                      )}
+                    </Flex>
+                  </Flex>
+                  <Text fontSize="sm" lineHeight="tall">
+                    {comment.content}
+                  </Text>
+                </Box>
+              </HStack>
             ))}
 
             {/* Pagination Controls */}

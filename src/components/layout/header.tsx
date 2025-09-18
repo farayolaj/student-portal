@@ -1,3 +1,4 @@
+import { userQueries } from "@/api/user.queries";
 import { useProfile } from "@/api/user/use-profile";
 import { PROFILE } from "@/constants/routes";
 import {
@@ -5,6 +6,7 @@ import {
   Flex,
   HStack,
   Icon,
+  IconButton,
   Menu,
   MenuButton,
   MenuItem,
@@ -14,10 +16,12 @@ import {
   Spacer,
   Text,
 } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import NextLink from "next/link";
 import { useAuth } from "oidc-react";
 import { FC } from "react";
+import { IoChatbubbleOutline } from "react-icons/io5";
 import { MdArrowDropDown } from "react-icons/md";
 import logo from "../../images/ui-logo.png";
 import { NotificationBox } from "../common/notification-box";
@@ -31,6 +35,10 @@ export const Header: FC = () => {
   const fullName = `${user?.lastName.toUpperCase()}, ${user?.firstName} ${
     user?.otherNames || ""
   }`.replace("undefined", "");
+
+  const { data: universityRoomLink } = useQuery(
+    userQueries.universityRoomLink()
+  );
 
   return (
     <HStack
@@ -70,6 +78,16 @@ export const Header: FC = () => {
       </Flex>
       <Spacer h="min-content" />
       <Flex gap={4} align="center">
+        <IconButton
+          aria-label="Open university common room"
+          icon={<Icon as={IoChatbubbleOutline} boxSize={6} />}
+          variant="ghost"
+          size="lg"
+          isDisabled={!universityRoomLink}
+          onClick={() =>
+            universityRoomLink && window.open(universityRoomLink, "_blank")
+          }
+        />
         <MobileCalendar />
         <NotificationBox />
         <Menu>

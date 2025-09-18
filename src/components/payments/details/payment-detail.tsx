@@ -125,7 +125,7 @@ export default function PaymentDetail({ payment }: PaymentDetailProps) {
                 </Link>
               ))
               .reduce((prev, curr, idx) => {
-                if (idx !== 0 && idx === prerequisites.length - 1)
+                if (idx !== 0 && idx === pendingTransactions.length - 1)
                   prev.push(" and ");
                 else if (idx !== 0) prev.push(", ");
                 prev.push(curr);

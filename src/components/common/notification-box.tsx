@@ -126,7 +126,6 @@ export const NotificationBox = () => {
             icon={<Icon as={MdOutlineNotifications} boxSize={6} />}
             variant="ghost"
             size="lg"
-            _hover={{ bg: "gray.100" }}
           />
           {notificationCount > 0 && (
             <Badge

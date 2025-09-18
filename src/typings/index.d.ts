@@ -39,6 +39,7 @@ interface Course {
   materialLink?: string;
   courseGuideUrl: string | null;
   preSelected?: boolean;
+  courseRoomUrl: string | null;
 }
 
 interface CourseStatistics {
@@ -203,6 +204,7 @@ interface User {
   telcoNumber: string | null;
   isFinalist: boolean;
   isExtraYear: boolean;
+  universityRoomUrl?: string | null;
 }
 
 interface AcademicProfile {

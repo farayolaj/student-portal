@@ -6,13 +6,13 @@ import {
   AlertIcon,
   AlertTitle,
   Box,
+  Button,
   Card,
   CardBody,
   CardHeader,
   Flex,
   Heading,
   Icon,
-  Link,
   SimpleGrid,
   Skeleton,
   SkeletonText,
@@ -22,6 +22,7 @@ import {
   TabPanels,
   Tabs,
   Text,
+  Tooltip,
   VStack,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
@@ -30,6 +31,7 @@ import { useRouter } from "next/router";
 import { FC } from "react";
 import {
   IoBookOutline,
+  IoChatbubbleOutline,
   IoDocumentOutline,
   IoDownloadOutline,
   IoPersonOutline,
@@ -210,53 +212,82 @@ const CourseDetail: FC = () => {
                 </Flex>
               </SimpleGrid>
               <Flex direction={["column", "row"]} gap={2} wrap="wrap">
-                {course.materialLink && (
-                  <Link
-                    variant="button"
-                    href={course.materialLink}
-                    py={2}
-                    px={3}
-                    lineHeight={0}
-                    display="inline-flex"
-                    w="fit-content"
-                    gap={2}
+                <Tooltip
+                  label={"Course material is unavailable at the moment."}
+                  isDisabled={!!course.materialLink}
+                  hasArrow
+                  placement="auto"
+                >
+                  <Button
+                    onClick={() =>
+                      course.materialLink &&
+                      window.open(course.materialLink, "_blank")
+                    }
                     alignItems="center"
-                    fontSize={"0.8rem"}
-                    isExternal
+                    size="sm"
+                    isDisabled={!course.materialLink}
                   >
                     <Icon
                       aria-label="Download course material"
                       role="presentation"
                       as={IoDownloadOutline}
                       fontSize={"1.2em"}
+                      me={2}
                     />
-                    <Text as="span">Download Course Material</Text>
-                  </Link>
-                )}
-                {course.courseGuideUrl && (
-                  <Link
-                    variant="button"
-                    href={course.courseGuideUrl}
-                    py={2}
-                    px={3}
-                    lineHeight={0}
-                    display="inline-flex"
-                    w="fit-content"
-                    gap={2}
+                    <Text as="span">Course Material</Text>
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                  label={"Course guide is unavailable at the moment."}
+                  isDisabled={!!course.courseGuideUrl}
+                  hasArrow
+                  placement="auto"
+                >
+                  <Button
+                    onClick={() =>
+                      course.courseGuideUrl &&
+                      window.open(course.courseGuideUrl, "_blank")
+                    }
                     alignItems="center"
-                    isExternal
-                    fontSize={"0.8rem"}
                     data-tour-id="course-guide-link"
+                    size="sm"
+                    isDisabled={!course.courseGuideUrl}
                   >
                     <Icon
                       aria-label="Download course guide"
                       role="presentation"
                       as={IoDownloadOutline}
                       fontSize={"1.2em"}
+                      me={2}
                     />
                     <Text as="span">Course Guide</Text>
-                  </Link>
-                )}
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                  label={"No room exists for this course yet."}
+                  isDisabled={!!course.courseRoomUrl}
+                  hasArrow
+                  placement="auto"
+                >
+                  <Button
+                    onClick={() =>
+                      course.courseRoomUrl &&
+                      window.open(course.courseRoomUrl, "_blank")
+                    }
+                    size="sm"
+                    colorScheme="blue"
+                    isDisabled={!course.courseRoomUrl}
+                  >
+                    <Icon
+                      aria-label="Go to course room"
+                      role="presentation"
+                      as={IoChatbubbleOutline}
+                      fontSize={"1.2em"}
+                      me={2}
+                    />
+                    <Text as="span">Course Room</Text>
+                  </Button>
+                </Tooltip>
               </Flex>
             </VStack>
           </Flex>

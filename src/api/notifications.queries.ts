@@ -36,13 +36,12 @@ export const notificationQueries = {
     queryOptions({
       queryKey: [...notificationQueries.all(), page, perPage],
       queryFn: () => getNotifications(page, perPage),
-      staleTime: 0,
+      staleTime: 1000 * 60 * 1, // 1 minute
     }),
   getCount: () =>
     queryOptions({
       queryKey: [...notificationQueries.all(), "count"],
       queryFn: getNotificationCount,
-      staleTime: 0,
-      refetchInterval: 10000, // Refetch every 10 seconds
+      refetchInterval: 1000 * 60 * 2.5, // Refetch every 2.5 minute
     }),
 };
