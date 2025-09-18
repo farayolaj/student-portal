@@ -78,16 +78,18 @@ export const Header: FC = () => {
       </Flex>
       <Spacer h="min-content" />
       <Flex gap={4} align="center">
-        <IconButton
-          aria-label="Open university common room"
-          icon={<Icon as={IoChatbubbleOutline} boxSize={6} />}
-          variant="ghost"
-          size="lg"
-          isDisabled={!universityRoomLink}
-          onClick={() =>
-            universityRoomLink && window.open(universityRoomLink, "_blank")
-          }
-        />
+        {universityRoomLink && (
+          <IconButton
+            aria-label="Open university common room"
+            icon={<Icon as={IoChatbubbleOutline} boxSize={6} />}
+            variant="ghost"
+            size="lg"
+            isDisabled={!universityRoomLink}
+            onClick={() =>
+              universityRoomLink && window.open(universityRoomLink, "_blank")
+            }
+          />
+        )}
         <MobileCalendar />
         <NotificationBox />
         <Menu>
