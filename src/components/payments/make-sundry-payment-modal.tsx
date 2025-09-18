@@ -1,18 +1,21 @@
+import buildPaymentDetailUrl from "@/lib/payments/build-payment-detail-url";
 import {
   Button,
+  Center,
   Flex,
   FormControl,
-  FormHelperText,
   FormLabel,
   Input,
   InputGroup,
   InputLeftElement,
+  Link,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  Text,
   VStack,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -23,6 +26,7 @@ import {
   AutoCompleteList,
 } from "@choc-ui/chakra-autocomplete";
 import { useQuery } from "@tanstack/react-query";
+import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { paymentQueries } from "../../api/payment.queries";
@@ -59,7 +63,7 @@ export default function MakeSundryPaymentModal() {
     <>
       <Button onClick={onOpen}>Make Sundry Payment</Button>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} size={"3xl"}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Make Sundry Payment</ModalHeader>
@@ -110,15 +114,41 @@ export default function MakeSundryPaymentModal() {
                     value={selectedPayment?.amount || ""}
                   />
                 </InputGroup>
-                {selectedPaymentPrerequisites.length > 0 && (
-                  <FormHelperText>
-                    Prerequisites:{" "}
-                    {selectedPaymentPrerequisites
-                      ?.map((pre) => pre.description)
-                      ?.join(", ")}
-                  </FormHelperText>
-                )}
               </FormControl>
+              {selectedPaymentPrerequisites.length > 0 && (
+                <Center bg="lightgrey" p={2} mb={8} w="full">
+                  <Text as="span" fontWeight="semibold" textAlign="center">
+                    Requires payment of{" "}
+                    {selectedPaymentPrerequisites
+                      .map((payment) => (
+                        <Link
+                          key={`${payment.id}-${payment.transactionRef}`}
+                          as={NextLink}
+                          href={buildPaymentDetailUrl({
+                            id: payment.id || "",
+                            trxRef: payment.transactionRef,
+                            trxType: payment.transactionType,
+                          })}
+                          color={"#0000EE"}
+                          textDecorationStyle="solid"
+                          textDecorationLine="underline"
+                        >
+                          {payment.description} {"(click here to pay)"}
+                        </Link>
+                      ))
+                      .reduce((prev, curr, idx) => {
+                        if (
+                          idx !== 0 &&
+                          idx === selectedPaymentPrerequisites.length - 1
+                        )
+                          prev.push(" and ");
+                        else if (idx !== 0) prev.push(", ");
+                        prev.push(curr);
+                        return prev;
+                      }, [] as (JSX.Element | string)[])}{" "}
+                  </Text>
+                </Center>
+              )}
               <Flex justify="center" gap={8} w="100%">
                 <Button colorScheme="red" onClick={onClose}>
                   Cancel
