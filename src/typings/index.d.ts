@@ -204,6 +204,7 @@ interface User {
   telcoNumber: string | null;
   isFinalist: boolean;
   isExtraYear: boolean;
+  universityRoomUrl?: string | null;
 }
 
 interface AcademicProfile {

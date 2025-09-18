@@ -122,7 +122,6 @@ export const NotificationBox = () => {
             icon={<Icon as={MdOutlineNotifications} boxSize={6} />}
             variant="ghost"
             size="lg"
-            _hover={{ bg: "gray.100" }}
           />
           {notificationCount > 0 && (
             <Badge
@@ -229,7 +228,12 @@ export const NotificationBox = () => {
                         >
                           {message}
                         </Text>
-                        <Flex justify="space-between" align="center" w="full" mt={2}>
+                        <Flex
+                          justify="space-between"
+                          align="center"
+                          w="full"
+                          mt={2}
+                        >
                           <Text fontSize="xs" color="gray.500">
                             {timeAgo}
                           </Text>
@@ -238,7 +242,12 @@ export const NotificationBox = () => {
                             variant="outline"
                             colorScheme="primary"
                             onClick={() => handleMarkAsRead(notification.id)}
-                            isLoading={markReadMutation.isPending && markReadMutation.variables?.ids.includes(notification.id)}
+                            isLoading={
+                              markReadMutation.isPending &&
+                              markReadMutation.variables?.ids.includes(
+                                notification.id
+                              )
+                            }
                           >
                             Mark as read
                           </Button>

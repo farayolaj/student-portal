@@ -60,6 +60,7 @@ export const toUser = (user: any) =>
     telcoNumber: user.telco_number,
     isFinalist: user.is_finalist,
     isExtraYear: user.is_extraYear,
+    universityRoomUrl: user.university_room_url,
   } as User);
 
 export const toAcademicProfile = (profile: any) =>
