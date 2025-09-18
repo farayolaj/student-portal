@@ -39,7 +39,7 @@ export default function TourProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const handleRouteChangeComplete = () => {
-      dispatch(playTour());
+      if (state.stepIndex > 0) dispatch(playTour());
     };
 
     router.events.on("routeChangeComplete", handleRouteChangeComplete);
@@ -47,7 +47,7 @@ export default function TourProvider({ children }: { children: ReactNode }) {
     return () => {
       router.events.off("routeChangeComplete", handleRouteChangeComplete);
     };
-  }, [router.events]);
+  }, [router.events, state.stepIndex]);
 
   const handleTourCallback = useCallback(
     (data: CallBackProps) => {
