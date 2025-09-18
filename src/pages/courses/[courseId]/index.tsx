@@ -6,13 +6,13 @@ import {
   AlertIcon,
   AlertTitle,
   Box,
+  Button,
   Card,
   CardBody,
   CardHeader,
   Flex,
   Heading,
   Icon,
-  Link,
   SimpleGrid,
   Skeleton,
   SkeletonText,
@@ -22,6 +22,7 @@ import {
   TabPanels,
   Tabs,
   Text,
+  Tooltip,
   VStack,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
@@ -210,19 +211,23 @@ const CourseDetail: FC = () => {
                 </Flex>
               </SimpleGrid>
               <Flex direction={["column", "row"]} gap={2} wrap="wrap">
-                {course.materialLink && (
-                  <Link
-                    variant="button"
-                    href={course.materialLink}
-                    py={2}
-                    px={3}
-                    lineHeight={0}
+                <Tooltip
+                  label={"Course material is unavailable at the moment."}
+                  isDisabled={!!course.materialLink}
+                  hasArrow
+                  placement="top"
+                >
+                  <Button
+                    onClick={() =>
+                      course.materialLink &&
+                      window.open(course.materialLink, "_blank")
+                    }
+                    variant="outline"
                     display="inline-flex"
-                    w="fit-content"
                     gap={2}
                     alignItems="center"
-                    fontSize={'0.8rem'}
-                    isExternal
+                    size="sm"
+                    isDisabled={!course.materialLink}
                   >
                     <Icon
                       aria-label="Download course material"
@@ -230,22 +235,26 @@ const CourseDetail: FC = () => {
                       as={IoDownloadOutline}
                       fontSize={"1.2em"}
                     />
-                    <Text as="span">Download Course Material</Text>
-                  </Link>
-                )}
-                {course.courseGuideUrl && (
-                  <Link
-                    variant="button"
-                    href={course.courseGuideUrl}
-                    py={2}
-                    px={3}
-                    lineHeight={0}
+                    <Text as="span">Course Material</Text>
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                  label={"Course guide is unavailable at the moment."}
+                  isDisabled={!!course.courseGuideUrl}
+                  hasArrow
+                  placement="top"
+                >
+                  <Button
+                    onClick={() =>
+                      course.courseGuideUrl &&
+                      window.open(course.courseGuideUrl, "_blank")
+                    }
+                    variant="outline"
                     display="inline-flex"
-                    w="fit-content"
                     gap={2}
                     alignItems="center"
-                    isExternal
-                    fontSize={'0.8rem'}
+                    size="sm"
+                    isDisabled={!course.courseGuideUrl}
                   >
                     <Icon
                       aria-label="Download course guide"
@@ -254,8 +263,8 @@ const CourseDetail: FC = () => {
                       fontSize={"1.2em"}
                     />
                     <Text as="span">Course Guide</Text>
-                  </Link>
-                )}
+                  </Button>
+                </Tooltip>
               </Flex>
             </VStack>
           </Flex>
