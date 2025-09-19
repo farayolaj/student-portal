@@ -55,13 +55,13 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
     child = null;
   } else
     child = (
-      <Flex pos="relative" direction="column">
+      <Flex pos="relative" direction="column" bg="gray.200">
         <PortalAlert />
         <BookstoreDialog />
         <Header />
         <Flex>
           <Sidebar />
-          <Box h="calc(100vh - 4rem)" pos="relative" w="full" bg="gray.200">
+          <Box h="calc(100vh - 4rem)" pos="relative" w="full">
             {profile?.data?.user.isFresher &&
               !profile?.data?.user?.isVerified && <ScreeningInfo />}
             <Box
@@ -74,12 +74,13 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
                 alignSelf="flex-start"
                 as="main"
                 w="100%"
-                h="full"
-                overflowY={"auto"}
+                h={[null, null, "full"]}
+                overflowY={[null, null, "auto"]}
                 top="0rem"
                 p={6}
                 pr={[null, null, 4]}
                 pb={6}
+                bg="gray.200"
                 sx={{
                   scrollbarGutter: [null, null, "stable"],
                   "&::-webkit-scrollbar": {

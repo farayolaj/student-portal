@@ -1,3 +1,4 @@
+import { useBreakpointValue } from "@chakra-ui/react";
 import React, { ComponentProps } from "react";
 import Joyride, { CallBackProps, Step } from "react-joyride";
 
@@ -118,6 +119,7 @@ export const TourGuide: React.FC<TourGuideProps> = ({
       lineHeight: "1",
     },
   };
+  const scrollOffset = useBreakpointValue([100, null, 200]);
 
   return (
     <Joyride
@@ -133,6 +135,7 @@ export const TourGuide: React.FC<TourGuideProps> = ({
       hideCloseButton={false}
       scrollToFirstStep={true}
       spotlightClicks={false}
+      scrollOffset={scrollOffset}
     />
   );
 };

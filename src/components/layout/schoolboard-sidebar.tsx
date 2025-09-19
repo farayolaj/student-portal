@@ -214,6 +214,7 @@ const SchoolBoardSidebar: FC = () => {
       p={4}
       gap={8}
       alignSelf="flex-start"
+      bg="gray.200"
     >
       <Card w="full">
         <CardHeader>
