@@ -1,4 +1,8 @@
 import { dashboardQueries } from "@/api/dashboard.queries";
+import {
+  registerTourCourse as _registerTourCourse,
+  unregisterTourCourse as _unregisterTourCourse,
+} from "@/api/tour.mutations";
 import { tourQueries } from "@/api/tour.queries";
 import { webinarQueries } from "@/api/webinar.queries";
 import { COURSE_DETAIL, DASHBOARD, WEBINAR_DETAIL } from "@/constants/routes";
@@ -9,8 +13,9 @@ import {
   CardHeader,
   Flex,
   Heading,
+  useToast,
 } from "@chakra-ui/react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
 import { Step } from "react-joyride";
 import { completeTour, playTour, setTour } from "./tour/actions";
@@ -23,10 +28,6 @@ export default function NewFeatureTour() {
   const tourDispatch = useTourDispatch();
   const tourState = useTourState();
 
-  const { data: enrolledCourses } = useQuery({
-    ...dashboardQueries.dashboardInfo(),
-    select: (data) => data.courses,
-  });
   const { data: tourSettings } = useQuery(tourQueries.tourSettings());
   const courseId = tourSettings?.courseId;
   const sessionId = tourSettings?.sessionId;
@@ -38,31 +39,50 @@ export default function NewFeatureTour() {
         ["started", "pending-start"].includes(webinar.status)
       )?.id,
   });
-  const isEnrolledInTourCourse =
-    enrolledCourses?.some((c) => c.id === courseId) ?? false;
+
+  const { mutate: unregisterTourCourse } = useMutation({
+    mutationFn: _unregisterTourCourse,
+  });
 
   useEffect(() => {
     if (!isTourSet && courseId && webinarId) {
       const steps = getTourSteps(courseId, webinarId);
-      tourDispatch(setTour(TOUR_KEY, steps));
+      tourDispatch(setTour(TOUR_KEY, steps, unregisterTourCourse));
       setIsTourSet(true);
     }
-  }, [courseId, isTourSet, tourDispatch, webinarId]);
+  }, [courseId, isTourSet, tourDispatch, unregisterTourCourse, webinarId]);
 
-  const startTour = useCallback(() => {
-    tourDispatch(playTour());
-  }, [tourDispatch]);
+  const toast = useToast();
+  const queryClient = useQueryClient();
+  const { mutateAsync: registerTourCourse, isPending: isRegistering } =
+    useMutation({
+      mutationFn: _registerTourCourse,
+      onSuccess: () => {
+        queryClient.refetchQueries(dashboardQueries.dashboardInfo());
+      },
+    });
+
+  const startTour = useCallback(async () => {
+    try {
+      await registerTourCourse();
+      tourDispatch(playTour());
+    } catch (err) {
+      const error = err as Error;
+
+      toast({
+        status: "error",
+        title: "Error Initiating Tour",
+        description: (error as Error).message || "An unexpected error occurred",
+        isClosable: true,
+      });
+    }
+  }, [registerTourCourse, toast, tourDispatch]);
 
   const skipTour = useCallback(() => {
     tourDispatch(completeTour());
   }, [tourDispatch]);
 
-  if (
-    tourState.isCompleted ||
-    tourState.tour?.key !== TOUR_KEY ||
-    !isEnrolledInTourCourse
-  )
-    return null;
+  if (tourState.isCompleted || tourState.tour?.key !== TOUR_KEY) return null;
 
   return (
     <Card mt={8}>
@@ -78,7 +98,9 @@ export default function NewFeatureTour() {
           <Button variant="outline" onClick={skipTour}>
             Skip
           </Button>
-          <Button onClick={startTour}>Start Tour</Button>
+          <Button onClick={startTour} isLoading={isRegistering}>
+            Start Tour
+          </Button>
         </Flex>
       </CardBody>
     </Card>

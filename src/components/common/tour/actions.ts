@@ -9,12 +9,17 @@ export const actionTypes = {
   RESET_TOUR: "RESET_TOUR",
 } as const;
 
-export function setTour(key: string, steps: Array<Step>) {
+export function setTour(
+  key: string,
+  steps: Array<Step>,
+  onComplete?: () => void
+) {
   return {
     type: actionTypes.SET_TOUR,
     payload: {
       key,
       steps,
+      onComplete,
     },
   };
 }

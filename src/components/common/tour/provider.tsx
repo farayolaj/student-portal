@@ -80,6 +80,7 @@ export default function TourProvider({ children }: { children: ReactNode }) {
         ([STATUS.FINISHED, STATUS.SKIPPED] as string[]).includes(status)
       ) {
         dispatch(completeTour());
+        if (state.onComplete) state.onComplete();
       }
 
       console.groupCollapsed(
@@ -88,7 +89,7 @@ export default function TourProvider({ children }: { children: ReactNode }) {
       console.log(data);
       console.groupEnd();
     },
-    [router]
+    [router, state]
   );
 
   const contextState = useMemo(() => ({ state, dispatch }), [state, dispatch]);

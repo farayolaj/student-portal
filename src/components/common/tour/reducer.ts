@@ -9,6 +9,7 @@ export type TourState = {
   isRunning: boolean;
   stepIndex: number;
   isCompleted: boolean;
+  onComplete?: () => void;
 };
 
 export default function reducer(state: TourState, action: TourAction) {
@@ -23,6 +24,7 @@ export default function reducer(state: TourState, action: TourAction) {
         isCompleted,
         stepIndex: 0,
         isRunning: isCompleted ? false : state.isRunning,
+        onComplete: action.payload.onComplete,
       };
     case actionTypes.PLAY_TOUR:
       return {
@@ -53,6 +55,7 @@ export default function reducer(state: TourState, action: TourAction) {
         ...state,
         isCompleted: false,
         stepIndex: 0,
+        onComplete: undefined,
       };
     default:
       return state;
