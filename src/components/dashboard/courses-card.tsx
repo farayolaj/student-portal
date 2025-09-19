@@ -98,6 +98,8 @@ const CourseItem: FC<CourseItemProps> = ({ course }) => {
 
   return (
     <Card
+      variant={"outline"}
+      colorScheme="primary"
       rounded="lg"
       overflow="hidden"
       _hover={{
