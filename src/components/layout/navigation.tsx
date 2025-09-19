@@ -1,13 +1,10 @@
-import { userQueries } from "@/api/user.queries";
 import { LMS_LOGIN_URL } from "@/constants/config";
 import { Badge, Icon, Link, Text, VStack } from "@chakra-ui/react";
-import { useQuery } from "@tanstack/react-query";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { FC } from "react";
 import {
   IoCalendarOutline,
-  IoChatbubbleOutline,
   IoDocumentsOutline,
   IoDocumentTextOutline,
   IoHomeOutline,
@@ -28,9 +25,9 @@ type NavigationProps = {
 const Navigation: FC<NavigationProps> = ({ isOpen }) => {
   const { pathname } = useRouter();
 
-  const { data: universityRoomLink } = useQuery(
-    userQueries.universityRoomLink()
-  );
+  // const { data: universityRoomLink } = useQuery(
+  //   userQueries.universityRoomLink()
+  // );
 
   return (
     <VStack align="flex-start" gap={2} px={0} mx={0}>
@@ -41,7 +38,7 @@ const Navigation: FC<NavigationProps> = ({ isOpen }) => {
         isOpen={isOpen}
         isActive={pathname === routes.DASHBOARD}
       />
-      {universityRoomLink && (
+      {/* {universityRoomLink && (
         <NavLink
           title="Common Room"
           icon={IoChatbubbleOutline}
@@ -51,7 +48,7 @@ const Navigation: FC<NavigationProps> = ({ isOpen }) => {
           badge="New"
           isExternal
         />
-      )}
+      )} */}
       <NavLink
         title="Verify Result"
         icon={IoShieldCheckmarkOutline}

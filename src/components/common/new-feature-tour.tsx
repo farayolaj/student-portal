@@ -217,13 +217,13 @@ function getTourSteps(courseId: string, webinarId: string): Step[] {
         Click here to view your notifications and stay updated.",
       target: '[data-tour-id="notifications-menu"]',
     },
-    {
-      title: "Common Room",
-      content:
-        "You can now access the university common room directly from the portal. \
-        Click here to join the conversation and connect with your peers.",
-      target: '[data-tour-id="university-room-btn"]',
-    },
+    // {
+    //   title: "Common Room",
+    //   content:
+    //     "You can now access the university common room directly from the portal. \
+    //     Click here to join the conversation and connect with your peers.",
+    //   target: '[data-tour-id="university-room-btn"]',
+    // },
     {
       title: "The End",
       content: "This concludes the tour of the new features.",
