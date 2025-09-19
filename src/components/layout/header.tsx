@@ -88,6 +88,7 @@ export const Header: FC = () => {
             onClick={() =>
               universityRoomLink && window.open(universityRoomLink, "_blank")
             }
+            data-tour-id="university-room-btn"
           />
         )}
         <MobileCalendar />

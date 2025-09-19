@@ -1,8 +1,5 @@
 import { dashboardQueries } from "@/api/dashboard.queries";
-import {
-  registerTourCourse as _registerTourCourse,
-  unregisterTourCourse as _unregisterTourCourse,
-} from "@/api/tour.mutations";
+import { registerTourCourse as _registerTourCourse } from "@/api/tour.mutations";
 import { tourQueries } from "@/api/tour.queries";
 import { webinarQueries } from "@/api/webinar.queries";
 import { COURSE_DETAIL, DASHBOARD, WEBINAR_DETAIL } from "@/constants/routes";
@@ -40,17 +37,13 @@ export default function NewFeatureTour() {
       )?.id,
   });
 
-  const { mutate: unregisterTourCourse } = useMutation({
-    mutationFn: _unregisterTourCourse,
-  });
-
   useEffect(() => {
     if (!isTourSet && courseId && webinarId) {
       const steps = getTourSteps(courseId, webinarId);
-      tourDispatch(setTour(TOUR_KEY, steps, unregisterTourCourse));
+      tourDispatch(setTour(TOUR_KEY, steps));
       setIsTourSet(true);
     }
-  }, [courseId, isTourSet, tourDispatch, unregisterTourCourse, webinarId]);
+  }, [courseId, isTourSet, tourDispatch, webinarId]);
 
   const toast = useToast();
   const queryClient = useQueryClient();
@@ -223,6 +216,13 @@ function getTourSteps(courseId: string, webinarId: string): Step[] {
         "You will now receive notifications about important events like upcoming webinars. \
         Click here to view your notifications and stay updated.",
       target: '[data-tour-id="notifications-menu"]',
+    },
+    {
+      title: "Common Room",
+      content:
+        "You can now access the university common room directly from the portal. \
+        Click here to join the conversation and connect with your peers.",
+      target: '[data-tour-id="university-room-btn"]',
     },
     {
       title: "The End",
