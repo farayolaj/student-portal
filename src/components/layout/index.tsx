@@ -1,5 +1,14 @@
 import { HOME } from "@/constants/routes";
-import { Box, Flex } from "@chakra-ui/react";
+import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
+  Box,
+  Flex,
+  Link,
+  VStack,
+} from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useAuth } from "oidc-react";
 import { FC, PropsWithChildren, ReactNode, useEffect, useState } from "react";
@@ -96,6 +105,26 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({
                 }}
                 data-tour-id="page"
               >
+                <Alert status="info" mb={4}>
+                  <AlertIcon />
+                  <VStack w="full" alignItems={"flex-start"} spacing={0}>
+                    <AlertTitle>
+                      Physical Interactive Schedule For First Semester,
+                      2024/2025 Academic Session
+                    </AlertTitle>
+                    <AlertDescription>
+                      Click{" "}
+                      <Link
+                        fontWeight={"bold"}
+                        href={"/docs/pi_schedule_s1_2024_2025.xlsx"}
+                        download="2024-2025 S1 PI Schedule.xlsx"
+                      >
+                        here
+                      </Link>{" "}
+                      to download the schedule.
+                    </AlertDescription>
+                  </VStack>
+                </Alert>
                 {children}
               </Box>
 
