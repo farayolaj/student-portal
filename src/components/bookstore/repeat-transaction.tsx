@@ -75,7 +75,7 @@ const RepeatOrderButton: React.FC<RepeatOrderButtonProps> = ({ order }) => {
               status: "success",
               isClosable: true,
             });
-            queryClient.invalidateQueries(bookstoreQueries.transactions());
+            queryClient.invalidateQueries(bookstoreQueries.books());
             onClose();
           },
           onError: (error) => {
@@ -141,30 +141,8 @@ const RepeatOrderButton: React.FC<RepeatOrderButtonProps> = ({ order }) => {
     );
   };
 
-  const { initPayment } = useRemitaInline({
+  const { initPayment, sdkStatus } = useRemitaInline({
     isLive: process.env.NODE_ENV === "production",
-    onSuccess: (res) => {
-      if (process.env.NODE_ENV === "development") console.log(res);
-
-      toast({
-        status: "success",
-        title: "Payment Successful",
-        description:
-          "If payment doesn't reflect immediately, requery transaction status later.",
-      });
-      queryClient.invalidateQueries(bookstoreQueries.transactions());
-    },
-    onError: (res) => {
-      if (process.env.NODE_ENV === "development") console.error(res);
-
-      toast({
-        status: "error",
-        title: "Payment Failed",
-        description: "Please try again later.",
-      });
-
-      handleCancelOrder();
-    },
   });
 
   const initialisePayment = () => {
@@ -183,20 +161,46 @@ const RepeatOrderButton: React.FC<RepeatOrderButtonProps> = ({ order }) => {
         },
         onSuccess: (data) => {
           onClose();
-          initPayment({
-            amount: parseInt(data.payment_details.total_amount),
-            key: data.split_payment.public_key || "",
-            processRrr: true,
-            transactionId: data.split_payment.transaction_id,
-            extendedData: {
-              customFields: [
-                {
-                  name: "rrr",
-                  value: data.split_payment.rrr,
-                },
-              ],
+          initPayment(
+            {
+              amount: parseInt(data.payment_details.total_amount),
+              key: data.split_payment.public_key || "",
+              processRrr: true,
+              transactionId: data.split_payment.transaction_id,
+              extendedData: {
+                customFields: [
+                  {
+                    name: "rrr",
+                    value: data.split_payment.rrr,
+                  },
+                ],
+              },
             },
-          });
+            {
+              onSuccess: (res) => {
+                if (process.env.NODE_ENV === "development") console.log(res);
+
+                toast({
+                  status: "success",
+                  title: "Payment Successful",
+                  description:
+                    "If payment doesn't reflect immediately, requery transaction status later.",
+                });
+                queryClient.invalidateQueries(bookstoreQueries.books());
+              },
+              onError: (res) => {
+                if (process.env.NODE_ENV === "development") console.error(res);
+
+                toast({
+                  status: "error",
+                  title: "Payment Failed",
+                  description: "Please try again later.",
+                });
+
+                handleCancelOrder();
+              },
+            }
+          );
         },
       }
     );
@@ -214,7 +218,7 @@ const RepeatOrderButton: React.FC<RepeatOrderButtonProps> = ({ order }) => {
         size="sm"
         width="max-content"
         onClick={handleCheckout}
-        disabled={checkoutMutation?.isPending}
+        disabled={checkoutMutation.isPending}
         display={order.book_status === "pending" ? "block" : "none"}
       >
         Retry
@@ -249,7 +253,7 @@ const RepeatOrderButton: React.FC<RepeatOrderButtonProps> = ({ order }) => {
               NB: <br />- Kindly pick up the books at the New Administrative
               Complex - CBT Centre, UI Extension, Ajibode-Sasa Road, Ibadan.
               <br />
-              -Payment should be completed within 24hours for transaction to be
+              -Payment should be completed within 24 hours for transaction to be
               valid.
             </Text>
             <Text
@@ -277,8 +281,10 @@ const RepeatOrderButton: React.FC<RepeatOrderButtonProps> = ({ order }) => {
               isDisabled={
                 initiatePaymentMutation.isPending ||
                 !orderId ||
-                cancelPaymentIsPending
+                cancelPaymentIsPending ||
+                sdkStatus !== "ready"
               }
+              isLoading={sdkStatus === "loading"}
             >
               Confirm Purchase
             </Button>

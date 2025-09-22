@@ -19,7 +19,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { useState } from "react";
 import { bookstoreQueries } from "../../api/bookstore.queries";
 import CancelTransactionButton from "../../components/bookstore/cancel-transaction";
-import RepeatOrderButton from "../../components/bookstore/repeat-trasaction";
+import RepeatOrderButton from "../../components/bookstore/repeat-transaction";
 import CustomTable from "../../components/common/custom-table";
 import PageTitle from "../../components/common/page-title";
 import Seo from "../../components/common/seo";

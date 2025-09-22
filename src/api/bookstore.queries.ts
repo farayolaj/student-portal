@@ -17,12 +17,13 @@ async function bookstoreTransaction() {
 }
 
 export const bookstoreQueries = {
+  root: () => ["books"],
   books: () => ({
-    queryKey: ["books"],
+    queryKey: [...bookstoreQueries.root()],
     queryFn: listBooks,
   }),
   transactions: () => ({
-    queryKey: ["bookstore-transactions"],
+    queryKey: [...bookstoreQueries.root(), "transactions"],
     queryFn: bookstoreTransaction,
   }),
 };

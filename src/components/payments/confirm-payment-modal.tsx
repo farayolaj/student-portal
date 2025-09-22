@@ -52,30 +52,9 @@ export default function ConfirmPaymentModal({
       queryClient.invalidateQueries(paymentQueries.mainList());
     },
   });
-  const { initPayment } = useRemitaInline({
+
+  const { initPayment, transactionInProgress, sdkStatus } = useRemitaInline({
     isLive: process.env.NODE_ENV === "production",
-    onSuccess: (res) => {
-      if (process.env.NODE_ENV === "development") console.log(res);
-
-      queryClient.invalidateQueries(paymentQueries.mainList());
-      queryClient.invalidateQueries(paymentQueries.transactionsList());
-
-      toast({
-        status: "success",
-        title: "Payment Successful",
-        description:
-          "If payment doesn't reflect immediately, requery transaction status later.",
-      });
-    },
-    onError: (res) => {
-      if (process.env.NODE_ENV === "development") console.error(res);
-
-      toast({
-        status: "error",
-        title: "Payment Failed",
-        description: "Please try again later.",
-      });
-    },
   });
 
   const handleCancel = useCallback(() => {
@@ -106,19 +85,47 @@ export default function ConfirmPaymentModal({
           });
         },
         onSuccess: (data) => {
-          initPayment({
-            key: data.transaction?.publicKey || "",
-            processRrr: true,
-            transactionId: data.transaction?.id,
-            extendedData: {
-              customFields: [
-                {
-                  name: "rrr",
-                  value: data.transaction?.rrr,
-                },
-              ],
+          initPayment(
+            {
+              key: data.transaction?.publicKey || "",
+              processRrr: true,
+              transactionId: data.transaction?.id,
+              extendedData: {
+                customFields: [
+                  {
+                    name: "rrr",
+                    value: data.transaction?.rrr,
+                  },
+                ],
+              },
             },
-          });
+            {
+              onSuccess: (res) => {
+                if (process.env.NODE_ENV === "development") console.log(res);
+
+                queryClient.invalidateQueries(paymentQueries.mainList());
+                queryClient.invalidateQueries(
+                  paymentQueries.transactionsList()
+                );
+
+                toast({
+                  status: "success",
+                  title: "Payment Successful",
+                  description:
+                    "If payment doesn't reflect immediately, requery transaction status later.",
+                });
+              },
+              onError: (res) => {
+                if (process.env.NODE_ENV === "development") console.error(res);
+
+                toast({
+                  status: "error",
+                  title: "Payment Failed",
+                  description: "Please try again later.",
+                });
+              },
+            }
+          );
           onClose();
         },
       }
@@ -135,6 +142,7 @@ export default function ConfirmPaymentModal({
     toast,
     initPayment,
     onClose,
+    queryClient,
   ]);
 
   useEffect(() => {
@@ -148,11 +156,11 @@ export default function ConfirmPaymentModal({
   }, []);
 
   useEffect(() => {
-    if (secondsLeft <= 0) {
-      // Automatically cancel the payment if the time runs out
+    if (secondsLeft <= 0 && !transactionInProgress) {
+      // Automatically cancel the payment if the time runs out and payment is not in progress.
       handleCancel();
     }
-  }, [secondsLeft, handleCancel]);
+  }, [secondsLeft, handleCancel, transactionInProgress]);
 
   return (
     <Modal isOpen={true} onClose={handleCancel} size={"2xl"} isCentered>
@@ -213,8 +221,8 @@ export default function ConfirmPaymentModal({
           <Button
             colorScheme="primary"
             onClick={initialisePayment}
-            isLoading={initiateTransactionIsPending}
-            isDisabled={initiateTransactionIsPending}
+            isLoading={initiateTransactionIsPending || sdkStatus === "loading"}
+            isDisabled={initiateTransactionIsPending || sdkStatus !== "ready"}
           >
             Proceed to Pay
           </Button>

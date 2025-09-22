@@ -1,3 +1,4 @@
+import { useToast } from "@chakra-ui/react";
 import {
   ForwardedRef,
   forwardRef,
@@ -6,7 +7,7 @@ import {
   useState,
 } from "react";
 
-type RemitaInlineData = {
+type InitPaymentData = {
   key: string;
   transactionId?: string;
   customerId?: string;
@@ -22,21 +23,39 @@ type RemitaInlineData = {
 };
 
 type RemitaInlineProps = {
-  data: RemitaInlineData;
+  data: InitPaymentData;
+  opts: InitPaymentOpts;
   className?: string;
   text?: string;
 };
 
 type UseRemitaInlineProps = {
   isLive: boolean;
+};
+
+type InitPaymentOpts = {
   onSuccess?: (response: unknown) => void;
   onError?: (response: unknown) => void;
   onClose?: () => void;
 };
 
 function useRemitaInline(props: UseRemitaInlineProps) {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [error, setError] = useState(false);
+  const [sdkStatus, setSdkStatus] = useState<"loading" | "ready" | "error">(
+    "loading"
+  );
+  const [sdkError, setSdkError] = useState<Error | null>(null);
+  const [transactionInProgress, setTransactionInProgress] = useState(false);
+  const toast = useToast();
+
+  useEffect(() => {
+    if (sdkStatus === "error" && sdkError) {
+      toast({
+        status: "error",
+        title: "Error loading payment gateway",
+        description: sdkError.message,
+      });
+    }
+  }, [sdkError, sdkStatus, toast]);
 
   useEffect(() => {
     const src = !props.isLive
@@ -48,13 +67,15 @@ function useRemitaInline(props: UseRemitaInlineProps) {
     script.async = true;
 
     const onScriptLoad = () => {
-      setIsLoaded(true);
-      setError(false);
+      setSdkStatus("ready");
+      setSdkError(null);
     };
 
     const onScriptError = () => {
-      setIsLoaded(true);
-      setError(true);
+      setSdkStatus("error");
+      setSdkError(
+        new Error("Failed to load Remita Inline SDK. Try again later.")
+      );
     };
 
     script.addEventListener("load", onScriptLoad);
@@ -70,27 +91,37 @@ function useRemitaInline(props: UseRemitaInlineProps) {
 
       script.remove();
 
-      setIsLoaded(false);
-      setError(false);
+      setSdkStatus("loading");
+      setSdkError(null);
     };
   }, [props.isLive]);
 
   const initPayment = useCallback(
-    (data: RemitaInlineData) => {
-      if (isLoaded) {
+    (data: InitPaymentData, opts: InitPaymentOpts) => {
+      if (sdkStatus === "ready") {
         const payload = {
           ...data,
-          onSuccess: props.onSuccess,
-          onError: props.onError,
-          onClose: props.onClose,
+          onSuccess: (res: unknown) => {
+            if (opts.onSuccess) opts.onSuccess(res);
+            setTransactionInProgress(false);
+          },
+          onError: (res: unknown) => {
+            if (opts.onError) opts.onError(res);
+            setTransactionInProgress(false);
+          },
+          onClose: () => {
+            if (opts.onClose) opts.onClose();
+            setTransactionInProgress(false);
+          },
         };
 
+        setTransactionInProgress(true);
         // @ts-expect-error RmPaymentEngine is loaded globally by script.
         const paymentEngine = RmPaymentEngine.init(payload);
         paymentEngine.showPaymentWidget();
       }
     },
-    [isLoaded, props.onClose, props.onError, props.onSuccess]
+    [sdkStatus]
   );
 
   const RemitaInline = forwardRef(function RemitaInline(
@@ -99,9 +130,9 @@ function useRemitaInline(props: UseRemitaInlineProps) {
   ) {
     return (
       <button
-        onClick={() => initPayment(props.data)}
+        onClick={() => initPayment(props.data, props.opts)}
         className={props.className}
-        disabled={!isLoaded || error}
+        disabled={sdkStatus !== "ready"}
         ref={ref}
       >
         {props.text || "Pay"}
@@ -112,6 +143,8 @@ function useRemitaInline(props: UseRemitaInlineProps) {
   return {
     initPayment,
     RemitaInline,
+    transactionInProgress,
+    sdkStatus,
   };
 }
 

@@ -161,29 +161,8 @@ const Bookstore: React.FC = () => {
     mutationFn: initiateBookstorePayment,
   });
 
-  const { initPayment } = useRemitaInline({
+  const { initPayment, sdkStatus } = useRemitaInline({
     isLive: process.env.NODE_ENV === "production",
-    onSuccess: (res) => {
-      if (process.env.NODE_ENV === "development") console.log(res);
-
-      queryClient.invalidateQueries(bookstoreQueries.books());
-      queryClient.invalidateQueries(bookstoreQueries.transactions());
-      toast({
-        status: "success",
-        title: "Payment Successful",
-        description:
-          "If payment doesn't reflect immediately, requery transaction status later.",
-      });
-    },
-    onError: (res) => {
-      if (process.env.NODE_ENV === "development") console.error(res);
-
-      toast({
-        status: "error",
-        title: "Payment Failed",
-        description: "Please try again later.",
-      });
-    },
   });
 
   const initialisePayment = () => {
@@ -202,20 +181,45 @@ const Bookstore: React.FC = () => {
         },
         onSuccess: (data) => {
           onClose();
-          initPayment({
-            amount: parseInt(data.payment_details.total_amount),
-            key: data.split_payment.public_key || "",
-            processRrr: true,
-            transactionId: data.split_payment.transaction_id,
-            extendedData: {
-              customFields: [
-                {
-                  name: "rrr",
-                  value: data.split_payment.rrr,
-                },
-              ],
+          initPayment(
+            {
+              amount: parseInt(data.payment_details.total_amount),
+              key: data.split_payment.public_key || "",
+              processRrr: true,
+              transactionId: data.split_payment.transaction_id,
+              extendedData: {
+                customFields: [
+                  {
+                    name: "rrr",
+                    value: data.split_payment.rrr,
+                  },
+                ],
+              },
             },
-          });
+            {
+              onSuccess: (res) => {
+                if (process.env.NODE_ENV === "development") console.log(res);
+
+                queryClient.invalidateQueries(bookstoreQueries.books());
+                queryClient.invalidateQueries(bookstoreQueries.transactions());
+                toast({
+                  status: "success",
+                  title: "Payment Successful",
+                  description:
+                    "If payment doesn't reflect immediately, requery transaction status later.",
+                });
+              },
+              onError: (res) => {
+                if (process.env.NODE_ENV === "development") console.error(res);
+
+                toast({
+                  status: "error",
+                  title: "Payment Failed",
+                  description: "Please try again later.",
+                });
+              },
+            }
+          );
         },
       }
     );
@@ -545,8 +549,10 @@ const Bookstore: React.FC = () => {
                 isDisabled={
                   initiatePaymentMutation.isPending ||
                   !orderId ||
-                  cancelPaymentMutationIsPending
+                  cancelPaymentMutationIsPending ||
+                  sdkStatus !== "ready"
                 }
+                isLoading={sdkStatus === "loading"}
               >
                 Confirm Purchase
               </Button>
